@@ -1,0 +1,27 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Total TCP Streams: 1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+192.168.56.1:56515         <-> 192.168.56.105:8001              5 640 bytes       6 896 bytes      11 1536 bytes     0.000000000         2.2798
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 ---
+Service: Apache/2.4.38 with PHP/7.2.31
+Relevant Events:
+- HTTP GET request to /index.php with system command execution attempt
+- HTTP Status 200 indicating successful processing of the request
+- Command executed: id
+Exploit Indicators:
+- call_user_func_array with system command
+Malicious Activities: Command execution attempt
+Attack Success: Succeeded
+Evidence Keywords: call_user_func_array, system, id, Apache/2.4.38, PHP/7.2.31
