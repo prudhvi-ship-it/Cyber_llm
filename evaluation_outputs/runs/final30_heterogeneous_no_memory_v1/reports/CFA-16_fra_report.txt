@@ -1,0 +1,56 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=9, OpenWire=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:41374           <-> 172.18.0.2:61616                 5 680 bytes       5 344 bytes      10 1024 bytes     0.000252000         7.5458
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: ActiveMQ 5.17.3
+Relevant Events:
+- [E-S0000-F000006-003] OpenWire protocol communication indicating ActiveMQ usage
+Exploit Indicators:
+- [E-S0000-F000006-003] ActiveMQ version 5.17.3 identified in the payload
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: ActiveMQ, OpenWire, 5.17.3, E-S0000-F000006-003
+
+=== FINAL REPORT ===
+Affected Service: ActiveMQ
+Identified CVE: CVE-2025-27533
+Attack: Unknown
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000006-003]: OpenWire communication on 172.18.0.2:61616 identifies ActiveMQ 5.17.3; no exploit activity observed in this stream.
+- PCAP [E-S0000-F000006-003]: Single OpenWire-bearing TCP stream established and closed without anomalous payloads indicative of exploitation.
+- NVD CVE-2025-27533: Affects Apache ActiveMQ from 5.17.0 before 5.17.7; OpenWire unmarshalling can allow excessive memory allocation leading to DoS when not using mutual TLS; fixed in 6.1.6+, 5.19.0+, 5.18.7+, 5.17.7, 5.16.8.
+
+Verification Summary:
+- Validated service and version via OpenWire protocol details in PCAP [E-S0000-F000006-003] showing ActiveMQ 5.17.3.
+- Mapped version 5.17.3 to NVD advisory CVE-2025-27533 which explicitly lists 5.17.0 before 5.17.7 as affected.
+- Reviewed packet contents in PCAP [E-S0000-F000006-003]; no frames consistent with exploitation attempts detected; attack outcome remains Unknown.
+- Concluded the broker is vulnerable by version, despite no observed exploitation in the captured traffic.
+
+Defensive Recommendation:
+- Upgrade Apache ActiveMQ to a fixed version per NVD CVE-2025-27533: 5.17.7+, 5.18.7+, 5.19.0+, or 6.1.6+ (or 5.16.8 for 5.16.x).
+- Enable and enforce mutual TLS on OpenWire connectors to mitigate this issue as recommended in CVE-2025-27533.
+- Restrict and monitor access to port 61616 (OpenWire) to trusted sources; require strong authentication.
+- Deploy detection for malformed or oversized OpenWire buffers and alert on sudden broker memory growth consistent with DoS attempts.
+- Implement resource limits and broker health monitoring to rapidly detect and recover from memory depletion conditions.

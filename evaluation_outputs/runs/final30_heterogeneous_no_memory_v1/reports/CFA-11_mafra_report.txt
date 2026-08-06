@@ -1,0 +1,313 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 14
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+Protocol Counts: RESP=270, TCP=240, RESP/JSON=53, PGSQL=224, ARP=6
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:6379            <-> 172.18.0.6:58668                55 8690 bytes     110 8459 bytes     165 17 kB         0.000000000        67.3797
+172.18.0.6:41690           <-> 172.18.0.3:6379                 37 2590 bytes      74 32 kB         111 35 kB         0.684324000        66.1397
+172.18.0.6:38478           <-> 172.18.0.2:5432                 37 4362 bytes      39 5279 bytes      76 9641 bytes    17.290683000         0.1374
+172.18.0.3:6379            <-> 172.18.0.8:36900                37 2442 bytes      37 31 kB          74 33 kB         0.685401000        66.1389
+172.18.0.3:63
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0000-F000001-001] Client initiated a connection to Redis server on port 6379.
+- [E-S0000-F000210-004] Command executed: `id`
+- [E-S0000-F000210-005] Payload indicating potential command execution.
+Exploit Indicators:
+- [E-S0000-F000210-005] W1tbInRvdWNoIiwgIi90bXAvYWlyZmxvd19jZWxlcnlfc3VjY2VzcyJdXSwge30sIHsiY2hhaW4iOiBudWxsLCAiY2hvcmQiOiBudWxsLCAiZXJyYmFja3MiOiBudWxsLCAiY2FsbGJhY2tzIjogbnVsbH1d
+Malicious Activities: Potential command execution detected.
+Attack Success: Unknown
+Evidence Keywords: Redis, command execution, id, W1tbInRvdWNoIiwgIi90bXAvYWlyZmxvd19jZWxlcnlfc3VjY2VzcyJdXSwge30sIHsiY2hhaW4iOiBudWxsLCAiY2hvcmQiOiBudWxsLCAiZXJyYmFja3MiOiBudWxsLCAiY2FsbGJhY2tzIjogbnVsbH1d, [E-S0000-F000001-001], [E-S0000-F000210-004], [E-S0000-F000210-005]
+
+--- Stream 1 [VALID] ---
+Service: Redis 6.0 (inferred from the port 6379, which is commonly used by Redis)
+Relevant Events:
+- [E-S0001-F000004-001] Client sent a PUBLISH command to Redis
+- [E-S0001-F000005-003] Server responded to the client
+- [E-S0001-F000022-005] Client sent another PUBLISH command to Redis
+Exploit Indicators:
+- [E-S0001-F000004-002] PUBLISH command with a payload containing base64 encoded JSON
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PUBLISH, Redis, base64, heartbeat, worker, JSON, evidence IDs [E-S0001-F000004-001, E-S0001-F000005-003, E-S0001-F000022-005, E-S0001-F000004-002]
+
+--- Stream 2 [VALID] ---
+Service: Redis 6.x (inferred from port 6379)
+Relevant Events:
+- [E-S0002-F000007-001] Client sent a message to Redis server
+- [E-S0002-F000025-004] Client sent a message to Redis server
+- [E-S0002-F000086-008] Client sent a message to Redis server
+Exploit Indicators:
+- [E-S0002-F000701-001] Payload contains base64 encoded JSON with potential command execution
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, base64, command execution, pmessage, worker.heartbeat, delivery_tag
+
+--- Stream 3 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0003-F000009-001] Client sent a command to Redis server.
+- [E-S0003-F000027-004] Client sent a command to Redis server.
+- [E-S0003-F000222-012] Client sent a command to Redis server with a JSON payload.
+Exploit Indicators:
+- [E-S0003-F000701-001] JSON payload containing base64 encoded data.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, JSON, base64, heartbeat, worker, exchange, routing_key, evidence IDs: E-S0003-F000009-001, E-S0003-F000027-004, E-S0003-F000222-012, E-S0003-F000701-001
+
+--- Stream 4 [VALID] ---
+Service: Redis  (version not visible)
+Relevant Events:
+- [E-S0004-F000011-001] Client sends a PUBLISH command to Redis
+- [E-S0004-F000012-003] Server responds to the client
+- [E-S0004-F000011-002] Payload contains a JSON object with a base64 encoded body
+Exploit Indicators:
+- [E-S0004-F000011-002] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, PUBLISH, JSON, base64, eJtZXRob2Qi, eJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9, [E-S0004-F000011-001], [E-S0004-F000012-003], [E-S0004-F000011-002]
+
+--- Stream 5 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0005-F000014-001] Client sent a message to the Redis server.
+- [E-S0005-F000014-002] Payload contains a JSON object with a base64 encoded body.
+- [E-S0005-F000015-003] Server response to the client.
+Exploit Indicators:
+- [E-S0005-F000014-002] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, JSON, base64, pmessage, delivery_tag, exchange
+
+--- Stream 6 [VALID] ---
+Service: PostgreSQL
+Relevant Events:
+- [E-S0006-F000060-001] Client initiated connection to PostgreSQL server.
+- [E-S0006-F000063-004] Executed SQL command: SELECT 1.
+- [E-S0006-F000065-006] Executed SQL command: SELECT job.id AS job_id, job.dag_id AS job_dag_id, job.state AS job_state, job.job_type AS job_job_type, job.start_date AS job_start_date, job.end_date AS job_end_date, job.latest_heartbeat AS job_latest_heartbeat, job.executor_class AS job_executor_class, job.hostname AS job_hostname, job.unixname ...
+Exploit Indicators:
+- [E-S0006-F000065-006] SQL command with potential for data extraction.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PostgreSQL, SELECT, job, evidence IDs [E-S0006-F000060-001, E-S0006-F000063-004, E-S0006-F000065-006]
+
+--- Stream 7 [VALID] ---
+Service: PostgreSQL 13.16
+Relevant Events:
+- [E-S0007-F000120-006] select version()
+- [E-S0007-F000138-012] SELECT slot_pool.id AS slot_pool_id, slot_pool.pool AS slot_pool_pool, slot_pool.slots AS slot_pool_slots, slot_pool.description AS slot_pool_description
+- [E-S0007-F000651-015] SELECT job.id AS job_id, job.dag_id AS job_dag_id, job.state AS job_state, job.job_type AS job_job_type, job.start_date AS job_start_date, job.end_date AS job_end_date, job.latest_heartbeat AS job_latest_heartbeat, job.executor_class AS job_executor_class, job.hostname AS job_hostname, job.unixname ...
+Exploit Indicators:
+- [E-S0007-F000138-012] id
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PostgreSQL, version, SELECT, job, slot_pool, evidence IDs [E-S0007-F000120-006, E-S0007-F000138-012, E-S0007-F000651-015]
+
+--- Stream 8 [VALID] ---
+Service: PostgreSQL
+Relevant Events:
+- [E-S0008-F000166-001] Client initiated connection to PostgreSQL server.
+- [E-S0008-F000167-002] TCP keep-alive or no-operation packet sent from client to server.
+- [E-S0008-F000168-003] TCP keep-alive or no-operation packet sent from server to client.
+Exploit Indicators:
+- [E-S0008-F000166-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PostgreSQL, TCP, client->server, server->client, E-S0008-F000166-001, E-S0008-F000167-002, E-S0008-F000168-003
+
+--- Stream 9 [VALID] ---
+Service: Redis 5.2.1
+Relevant Events:
+- [E-S0009-F000203-003] Client sent a command to the Redis server.
+- [E-S0009-F000205-004] Server responded with an error for an unknown subcommand.
+- [E-S0009-F000209-006] Client executed the command `id`.
+Exploit Indicators:
+- [E-S0009-F000209-007] Base64 encoded payload indicating potential command execution or data manipulation.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: redis, command execution, base64, E-S0009-F000209-007
+
+--- Stream 10 [VALID] ---
+Service: Redis 6.0 (inferred from port 6379)
+Relevant Events:
+- [E-S0010-F000212-001] Client initiated connection to Redis server.
+- [E-S0010-F000215-005] Command executed: id
+- [E-S0010-F000215-006] Payload indicating potential command execution.
+Exploit Indicators:
+- [E-S0010-F000215-006] W1tbInRvdWNoIiwgIi90bXAvYWlyZmxvd19jZWxlcnlfc3VjY2VzcyJdXSwge30sIHsiY2hhaW4iOiBudWxsLCAiY2hvcmQiOiBudWxsLCAiZXJyYmFja3MiOiBudWxsLCAiY2FsbGJhY2tzIjogbnVsbH1d
+Malicious Activities: Command execution detected (id command).
+Attack Success: Unknown
+Evidence Keywords: Redis, command execution, id, W1tbInRvdWNoIiwgIi90bXAvYWlyZmxvd19jZWxlcnlfc3VjY2VzcyJdXSwge30sIHsiY2hhaW4iOiBudWxsLCAiY2hvcmQiOiBudWxsLCAiZXJyYmFja3MiOiBudWxsLCAiY2FsbGJhY2tzIjogbnVsbH1d, [E-S0010-F000215-006]
+
+--- Stream 11 [VALID] ---
+Service: PostgreSQL 13.16
+Relevant Events:
+- [E-S0011-F000252-006] select version()
+- [E-S0011-F000280-014] CREATE TABLE celery_taskmeta (
+- [E-S0011-F000294-018] CREATE TABLE celery_tasksetmeta (
+Exploit Indicators:
+- [E-S0011-F000280-014] CREATE TABLE celery_taskmeta (
+Malicious Activities: CREATE TABLE operations suggest potential unauthorized schema modifications.
+Attack Success: Succeeded
+Evidence Keywords: PostgreSQL, CREATE TABLE, celery_taskmeta, celery_tasksetmeta, select version(), E-S0011-F000252-006, E-S0011-F000280-014, E-S0011-F000294-018
+
+--- Stream 12 [VALID] ---
+Service: PostgreSQL
+Relevant Events:
+- [E-S0012-F000505-001] Client initiated connection to PostgreSQL server.
+- [E-S0012-F000510-006] Executed SQL query to select job details.
+- [E-S0012-F000511-008] Executed SQL query returning a result.
+Exploit Indicators:
+- [E-S0012-F000510-007] Command executed: id
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PostgreSQL, SELECT, job, id, evidence IDs: E-S0012-F000505-001, E-S0012-F000510-006, E-S0012-F000511-008, E-S0012-F000510-007
+
+--- Stream 13 [VALID] ---
+Service: PostgreSQL 13.16
+Relevant Events:
+- [E-S0013-F000565-006] select version()
+- [E-S0013-F000583-012] SELECT slot_pool.id AS slot_pool_id, slot_pool.pool AS slot_pool_pool, slot_pool.slots AS slot_pool_slots, slot_pool.description AS slot_pool_description
+- [E-S0013-F000583-013] id
+Exploit Indicators:
+- [E-S0013-F000583-012] SELECT slot_pool.id AS slot_pool_id, slot_pool.pool AS slot_pool_pool, slot_pool.slots AS slot_pool_slots, slot_pool.description AS slot_pool_description
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PostgreSQL, version, SELECT, slot_pool, id, E-S0013-F000565-006, E-S0013-F000583-012, E-S0013-F000583-013
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache Airflow",
+    "application": "Apache Airflow",
+    "framework": "Celery",
+    "web_server": "Unknown",
+    "language": "Python",
+    "database": "PostgreSQL"
+  },
+  "attack": {
+    "type": "Remote Code Execution",
+    "technique": "Celery task injection via Redis broker messages carrying OS commands",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000210-004",
+      "E-S0000-F000210-005",
+      "E-S0009-F000209-006",
+      "E-S0009-F000209-007",
+      "E-S0010-F000215-005",
+      "E-S0010-F000215-006"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "Evidence indicates generic Celery/Redis task abuse for command execution without fingerprints for a specific CVE."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "The analyst's claim about the attack success is not directly supported by the provided flow evidence."
+  ],
+  "evidence_check": [
+    "E-S0000-F000210-004",
+    "E-S0000-F000210-005",
+    "E-S0009-F000209-006",
+    "E-S0009-F000209-007",
+    "E-S0010-F000215-005",
+    "E-S0010-F000215-006"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Apache Airflow
+Attack Type: Remote Code Execution
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Medium
+Overall Confidence: Medium
+Score: 2/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2020-11981",
+  "cve_supported": "Yes",
+  "confidence": "Medium",
+  "reasons": [
+    "Product match: Apache Airflow is the observed service.",
+    "Attack match: PCAP shows Redis broker traffic carrying Celery-formatted task payloads that decode to OS commands (e.g., 'id' and 'touch /tmp/airflow_celery_success'), indicating broker task injection leading to command execution on workers.",
+    "CVE-2020-11981 specifically covers arbitrary command execution via broker command/task injection when using CeleryExecutor, aligning with the Redis/Celery evidence.",
+    "Analyst and Verifier both support the service and attack type; while the Airflow version is unknown, the technique precisely matches this CVE’s described vector, lowering confidence but supporting relevance."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Apache Airflow
+Identified CVE: CVE-2020-11981
+Attack: Unknown
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000210-004]: Command executed: `id`.
+- PCAP [E-S0000-F000210-005]: Payload indicating potential command execution.
+- PCAP [E-S0009-F000209-006]: Client executed the command `id`.
+- PCAP [E-S0009-F000209-007]: Base64 encoded payload indicating potential command execution or data manipulation.
+- PCAP [E-S0010-F000215-005]: Command executed: id.
+- PCAP [E-S0010-F000215-006]: Payload indicating potential command execution.
+
+Verification Summary:
+- Affected service: Apache Airflow.
+- Attack type: Remote Code Execution.
+- Attack technique: Celery task injection via Redis broker messages carrying OS commands.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 2/4.
+- Validated CVE: CVE-2020-11981.
+- CVE assessment: Product match: Apache Airflow is the observed service.
+- CVE assessment: Attack match: PCAP shows Redis broker traffic carrying Celery-formatted task payloads that decode to OS commands (e.g., 'id' and 'touch /tmp/airflow_celery_success'), indicating broker task injection leading to command execution on workers.
+- CVE assessment: CVE-2020-11981 specifically covers arbitrary command execution via broker command/task injection when using CeleryExecutor, aligning with the Redis/Celery evidence.
+- CVE assessment: Analyst and Verifier both support the service and attack type; while the Airflow version is unknown, the technique precisely matches this CVE’s described vector, lowering confidence but supporting relevance.
+- Unsupported claim: The analyst's claim about the attack success is not directly supported by the provided flow evidence.
+
+Defensive Recommendation:
+- Upgrade Apache Airflow to a version patched against CVE-2020-11981.
+- Ensure that the Redis broker used by Celery is properly secured and not exposed to untrusted networks.
+- Implement strong authentication and authorization for access to the Redis broker.
+- Monitor Celery task queues for unusual or unauthorized task injections.
+- Review and restrict the permissions of the user running the Celery worker processes to minimize the impact of successful command execution.

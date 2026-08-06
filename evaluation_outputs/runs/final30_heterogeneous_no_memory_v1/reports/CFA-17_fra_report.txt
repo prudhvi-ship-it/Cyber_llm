@@ -1,0 +1,66 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: MDNS=2, ARP=4, TCP=11, OpenWire=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:55040           <-> 172.18.0.2:61616                 6 803 bytes       6 410 bytes      12 1213 bytes     8.449037000        16.2085
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: ActiveMQ 5.14.2
+Relevant Events:
+- [E-S0000-F000008-003] OpenWire protocol communication observed
+- [E-S0000-F000005-001] TCP connection established from client to server
+- [E-S0000-F000006-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0000-F000008-003] ActiveMQ version and platform details revealed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: ActiveMQ, OpenWire, 5.14.2, TCP, Linux, Oracle Corporation
+
+=== FINAL REPORT ===
+Affected Service: ActiveMQ
+Identified CVE: CVE-2020-13920
+Attack: Unknown
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000008-003]: OpenWire protocol communication revealed broker identity and version (ActiveMQ 5.14.2).
+- PCAP [E-S0000-F000005-001]: Client established TCP connection to broker at 172.18.0.2:61616.
+- PCAP [E-S0000-F000006-002]: Server responded on the TCP connection, confirming ActiveMQ service availability.
+- NVD: CVE-2018-11775 — Missing TLS hostname verification in Apache ActiveMQ Client before 5.15.6 could enable MITM between client and server (affects environments using 5.14.2-era clients).
+- NVD: CVE-2019-0222 — Unmarshalling corrupt MQTT frames can cause broker OOM in Apache ActiveMQ 5.0.0–5.15.8 (includes 5.14.2).
+- NVD: CVE-2020-1941 — XSS in the web console queue view in Apache ActiveMQ 5.0.0–5.15.11 (includes 5.14.2).
+- NVD: CVE-2020-13920 — Unauthenticated JMX RMI registry rebind allows MITM of JMX credentials in affected Apache ActiveMQ versions prior to 5.15.12 (5.14.2 within affected range).
+- NVD: CVE-2015-7559 — Exposed remote shutdown command in Apache ActiveMQ client before 5.14.5 enables DoS against connected clients.
+
+Verification Summary:
+- Confirmed service as Apache ActiveMQ 5.14.2 via OpenWire banner/version disclosure in PCAP (E-S0000-F000008-003).
+- Observed only connection establishment and protocol negotiation; no exploit payloads or abuse sequences were present (E-S0000-F000005-001, E-S0000-F000006-002).
+- Multiple NVD CVEs are known to affect the 5.14.x era, but no packet evidence ties this capture to any specific CVE exploitation.
+- Given the absence of exploit behavior in the PCAP, the attack outcome and service vulnerability status remain Unknown.
+
+Defensive Recommendation:
+- Restrict broker port 61616 and related management interfaces to trusted networks and authenticated clients (firewall/ACLs).
+- Enable TLS for OpenWire and ensure clients validate certificates and hostnames; update clients to versions addressing CVE-2018-11775.
+- Upgrade Apache ActiveMQ to a currently supported release to incorporate security fixes relevant to 5.14.x.
+- Harden JMX/RMI: require authentication, disable unauthenticated registry access, and restrict exposure to management networks (mitigates risks like CVE-2020-13920).
+- If the web console is enabled, restrict access, enforce authentication, and avoid exposing it to untrusted networks (reduces exposure to XSS issues like CVE-2020-1941).
+- Monitor for anomalous OpenWire/MQTT traffic patterns (e.g., malformed frames, excessive memory usage) and deploy IDS/IPS rules where feasible.
+- Minimize version disclosure where configurable and ensure broker/client configurations do not leak unnecessary platform details.
+- Implement rigorous patch management and continuous monitoring of vendor advisories for Apache ActiveMQ and its clients.

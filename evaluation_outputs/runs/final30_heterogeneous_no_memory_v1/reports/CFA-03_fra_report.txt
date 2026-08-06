@@ -1,0 +1,177 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 11
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Protocol Counts: ICMPv6=2, ARP=2, TCP=88, HTTP=22
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:38308           <-> 172.18.0.2:80                    5 744 bytes       5 434 bytes      10 1178 bytes   120.365310000         0.0073
+172.18.0.1:38322           <-> 172.18.0.2:80                    5 744 bytes       5 434 bytes      10 1178 bytes   120.415152000         0.0055
+172.18.0.1:38330           <-> 172.18.0.2:80                    5 744 bytes       5 433 bytes      10 1177 bytes   120.474914000         0.0046
+172.18.0.1:38332           <-> 172.18.0.2:80                    5 744 bytes       5 436 bytes      10 1180 bytes   120.543146000         0.0063
+172.18.0.1:38346
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0000-F000010-007] HTTP Status 400
+- [E-S0000-F000008-004] GET /icons/../../../../etc/passwd
+Exploit Indicators:
+- [E-S0000-F000008-004] GET /icons/../../../../etc/passwd
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP, Apache/2.4.50, [E-S0000-F000008-004], [E-S0000-F000010-007]
+
+--- Stream 1 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0001-F000018-004] GET /icons/../../../../etc/shadow
+- [E-S0001-F000020-007] HTTP Status 400
+Exploit Indicators:
+- [E-S0001-F000018-004] ../../../../etc/shadow
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, Apache/2.4.50, [E-S0001-F000018-004], [E-S0001-F000020-007]
+
+--- Stream 2 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0002-F000025-001] TCP connection established from client to server
+- [E-S0002-F000028-004] GET request for path traversal attempt to /etc/hosts
+- [E-S0002-F000030-007] Server response with HTTP Status 400
+Exploit Indicators:
+- [E-S0002-F000028-004] GET /icons/../../../../etc/hosts
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 400, E-S0002-F000028-004, E-S0002-F000030-007
+
+--- Stream 3 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0003-F000035-001] TCP connection established from client to server
+- [E-S0003-F000038-004] GET request for path traversal attempt
+- [E-S0003-F000040-007] HTTP response indicating a bad request
+Exploit Indicators:
+- [E-S0003-F000038-004] GET /icons/../../../../etc/hostname
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP, 400 Bad Request, E-S0003-F000038-004, E-S0003-F000040-007
+
+--- Stream 4 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0004-F000045-001] TCP connection established from client to server
+- [E-S0004-F000048-004] GET request for path traversal attempt to /etc/group
+- [E-S0004-F000050-007] Server response with HTTP Status 400 (Bad Request)
+Exploit Indicators:
+- [E-S0004-F000048-004] GET /icons/../../../../etc/group
+Malicious Activities: Path traversal attempt detected
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 400, [E-S0004-F000048-004], [E-S0004-F000050-007]
+
+--- Stream 5 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0005-F000058-004] GET /icons/../../../../root/.bash_history
+- [E-S0005-F000060-008] HTTP Status 400
+- [E-S0005-F000058-006] root user keyword observed
+Exploit Indicators:
+- [E-S0005-F000058-004] ../../../../root/.bash_history
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, root user, [E-S0005-F000058-004], [E-S0005-F000060-008], [E-S0005-F000058-006]
+
+--- Stream 6 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0006-F000068-004] GET /icons/../../../../root/.ssh/authorized_keys
+- [E-S0006-F000070-008] HTTP Status 400
+- [E-S0006-F000068-006] root user keyword observed
+Exploit Indicators:
+- [E-S0006-F000068-004] ../../../../root/.ssh/authorized_keys
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 400, root user keyword observed, E-S0006-F000068-004, E-S0006-F000070-008, E-S0006-F000068-006
+
+--- Stream 7 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0007-F000078-004] GET /icons/../../../../var/log/syslog
+- [E-S0007-F000080-007] HTTP Status 400
+Exploit Indicators:
+- [E-S0007-F000078-004] ../../../../var/log/syslog
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 400, E-S0007-F000078-004, E-S0007-F000080-007
+
+--- Stream 8 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0008-F000088-004] GET /icons/../../../../var/log/auth.log
+- [E-S0008-F000090-007] HTTP Status 400
+Exploit Indicators:
+- [E-S0008-F000088-004] ../../../../var/log/auth.log
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 400, E-S0008-F000088-004, E-S0008-F000090-007
+
+--- Stream 9 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0009-F000098-004] GET /icons/../../../../var/www/html/config.php
+- [E-S0009-F000100-007] HTTP Status 400
+Exploit Indicators:
+- [E-S0009-F000098-004] ../../../../var/www/html/config.php
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, Apache/2.4.50, [E-S0009-F000098-004], [E-S0009-F000100-007]
+
+--- Stream 10 [VALID] ---
+Service: Apache/2.4.50
+Relevant Events:
+- [E-S0010-F000108-004] POST /cgi-bin/../../../../bin/sh
+- [E-S0010-F000110-008] HTTP Status 400
+Exploit Indicators:
+- [E-S0010-F000108-006] /bin/sh
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, /bin/sh, HTTP Status 400, E-S0010-F000108-004, E-S0010-F000110-008
+
+=== FINAL REPORT ===
+Affected Service: Apache HTTP Server
+Identified CVE: CVE-2021-42013
+Attack: Failed
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP: Directory traversal HTTP GET request observed [E-S0000-F000008-004].
+- PCAP: Directory traversal HTTP GET request observed [E-S0001-F000018-004].
+- PCAP: Additional traversal attempts across multiple streams [E-S0002-F000028-004], [E-S0003-F000038-004], [E-S0004-F000048-004], [E-S0005-F000058-004], [E-S0006-F000068-004], [E-S0007-F000078-004], [E-S0008-F000088-004], [E-S0009-F000098-004], [E-S0010-F000108-004].
+- NVD: Apache HTTP Server 2.4.49 and 2.4.50 are affected by a path traversal vulnerability that may allow access outside aliased directories and potential RCE when CGI is enabled (CVE-2021-42013).
+
+Verification Summary:
+- Service identified as Apache HTTP Server (Apache/2.4.50) per validated FRA service identification.
+- Observed multiple HTTP directory traversal attempts in PCAP [E-S0000-F000008-004] through [E-S0010-F000108-004]; no evidence of sensitive file disclosure or code execution was observed.
+- Mapped the activity to NVD CVE-2021-42013 based on product/version and attack technique (NVD).
+- Conclusion: Attack attempts failed; however, the deployed version (2.4.50) is within the affected range for CVE-2021-42013.
+
+Defensive Recommendation:
+- Upgrade Apache HTTP Server to 2.4.51 or later to remediate CVE-2021-42013.
+- Harden configuration: apply 'Require all denied' to aliased directories and restrict filesystem exposure to intended paths only.
+- Disable CGI execution in aliased directories; use ScriptAlias for controlled CGI locations and review related directives.
+- Deploy WAF/reverse proxy rules to block path traversal patterns and encoded variants.
+- Limit information leakage by setting ServerTokens to minimal and disabling ServerSignature.
+- Enhance monitoring and alerting for repeated traversal attempts and anomalous request patterns.
+- Review and minimize use of Alias-like directives; enforce least-privilege filesystem permissions.

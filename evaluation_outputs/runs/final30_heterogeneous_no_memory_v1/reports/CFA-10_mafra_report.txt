@@ -1,0 +1,226 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: RESP=67, TCP=51, RESP/JSON=13
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:6379            <-> 172.18.0.7:45572                16 2528 bytes      32 2192 bytes      48 4720 bytes     0.000000000        16.5143
+172.18.0.7:45638           <-> 172.18.0.2:6379                  9 630 bytes      18 8013 bytes      27 8643 bytes     0.882430000        16.0402
+172.18.0.2:6379            <-> 172.18.0.7:45616                 9 594 bytes       9 7671 bytes      18 8265 bytes     0.883338000        16.0398
+172.18.0.2:6379            <-> 172.18.0.6:49268                 9 594 bytes       9 7608 bytes      18 8202 bytes     0.883621000        16.0404
+172.18.0.6:
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0000-F000001-001] Client initiated a connection to Redis server on port 6379.
+- [E-S0000-F000002-002] Server responded to client request.
+- [E-S0000-F000003-003] Client sent a TCP keep-alive packet.
+Exploit Indicators:
+- [E-S0000-F000001-001] BRPOP command indicates potential exploitation of Redis data structures.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, BRPOP, E-S0000-F000001-001, E-S0000-F000002-002, E-S0000-F000003-003
+
+--- Stream 1 [VALID] ---
+Service: Redis 6.0 (inferred from the port 6379, which is commonly used by Redis)
+Relevant Events:
+- [E-S0001-F000004-001] Client sent a PUBLISH command to Redis
+- [E-S0001-F000005-003] Server responded to the client
+- [E-S0001-F000006-004] Client sent a TCP keep-alive packet
+Exploit Indicators:
+- [E-S0001-F000004-002] Payload contains a base64-encoded JSON object with a method indicating potential command execution
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PUBLISH, base64, Redis, command execution, [E-S0001-F000004-001], [E-S0001-F000004-002]
+
+--- Stream 2 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0002-F000007-001] Client communication with Redis server on port 6379
+- [E-S0002-F000008-003] Server response to client
+Exploit Indicators:
+- [E-S0002-F000007-002] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, pmessage, celery.pidbox, base64, JSON
+
+--- Stream 3 [VALID] ---
+Service: Redis 6.x (inferred from port 6379)
+Relevant Events:
+- [E-S0003-F000009-001] Client sent a PUBLISH command to Redis.
+- [E-S0003-F000022-005] Client sent a PUBLISH command to Redis.
+- [E-S0003-F000035-006] Client sent a PUBLISH command to Redis.
+Exploit Indicators:
+- [E-S0003-F000009-002] Payload contains base64 encoded JSON data, which may indicate potential misuse of the Redis service.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, PUBLISH, base64, JSON, E-S0003-F000009-002, E-S0003-F000009-001, E-S0003-F000022-005, E-S0003-F000035-006
+
+--- Stream 4 [VALID] ---
+Service: Redis 5.x (inferred from port 6379)
+Relevant Events:
+- [E-S0004-F000012-001] Client sent a message to the Redis server.
+- [E-S0004-F000025-004] Client sent a message to the Redis server.
+- [E-S0004-F000056-006] Client sent a message to the Redis server.
+Exploit Indicators:
+- [E-S0004-F000012-002] Payload contains base64 encoded JSON data, potentially indicating command execution or data manipulation.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, pmessage, worker.heartbeat, base64, JSON, E-S0004-F000012-002, E-S0004-F000025-004, E-S0004-F000056-006
+
+--- Stream 5 [VALID] ---
+Service: Redis 5.0 (inferred from port 6379)
+Relevant Events:
+- [E-S0005-F000014-001] Client sent a message to Redis server
+- [E-S0005-F000014-002] Payload contains base64 encoded JSON data
+- [E-S0005-F000027-004] Client sent another message to Redis server
+- [E-S0005-F000040-005] Client sent another message to Redis server
+- [E-S0005-F000058-006] Client sent another message to Redis server
+- [E-S0005-F000071-007] Client sent another message to Redis server
+- [E-S0005-F000086-008] Client sent another message to Redis server
+- [E-S0005-F000099-009] Client sent another message to Redis server
+- [E-S0005-F000112-010] Client sent another message to Redis server
+- [E-S0005-F000130-011] Client sent another message to Redis server
+Exploit Indicators:
+- [E-S0005-F000014-002] Payload contains base64 encoded JSON data
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, base64, JSON, heartbeat, worker, pmessage, celery, delivery_tag
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Celery",
+    "application": "Celery",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Python",
+    "database": "Redis"
+  },
+  "attack": {
+    "type": "Message Broker Abuse",
+    "technique": "Unauthorized PUBLISH to Celery pidbox and worker channels via Redis PUB/SUB",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0001-F000004-001",
+      "E-S0001-F000004-002",
+      "E-S0002-F000007-002",
+      "E-S0003-F000009-001",
+      "E-S0003-F000009-002",
+      "E-S0003-F000022-005",
+      "E-S0003-F000035-006",
+      "E-S0004-F000012-002",
+      "E-S0005-F000014-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "Traffic indicates Celery control and heartbeat messages over Redis PUB/SUB, but no specific vulnerability or version-specific exploit is identified."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "Success/Fail outcome"
+  ],
+  "evidence_check": [
+    "E-S0001-F000004-001",
+    "E-S0001-F000004-002",
+    "E-S0002-F000007-002",
+    "E-S0003-F000009-001",
+    "E-S0003-F000009-002",
+    "E-S0003-F000022-005",
+    "E-S0003-F000035-006",
+    "E-S0004-F000012-002",
+    "E-S0005-F000014-002"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Celery
+Attack Type: Message Broker Abuse
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Medium
+Overall Confidence: Medium
+Score: 2/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "No product-matching NVD candidates were available, so an exact CVE could not be validated."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Celery
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0001-F000004-001]: Client sent a PUBLISH command to Redis.
+- PCAP [E-S0001-F000004-002]: Payload contains a base64-encoded JSON object with a method indicating potential command execution.
+- PCAP [E-S0002-F000007-002]: eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9.
+- PCAP [E-S0003-F000009-001]: Client sent a PUBLISH command to Redis.
+- PCAP [E-S0003-F000009-002]: Payload contains base64 encoded JSON data, which may indicate potential misuse of the Redis service.
+- PCAP [E-S0003-F000022-005]: Client sent a PUBLISH command to Redis.
+- PCAP [E-S0003-F000035-006]: Client sent a PUBLISH command to Redis.
+- PCAP [E-S0004-F000012-002]: Payload contains base64 encoded JSON data, potentially indicating command execution or data manipulation.
+- PCAP [E-S0005-F000014-002]: Payload contains base64 encoded JSON data.
+
+Verification Summary:
+- Affected service: Celery.
+- Attack type: Message Broker Abuse.
+- Attack technique: Unauthorized PUBLISH to Celery pidbox and worker channels via Redis PUB/SUB.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 2/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: No product-matching NVD candidates were available, so an exact CVE could not be validated.
+- Unsupported claim: Success/Fail outcome
+
+Defensive Recommendation:
+- Implement strong authentication and authorization for Redis, especially for PUBLISH commands.
+- Restrict network access to Redis to only trusted Celery workers and necessary applications.
+- Monitor Redis PUB/SUB channels for unusual or unauthorized activity.
+- Regularly review and audit Celery configurations and Redis access controls.
+- Ensure Celery workers and Redis instances are running with the principle of least privilege.

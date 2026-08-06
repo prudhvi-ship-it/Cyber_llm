@@ -1,0 +1,58 @@
+{
+  "total_pcaps": 30,
+  "total_logs": 49,
+  "benchmarks": {
+    "CFA-benchmark": 20,
+    "TestSet_benchmark": 10
+  },
+  "services": {
+    "couchdb": 1,
+    "grafana": 1,
+    "apache http server": 2,
+    "jenkins": 1,
+    "joomla": 1,
+    "apache solr": 1,
+    "phpmyadmin": 2,
+    "cacti": 1,
+    "airflow": 2,
+    "saltstack": 2,
+    "apisix": 2,
+    "activemq": 2,
+    "gitlab": 2,
+    "erlang/OTP": 2,
+    "vite": 2,
+    "Next.js": 2,
+    "langflow": 3,
+    "tomcat": 1
+  },
+  "cves": {
+    "CVE-2022-24706": 1,
+    "CVE-2021-43798": 1,
+    "CVE-2021-41773": 1,
+    "CVE-2021-42013": 1,
+    "CVE-2024-23897": 1,
+    "CVE-2023-23752": 1,
+    "CVE-2021-44228": 1,
+    "CVE-2016-5734": 1,
+    "CVE-2018-12613": 1,
+    "CVE-2022-46169": 1,
+    "CVE-2020-11981": 2,
+    "CVE-2020-11651": 2,
+    "CVE-2021-45232": 2,
+    "CVE-2017-15709": 2,
+    "CVE-2021-22205": 2,
+    "CVE-2025-32433": 2,
+    "CVE-2025-30208": 2,
+    "CVE-2025-29927": 2,
+    "CVE-2025-3248": 3,
+    "CVE-2025-24813": 1
+  },
+  "success": {
+    "Success": 19,
+    "Fail": 11
+  },
+  "vulnerable": {
+    "Yes": 22,
+    "No": 8
+  }
+}

@@ -1,0 +1,159 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=4, TCP=16, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:33004           <-> 172.18.0.2:5173                  4 778 bytes       6 717 bytes      10 1495 bytes     0.000147000         0.0240
+172.18.0.1:33014           <-> 172.18.0.2:5173                  5 844 bytes       5 657 bytes      10 1501 bytes     0.024102000         0.0060
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Vite (version not explicitly visible)
+Relevant Events:
+- [E-S0000-F000006-004] GET /@fs/etc/passwd
+- [E-S0000-F000008-008] HTTP Status 403
+Exploit Indicators:
+- [E-S0000-F000006-004] GET /@fs/etc/passwd
+Malicious Activities: Attempted access to sensitive file (/etc/passwd)
+Attack Success: Failed
+Evidence Keywords: GET, /etc/passwd, 403 Forbidden, Vite, evidence IDs [E-S0000-F000006-004, E-S0000-F000008-008]
+
+--- Stream 1 [VALID] ---
+Service: Vite (version not visible)
+Relevant Events:
+- [E-S0001-F000016-004] GET /@fs/etc/passwd?raw??
+- [E-S0001-F000018-008] HTTP Status 403
+Exploit Indicators:
+- [E-S0001-F000016-004] GET /@fs/etc/passwd?raw??
+Malicious Activities: Attempted access to /etc/passwd
+Attack Success: Failed
+Evidence Keywords: Vite, /etc/passwd, 403 Forbidden, E-S0001-F000016-004, E-S0001-F000018-008
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Arbitrary File Read",
+    "technique": "Attempted access to sensitive file via Vite /@fs path",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000016-004",
+      "E-S0001-F000018-008"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No version or specific vulnerability details to map to a known CVE; only attempted /@fs access observed."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000006-004",
+    "E-S0000-F000008-008",
+    "E-S0001-F000016-004",
+    "E-S0001-F000018-008"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Vite
+Attack Type: Arbitrary File Read
+Attack Success: Fail
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: High
+Score: 4/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "Not Applicable",
+  "confidence": "High",
+  "reasons": [
+    "Observed service is Vite with version Unknown; no confirmed vulnerable version in evidence.",
+    "PCAP shows attempted arbitrary file read via Vite @fs endpoints (/@fs/etc/passwd and /@fs/etc/passwd?raw??) but all requests returned HTTP 403, indicating failure and no data exposure.",
+    "While the ?raw?? pattern aligns with CVE-2025-30208, the lack of successful file disclosure and unknown version prevent validating that vulnerability on the target.",
+    "No other CVE-specific indicators were observed (e.g., double slashes for CVE-2023-34092, case-augmented filenames for CVE-2024-23331, ?import&raw for CVE-2024-45811).",
+    "Both Analyst and Verifier reports confirm the attack attempt failed and did not map the activity to a specific CVE."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Vite
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000016-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 403.
+
+Verification Summary:
+- Affected service: Vite.
+- Attack type: Arbitrary File Read.
+- Attack technique: Attempted access to sensitive file via Vite /@fs path.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Observed service is Vite with version Unknown; no confirmed vulnerable version in evidence.
+- CVE assessment: PCAP shows attempted arbitrary file read via Vite @fs endpoints (/@fs/etc/passwd and /@fs/etc/passwd?raw??) but all requests returned HTTP 403, indicating failure and no data exposure.
+- CVE assessment: While the ?raw?? pattern aligns with CVE-2025-30208, the lack of successful file disclosure and unknown version prevent validating that vulnerability on the target.
+- CVE assessment: No other CVE-specific indicators were observed (e.g., double slashes for CVE-2023-34092, case-augmented filenames for CVE-2024-23331, ?import&raw for CVE-2024-45811).
+- CVE assessment: Both Analyst and Verifier reports confirm the attack attempt failed and did not map the activity to a specific CVE.
+
+Defensive Recommendation:
+- Ensure Vite is updated to the latest stable version to mitigate known vulnerabilities.
+- Implement strict access controls and permissions on sensitive files and directories.
+- Monitor logs for unusual access patterns to /@fs paths or other sensitive endpoints.
+- Configure web application firewalls (WAFs) to block requests attempting to access system files via application-specific paths.
+- Regularly review and harden server configurations to prevent directory traversal and arbitrary file read vulnerabilities.

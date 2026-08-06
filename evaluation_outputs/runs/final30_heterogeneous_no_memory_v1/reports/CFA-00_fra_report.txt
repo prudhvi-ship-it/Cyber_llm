@@ -1,0 +1,74 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ICMPv6=1, ARP=2, TCP=31, EPMD=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:58612           <-> 172.18.0.2:9100                  9 747 bytes      11 886 bytes      20 1633 bytes   120.751311000         0.2423
+172.18.0.1:53970           <-> 172.18.0.2:4369                  6 434 bytes       6 407 bytes      12 841 bytes   120.746650000         0.0046
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: couchdb
+Relevant Events:
+- [E-S0000-F000011-004] couchdb
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: couchdb, E-S0000-F000011-004
+
+--- Stream 1 [VALID] ---
+Service: couchdb
+Relevant Events:
+- [E-S0001-F000023-003] couchdb
+- [E-S0001-F000031-004] root user keyword observed
+- [E-S0001-F000031-005] uid=0
+Exploit Indicators:
+- [E-S0001-F000031-006] gid=0
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: couchdb, root user, uid=0, gid=0, E-S0001-F000023-003, E-S0001-F000031-004, E-S0001-F000031-005, E-S0001-F000031-006
+
+=== FINAL REPORT ===
+Affected Service: couchdb
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP E-S0001-F000023-003: CouchDB application traffic identified on the observed stream.
+- PCAP E-S0001-F000031-004: Payload contained a 'root' user keyword, indicative of elevated context.
+- PCAP E-S0001-F000031-005: Payload showed 'uid=0', consistent with root user context.
+- PCAP E-S0001-F000031-006: Payload showed 'gid=0', consistent with root group context.
+
+Verification Summary:
+- Validated CouchDB as the affected service via PCAP marker E-S0001-F000023-003.
+- Observed indicators of root-level context in packet payloads via E-S0001-F000031-004, E-S0001-F000031-005, and E-S0001-F000031-006.
+- No specific CVE could be conclusively matched to the observed behavior; identified_cve remains Not Found.
+- Overall attack outcome recorded as Success per validated FRA analysis and corroborating packet evidence.
+
+Defensive Recommendation:
+- Immediately restrict network exposure of CouchDB using firewall rules and allowlisting; remove unintended public access.
+- Require strong authentication and disable any default or anonymous administrative access; review and remove unauthorized admin roles.
+- Upgrade Apache CouchDB to the latest supported version and apply all relevant security patches.
+- Run CouchDB under a dedicated non-root system account; audit and correct file, directory, and service permissions.
+- Rotate credentials, API tokens, and sessions potentially exposed; invalidate active sessions and reissue secrets.
+- Enable TLS for all CouchDB endpoints and enforce least-privilege access controls; configure CORS conservatively if needed.
+- Enhance monitoring and logging for administrative actions and configuration changes; forward logs to a SIEM and set alerts for anomalous activity.
+- Conduct a host compromise assessment for persistence and lateral movement given root-level indicators; consider reimaging if compromise is confirmed.
+- Implement host- and network-based detections for suspicious CouchDB administrative API usage patterns without performing offensive actions.

@@ -1,0 +1,30 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=6, TCP=12, HTTP/JSON=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:42576           <-> 172.18.0.2:7860                  6 625 bytes       8 1018 bytes      14 1643 bytes   159.002240000         0.0249
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0000-F000010-009] HTTP Status 200
+- [E-S0000-F000012-011] root user keyword observed
+- [E-S0000-F000012-012] uid=0
+Exploit Indicators:
+- [E-S0000-F000008-007] exec("raise Exception(__import__('subprocess')
+Malicious Activities: Command execution observed
+Attack Success: Succeeded
+Evidence Keywords: exec, subprocess, uid=0, root user, E-S0000-F000008-007, E-S0000-F000012-011, E-S0000-F000012-012

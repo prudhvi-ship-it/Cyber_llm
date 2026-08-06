@@ -1,0 +1,296 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 11
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Protocol Counts: ICMPv6=1, ARP=2, TCP=88, HTTP=22
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:34938           <-> 172.18.0.2:80                    5 1485 bytes       5 434 bytes      10 1919 bytes   120.593323000         0.0091
+172.18.0.1:34948           <-> 172.18.0.2:80                    5 715 bytes       5 434 bytes      10 1149 bytes   120.679701000         0.0053
+172.18.0.1:34960           <-> 172.18.0.2:80                    5 732 bytes       5 433 bytes      10 1165 bytes   120.736330000         0.0073
+172.18.0.1:34970           <-> 172.18.0.2:80                    5 569 bytes       5 436 bytes      10 1005 bytes   120.791599000         0.0078
+172.18.0.1:3498
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0000-F000007-004] GET /icons/../../../../etc/passwd
+- [E-S0000-F000009-007] HTTP Status 200
+- [E-S0000-F000009-008] root user keyword observed
+Exploit Indicators:
+- [E-S0000-F000007-004] ../../../../etc/passwd
+Malicious Activities: Path traversal to access /etc/passwd
+Attack Success: Succeeded
+Evidence Keywords: path traversal, /etc/passwd, root, admin, [E-S0000-F000007-004], [E-S0000-F000009-007], [E-S0000-F000009-008]
+
+--- Stream 1 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0001-F000017-004] GET /icons/../../../../etc/shadow
+- [E-S0001-F000019-007] HTTP Status 403
+Exploit Indicators:
+- [E-S0001-F000017-004] ../../../../etc/shadow
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, 403 Forbidden, Apache/2.4.49, E-S0001-F000017-004, E-S0001-F000019-007
+
+--- Stream 2 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0002-F000024-001] TCP connection established from client to server
+- [E-S0002-F000027-004] GET request for /icons/../../../../etc/hosts
+- [E-S0002-F000029-007] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0002-F000027-004] GET /icons/../../../../etc/hosts
+Malicious Activities: Path Traversal
+Attack Success: Succeeded
+Evidence Keywords: path traversal, HTTP, Apache/2.4.49, [E-S0002-F000027-004], [E-S0002-F000029-007]
+
+--- Stream 3 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0003-F000034-001] TCP connection established from client to server
+- [E-S0003-F000037-004] GET request for /icons/../../../../etc/hostname
+- [E-S0003-F000039-007] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0003-F000037-004] GET /icons/../../../../etc/hostname
+Malicious Activities: Path Traversal
+Attack Success: Succeeded
+Evidence Keywords: path traversal, HTTP, Apache/2.4.49, [E-S0003-F000037-004], [E-S0003-F000039-007]
+
+--- Stream 4 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0004-F000044-001] TCP connection established from client to server
+- [E-S0004-F000047-004] GET /icons/../../../../etc/group
+- [E-S0004-F000049-007] HTTP Status 200 returned with sensitive information
+Exploit Indicators:
+- [E-S0004-F000047-004] GET /icons/../../../../etc/group (path traversal attempt)
+Malicious Activities: Access to sensitive file (/etc/group) indicating potential unauthorized access
+Attack Success: Succeeded
+Evidence Keywords: path traversal, HTTP Status 200, root user keyword observed, [E-S0004-F000047-004], [E-S0004-F000049-007], [E-S0004-F000049-008]
+
+--- Stream 5 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0005-F000057-004] GET /icons/../../../../root/.bash_history
+- [E-S0005-F000059-008] HTTP Status 403
+- [E-S0005-F000057-006] root user keyword observed
+Exploit Indicators:
+- [E-S0005-F000057-004] ../../../../root/.bash_history
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, 403 Forbidden, root user
+
+--- Stream 6 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0006-F000064-001] TCP connection established from client to server
+- [E-S0006-F000067-004] GET request for /icons/../../../../root/.ssh/authorized_keys
+- [E-S0006-F000069-008] HTTP Status 403 Forbidden response from server
+Exploit Indicators:
+- [E-S0006-F000067-004] Path traversal attempt to access /root/.ssh/authorized_keys
+Malicious Activities: Path traversal attempt detected
+Attack Success: Failed
+Evidence Keywords: path traversal, 403 Forbidden, E-S0006-F000067-004, E-S0006-F000069-008
+
+--- Stream 7 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0007-F000077-004] GET /icons/../../../../var/log/syslog
+- [E-S0007-F000079-007] HTTP Status 404
+Exploit Indicators:
+- [E-S0007-F000077-004] ../../../../var/log/syslog
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, 404 Not Found, E-S0007-F000077-004, E-S0007-F000079-007
+
+--- Stream 8 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0008-F000084-001] TCP connection established from client to server
+- [E-S0008-F000087-004] GET request for /icons/../../../../var/log/auth.log
+- [E-S0008-F000089-007] HTTP Status 404 response from server
+Exploit Indicators:
+- [E-S0008-F000087-004] GET /icons/../../../../var/log/auth.log
+Malicious Activities: Path Traversal Attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, 404 Not Found, E-S0008-F000087-004, E-S0008-F000089-007
+
+--- Stream 9 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0009-F000094-001] TCP connection established from client to server
+- [E-S0009-F000097-004] GET request for path traversal to access config.php
+- [E-S0009-F000099-007] HTTP Status 404 response indicating the resource was not found
+Exploit Indicators:
+- [E-S0009-F000097-004] GET /icons/../../../../var/www/html/config.php
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, 404 Not Found, Apache/2.4.49, [E-S0009-F000097-004], [E-S0009-F000099-007]
+
+--- Stream 10 [VALID] ---
+Service: Apache/2.4.49
+Relevant Events:
+- [E-S0010-F000107-004] POST /cgi-bin/../../../../bin/sh
+- [E-S0010-F000109-008] HTTP Status 200
+- [E-S0010-F000107-006] /bin/sh
+Exploit Indicators:
+- [E-S0010-F000107-004] /cgi-bin/../../../../bin/sh
+Malicious Activities: Command execution attempt via path traversal
+Attack Success: Succeeded
+Evidence Keywords: path traversal, command execution, [E-S0010-F000107-004], [E-S0010-F000109-008], [E-S0010-F000107-006]
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache HTTP Server",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Apache/2.4.49",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "Directory Traversal leading to file disclosure and CGI shell access",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000007-004",
+      "E-S0000-F000009-007",
+      "E-S0000-F000009-008",
+      "E-S0002-F000027-004",
+      "E-S0002-F000029-007",
+      "E-S0003-F000037-004",
+      "E-S0003-F000039-007",
+      "E-S0004-F000047-004",
+      "E-S0004-F000049-007",
+      "E-S0004-F000049-008",
+      "E-S0010-F000107-004",
+      "E-S0010-F000109-008",
+      "E-S0010-F000107-006"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-41773",
+    "confidence": "High",
+    "reason": "Apache 2.4.49 path traversal allowed access to /etc/passwd (HTTP 200 with root content via /icons/../../../../) and CGI invocation via /cgi-bin/../../../../bin/sh returned 200, consistent with CVE-2021-41773 exploitation."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000007-004",
+    "E-S0000-F000009-007",
+    "E-S0000-F000009-008",
+    "E-S0002-F000027-004",
+    "E-S0002-F000029-007",
+    "E-S0003-F000037-004",
+    "E-S0003-F000039-007",
+    "E-S0004-F000047-004",
+    "E-S0004-F000049-007",
+    "E-S0004-F000049-008",
+    "E-S0010-F000107-004",
+    "E-S0010-F000109-008",
+    "E-S0010-F000107-006"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Apache HTTP Server
+Attack Type: Path Traversal
+Attack Success: Success
+CVE: CVE-2021-41773
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: High
+Overall Confidence: High
+Score: 5/5
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2021-41773",
+  "cve_supported": "Yes",
+  "confidence": "High",
+  "reasons": [
+    "Product and version match: Apache HTTP Server 2.4.49 observed; NVD candidate explicitly affects 2.4.49",
+    "Attack match: confirmed path traversal leading to file disclosure",
+    "Forensic evidence: GET /icons/../../../../etc/passwd returned HTTP 200 with 'root' content; additional traversal to /etc/hosts succeeded",
+    "Both Analyst and Verifier identify CVE-2021-41773 with high confidence",
+    "NVD description aligns with observed behavior (path normalization flaw enabling traversal and potential CGI execution)"
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Apache HTTP Server
+Identified CVE: CVE-2021-41773
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000007-004]: GET /icons/../../../../etc/passwd.
+- PCAP [E-S0000-F000009-007]: HTTP Status 200.
+- PCAP [E-S0000-F000009-008]: root user keyword observed.
+- PCAP [E-S0002-F000027-004]: GET request for /icons/../../../../etc/hosts.
+- PCAP [E-S0002-F000029-007]: HTTP Status 200 response from server.
+- PCAP [E-S0003-F000037-004]: GET request for /icons/../../../../etc/hostname.
+- PCAP [E-S0003-F000039-007]: HTTP Status 200 response from server.
+- PCAP [E-S0004-F000047-004]: GET /icons/../../../../etc/group.
+- PCAP [E-S0004-F000049-007]: HTTP Status 200 returned with sensitive information.
+- PCAP [E-S0004-F000049-008]: Evidence cited by the validated Analyst and Verifier.
+- PCAP [E-S0010-F000107-004]: POST /cgi-bin/../../../../bin/sh.
+- PCAP [E-S0010-F000109-008]: HTTP Status 200.
+- PCAP [E-S0010-F000107-006]: /bin/sh.
+
+Verification Summary:
+- Affected service: Apache HTTP Server.
+- Attack type: Path Traversal.
+- Attack technique: Directory Traversal leading to file disclosure and CGI shell access.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Validated CVE: CVE-2021-41773.
+- CVE assessment: Product and version match: Apache HTTP Server 2.4.49 observed; NVD candidate explicitly affects 2.4.49
+- CVE assessment: Attack match: confirmed path traversal leading to file disclosure
+- CVE assessment: Forensic evidence: GET /icons/../../../../etc/passwd returned HTTP 200 with 'root' content; additional traversal to /etc/hosts succeeded
+- CVE assessment: Both Analyst and Verifier identify CVE-2021-41773 with high confidence
+- CVE assessment: NVD description aligns with observed behavior (path normalization flaw enabling traversal and potential CGI execution)
+
+Defensive Recommendation:
+- Upgrade Apache HTTP Server to a version greater than 2.4.49 to remediate CVE-2021-41773.
+- Implement strict input validation and sanitization for all user-supplied input, especially file paths.
+- Configure web server access controls to restrict access to sensitive directories and files.
+- Regularly review and update web server configurations to follow security best practices.
+- Deploy a Web Application Firewall (WAF) to detect and block path traversal attempts.
+- Monitor web server logs for unusual access patterns, such as requests containing '..' or encoded path traversal sequences.

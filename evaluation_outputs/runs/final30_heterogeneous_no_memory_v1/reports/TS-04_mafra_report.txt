@@ -1,0 +1,174 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=2, TCP=20, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:48170           <-> 172.18.0.2:3000                  6 9666 bytes       8 696 bytes      14 10 kB        10.169293000         0.1211
+172.18.0.1:40342           <-> 172.18.0.2:3000                  4 453 bytes       6 483 bytes      10 936 bytes     0.000125000         0.1493
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0000-F000006-004] GET /
+- [E-S0000-F000008-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0000-F000006-006] User-Agent: curl/7.68.0
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP, 307, curl, GET, redirect, evidence IDs [E-S0000-F000006-004, E-S0000-F000008-008]
+
+--- Stream 1 [VALID] ---
+Service: Next.js (version not explicitly visible)
+Relevant Events:
+- [E-S0001-F000016-004] GET /
+- [E-S0001-F000020-008] admin keyword observed
+- [E-S0001-F000018-007] HTTP Status 200
+Exploit Indicators:
+- [E-S0001-F000020-008] admin keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Next.js, admin, HTTP Status 200, GET /, curl/7.68.0, evidence ID E-S0001-F000020-008
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Next.js",
+    "application": "Unknown",
+    "framework": "Next.js",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0000-F000006-006",
+      "E-S0001-F000016-004",
+      "E-S0001-F000018-007",
+      "E-S0001-F000020-008"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No exploit indicators tied to a known CVE; only basic GET requests and an 'admin' keyword observed."
+  },
+  "confidence": "Unknown"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "No",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "Attack Type",
+    "Attack Technique",
+    "Attack Success"
+  ],
+  "evidence_check": [
+    "E-S0000-F000006-004",
+    "E-S0000-F000008-008",
+    "E-S0000-F000006-006",
+    "E-S0001-F000016-004",
+    "E-S0001-F000018-007",
+    "E-S0001-F000020-008"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Next.js
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: No
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Medium
+Overall Confidence: Low
+Score: 1/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "High",
+  "reasons": [
+    "Observed product is Next.js but version is Unknown.",
+    "PCAP shows only basic GET requests with 200/307 responses; no exploitation indicators.",
+    "No evidence of known Next.js exploit paths or behaviors (e.g., /_next, /static, /_error, open redirect parameters, images.domains/SVG).",
+    "No signs of next-auth or Auth0 SDK usage required by several candidates.",
+    "Both Analyst and Verifier found no CVE linkage; attack type and success are unknown.",
+    "Allowed CVEs require specific versions or configurations not supported by the evidence."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Next.js
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000006-004]: GET /.
+- PCAP [E-S0000-F000008-008]: HTTP Status 307.
+- PCAP [E-S0000-F000006-006]: User-Agent: curl/7.68.0.
+- PCAP [E-S0001-F000016-004]: GET /.
+- PCAP [E-S0001-F000018-007]: HTTP Status 200.
+- PCAP [E-S0001-F000020-008]: admin keyword observed.
+
+Verification Summary:
+- Affected service: Next.js.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: No.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Observed product is Next.js but version is Unknown.
+- CVE assessment: PCAP shows only basic GET requests with 200/307 responses; no exploitation indicators.
+- CVE assessment: No evidence of known Next.js exploit paths or behaviors (e.g., /_next, /static, /_error, open redirect parameters, images.domains/SVG).
+- CVE assessment: No signs of next-auth or Auth0 SDK usage required by several candidates.
+- CVE assessment: Both Analyst and Verifier found no CVE linkage; attack type and success are unknown.
+- CVE assessment: Allowed CVEs require specific versions or configurations not supported by the evidence.
+- Unsupported claim: Attack Type
+- Unsupported claim: Attack Technique
+- Unsupported claim: Attack Success
+
+Defensive Recommendation:
+- Ensure all Next.js applications are running the latest stable version to benefit from security patches.
+- Implement robust logging and monitoring for Next.js applications, specifically looking for unusual GET requests or unexpected HTTP status codes.
+- Regularly review and update dependencies used in Next.js projects to mitigate risks from third-party vulnerabilities.
+- Employ a Web Application Firewall (WAF) to detect and block common web-based attacks targeting Next.js applications.

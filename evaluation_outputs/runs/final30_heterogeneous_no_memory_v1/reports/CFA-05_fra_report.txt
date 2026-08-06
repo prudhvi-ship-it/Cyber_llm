@@ -1,0 +1,279 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 19
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+Protocol Counts: TCP=273, ARP=2, MySQL=321
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:47626           <-> 172.18.0.2:3306                157 12 kB          94 95 kB         251 108 kB       15.461340000         1.9536
+172.18.0.3:47640           <-> 172.18.0.2:3306                 75 5585 bytes      47 30 kB         122 36 kB        17.434013000         1.6441
+172.18.0.3:37132           <-> 172.18.0.2:3306                 58 4546 bytes      41 48 kB          99 53 kB        19.091875000         0.9672
+172.18.0.3:37144           <-> 172.18.0.2:3306                 10 870 bytes      12 2128 bytes      22 2998 bytes    20.072244000         0.0297
+172.18.0.3:47598
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0000-F000001-001] Client initiated connection to MySQL server.
+- [E-S0000-F000002-002] MySQL server responded to client connection.
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, [E-S0000-F000001-001], [E-S0000-F000002-002]
+
+--- Stream 1 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0001-F000003-001] TCP connection initiated from client to server
+- [E-S0001-F000004-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0001-F000003-001, E-S0001-F000004-002
+
+--- Stream 2 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0002-F000005-001] TCP connection initiated from client to server
+- [E-S0002-F000006-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0002-F000005-001, E-S0002-F000006-002
+
+--- Stream 3 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0003-F000007-001] TCP connection initiated from client to server
+- [E-S0003-F000008-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0003-F000007-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0003-F000007-001, E-S0003-F000008-002
+
+--- Stream 4 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0004-F000011-001] TCP connection initiated from client to server
+- [E-S0004-F000012-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0004-F000011-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0004-F000011-001, E-S0004-F000012-002
+
+--- Stream 5 [VALID] ---
+Service: MySQL  (version not visible)
+Relevant Events:
+- [E-S0005-F000013-001] TCP connection initiated from client to server
+- [E-S0005-F000014-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, E-S0005-F000013-001, E-S0005-F000014-002
+
+--- Stream 6 [VALID] ---
+Service: MySQL  (version not visible)
+Relevant Events:
+- [E-S0006-F000015-001] TCP connection initiated from client to server
+- [E-S0006-F000016-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0006-F000015-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, E-S0006-F000015-001, E-S0006-F000016-002
+
+--- Stream 7 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0007-F000017-001] TCP connection initiated from client to server
+- [E-S0007-F000018-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0007-F000017-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0007-F000017-001, E-S0007-F000018-002
+
+--- Stream 8 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0008-F000019-001] TCP connection initiated from client to server
+- [E-S0008-F000020-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0008-F000019-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0008-F000019-001, E-S0008-F000020-002
+
+--- Stream 9 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0009-F000021-001] TCP connection initiated from client to server
+- [E-S0009-F000022-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0009-F000021-001, E-S0009-F000022-002
+
+--- Stream 10 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0010-F000023-001] TCP connection established from client to server
+- [E-S0010-F000024-002] TCP connection response from server to client
+- [E-S0010-F000029-003] MySQL server response to client
+Exploit Indicators:
+- [E-S0010-F000029-003] mysql_native_password
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, mysql_native_password, E-S0010-F000029-003
+
+--- Stream 11 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0011-F000031-001] TCP connection established from client to server
+- [E-S0011-F000036-005] root user keyword observed
+- [E-S0011-F000040-006] SQL command executed: SHOW DATABASES LIKE "joomla"
+Exploit Indicators:
+- [E-S0011-F000036-005] root user keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, SHOW DATABASES, E-S0011-F000031-001, E-S0011-F000036-005, E-S0011-F000040-006
+
+--- Stream 12 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0012-F000052-003] MySQL payload observed
+- [E-S0012-F000054-004] MySQL payload observed
+- [E-S0012-F000054-005] root user keyword observed
+Exploit Indicators:
+- [E-S0012-F000054-004] CREATE DATABASE IF NOT EXISTS `joomla` CHARACTER SET utf8
+Malicious Activities: Database creation attempt detected
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, CREATE DATABASE, E-S0012-F000052-003, E-S0012-F000054-004, E-S0012-F000054-005
+
+--- Stream 13 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0013-F000070-003] MySQL response with payload
+- [E-S0013-F000072-004] MySQL request with root user keyword observed
+- [E-S0013-F000084-006] CREATE TABLE command observed
+Exploit Indicators:
+- [E-S0013-F000084-007] id command executed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, CREATE TABLE, root, id, INSERT, evidence IDs [E-S0013-F000070-003, E-S0013-F000072-004, E-S0013-F000084-006, E-S0013-F000084-007]
+
+--- Stream 14 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0014-F000335-006] CREATE TABLE IF NOT EXISTS `j_banners` (
+- [E-S0014-F000339-008] CREATE TABLE IF NOT EXISTS `j_banner_clients` (
+- [E-S0014-F000343-009] CREATE TABLE IF NOT EXISTS `j_banner_tracks` (
+Exploit Indicators:
+- [E-S0014-F000335-007] id
+Malicious Activities: Suspicious table creation and insertion of data into multiple tables
+Attack Success: Succeeded
+Evidence Keywords: MySQL, CREATE TABLE, j_banners, j_banner_clients, j_banner_tracks, root, E-S0014-F000335-006, E-S0014-F000339-008, E-S0014-F000343-009, E-S0014-F000335-007
+
+--- Stream 15 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0015-F000443-003] MySQL response to client
+- [E-S0015-F000445-005] root user keyword observed
+- [E-S0015-F000505-022] admin keyword observed
+Exploit Indicators:
+- [E-S0015-F000457-006] CREATE TABLE IF NOT EXISTS `j_associations` (
+Malicious Activities: Multiple CREATE TABLE and INSERT statements indicating potential database manipulation
+Attack Success: Succeeded
+Evidence Keywords: MySQL, CREATE TABLE, INSERT, root, admin, j_associations, j_categories, j_content_types, E-S0015-F000443-003, E-S0015-F000445-005, E-S0015-F000505-022
+
+--- Stream 16 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0016-F000539-001] TCP connection established from client to server
+- [E-S0016-F000542-003] MySQL response from server to client
+- [E-S0016-F000548-007] SQL command to insert users into `j_users` table
+Exploit Indicators:
+- [E-S0016-F000548-008] Command executed: id
+Malicious Activities: SQL injection observed with user creation commands
+Attack Success: Succeeded
+Evidence Keywords: MySQL, SQL injection, INSERT INTO, user creation, [E-S0016-F000548-007], [E-S0016-F000552-009]
+
+--- Stream 17 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0017-F000561-001] TCP connection established from client to server
+- [E-S0017-F000564-003] MySQL response from server to client
+- [E-S0017-F000566-005] root user keyword observed
+Exploit Indicators:
+- [E-S0017-F000564-003] REPLACE INTO j_schemas (extension_id, version_id) VALUES (700, '4.2.7-2022-12-29')
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, REPLACE INTO, E-S0017-F000564-003, E-S0017-F000566-005
+
+--- Stream 18 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0018-F000579-001] TCP connection established from client to server
+- [E-S0018-F000582-003] MySQL response from server to client
+- [E-S0018-F000588-006] SQL command executed to update j_extensions
+Exploit Indicators:
+- [E-S0018-F000584-005] root user keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, UPDATE, j_extensions, evidence IDs [E-S0018-F000579-001, E-S0018-F000582-003, E-S0018-F000584-005, E-S0018-F000588-006]
+
+=== FINAL REPORT ===
+Affected Service: MySQL
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0012-F000054-004]: Successful MySQL authentication using root credentials observed between 172.18.0.3 and 172.18.0.2:3306.
+- PCAP [E-S0014-F000335-006]: SQL commands consistent with creating a Joomla database schema were issued post-authentication.
+- PCAP [E-S0014-F000339-008]: Additional schema creation or alteration queries consistent with Joomla deployment observed.
+- PCAP [E-S0014-F000343-009]: Continuation of Joomla-related schema setup via CREATE/ALTER statements.
+- PCAP [E-S0015-F000445-005]: INSERT statements consistent with adding Joomla administrative user records issued to the database.
+- PCAP [E-S0015-F000457-006]: Further INSERT/UPDATE statements modifying user-related tables observed.
+- PCAP [E-S0015-F000505-022]: OK responses from MySQL acknowledging successful data modifications.
+- PCAP [E-S0016-F000548-007]: Additional post-authentication data manipulation commands executed.
+- PCAP [E-S0016-F000552-009]: Session concluded after successful database modifications.
+- NVD (CVE-2005-1274): Top-ranked candidate affects MySQL MaxDB WebDAV and is not applicable to direct MySQL 5.7.44 database access with valid credentials; no NVD CVE matches the observed technique.
+
+Verification Summary:
+- Validated primary service as MySQL; database identified as MySQL 5.7.44.
+- Traffic shows successful root login followed by DDL/DML implementing a Joomla schema and inserting admin users.
+- No exploit indicators or specific vulnerability fingerprints observed; activity is consistent with credential-based misuse.
+- NVD search produced candidates unrelated to the observed behavior (e.g., CVE-2005-1274 for MaxDB WebDAV); no applicable CVE identified.
+- Attack outcome confirmed successful unauthorized database modification.
+
+Defensive Recommendation:
+- Immediately remove the unauthorized Joomla schema and accounts; restore affected databases from known-good backups.
+- Rotate and securely store all MySQL credentials; disable remote root login and require unique, least-privileged accounts for applications.
+- Restrict network access to MySQL (3306) with host-based firewalls and allowlists; segment databases from untrusted networks.
+- Enable TLS for MySQL client-server connections and enforce strong authentication plugins.
+- Enable and regularly review MySQL general/audit logs; alert on anomalous DDL/DML (e.g., CREATE DATABASE, new admin users).
+- Implement centralized monitoring and SIEM correlation for database access events and credential changes.
+- Harden MySQL configuration (skip symbolic-links, secure_file_priv, local_infile=OFF unless required).
+- Plan upgrade to a currently supported MySQL release and apply security updates promptly.
+- Adopt a secrets management solution; eliminate shared or hardcoded credentials and enforce periodic key rotation.
+- Conduct an enterprise-wide credential hygiene review and enable MFA for administrative access to database hosts.

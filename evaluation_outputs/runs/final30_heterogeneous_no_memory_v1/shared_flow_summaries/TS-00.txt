@@ -1,0 +1,30 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=12, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:49424           <-> 172.18.0.2:2222                  8 1542 bytes      10 1081 bytes      18 2623 bytes     0.000135000         1.5382
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: SSH (OpenSSH 8.9)
+Relevant Events:
+- [E-S0000-F000008-004] SSHv2 connection established
+- [E-S0000-F000008-005] Erlang service identified
+- [E-S0000-F000012-006] SSHv2 payload with command execution
+Exploit Indicators:
+- [E-S0000-F000012-006] exec....Fos:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw==")))
+Malicious Activities: Command execution detected
+Attack Success: Succeeded
+Evidence Keywords: SSH, OpenSSH 8.9, Erlang, command execution, base64 decode, exec

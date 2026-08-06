@@ -1,0 +1,72 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=2, TCP=20, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:48170           <-> 172.18.0.2:3000                  6 9666 bytes       8 696 bytes      14 10 kB        10.169293000         0.1211
+172.18.0.1:40342           <-> 172.18.0.2:3000                  4 453 bytes       6 483 bytes      10 936 bytes     0.000125000         0.1493
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0000-F000006-004] GET /
+- [E-S0000-F000008-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0000-F000006-006] User-Agent: curl/7.68.0
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP, 307, curl, GET, redirect, evidence IDs [E-S0000-F000006-004, E-S0000-F000008-008]
+
+--- Stream 1 [VALID] ---
+Service: Next.js (version not explicitly visible)
+Relevant Events:
+- [E-S0001-F000016-004] GET /
+- [E-S0001-F000020-008] admin keyword observed
+- [E-S0001-F000018-007] HTTP Status 200
+Exploit Indicators:
+- [E-S0001-F000020-008] admin keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Next.js, admin, HTTP Status 200, GET /, curl/7.68.0, evidence ID E-S0001-F000020-008
+
+=== FINAL REPORT ===
+Affected Service: Next.js
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP: Stream 1 request to Next.js GET / with HTTP 200 [E-S0001-F000016-004, E-S0001-F000018-007].
+- PCAP: 'admin' keyword observed in HTTP traffic [E-S0001-F000020-008].
+- PCAP: Stream 0 GET / followed by HTTP 307 redirect [E-S0000-F000006-004, E-S0000-F000008-008].
+- NVD: CVE-2020-15242 – Next.js open redirect vulnerability in versions >=9.5.0 and <9.5.4; relates to specially encoded paths and redirect behavior (no exploitation confirmed in PCAP).
+
+Verification Summary:
+- Reviewed PCAP streams to 172.18.0.2:3000 classified as Next.js; observed GET / with successful 200 response [E-S0001-F000016-004, E-S0001-F000018-007].
+- Confirmed presence of 'admin' keyword in HTTP traffic; no evidence of admin access, authentication bypass, or privileged action [E-S0001-F000020-008].
+- Observed HTTP 307 redirect after a GET /; no evidence of externally directed or specially encoded redirect parameters in the capture, so no linkage to a specific CVE can be made [E-S0000-F000006-004, E-S0000-F000008-008].
+- No malicious payloads or exploitation behaviors identified; attack success and service vulnerability remain undetermined based on available packets.
+
+Defensive Recommendation:
+- Patch and maintain Next.js at the latest stable version to incorporate security fixes.
+- Harden redirect handling: enforce same-origin allowlists for any redirects, validate/normalize redirect targets server-side, and avoid using user-controlled parameters for redirect destinations.
+- Increase monitoring around admin-related paths or keywords; require strong authentication and authorization, and apply rate limiting.
+- Enable comprehensive HTTP access logging and correlate with IDS/IPS alerts to detect open-redirect patterns and anomalous requests.
+- Deploy security headers (e.g., Content-Security-Policy, X-Content-Type-Options, Referrer-Policy) to reduce web exploitation surface.
+- Retain full packet captures and enhance alerting to capture query parameters and redirect targets for future investigations.

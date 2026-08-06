@@ -1,0 +1,186 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 4
+TCP Stream IDs: 0, 1, 2, 3
+Protocol Counts: ARP=2, TCP=44, HTTP=8
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:59412           <-> 172.18.0.2:8080                  6 11 kB           8 691 bytes      14 12 kB         0.000212000         3.0020
+172.18.0.1:59434           <-> 172.18.0.2:8080                  6 11 kB           8 713 bytes      14 12 kB         4.453753000         0.0383
+172.18.0.1:59414           <-> 172.18.0.2:8080                  5 459 bytes       7 686 bytes      12 1145 bytes     2.989548000         0.0699
+172.18.0.1:59422           <-> 172.18.0.2:8080                  5 1175 bytes       7 2002 bytes      12 3177 bytes     4.432555000         0.0236
+================
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0000-F000006-004] GET /index.jsp
+- [E-S0000-F000008-008] id
+- [E-S0000-F000008-010] org/confluence/display/TOMCAT/Tomcat+Versions
+Exploit Indicators:
+- [E-S0000-F000008-009] org/confluence/display/TOMCAT/Specifications
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Apache Tomcat, GET, id, org/confluence/display/TOMCAT/Specifications, org/confluence/display/TOMCAT/Tomcat+Versions
+
+--- Stream 1 [VALID] ---
+Service: HTTP/1.1 (python-requests/2.22.0)
+Relevant Events:
+- [E-S0001-F000018-003] PUT /check.txt
+- [E-S0001-F000024-008] HTTP Status 201
+Exploit Indicators:
+- [E-S0001-F000018-003] PUT /check.txt
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: PUT, HTTP Status 201, python-requests/2.22.0, E-S0001-F000018-003, E-S0001-F000024-008
+
+--- Stream 2 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0002-F000032-003] PUT /sessions/absholi7ly.session
+- [E-S0002-F000034-007] cmd.exe
+- [E-S0002-F000036-010] HTTP Status 409
+Exploit Indicators:
+- [E-S0002-F000034-008] Lorg/apache/commons/collections/Transformer
+Malicious Activities: Suspicious payload indicating potential command execution
+Attack Success: Failed
+Evidence Keywords: cmd.exe, Transformer, HTTP Status 409, E-S0002-F000034-008, E-S0002-F000034-007
+
+--- Stream 3 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0003-F000043-004] GET /
+- [E-S0003-F000046-009] id
+- [E-S0003-F000046-010] org/confluence/display/TOMCAT/Specifications
+Exploit Indicators:
+- [E-S0003-F000046-010] org/confluence/display/TOMCAT/Specifications
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Tomcat, GET, id, python-requests/2.22.0, HTTP Status 200, evidence IDs [E-S0003-F000043-004, E-S0003-F000046-009, E-S0003-F000046-010]
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache Tomcat 9.0.97",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Java",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Arbitrary File Upload",
+    "technique": "HTTP PUT file upload",
+    "success": "Success",
+    "evidence": [
+      "E-S0001-F000018-003",
+      "E-S0001-F000024-008"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Medium",
+    "reason": "Evidence shows successful HTTP PUT upload to Apache Tomcat but does not match a specific CVE signature."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "The analyst's claim that the attack type is 'Arbitrary File Upload' is not directly supported by the evidence. The evidence shows a successful HTTP PUT request, but does not indicate that the uploaded file was arbitrary."
+  ],
+  "evidence_check": [
+    "E-S0001-F000018-003",
+    "E-S0001-F000024-008"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Apache Tomcat 9.0.97
+Attack Type: Arbitrary File Upload
+Attack Success: Success
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: Medium
+Score: 3/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "High",
+  "reasons": [
+    "Observed service and version match: Apache Tomcat 9.0.97.",
+    "Evidence confirms a successful HTTP PUT upload (201 Created) but does not demonstrate conditions required by the candidates.",
+    "CVE-2024-50379 and CVE-2024-56337: require JSP compilation TOCTOU on a case-insensitive filesystem with default servlet write enabled; no JSP compilation or filesystem characteristics observed.",
+    "CVE-2025-24813: RCE path requires internal-dot path equivalence and partial PUT plus Tomcat file-based session persistence; traffic shows an attempted session deserialization payload to /sessions/*.session that failed (HTTP 409) and no partial PUT or internal-dot path observed.",
+    "CVE-2025-55752: requires URL rewriting-based path traversal; no evidence of rewrite rules or traversal in the traffic.",
+    "CVE-2008-0457: specific to Symantec LiveState on Tomcat, not applicable to a generic Apache Tomcat 9.0.97 instance.",
+    "Both Analyst and Verifier did not attribute a specific CVE to the observed activity."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Apache Tomcat 9.0.97
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0001-F000018-003]: PUT /check.txt.
+- PCAP [E-S0001-F000024-008]: HTTP Status 201.
+
+Verification Summary:
+- Affected service: Apache Tomcat 9.0.97.
+- Attack type: Arbitrary File Upload.
+- Attack technique: HTTP PUT file upload.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: High.
+- Consensus confidence: Medium.
+- Consensus score: 3/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Observed service and version match: Apache Tomcat 9.0.97.
+- CVE assessment: Evidence confirms a successful HTTP PUT upload (201 Created) but does not demonstrate conditions required by the candidates.
+- CVE assessment: CVE-2024-50379 and CVE-2024-56337: require JSP compilation TOCTOU on a case-insensitive filesystem with default servlet write enabled; no JSP compilation or filesystem characteristics observed.
+- CVE assessment: CVE-2025-24813: RCE path requires internal-dot path equivalence and partial PUT plus Tomcat file-based session persistence; traffic shows an attempted session deserialization payload to /sessions/*.session that failed (HTTP 409) and no partial PUT or internal-dot path observed.
+- CVE assessment: CVE-2025-55752: requires URL rewriting-based path traversal; no evidence of rewrite rules or traversal in the traffic.
+- CVE assessment: CVE-2008-0457: specific to Symantec LiveState on Tomcat, not applicable to a generic Apache Tomcat 9.0.97 instance.
+- CVE assessment: Both Analyst and Verifier did not attribute a specific CVE to the observed activity.
+- Unsupported claim: The analyst's claim that the attack type is 'Arbitrary File Upload' is not directly supported by the evidence. The evidence shows a successful HTTP PUT request, but does not indicate that the uploaded file was arbitrary.
+
+Defensive Recommendation:
+- Review and restrict HTTP PUT method access on Apache Tomcat servers to authorized users and paths only.
+- Implement strict access controls and authentication for file upload functionalities.
+- Regularly update Apache Tomcat to the latest stable version to patch known vulnerabilities.
+- Monitor server logs for unusual file uploads, especially to sensitive directories.
+- Configure web application firewalls (WAFs) to detect and block suspicious HTTP PUT requests.

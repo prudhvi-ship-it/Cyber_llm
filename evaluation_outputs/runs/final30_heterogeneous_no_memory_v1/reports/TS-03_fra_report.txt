@@ -1,0 +1,76 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=4, TCP=16, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:33004           <-> 172.18.0.2:5173                  4 778 bytes       6 717 bytes      10 1495 bytes     0.000147000         0.0240
+172.18.0.1:33014           <-> 172.18.0.2:5173                  5 844 bytes       5 657 bytes      10 1501 bytes     0.024102000         0.0060
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Vite (version not explicitly visible)
+Relevant Events:
+- [E-S0000-F000006-004] GET /@fs/etc/passwd
+- [E-S0000-F000008-008] HTTP Status 403
+Exploit Indicators:
+- [E-S0000-F000006-004] GET /@fs/etc/passwd
+Malicious Activities: Attempted access to sensitive file (/etc/passwd)
+Attack Success: Failed
+Evidence Keywords: GET, /etc/passwd, 403 Forbidden, Vite, evidence IDs [E-S0000-F000006-004, E-S0000-F000008-008]
+
+--- Stream 1 [VALID] ---
+Service: Vite (version not visible)
+Relevant Events:
+- [E-S0001-F000016-004] GET /@fs/etc/passwd?raw??
+- [E-S0001-F000018-008] HTTP Status 403
+Exploit Indicators:
+- [E-S0001-F000016-004] GET /@fs/etc/passwd?raw??
+Malicious Activities: Attempted access to /etc/passwd
+Attack Success: Failed
+Evidence Keywords: Vite, /etc/passwd, 403 Forbidden, E-S0001-F000016-004, E-S0001-F000018-008
+
+=== FINAL REPORT ===
+Affected Service: Vite
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000006-004]: HTTP GET request to /@fs/etc/passwd against a Vite dev server endpoint.
+- PCAP [E-S0000-F000008-008]: Server returned HTTP 403 Forbidden for /@fs/etc/passwd.
+- PCAP [E-S0001-F000016-004]: HTTP GET request to /@fs/etc/passwd?raw?? attempting alternate access.
+- PCAP [E-S0001-F000018-008]: Server returned HTTP 403 Forbidden for /@fs/etc/passwd?raw??.
+- NVD [CVE-2022-35204]: Vite before v2.9.13 allowed directory traversal via crafted URLs (NVD).
+- NVD [CVE-2023-34092]: Bypass of Vite server.fs.deny using double slashes could expose files in the project root on exposed dev servers; fixed in 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, 4.3.9 (NVD).
+- NVD [CVE-2024-23331]: Case-insensitive filesystem bypass of Vite server.fs.deny on Windows hosts, related to raw filesystem path access (NVD).
+
+Verification Summary:
+- Primary service confirmed as Vite; version not visible in traffic.
+- Two path traversal attempts targeting /@fs/ were observed; both requests received HTTP 403 responses, and no file contents were returned.
+- No packet evidence indicates successful local file read or leakage of sensitive data.
+- Specific CVE could not be validated from PCAP (version and exploit fingerprint unknown); identified_cve remains Not Found.
+- Given consistent 403 responses, the attack outcome is Fail; service vulnerability state remains Unknown without version/config details.
+
+Defensive Recommendation:
+- Do not expose the Vite dev server to untrusted networks; restrict by host/IP and place behind a firewall or VPN.
+- Upgrade Vite to versions that include fixes for known file access issues (at least vite 2.9.16/3.2.7/4.3.9 or newer stable releases).
+- Harden Vite server filesystem settings: keep strict defaults, ensure server.fs.deny includes sensitive patterns, and limit server.fs.allow to required project paths only.
+- Deploy HTTP filtering/WAF rules to block traversal patterns and access to /@fs/ from untrusted clients.
+- Enable verbose access/error logging on the dev server and monitor for repeated 403s and traversal indicators.
+- If hosting on Windows, validate behavior on case-insensitive filesystems and enforce case-sensitive checks where possible or keep the service internal only.
+- Regularly review dependencies and apply security updates; disable or remove the dev server in production environments.

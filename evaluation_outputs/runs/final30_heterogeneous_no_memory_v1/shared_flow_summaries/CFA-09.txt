@@ -1,0 +1,211 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 17
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+Protocol Counts: TCP=337, ARP=2, MySQL=1689
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:60626           <-> 172.18.0.2:3306               1092 81 kB         848 174 kB       1940 256 kB       12.168150000        11.8579
+172.18.0.3:60622           <-> 172.18.0.2:3306                  8 749 bytes      10 897 bytes      18 1646 bytes    12.154748000         0.0041
+172.18.0.3:58280           <-> 172.18.0.2:3306                  8 687 bytes      10 955 bytes      18 1642 bytes    24.039831000         0.0118
+172.18.0.3:58284           <-> 172.18.0.2:3306                  8 646 bytes      10 914 bytes      18 1560 bytes    24.068979000         0.0057
+172.18.0.3:60608 
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0000-F000001-001] Client initiated connection to MySQL server.
+- [E-S0000-F000002-002] MySQL server acknowledged the connection.
+Exploit Indicators:
+- [E-S0000-F000001-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, E-S0000-F000001-001, E-S0000-F000002-002
+
+--- Stream 1 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0001-F000003-001] Client initiated connection to MySQL server
+- [E-S0001-F000004-002] Server acknowledged connection from client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, [E-S0001-F000003-001], [E-S0001-F000004-002]
+
+--- Stream 2 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0002-F000005-001] TCP connection initiated from client to server
+- [E-S0002-F000006-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0002-F000005-001, E-S0002-F000006-002
+
+--- Stream 3 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0003-F000009-001] TCP connection initiated from client to server
+- [E-S0003-F000010-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0003-F000009-001, E-S0003-F000010-002
+
+--- Stream 4 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0004-F000011-001] TCP connection initiated from client to server
+- [E-S0004-F000012-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0004-F000011-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0004-F000011-001, E-S0004-F000012-002
+
+--- Stream 5 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0005-F000013-001] Client initiated connection to MySQL server
+- [E-S0005-F000014-002] MySQL server acknowledged connection
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, [E-S0005-F000013-001], [E-S0005-F000014-002]
+
+--- Stream 6 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0006-F000015-001] TCP connection initiated from client to server
+- [E-S0006-F000016-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0006-F000015-001, E-S0006-F000016-002
+
+--- Stream 7 [VALID] ---
+Service: MySQL  (version not visible)
+Relevant Events:
+- [E-S0007-F000017-001] TCP connection initiated from client to server
+- [E-S0007-F000018-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0007-F000017-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, E-S0007-F000017-001, E-S0007-F000018-002
+
+--- Stream 8 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0008-F000019-001] Client initiated connection to MySQL server
+- [E-S0008-F000020-002] MySQL server responded to client connection
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, E-S0008-F000019-001, E-S0008-F000020-002
+
+--- Stream 9 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0009-F000021-001] TCP connection initiated from client to server
+- [E-S0009-F000022-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0009-F000021-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0009-F000021-001, E-S0009-F000022-002
+
+--- Stream 10 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0010-F000023-001] Client initiated connection to MySQL server.
+- [E-S0010-F000024-002] MySQL server acknowledged the connection.
+Exploit Indicators:
+- [E-S0010-F000023-001] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, connection, E-S0010-F000023-001, E-S0010-F000024-002
+
+--- Stream 11 [VALID] ---
+Service: MySQL 5.7 (assumed based on port 3306)
+Relevant Events:
+- [E-S0011-F000025-001] TCP connection initiated from client to server
+- [E-S0011-F000026-002] TCP connection response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, 3306, E-S0011-F000025-001, E-S0011-F000026-002
+
+--- Stream 12 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0012-F000027-001] TCP connection established from client to server
+- [E-S0012-F000033-003] MySQL response sent from server to client
+Exploit Indicators:
+- [E-S0012-F000033-003] mysql_native_password
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, mysql_native_password, E-S0012-F000033-003
+
+--- Stream 13 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0013-F000038-003] MySQL response with payload indicating server version and authentication method
+- [E-S0013-F000040-005] root user keyword observed
+- [E-S0013-F000044-006] SQL command "show tables" executed
+Exploit Indicators:
+- [E-S0013-F000040-005] root user keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, show tables, E-S0013-F000038-003, E-S0013-F000040-005, E-S0013-F000044-006
+
+--- Stream 14 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0014-F000056-003] MySQL protocol communication observed
+- [E-S0014-F000058-005] root user keyword observed
+- [E-S0014-F000144-034] admin keyword observed
+Exploit Indicators:
+- [E-S0014-F000082-012] CREATE FUNCTION NOAUTOCREATENEEDED() detected
+Malicious Activities: SQL injection attempts and unauthorized table creation
+Attack Success: Succeeded
+Evidence Keywords: MySQL, root, admin, CREATE FUNCTION, SQL injection, table creation, [E-S0014-F000082-012], [E-S0014-F000144-034], [E-S0014-F000058-005]
+
+--- Stream 15 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0015-F001993-001] TCP connection established from client to server
+- [E-S0015-F001996-003] MySQL response from server to client
+- [E-S0015-F002002-007] SQL command executed to update user authentication
+Exploit Indicators:
+- [E-S0015-F002002-007] UPDATE user_auth SET must_change_password='' WHERE username = 'admin'
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: MySQL, root, admin, UPDATE, user_auth, must_change_password, evidence IDs [E-S0015-F001998-005, E-S0015-F002002-006, E-S0015-F002002-007]
+
+--- Stream 16 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0016-F002014-003] MySQL payload observed
+- [E-S0016-F002016-005] root user keyword observed
+- [E-S0016-F002020-004] SET GLOBAL time_zone = 'UTC' command observed
+Exploit Indicators:
+- [E-S0016-F002016-005] root user keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, SET GLOBAL time_zone, E-S0016-F002014-003, E-S0016-F002016-005, E-S0016-F002020-004

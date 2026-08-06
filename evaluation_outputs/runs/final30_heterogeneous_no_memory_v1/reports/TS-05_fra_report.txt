@@ -1,0 +1,71 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: TCP=16, HTTP=4, ARP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:50168           <-> 172.18.0.2:3000                  4 453 bytes       6 483 bytes      10 936 bytes     0.000000000         0.0096
+172.18.0.1:55670           <-> 172.18.0.2:3000                  4 453 bytes       6 564 bytes      10 1017 bytes    10.025536000         0.0064
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0000-F000004-004] GET /
+- [E-S0000-F000004-005] Host: 172.17.0.1:3000
+- [E-S0000-F000006-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0000-F000006-008] HTTP Status 307
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: HTTP, curl, 307, redirect, GET, login
+
+--- Stream 1 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0001-F000018-004] GET /
+- [E-S0001-F000018-005] Host: 172.17.0.1:3000
+- [E-S0001-F000020-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0001-F000018-006] User-Agent: curl/7.68.0
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP, GET, 307, curl, redirect, evidence IDs: [E-S0001-F000018-004, E-S0001-F000018-005, E-S0001-F000020-008]
+
+=== FINAL REPORT ===
+Affected Service: HTTP
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP: Stream 0 - Server responded with HTTP 307 redirect [E-S0000-F000006-008]
+- PCAP: Stream 1 - Server responded with HTTP 307 redirect [E-S0001-F000020-008]
+- NVD: No matching CVE identified for the validated service context; Selected CVE: Not Found
+
+Verification Summary:
+- Validated primary service as HTTP via FRA analysis.
+- Observed only HTTP 307 redirects across both TCP streams, with no further exploit activity [E-S0000-F000006-008, E-S0001-F000020-008].
+- NVD search returned Not Found; no product-matching CVEs applicable to the observed traffic.
+
+Defensive Recommendation:
+- Monitor and alert on unusual HTTP 3xx redirect patterns and loops; baseline normal application behavior.
+- Review and harden web server/reverse proxy redirect configuration to ensure intended 307 usage and least-privilege routing.
+- Maintain an accurate asset inventory and apply timely security updates to the web stack and dependencies.
+- Deploy and tune WAF/IDS rules for common HTTP-layer attacks; implement rate limiting and IP reputation controls.
+- Enforce TLS with strong ciphers, enable HSTS, and disable unnecessary HTTP methods (e.g., TRACE).
+- Centralize HTTP access/error logs, enable sufficient retention, and set alerts for anomalies.

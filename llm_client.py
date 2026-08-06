@@ -1,55 +1,41 @@
-'''import os
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-
-load_dotenv()
-
-
-DEFAULT_MODEL = os.getenv("LLM_MODEL", "gpt-4o")
-
-
-def get_llm(model: str | None = None, temperature: float = 0):
-    """Create and return the LLM used by the FRA project.
-
-    Today this uses OpenAI through LangChain.
-    Later, this file will be the only place we change for OpenRouter,
-    Claude, Gemini, or multi-LLM support.
-    """
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY is missing. Please check your .env file.")
-
-    return ChatOpenAI(
-        model=model or DEFAULT_MODEL,
-        api_key=api_key,
-        temperature=temperature,
-    )'''
+"""Single, auditable LLM factory used by every FRA and MAFRA role."""
 
 import os
+
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+
+from experiment_config import get_experiment_profile, resolve_model
+from llm_telemetry import TelemetryCallback
 
 load_dotenv()
 
 
-MODEL_MAP = {
-    "gpt": "openai/gpt-4o-mini",
-    "claude": "anthropic/claude-3.5-haiku",
-    "gemini": "google/gemini-2.0-flash-001",
-}
-
-
-def get_llm(role: str = "gpt", temperature: float = 0):
+def get_llm(role: str = "flow_summariser", temperature: float | None = None):
     api_key = os.getenv("OPENROUTER_API_KEY")
-
     if not api_key:
         raise ValueError("OPENROUTER_API_KEY is missing. Please check your .env file.")
 
-    model_name = MODEL_MAP.get(role, role)
+    profile = get_experiment_profile()
+    model_name = resolve_model(role, profile)
+    selected_temperature = (
+        float(os.getenv("FRA_LLM_TEMPERATURE", "0"))
+        if temperature is None
+        else float(temperature)
+    )
+    callback = TelemetryCallback(
+        role=role,
+        model=model_name,
+        profile=profile,
+    )
 
     return ChatOpenAI(
         model=model_name,
         api_key=api_key,
         base_url="https://openrouter.ai/api/v1",
-        temperature=temperature,
+        temperature=selected_temperature,
+        timeout=float(os.getenv("FRA_LLM_TIMEOUT", "180")),
+        max_retries=int(os.getenv("FRA_LLM_MAX_RETRIES", "2")),
+        max_tokens=int(os.getenv("OPENROUTER_MAX_TOKENS", "8192")),
+        callbacks=[callback],
     )

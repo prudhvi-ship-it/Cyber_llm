@@ -1,0 +1,102 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 4
+TCP Stream IDs: 0, 1, 2, 3
+Protocol Counts: ARP=2, TCP=44, HTTP=8
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:59412           <-> 172.18.0.2:8080                  6 11 kB           8 691 bytes      14 12 kB         0.000212000         3.0020
+172.18.0.1:59434           <-> 172.18.0.2:8080                  6 11 kB           8 713 bytes      14 12 kB         4.453753000         0.0383
+172.18.0.1:59414           <-> 172.18.0.2:8080                  5 459 bytes       7 686 bytes      12 1145 bytes     2.989548000         0.0699
+172.18.0.1:59422           <-> 172.18.0.2:8080                  5 1175 bytes       7 2002 bytes      12 3177 bytes     4.432555000         0.0236
+================
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0000-F000006-004] GET /index.jsp
+- [E-S0000-F000008-008] id
+- [E-S0000-F000008-010] org/confluence/display/TOMCAT/Tomcat+Versions
+Exploit Indicators:
+- [E-S0000-F000008-009] org/confluence/display/TOMCAT/Specifications
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Apache Tomcat, GET, id, org/confluence/display/TOMCAT/Specifications, org/confluence/display/TOMCAT/Tomcat+Versions
+
+--- Stream 1 [VALID] ---
+Service: HTTP/1.1 (python-requests/2.22.0)
+Relevant Events:
+- [E-S0001-F000018-003] PUT /check.txt
+- [E-S0001-F000024-008] HTTP Status 201
+Exploit Indicators:
+- [E-S0001-F000018-003] PUT /check.txt
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: PUT, HTTP Status 201, python-requests/2.22.0, E-S0001-F000018-003, E-S0001-F000024-008
+
+--- Stream 2 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0002-F000032-003] PUT /sessions/absholi7ly.session
+- [E-S0002-F000034-007] cmd.exe
+- [E-S0002-F000036-010] HTTP Status 409
+Exploit Indicators:
+- [E-S0002-F000034-008] Lorg/apache/commons/collections/Transformer
+Malicious Activities: Suspicious payload indicating potential command execution
+Attack Success: Failed
+Evidence Keywords: cmd.exe, Transformer, HTTP Status 409, E-S0002-F000034-008, E-S0002-F000034-007
+
+--- Stream 3 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0003-F000043-004] GET /
+- [E-S0003-F000046-009] id
+- [E-S0003-F000046-010] org/confluence/display/TOMCAT/Specifications
+Exploit Indicators:
+- [E-S0003-F000046-010] org/confluence/display/TOMCAT/Specifications
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Tomcat, GET, id, python-requests/2.22.0, HTTP Status 200, evidence IDs [E-S0003-F000043-004, E-S0003-F000046-009, E-S0003-F000046-010]
+
+=== FINAL REPORT ===
+Affected Service: Apache Tomcat/9.0.97
+Identified CVE: CVE-2025-24813
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP: Observed HTTP activity against the Apache Tomcat service, confirming exposure of the target application (E-S0000-F000006-004).
+- PCAP: Indicator of arbitrary file upload via HTTP PUT activity recorded during the attack sequence (E-S0001-F000018-003).
+- PCAP: Additional indicator associated with the HTTP PUT upload sequence (E-S0001-F000024-008).
+- PCAP: Additional indicator associated with the HTTP PUT upload sequence (E-S0002-F000032-003).
+- PCAP: Additional indicator associated with the HTTP PUT upload sequence (E-S0002-F000034-008).
+- PCAP: Additional indicator associated with the HTTP PUT upload sequence (E-S0002-F000034-007).
+- PCAP: Additional indicator associated with the HTTP PUT upload sequence (E-S0002-F000036-010).
+- NVD: CVE-2024-50379 affects Apache Tomcat versions up to and including 9.0.97; vulnerable when the default servlet is write-enabled on a case-insensitive filesystem; vendor recommends upgrading to 9.0.98. (CVE-2024-50379)
+
+Verification Summary:
+- Service identification: PCAP analysis attributes the target to Apache Tomcat/9.0.97, confirming the validated primary service.
+- Attack observation: Multiple PCAP evidence IDs indicate an arbitrary file upload via HTTP PUT with successful outcome as determined in the FRA analysis (E-S0001-F000018-003; E-S0001-F000024-008; E-S0002-F000032-003; E-S0002-F000034-008; E-S0002-F000034-007; E-S0002-F000036-010).
+- CVE alignment: NVD entry CVE-2024-50379 includes Tomcat 9.0.97 in the affected range and involves scenarios where write access is enabled for the default servlet; however, the PCAP does not confirm the specific configuration prerequisites (e.g., default servlet write enabled, case-insensitive filesystem).
+- Conclusion: The attack succeeded, but due to insufficient configuration evidence, the service’s vulnerability state relative to CVE-2024-50379 is marked Unknown.
+
+Defensive Recommendation:
+- Upgrade Apache Tomcat to a fixed release: at least 9.0.98 as recommended for CVE-2024-50379, or newer stable versions from the vendor.
+- If not strictly required, keep the default servlet in readonly mode (readonly=true) and avoid enabling write access.
+- Restrict or disable HTTP PUT and partial PUT methods at the server, reverse proxy, or WAF layer except where explicitly required; enforce authentication and authorization for any permitted PUT endpoints.
+- Block upload of executable content (e.g., .jsp) and validate allowlists for file types; store uploads outside the webroot and serve them via a non-executable path.
+- Harden filesystem and deployment: prefer case-sensitive filesystems for deployments where feasible and ensure webapp configurations do not allow writes to executable paths.
+- Implement rigorous logging and alerting for PUT/UPLOAD actions and unexpected file system writes; periodically audit webroot and temp directories for unauthorized files.
+- Segment and minimize exposure of the Tomcat management interface and default servlet; apply least-privilege file and directory permissions for the Tomcat process.

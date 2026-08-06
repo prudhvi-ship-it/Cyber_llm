@@ -1,0 +1,916 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 72
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71
+Protocol Counts: TCP=357, HTTP=29, HTTP/JSON=2, MDNS=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:36500           <-> 172.18.0.2:2379                  8 2363 bytes      11 1629 bytes      19 3992 bytes     0.000000000        11.7110
+172.18.0.3:49970           <-> 172.18.0.2:2379                  4 744 bytes       5 578 bytes       9 1322 bytes    10.985277000         0.0043
+172.18.0.3:49976           <-> 172.18.0.2:2379                  4 744 bytes       5 578 bytes       9 1322 bytes    11.219422000         0.0026
+172.18.0.3:49984           <-> 172.18.0.2:2379                  4 744 bytes       5 570 bytes       9 1314 bytes    11.671263000         0.0030
+172.18.0.3:500
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: etcd 3.4.0
+Relevant Events:
+- [E-S0000-F000004-003] POST /v3/lease/grant
+- [E-S0000-F000010-011] POST /v3/kv/put
+- [E-S0000-F000179-015] POST /v3/watch
+Exploit Indicators:
+- [E-S0000-F000011-012] eyJob3N0bmFtZSI6IjE2Y2NhMDk1ZGI0MCIsImV0Y2RfdmVyc2lvbiI6IjMuNC4wIiwiaWQiOiI2OGEzM2I5Ni1mOGNlLTRmMzAtOWRhZC05NmZjODdkYmViYmYiLCJib290X3RpbWUiOjE3Mzk4ODU4ODMsInZlcnNpb24iOiIyLjExLjAiLCJ1cF90aW1lIjo2MCwibGFzdF9yZXBvcnRfdGltZSI6MTczOTg4NTk0M30=
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: etcd, POST, lease, kv, watch, lua-resty-http, command execution, evidence IDs [E-S0000-F000004-003, E-S0000-F000010-011, E-S0000-F000179-015, E-S0000-F000011-012]
+
+--- Stream 1 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0001-F000017-001] TCP connection established from client to server
+- [E-S0001-F000018-002] Server response indicating a request timeout
+- [E-S0001-F000019-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0001-F000018-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0001-F000018-002
+
+--- Stream 2 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0002-F000020-001] Client initiated a connection to the etcd service on port 2379.
+- [E-S0002-F000021-002] Server responded with an error message indicating a request timeout.
+- [E-S0002-F000021-002] The response contained a gRPC error code and HTTP status indicating a failure to process the request.
+Exploit Indicators:
+- [E-S0002-F000021-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0002-F000021-002
+
+--- Stream 3 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0003-F000023-001] TCP connection initiated from 172.18.0.3:34208 to 172.18.0.2:2379
+- [E-S0003-F000024-002] TCP response from 172.18.0.2:2379 to 172.18.0.3:34208 with error message
+- [E-S0003-F000025-003] TCP connection closure from 172.18.0.3:34208 to 172.18.0.2:2379
+Exploit Indicators:
+- [E-S0003-F000024-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0003-F000024-002
+
+--- Stream 4 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0004-F000026-001] TCP connection initiated from client to server
+- [E-S0004-F000027-002] Server response indicating a request timeout
+- [E-S0004-F000028-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0004-F000027-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0004-F000027-002
+
+--- Stream 5 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0005-F000029-001] TCP connection initiated from client to server
+- [E-S0005-F000030-002] Server response indicating a request timeout
+- [E-S0005-F000031-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0005-F000030-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0005-F000030-002
+
+--- Stream 6 [VALID] ---
+Service: etcd  (port 2379 is commonly associated with etcd)
+Relevant Events:
+- [E-S0006-F000032-001] TCP connection initiated from client to server
+- [E-S0006-F000033-002] Server response indicating a request timeout
+- [E-S0006-F000034-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0006-F000033-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, Request Timeout, E-S0006-F000033-002
+
+--- Stream 7 [VALID] ---
+Service: etcd 3.4.0 (assumed based on port 2379)
+Relevant Events:
+- [E-S0007-F000035-001] TCP connection established from client to server
+- [E-S0007-F000036-002] Server response indicating a request timeout
+- [E-S0007-F000037-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0007-F000036-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0007-F000036-002
+
+--- Stream 8 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0008-F000038-001] TCP connection initiated from client to server
+- [E-S0008-F000039-002] Server response indicating a request timeout
+- [E-S0008-F000040-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0008-F000039-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0008-F000039-002
+
+--- Stream 9 [VALID] ---
+Service: etcd 3.4.0 (assumed based on port 2379)
+Relevant Events:
+- [E-S0009-F000041-001] TCP connection established from client to server
+- [E-S0009-F000043-002] Server response indicating a request timeout
+- [E-S0009-F000044-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0009-F000043-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0009-F000043-002
+
+--- Stream 10 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0010-F000042-001] TCP connection initiated from client to server
+- [E-S0010-F000045-002] Server response indicating a request timeout
+- [E-S0010-F000046-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0010-F000045-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, http_status, E-S0010-F000045-002
+
+--- Stream 11 [VALID] ---
+Service: etcd  (port 2379 is commonly associated with etcd)
+Relevant Events:
+- [E-S0011-F000047-001] TCP connection initiated from client to server
+- [E-S0011-F000048-002] Server response indicating a request timeout
+- [E-S0011-F000049-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0011-F000048-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, Request Timeout, evidence IDs: [E-S0011-F000047-001, E-S0011-F000048-002, E-S0011-F000049-001]
+
+--- Stream 12 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0012-F000050-001] Client initiated a connection to the server.
+- [E-S0012-F000051-002] Server responded with an error message indicating a request timeout.
+- [E-S0012-F000052-001] Client sent a follow-up TCP packet with no payload.
+Exploit Indicators:
+- [E-S0012-F000051-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0012-F000051-002
+
+--- Stream 13 [VALID] ---
+Service: etcd 3.4.0 (assumed based on port 2379)
+Relevant Events:
+- [E-S0013-F000053-001] TCP connection initiated from client to server
+- [E-S0013-F000054-002] Server response indicating a request timeout
+- [E-S0013-F000055-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0013-F000054-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, request timeout, E-S0013-F000054-002
+
+--- Stream 14 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0014-F000056-001] TCP connection established from 172.18.0.3:34300 to 172.18.0.2:2379
+- [E-S0014-F000057-002] Server response indicating a request timeout
+- [E-S0014-F000058-003] TCP connection closure
+Exploit Indicators:
+- [E-S0014-F000057-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0014-F000057-002
+
+--- Stream 15 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0015-F000059-001] TCP connection established from client to server
+- [E-S0015-F000060-002] Server response indicating a request timeout
+- [E-S0015-F000061-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0015-F000060-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, Request Timeout, E-S0015-F000060-002
+
+--- Stream 16 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0016-F000062-001] TCP connection initiated from client to server
+- [E-S0016-F000063-002] Server response indicating a request timeout
+- [E-S0016-F000064-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0016-F000063-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0016-F000063-002
+
+--- Stream 17 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0017-F000065-001] TCP connection initiated from client to server
+- [E-S0017-F000066-002] Server response indicating a request timeout
+- [E-S0017-F000067-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0017-F000066-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0017-F000066-002
+
+--- Stream 18 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0018-F000068-001] TCP connection initiated from client to server
+- [E-S0018-F000069-002] Server response indicating a request timeout
+- [E-S0018-F000069-002] TCP connection response to client
+Exploit Indicators:
+- [E-S0018-F000069-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0018-F000069-002
+
+--- Stream 19 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0019-F000071-001] TCP connection established from 172.18.0.3:34350 to 172.18.0.2:2379
+- [E-S0019-F000072-002] Server response indicating a request timeout
+- [E-S0019-F000073-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0019-F000072-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0019-F000072-002
+
+--- Stream 20 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0020-F000074-001] TCP connection initiated from client to server
+- [E-S0020-F000075-002] Server response indicating a request timeout
+- [E-S0020-F000076-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0020-F000075-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0020-F000075-002
+
+--- Stream 21 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0021-F000077-001] TCP connection established from 172.18.0.3:34364 to 172.18.0.2:2379
+- [E-S0021-F000078-002] Server response indicating a request timeout
+- [E-S0021-F000079-001] TCP connection closed
+Exploit Indicators:
+- [E-S0021-F000078-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0021-F000078-002
+
+--- Stream 22 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0022-F000080-001] TCP connection initiated from client to server
+- [E-S0022-F000081-002] Server response indicating a request timeout
+- [E-S0022-F000081-002] TCP connection closed by client
+Exploit Indicators:
+- [E-S0022-F000081-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0022-F000081-002
+
+--- Stream 23 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0023-F000083-001] TCP connection initiated from client to server
+- [E-S0023-F000084-002] Server response indicating a request timeout
+- [E-S0023-F000085-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0023-F000084-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0023-F000084-002
+
+--- Stream 24 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0024-F000086-001] TCP connection initiated from client to server
+- [E-S0024-F000087-002] Server response indicating a request timeout
+- [E-S0024-F000088-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0024-F000087-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0024-F000087-002
+
+--- Stream 25 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0025-F000089-001] TCP connection initiated from client to server
+- [E-S0025-F000090-002] Server response indicating a request timeout
+- [E-S0025-F000091-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0025-F000090-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0025-F000090-002
+
+--- Stream 26 [VALID] ---
+Service: etcd 3.4.0 (assumed version based on port 2379)
+Relevant Events:
+- [E-S0026-F000092-001] TCP connection established from client to server
+- [E-S0026-F000093-002] Server response indicating a request timeout
+- [E-S0026-F000094-001] TCP connection closed from client to server
+Exploit Indicators:
+- [E-S0026-F000093-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0026-F000093-002
+
+--- Stream 27 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0027-F000095-001] Client initiated a connection to the server.
+- [E-S0027-F000096-002] Server responded with an error message indicating a request timeout.
+- [E-S0027-F000097-001] Client sent a follow-up TCP packet with no payload.
+Exploit Indicators:
+- [E-S0027-F000096-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0027-F000096-002
+
+--- Stream 28 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0028-F000098-001] TCP connection initiated from client to server
+- [E-S0028-F000099-002] Server response indicating a request timeout
+- [E-S0028-F000100-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0028-F000099-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0028-F000099-002
+
+--- Stream 29 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0029-F000101-001] TCP connection established from client to server
+- [E-S0029-F000102-002] Server response indicating a request timeout
+- [E-S0029-F000103-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0029-F000102-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0029-F000102-002
+
+--- Stream 30 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0030-F000104-001] TCP connection initiated from 172.18.0.3:34444 to 172.18.0.2:2379
+- [E-S0030-F000105-002] Response from server indicating a request timeout
+- [E-S0030-F000106-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0030-F000105-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0030-F000105-002
+
+--- Stream 31 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0031-F000107-001] TCP connection initiated from client to server
+- [E-S0031-F000108-002] Server response indicating a request timeout
+- [E-S0031-F000109-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0031-F000108-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0031-F000108-002
+
+--- Stream 32 [VALID] ---
+Service: etcd 3.4.0 (assumed based on port 2379)
+Relevant Events:
+- [E-S0032-F000110-001] TCP connection initiated from client to server
+- [E-S0032-F000111-002] Server response indicating a request timeout
+- [E-S0032-F000112-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0032-F000111-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0032-F000111-002
+
+--- Stream 33 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0033-F000113-001] Client initiated a connection to the server.
+- [E-S0033-F000114-002] Server responded with an error message indicating a request timeout.
+- [E-S0033-F000115-001] Client sent another request to the server.
+Exploit Indicators:
+- [E-S0033-F000114-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0033-F000114-002
+
+--- Stream 34 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0034-F000116-001] TCP connection initiated from client to server
+- [E-S0034-F000117-002] Server response indicating a request timeout
+- [E-S0034-F000118-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0034-F000117-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0034-F000117-002
+
+--- Stream 35 [VALID] ---
+Service: etcd 3.4.0 (assumed based on port 2379)
+Relevant Events:
+- [E-S0035-F000119-001] TCP connection initiated from client to server
+- [E-S0035-F000120-002] Server response indicating a request timeout
+- [E-S0035-F000121-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0035-F000120-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0035-F000120-002
+
+--- Stream 36 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0036-F000122-001] TCP connection initiated from client to server
+- [E-S0036-F000123-002] Server response indicating a request timeout
+- [E-S0036-F000124-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0036-F000123-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0036-F000123-002
+
+--- Stream 37 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0037-F000125-001] TCP connection initiated from client to server
+- [E-S0037-F000126-002] Server response indicating a request timeout
+- [E-S0037-F000127-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0037-F000126-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0037-F000126-002
+
+--- Stream 38 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0038-F000128-001] Client initiated a connection to the server.
+- [E-S0038-F000129-002] Server responded with an error message indicating a request timeout.
+- [E-S0038-F000130-003] Client sent another request (payload is empty).
+Exploit Indicators:
+- [E-S0038-F000129-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0038-F000129-002
+
+--- Stream 39 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0039-F000131-001] TCP connection initiated from client to server
+- [E-S0039-F000132-002] Server response indicating a request timeout
+- [E-S0039-F000133-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0039-F000132-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0039-F000132-002
+
+--- Stream 40 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0040-F000134-001] Client initiated a connection to the etcd service.
+- [E-S0040-F000135-002] Server responded with an error message indicating a request timeout.
+- [E-S0040-F000136-001] Client sent a keep-alive or empty packet to the server.
+Exploit Indicators:
+- [E-S0040-F000135-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, Request Timeout, E-S0040-F000135-002
+
+--- Stream 41 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0041-F000137-001] TCP connection established from client to server
+- [E-S0041-F000138-002] Server response indicating a request timeout
+- [E-S0041-F000139-003] TCP connection closed from client to server
+Exploit Indicators:
+- [E-S0041-F000138-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, Request Timeout, E-S0041-F000138-002
+
+--- Stream 42 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0042-F000140-001] Client initiated connection to server.
+- [E-S0042-F000141-002] Server responded with an error message indicating a request timeout.
+- [E-S0042-F000142-003] Client sent a follow-up empty TCP packet.
+Exploit Indicators:
+- [E-S0042-F000141-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0042-F000141-002
+
+--- Stream 43 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0043-F000143-001] Client initiated a TCP connection to the etcd service.
+- [E-S0043-F000146-002] Server responded with an error message indicating a request timeout.
+- [E-S0043-F000148-001] Client sent a follow-up TCP packet with no payload.
+Exploit Indicators:
+- [E-S0043-F000146-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: etcd, grpc_code, http_code, Request Timeout, E-S0043-F000146-002
+
+--- Stream 44 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0044-F000144-001] TCP connection initiated from client to server
+- [E-S0044-F000145-002] Server response indicating a request timeout
+- [E-S0044-F000147-001] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0044-F000145-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0044-F000145-002
+
+--- Stream 45 [VALID] ---
+Service: etcd  (version not visible)
+Relevant Events:
+- [E-S0045-F000149-001] TCP connection established from client to server
+- [E-S0045-F000150-002] Server response indicating a request timeout
+- [E-S0045-F000151-003] TCP connection closure from client to server
+Exploit Indicators:
+- [E-S0045-F000150-002] {"error":{"grpc_code":1,"http_code":408,"message":"context canceled","http_status":"Request Timeout"}}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: grpc_code, http_code, Request Timeout, E-S0045-F000150-002
+
+--- Stream 46 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0046-F000152-001] TCP connection established from client to server
+- [E-S0046-F000155-003] POST request to /v3/watch
+- [E-S0046-F000159-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0046-F000155-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 47 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0047-F000161-001] TCP connection established from 172.18.0.3:49976 to 172.18.0.2:2379
+- [E-S0047-F000164-003] POST request to /v3/watch
+- [E-S0047-F000168-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0047-F000164-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch
+
+--- Stream 48 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0048-F000170-001] TCP connection established from 172.18.0.3:49984 to 172.18.0.2:2379
+- [E-S0048-F000173-003] POST request to /v3/watch
+- [E-S0048-F000177-008] HTTP Status 200 response received
+Exploit Indicators:
+- [E-S0048-F000173-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 49 [VALID] ---
+Service: etcd 3.5.0 (inferred from the HTTP endpoint /v3/watch)
+Relevant Events:
+- [E-S0049-F000187-003] POST /v3/watch
+- [E-S0049-F000187-004] Host: etcd:2379
+- [E-S0049-F000191-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0049-F000187-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, User-Agent, HTTP Status 200, lua-resty-http
+
+--- Stream 50 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0050-F000193-001] TCP connection established from 172.18.0.3:50014 to 172.18.0.2:2379
+- [E-S0050-F000196-003] POST request to /v3/watch
+- [E-S0050-F000200-008] HTTP Status 200 response received
+Exploit Indicators:
+- [E-S0050-F000196-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 51 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0051-F000205-003] POST /v3/watch
+- [E-S0051-F000205-004] Host: etcd:2379
+- [E-S0051-F000205-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0051-F000205-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, /v3/watch, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 52 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0052-F000211-001] TCP connection established from 172.18.0.3:50018 to 172.18.0.2:2379
+- [E-S0052-F000214-003] POST request to /v3/watch
+- [E-S0052-F000218-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0052-F000214-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 53 [VALID] ---
+Service: etcd 3.5.0 (inferred from the use of /v3/watch endpoint)
+Relevant Events:
+- [E-S0053-F000220-001] TCP connection established from client to server
+- [E-S0053-F000223-003] POST request to /v3/watch
+- [E-S0053-F000227-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0053-F000223-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, /v3/watch, HTTP Status 200, lua-resty-http, User-Agent, Access-Control-Allow-Origin
+
+--- Stream 54 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0054-F000229-001] TCP connection established from client to server
+- [E-S0054-F000232-003] POST request to /v3/watch
+- [E-S0054-F000236-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0054-F000232-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 55 [VALID] ---
+Service: etcd:3.5.0 (inferred from the context of the HTTP request)
+Relevant Events:
+- [E-S0055-F000241-003] POST /v3/watch
+- [E-S0055-F000241-004] Host: etcd:2379
+- [E-S0055-F000245-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0055-F000241-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch
+
+--- Stream 56 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0056-F000250-003] POST /v3/watch
+- [E-S0056-F000250-004] Host: etcd:2379
+- [E-S0056-F000250-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Exploit Indicators:
+- [E-S0056-F000250-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, lua-resty-http, User-Agent, HTTP Status 200, Access-Control-Allow-Origin
+
+--- Stream 57 [VALID] ---
+Service: etcd  (version not explicitly visible)
+Relevant Events:
+- [E-S0057-F000256-001] TCP connection established from 172.18.0.3:50042 to 172.18.0.2:2379
+- [E-S0057-F000259-003] POST request to /v3/watch
+- [E-S0057-F000263-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0057-F000259-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 58 [VALID] ---
+Service: etcd:3.5.0 (inferred from the context of the HTTP request)
+Relevant Events:
+- [E-S0058-F000268-003] POST /v3/watch
+- [E-S0058-F000268-004] Host: etcd:2379
+- [E-S0058-F000272-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0058-F000268-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, User-Agent
+
+--- Stream 59 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0059-F000277-003] POST /v3/watch
+- [E-S0059-F000281-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0059-F000277-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 60 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0060-F000283-001] TCP connection established from client to server
+- [E-S0060-F000286-003] POST request to /v3/watch
+- [E-S0060-F000290-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0060-F000286-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 61 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0061-F000292-001] TCP connection established from client to server
+- [E-S0061-F000295-003] POST request to /v3/watch
+- [E-S0061-F000299-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0061-F000295-003] POST /v3/watch
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 62 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0062-F000301-001] TCP connection established from client to server
+- [E-S0062-F000304-003] POST request to /v3/watch
+- [E-S0062-F000308-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0062-F000304-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, User-Agent, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 63 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0063-F000310-001] TCP connection established from 172.18.0.3:50102 to 172.18.0.2:2379
+- [E-S0063-F000313-003] POST request to /v3/watch
+- [E-S0063-F000317-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0063-F000313-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 64 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0064-F000319-001] TCP connection established from 172.18.0.3:50110 to 172.18.0.2:2379
+- [E-S0064-F000322-003] POST request to /v3/watch
+- [E-S0064-F000326-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0064-F000322-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 65 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0065-F000328-001] TCP connection established from client to server
+- [E-S0065-F000331-003] POST request to /v3/watch
+- [E-S0065-F000335-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0065-F000331-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 66 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0066-F000340-003] POST /v3/watch
+- [E-S0066-F000340-004] Host: etcd:2379
+- [E-S0066-F000344-008] HTTP Status 200
+Exploit Indicators:
+- [E-S0066-F000340-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch
+
+--- Stream 67 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0067-F000346-001] TCP connection established from 172.18.0.3:50144 to 172.18.0.2:2379
+- [E-S0067-F000349-003] POST request to /v3/watch
+- [E-S0067-F000353-008] HTTP Status 200 response indicating success
+Exploit Indicators:
+- [E-S0067-F000349-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 68 [VALID] ---
+Service: etcd 3.x
+Relevant Events:
+- [E-S0068-F000355-001] TCP connection established from client to server
+- [E-S0068-F000358-003] POST request to /v3/watch
+- [E-S0068-F000362-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0068-F000358-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 69 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0069-F000364-001] TCP connection established from client to server
+- [E-S0069-F000367-003] POST request to /v3/watch
+- [E-S0069-F000371-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0069-F000367-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, /v3/watch, HTTP Status 200, lua-resty-http, ngx_lua
+
+--- Stream 70 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0070-F000373-001] TCP connection established from client to server
+- [E-S0070-F000376-003] POST request to /v3/watch
+- [E-S0070-F000380-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0070-F000376-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+--- Stream 71 [VALID] ---
+Service: etcd:2379
+Relevant Events:
+- [E-S0071-F000382-001] TCP connection established from client to server
+- [E-S0071-F000385-003] POST request to /v3/watch
+- [E-S0071-F000389-008] HTTP Status 200 response from server
+Exploit Indicators:
+- [E-S0071-F000385-005] User-Agent: lua-resty-http/0.16.1 (Lua) ngx_lua/10020
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: etcd, POST, HTTP Status 200, lua-resty-http, /v3/watch, Access-Control-Allow-Origin
+
+=== FINAL REPORT ===
+Affected Service: etcd
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP (E-S0000-F000010-011): Observed unauthenticated POST request to /v3/kv/put on the etcd v3 API.
+- PCAP (E-S0000-F000179-015): Observed unauthenticated POST request to /v3/watch initiating a watch on the etcd v3 API.
+- PCAP (E-S0046-F000155-003): Additional etcd v3 API interaction consistent with unauthenticated access.
+- PCAP (E-S0046-F000159-008): Additional etcd v3 API interaction consistent with unauthenticated access.
+- PCAP (E-S0047-F000164-003): Additional etcd v3 API interaction consistent with unauthenticated access.
+- PCAP (E-S0047-F000168-008): Additional etcd v3 API interaction consistent with unauthenticated access.
+- NVD (CVE: Not Found): No product-matching CVEs were retrieved for the observed issue; exposure likely due to misconfiguration rather than a known CVE.
+
+Verification Summary:
+- Confirmed the exposed etcd v3 API accepted unauthenticated POST requests to key endpoints (/v3/kv and /v3/watch), indicating unauthorized access was possible.
+- Multiple PCAP evidence IDs demonstrate repeated unauthenticated interactions with etcd v3 endpoints, corroborating successful unauthorized access.
+- NVD search yielded no matching CVE; the condition aligns with misconfiguration or missing authentication on the etcd service.
+
+Defensive Recommendation:
+- Enable etcd authentication and RBAC; create users/roles and require credentials for all client operations.
+- Enforce TLS for client and peer traffic (server and client certs, client-cert-auth) and disable plaintext listeners.
+- Restrict network exposure: bind etcd to localhost or a trusted management network; limit ports 2379/2380 via firewall/ACLs.
+- If running under Kubernetes, keep etcd private to the control plane, use TLS everywhere, and do not expose etcd externally.
+- Audit and rotate any secrets/keys stored in etcd that may have been accessed; review and revoke leases created during the incident.
+- Enable and monitor etcd logs; add detections for unexpected /v3/kv and /v3/watch access from untrusted sources.
+- Harden configuration management/IaC to enforce secure defaults (auth enabled, TLS required, restricted listen addresses) and include regular exposure scans.

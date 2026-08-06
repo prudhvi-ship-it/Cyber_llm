@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Approved FRA/MAFRA Training Memory Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "split",
+    "approved",
+    "provenance",
+    "flow_summary",
+    "report"
+  ],
+  "properties": {
+    "source_id": {"type": "string", "minLength": 1},
+    "split": {"const": "training"},
+    "approved": {"const": true},
+    "provenance": {"type": "string", "minLength": 1},
+    "flow_summary": {"type": "string", "minLength": 1},
+    "report": {"type": "string", "minLength": 1}
+  }
+}

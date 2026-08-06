@@ -1,0 +1,138 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=11, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:45828           <-> 172.18.0.2:2222                  8 1531 bytes       9 1015 bytes      17 2546 bytes     0.000180000         1.5442
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: SSH (OpenSSH_8.9)
+Relevant Events:
+- [E-S0000-F000006-003] SSH connection initiated from client to server
+- [E-S0000-F000008-004] SSHv2 response from server to client
+- [E-S0000-F000012-006] SSHv2 data sent from client to server
+Exploit Indicators:
+- [E-S0000-F000008-005] exec....Fos:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw==")))
+Malicious Activities: Command execution attempt detected
+Attack Success: Unknown
+Evidence Keywords: SSH, OpenSSH_8.9, Erlang, exec, command execution, base64, decode
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SSH",
+    "application": "OpenSSH_8.9",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Command Execution",
+    "technique": "Base64-decoded command execution via os:cmd over SSH",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000008-005",
+      "E-S0000-F000012-006"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No CVE identified in evidence"
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "Success of the attack is unknown"
+  ],
+  "evidence_check": [
+    "E-S0000-F000008-005",
+    "E-S0000-F000012-006"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: SSH
+Attack Type: Remote Command Execution
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Medium
+Overall Confidence: Medium
+Score: 2/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "No product-matching NVD candidates were available, so an exact CVE could not be validated."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: SSH
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000008-005]: exec....Fos:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw=="))).
+- PCAP [E-S0000-F000012-006]: SSHv2 data sent from client to server.
+
+Verification Summary:
+- Affected service: SSH.
+- Attack type: Remote Command Execution.
+- Attack technique: Base64-decoded command execution via os:cmd over SSH.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 2/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: No product-matching NVD candidates were available, so an exact CVE could not be validated.
+- Unsupported claim: Success of the attack is unknown
+
+Defensive Recommendation:
+- Implement strong authentication mechanisms for SSH, such as multi-factor authentication (MFA) or key-based authentication, and disable password-based authentication.
+- Regularly update OpenSSH to the latest version to patch known vulnerabilities.
+- Monitor SSH logs for unusual activity, failed login attempts, and unauthorized command execution.
+- Restrict SSH access to a limited set of trusted IP addresses or networks.
+- Implement a robust intrusion detection/prevention system (IDPS) to detect and block malicious SSH activity.
+- Ensure proper access controls are in place for SSH users and limit their privileges to only what is necessary for their roles.

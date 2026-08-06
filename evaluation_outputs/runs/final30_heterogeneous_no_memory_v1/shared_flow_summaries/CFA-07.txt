@@ -1,0 +1,80 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 5
+TCP Stream IDs: 0, 1, 2, 3, 4
+Protocol Counts: ARP=4, TCP=123, HTTP=6, MySQL=145, HTTP/JSON=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:50618           <-> 172.18.0.2:3306                 35 11 kB          49 6080 bytes      84 17 kB         0.256556000         0.0576
+172.18.0.3:50596           <-> 172.18.0.2:3306                 29 13 kB          38 4222 bytes      67 17 kB         0.097250000         0.0432
+172.18.0.3:50610           <-> 172.18.0.2:3306                 29 3446 bytes      34 3411 bytes      63 6857 bytes     0.173337000         0.0556
+172.18.0.3:50580           <-> 172.18.0.2:3306                 16 1550 bytes      18 1466 bytes      34 3016 bytes     0.054334000         0.0140
+172.18.0.1:3
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache/2.4.10 (Debian), PHP/5.3.29
+Relevant Events:
+- [E-S0000-F000006-003] POST //?lang=en
+- [E-S0000-F000048-015] GET /index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000190-021] POST //tbl_find_replace.php
+Exploit Indicators:
+- [E-S0000-F000044-014] phpMyAdmin
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: phpMyAdmin, token, pma_username, pma_password, useRegex=on, HTTP Status 302, HTTP Status 200
+
+--- Stream 1 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0001-F000015-003] MySQL response indicating the version
+- [E-S0001-F000025-006] SQL query to retrieve version information
+- [E-S0001-F000029-007] SQL query to show character set variables
+Exploit Indicators:
+- [E-S0001-F000017-005] root user keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, version, root user, SELECT, SHOW VARIABLES, E-S0001-F000015-003, E-S0001-F000025-006, E-S0001-F000029-007
+
+--- Stream 2 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0002-F000053-003] MySQL response to client
+- [E-S0002-F000055-004] MySQL request from client
+- [E-S0002-F000071-006] SQL query to information_schema.CHARACTER_SETS
+Exploit Indicators:
+- [E-S0002-F000055-005] root user keyword observed
+Malicious Activities: SQL queries indicating potential enumeration of user privileges and database information
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, SELECT, information_schema, SHOW GRANTS, USER_PRIVILEGES, evidence IDs [E-S0002-F000055-005, E-S0002-F000071-006, E-S0002-F000075-007, E-S0002-F000081-009, E-S0002-F000084-010, E-S0002-F000090-013, E-S0002-F000103-017]
+
+--- Stream 3 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0003-F000128-003] MySQL response to client
+- [E-S0003-F000130-005] root user keyword observed
+- [E-S0003-F000146-006] SHOW TABLES FROM `test`
+Exploit Indicators:
+- [E-S0003-F000161-011] UNHEX(
+Malicious Activities: CREATE TABLE `prgpwn` and INSERT INTO `prgpwn` observed
+Attack Success: Succeeded
+Evidence Keywords: MySQL, root, CREATE TABLE, INSERT INTO, UNHEX, SHOW TABLES, INFORMATION_SCHEMA, USER_PRIVILEGES, PRIVILEGE_TYPE
+
+--- Stream 4 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0004-F000195-003] MySQL response to client
+- [E-S0004-F000197-005] root user keyword observed
+- [E-S0004-F000213-006] SHOW TABLES FROM `test`
+Exploit Indicators:
+- [E-S0004-F000233-017] /e
+Malicious Activities: SQL injection attempts and table creation
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, SHOW TABLES, CREATE TABLE, SQL injection, E-S0004-F000197-005, E-S0004-F000213-006, E-S0004-F000233-017
