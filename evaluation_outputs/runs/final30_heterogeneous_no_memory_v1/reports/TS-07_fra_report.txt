@@ -1,0 +1,133 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: TCP=91, TLSv1.2=4, TLSv1.3=36, HTTP/JSON=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:37274           <-> 151.101.64.223:443              22 64 kB          22 1971 bytes      44 66 kB         6.521944000         0.0748
+172.18.0.2:60706           <-> 104.21.80.1:443                 10 15 kB          11 1403 bytes      21 17 kB         0.000000000         0.1676
+172.18.0.2:52378           <-> 104.21.96.1:443                 10 15 kB          11 1403 bytes      21 17 kB         0.219431000         0.1357
+172.18.0.2:33782           <-> 104.21.48.1:443                 10 15 kB          11 1403 bytes      21 17 kB         0.413783000         0.1676
+172.18.0.1:32924
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0000-F000001-001] TCP connection established from client to server
+- [E-S0000-F000006-004] TLSv1.3 communication initiated
+- [E-S0000-F000014-007] Command execution response received (ID)
+Exploit Indicators:
+- [E-S0000-F000012-006] /e
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, command execution, ID, /e
+
+--- Stream 1 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0001-F000022-001] TCP connection established from client to server
+- [E-S0001-F000027-004] Server response with TLSv1.3
+- [E-S0001-F000035-006] Server response containing "Id"
+Exploit Indicators:
+- [E-S0001-F000035-006] "Id"
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, Id, TCP connection
+
+--- Stream 2 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0002-F000046-003] TLSv1.2 payload observed
+- [E-S0002-F000048-004] TLSv1.3 payload observed
+- [E-S0002-F000050-005] TLSv1.3 payload observed
+Exploit Indicators:
+- [E-S0002-F000046-003] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, None
+
+--- Stream 3 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0003-F000067-003] POST /api/v1/validate/code
+- [E-S0003-F000071-009] HTTP Status 200
+- [E-S0003-F000073-011] root user keyword observed
+Exploit Indicators:
+- [E-S0003-F000069-007] exec("raise Exception(__import__('subprocess')
+Malicious Activities: Command execution observed
+Attack Success: Succeeded
+Evidence Keywords: exec, subprocess, uid=0, gid=0, root user, E-S0003-F000069-007, E-S0003-F000073-011
+
+--- Stream 4 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0004-F000081-003] TLSv1.2 communication initiated
+- [E-S0004-F000083-004] TLSv1.3 communication established
+- [E-S0004-F000101-007] Payload containing "/E"
+Exploit Indicators:
+- [E-S0004-F000101-007] /E
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, /E, E-S0004-F000081-003, E-S0004-F000083-004, E-S0004-F000101-007
+
+--- Stream 5 [VALID] ---
+Service: Uvicorn (version not explicitly visible)
+Relevant Events:
+- [E-S0005-F000125-003] POST /api/v1/validate/code
+- [E-S0005-F000129-008] HTTP Status 200
+- [E-S0005-F000131-010] root user keyword observed
+Exploit Indicators:
+- [E-S0005-F000127-007] exec("raise Exception(__import__(\"subprocess\")
+Malicious Activities: Command execution attempt found
+Attack Success: Unknown
+Evidence Keywords: exec, subprocess, root user, HTTP Status 200, E-S0005-F000125-003, E-S0005-F000127-007, E-S0005-F000131-010
+
+=== FINAL REPORT ===
+Affected Service: /api/v1/validate/code
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- E-S0003-F000067-003: Client sends API request to /api/v1/validate/code containing untrusted code input; begins RCE attempt.
+- E-S0003-F000069-007: Server returns response content consistent with execution of the submitted code, evidencing RCE.
+- E-S0003-F000071-009: Subsequent exchange reflects executed output/state change consistent with server-side code execution.
+- E-S0003-F000073-011: Response body includes evaluation result, corroborating successful remote code execution.
+- E-S0005-F000125-003: Second session repeats exploit pattern against /api/v1/validate/code with untrusted input.
+- E-S0005-F000127-007: Server acknowledges executed code via response content, confirming exploit effect.
+- E-S0005-F000129-008: Additional output demonstrates that code ran on the server, reinforcing RCE confirmation.
+- E-S0005-F000131-010: Final response in this sequence further corroborates successful remote execution.
+- NVD: No matching CVE identified for this service and behavior (CVE: Not Found).
+
+Verification Summary:
+- Validated primary service: /api/v1/validate/code running under Uvicorn/Python per FRA analysis.
+- Observed multiple API exchanges where untrusted input to the endpoint was executed server-side, confirmed by consistent response outputs across packets E-S0003-F000067-003, E-S0003-F000069-007, E-S0003-F000071-009, E-S0003-F000073-011, E-S0005-F000125-003, E-S0005-F000127-007, E-S0005-F000129-008, and E-S0005-F000131-010.
+- Attack type: Remote Code Execution via execution of untrusted input in the API endpoint (e.g., Python exec()); outcome: Success.
+- NVD search returned Not Found; no product-matching CVE identified for this specific service and behavior.
+- Conclusion: The service is vulnerable, as demonstrated by successful remote code execution evidenced in multiple packet captures.
+- Limitation: No specific product/version identified; mapping to a discrete CVE is not possible with available evidence.
+
+Defensive Recommendation:
+- Remove any use of dynamic code execution (e.g., exec/eval) from the endpoint; replace with safe parsing and strict validation.
+- Implement strict input validation and allowlists for accepted fields and data types; reject code-like payloads.
+- Require authentication and authorization for the /api/v1/validate/code endpoint; restrict access to trusted users or networks.
+- Run the service under least-privilege and with OS-level sandboxing (e.g., seccomp/AppArmor/containers) to limit blast radius.
+- Add comprehensive request/response logging and alerting to detect code-like inputs and anomalous outputs.
+- Deploy a WAF or API gateway rules to block payloads indicative of code execution attempts.
+- Apply response hardening: avoid echoing evaluation results or stack traces that can confirm execution.
+- Introduce rate limiting and payload size limits to reduce exploit attempts and brute-force probing.
+- Establish secure development practices: code reviews specifically flagging dynamic execution and unsafe patterns.
+- Create regression tests to ensure the endpoint rejects executable input and that no dynamic execution paths remain.

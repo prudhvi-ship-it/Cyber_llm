@@ -1,0 +1,98 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: RESP=67, TCP=51, RESP/JSON=13
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:6379            <-> 172.18.0.7:45572                16 2528 bytes      32 2192 bytes      48 4720 bytes     0.000000000        16.5143
+172.18.0.7:45638           <-> 172.18.0.2:6379                  9 630 bytes      18 8013 bytes      27 8643 bytes     0.882430000        16.0402
+172.18.0.2:6379            <-> 172.18.0.7:45616                 9 594 bytes       9 7671 bytes      18 8265 bytes     0.883338000        16.0398
+172.18.0.2:6379            <-> 172.18.0.6:49268                 9 594 bytes       9 7608 bytes      18 8202 bytes     0.883621000        16.0404
+172.18.0.6:
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0000-F000001-001] Client initiated a connection to Redis server on port 6379.
+- [E-S0000-F000002-002] Server responded to client request.
+- [E-S0000-F000003-003] Client sent a TCP keep-alive packet.
+Exploit Indicators:
+- [E-S0000-F000001-001] BRPOP command indicates potential exploitation of Redis data structures.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, BRPOP, E-S0000-F000001-001, E-S0000-F000002-002, E-S0000-F000003-003
+
+--- Stream 1 [VALID] ---
+Service: Redis 6.0 (inferred from the port 6379, which is commonly used by Redis)
+Relevant Events:
+- [E-S0001-F000004-001] Client sent a PUBLISH command to Redis
+- [E-S0001-F000005-003] Server responded to the client
+- [E-S0001-F000006-004] Client sent a TCP keep-alive packet
+Exploit Indicators:
+- [E-S0001-F000004-002] Payload contains a base64-encoded JSON object with a method indicating potential command execution
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PUBLISH, base64, Redis, command execution, [E-S0001-F000004-001], [E-S0001-F000004-002]
+
+--- Stream 2 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0002-F000007-001] Client communication with Redis server on port 6379
+- [E-S0002-F000008-003] Server response to client
+Exploit Indicators:
+- [E-S0002-F000007-002] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, pmessage, celery.pidbox, base64, JSON
+
+--- Stream 3 [VALID] ---
+Service: Redis 6.x (inferred from port 6379)
+Relevant Events:
+- [E-S0003-F000009-001] Client sent a PUBLISH command to Redis.
+- [E-S0003-F000022-005] Client sent a PUBLISH command to Redis.
+- [E-S0003-F000035-006] Client sent a PUBLISH command to Redis.
+Exploit Indicators:
+- [E-S0003-F000009-002] Payload contains base64 encoded JSON data, which may indicate potential misuse of the Redis service.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, PUBLISH, base64, JSON, E-S0003-F000009-002, E-S0003-F000009-001, E-S0003-F000022-005, E-S0003-F000035-006
+
+--- Stream 4 [VALID] ---
+Service: Redis 5.x (inferred from port 6379)
+Relevant Events:
+- [E-S0004-F000012-001] Client sent a message to the Redis server.
+- [E-S0004-F000025-004] Client sent a message to the Redis server.
+- [E-S0004-F000056-006] Client sent a message to the Redis server.
+Exploit Indicators:
+- [E-S0004-F000012-002] Payload contains base64 encoded JSON data, potentially indicating command execution or data manipulation.
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, pmessage, worker.heartbeat, base64, JSON, E-S0004-F000012-002, E-S0004-F000025-004, E-S0004-F000056-006
+
+--- Stream 5 [VALID] ---
+Service: Redis 5.0 (inferred from port 6379)
+Relevant Events:
+- [E-S0005-F000014-001] Client sent a message to Redis server
+- [E-S0005-F000014-002] Payload contains base64 encoded JSON data
+- [E-S0005-F000027-004] Client sent another message to Redis server
+- [E-S0005-F000040-005] Client sent another message to Redis server
+- [E-S0005-F000058-006] Client sent another message to Redis server
+- [E-S0005-F000071-007] Client sent another message to Redis server
+- [E-S0005-F000086-008] Client sent another message to Redis server
+- [E-S0005-F000099-009] Client sent another message to Redis server
+- [E-S0005-F000112-010] Client sent another message to Redis server
+- [E-S0005-F000130-011] Client sent another message to Redis server
+Exploit Indicators:
+- [E-S0005-F000014-002] Payload contains base64 encoded JSON data
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, base64, JSON, heartbeat, worker, pmessage, celery, delivery_tag

@@ -1,0 +1,217 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: TCP=91, TLSv1.2=4, TLSv1.3=36, HTTP/JSON=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:37274           <-> 151.101.64.223:443              22 64 kB          22 1971 bytes      44 66 kB         6.521944000         0.0748
+172.18.0.2:60706           <-> 104.21.80.1:443                 10 15 kB          11 1403 bytes      21 17 kB         0.000000000         0.1676
+172.18.0.2:52378           <-> 104.21.96.1:443                 10 15 kB          11 1403 bytes      21 17 kB         0.219431000         0.1357
+172.18.0.2:33782           <-> 104.21.48.1:443                 10 15 kB          11 1403 bytes      21 17 kB         0.413783000         0.1676
+172.18.0.1:32924
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0000-F000001-001] TCP connection established from client to server
+- [E-S0000-F000006-004] TLSv1.3 communication initiated
+- [E-S0000-F000014-007] Command execution response received (ID)
+Exploit Indicators:
+- [E-S0000-F000012-006] /e
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, command execution, ID, /e
+
+--- Stream 1 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0001-F000022-001] TCP connection established from client to server
+- [E-S0001-F000027-004] Server response with TLSv1.3
+- [E-S0001-F000035-006] Server response containing "Id"
+Exploit Indicators:
+- [E-S0001-F000035-006] "Id"
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, Id, TCP connection
+
+--- Stream 2 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0002-F000046-003] TLSv1.2 payload observed
+- [E-S0002-F000048-004] TLSv1.3 payload observed
+- [E-S0002-F000050-005] TLSv1.3 payload observed
+Exploit Indicators:
+- [E-S0002-F000046-003] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, None
+
+--- Stream 3 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0003-F000067-003] POST /api/v1/validate/code
+- [E-S0003-F000071-009] HTTP Status 200
+- [E-S0003-F000073-011] root user keyword observed
+Exploit Indicators:
+- [E-S0003-F000069-007] exec("raise Exception(__import__('subprocess')
+Malicious Activities: Command execution observed
+Attack Success: Succeeded
+Evidence Keywords: exec, subprocess, uid=0, gid=0, root user, E-S0003-F000069-007, E-S0003-F000073-011
+
+--- Stream 4 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0004-F000081-003] TLSv1.2 communication initiated
+- [E-S0004-F000083-004] TLSv1.3 communication established
+- [E-S0004-F000101-007] Payload containing "/E"
+Exploit Indicators:
+- [E-S0004-F000101-007] /E
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TLSv1.2, TLSv1.3, /E, E-S0004-F000081-003, E-S0004-F000083-004, E-S0004-F000101-007
+
+--- Stream 5 [VALID] ---
+Service: Uvicorn (version not explicitly visible)
+Relevant Events:
+- [E-S0005-F000125-003] POST /api/v1/validate/code
+- [E-S0005-F000129-008] HTTP Status 200
+- [E-S0005-F000131-010] root user keyword observed
+Exploit Indicators:
+- [E-S0005-F000127-007] exec("raise Exception(__import__(\"subprocess\")
+Malicious Activities: Command execution attempt found
+Attack Success: Unknown
+Evidence Keywords: exec, subprocess, root user, HTTP Status 200, E-S0005-F000125-003, E-S0005-F000127-007, E-S0005-F000131-010
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Unknown",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Uvicorn",
+    "language": "Python",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Code Execution",
+    "technique": "Python exec-based code injection",
+    "success": "Success",
+    "evidence": [
+      "E-S0003-F000067-003",
+      "E-S0003-F000069-007",
+      "E-S0003-F000071-009",
+      "E-S0003-F000073-011",
+      "E-S0005-F000125-003",
+      "E-S0005-F000127-007",
+      "E-S0005-F000129-008",
+      "E-S0005-F000131-010"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "CVE"
+  ],
+  "evidence_check": [
+    "E-S0003-F000067-003",
+    "E-S0003-F000069-007",
+    "E-S0003-F000071-009",
+    "E-S0003-F000073-011",
+    "E-S0005-F000125-003",
+    "E-S0005-F000127-007",
+    "E-S0005-F000129-008",
+    "E-S0005-F000131-010"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Unknown
+Attack Type: Remote Code Execution
+Attack Success: Success
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: Medium
+Score: 3/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "No product-matching NVD candidates were available, so an exact CVE could not be validated."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Unknown
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0003-F000067-003]: POST /api/v1/validate/code.
+- PCAP [E-S0003-F000069-007]: exec("raise Exception(__import__('subprocess').
+- PCAP [E-S0003-F000071-009]: HTTP Status 200.
+- PCAP [E-S0003-F000073-011]: root user keyword observed.
+- PCAP [E-S0005-F000125-003]: POST /api/v1/validate/code.
+- PCAP [E-S0005-F000127-007]: exec("raise Exception(__import__(\"subprocess\").
+- PCAP [E-S0005-F000129-008]: HTTP Status 200.
+- PCAP [E-S0005-F000131-010]: root user keyword observed.
+
+Verification Summary:
+- Affected service: Unknown.
+- Attack type: Remote Code Execution.
+- Attack technique: Python exec-based code injection.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: High.
+- Consensus confidence: Medium.
+- Consensus score: 3/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: No product-matching NVD candidates were available, so an exact CVE could not be validated.
+- Unsupported claim: CVE
+
+Defensive Recommendation:
+- Review and sanitize all user-supplied input to prevent code injection.
+- Implement a Web Application Firewall (WAF) to detect and block malicious requests.
+- Regularly update Uvicorn and Python dependencies to their latest versions to patch known vulnerabilities.
+- Employ a principle of least privilege for the application's runtime environment.
+- Monitor application logs for unusual activity, error messages, or signs of code execution.

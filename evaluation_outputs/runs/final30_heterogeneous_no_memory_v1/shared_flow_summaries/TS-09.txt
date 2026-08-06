@@ -1,0 +1,67 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 4
+TCP Stream IDs: 0, 1, 2, 3
+Protocol Counts: ARP=2, TCP=44, HTTP=8
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:59412           <-> 172.18.0.2:8080                  6 11 kB           8 691 bytes      14 12 kB         0.000212000         3.0020
+172.18.0.1:59434           <-> 172.18.0.2:8080                  6 11 kB           8 713 bytes      14 12 kB         4.453753000         0.0383
+172.18.0.1:59414           <-> 172.18.0.2:8080                  5 459 bytes       7 686 bytes      12 1145 bytes     2.989548000         0.0699
+172.18.0.1:59422           <-> 172.18.0.2:8080                  5 1175 bytes       7 2002 bytes      12 3177 bytes     4.432555000         0.0236
+================
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0000-F000006-004] GET /index.jsp
+- [E-S0000-F000008-008] id
+- [E-S0000-F000008-010] org/confluence/display/TOMCAT/Tomcat+Versions
+Exploit Indicators:
+- [E-S0000-F000008-009] org/confluence/display/TOMCAT/Specifications
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Apache Tomcat, GET, id, org/confluence/display/TOMCAT/Specifications, org/confluence/display/TOMCAT/Tomcat+Versions
+
+--- Stream 1 [VALID] ---
+Service: HTTP/1.1 (python-requests/2.22.0)
+Relevant Events:
+- [E-S0001-F000018-003] PUT /check.txt
+- [E-S0001-F000024-008] HTTP Status 201
+Exploit Indicators:
+- [E-S0001-F000018-003] PUT /check.txt
+Malicious Activities: None
+Attack Success: Succeeded
+Evidence Keywords: PUT, HTTP Status 201, python-requests/2.22.0, E-S0001-F000018-003, E-S0001-F000024-008
+
+--- Stream 2 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0002-F000032-003] PUT /sessions/absholi7ly.session
+- [E-S0002-F000034-007] cmd.exe
+- [E-S0002-F000036-010] HTTP Status 409
+Exploit Indicators:
+- [E-S0002-F000034-008] Lorg/apache/commons/collections/Transformer
+Malicious Activities: Suspicious payload indicating potential command execution
+Attack Success: Failed
+Evidence Keywords: cmd.exe, Transformer, HTTP Status 409, E-S0002-F000034-008, E-S0002-F000034-007
+
+--- Stream 3 [VALID] ---
+Service: Apache Tomcat/9.0.97
+Relevant Events:
+- [E-S0003-F000043-004] GET /
+- [E-S0003-F000046-009] id
+- [E-S0003-F000046-010] org/confluence/display/TOMCAT/Specifications
+Exploit Indicators:
+- [E-S0003-F000046-010] org/confluence/display/TOMCAT/Specifications
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Tomcat, GET, id, python-requests/2.22.0, HTTP Status 200, evidence IDs [E-S0003-F000043-004, E-S0003-F000046-009, E-S0003-F000046-010]

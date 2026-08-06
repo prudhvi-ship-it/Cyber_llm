@@ -1,0 +1,202 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 12
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+Protocol Counts: ARP=4, TCP=185, HTTP=10, MySQL=128
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:55812           <-> 172.18.0.2:3306                 27 3918 bytes      43 4186 bytes      70 8104 bytes     0.317301000         0.1148
+172.18.0.3:55802           <-> 172.18.0.2:3306                 25 9818 bytes      32 4005 bytes      57 13 kB         0.173445000         0.1120
+172.18.0.3:55832           <-> 172.18.0.2:3306                 19 1925 bytes      24 2570 bytes      43 4495 bytes     0.462083000         0.0713
+172.18.0.3:55778           <-> 172.18.0.2:3306                 19 1922 bytes      22 1795 bytes      41 3717 bytes     0.127050000         0.0264
+172.18.0.
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache/2.4.25 (Debian), PHP/7.2.5
+Relevant Events:
+- [E-S0000-F000008-009] HTTP Status 200
+- [E-S0000-F000006-004] GET //index.php
+- [E-S0000-F000008-010] Cookie header observed: [REDACTED]
+Exploit Indicators:
+- [E-S0000-F000008-011] /E
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Apache, PHP, GET, Cookie, HTTP Status 200, /E
+
+--- Stream 1 [VALID] ---
+Service: Apache/2.4.25 (Debian), PHP/7.2.5
+Relevant Events:
+- [E-S0001-F000016-004] POST //index.php
+- [E-S0001-F000074-012] HTTP Status 302
+- [E-S0001-F000141-015] HTTP Status 200
+Exploit Indicators:
+- [E-S0001-F000016-007] Sensitive field observed: token=[REDACTED]
+- [E-S0001-F000016-008] Sensitive field observed: pma_username=[REDACTED]
+- [E-S0001-F000016-009] Sensitive field observed: pma_password=[REDACTED]
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Apache, PHP, POST, HTTP Status 302, HTTP Status 200, token, pma_username, pma_password
+
+--- Stream 2 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0002-F000029-005] SELECT @@version, @@version_comment
+- [E-S0002-F000050-006] SELECT CURRENT_USER()
+- [E-S0002-F000054-007] SHOW GRANTS
+Exploit Indicators:
+- [E-S0002-F000029-005] SELECT @@version, @@version_comment
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, SELECT, @@version, @@version_comment, CURRENT_USER, SHOW GRANTS, evidence IDs [E-S0002-F000029-005, E-S0002-F000050-006, E-S0002-F000054-007]
+
+--- Stream 3 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0003-F000041-001] TCP connection initiated from client to server
+- [E-S0003-F000044-003] MySQL response from server to client with payload
+- [E-S0003-F000046-004] MySQL request from client to server with payload
+Exploit Indicators:
+- [E-S0003-F000046-004] mysql_native_password
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, mysql_native_password, E-S0003-F000041-001, E-S0003-F000044-003, E-S0003-F000046-004
+
+--- Stream 4 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0004-F000088-005] SELECT @@version, @@version_comment
+- [E-S0004-F000120-009] SELECT 1 FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE `PRIVILEGE_TYPE` = 'CREATE USER' AND '''test''@''%''' LIKE `GRANTEE` LIMIT 1
+- [E-S0004-F000123-010] SELECT 1 FROM mysql.user LIMIT 1
+Exploit Indicators:
+- [E-S0004-F000117-007] SELECT 1 FROM (SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`COLUMN_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES`) t WHERE `IS_GRANTABLE` = 'YES' AND '''test''@''%''' LIKE `GRANTEE` LIMIT 1
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, SELECT, INFORMATION_SCHEMA, GRANTEE, USER_PRIVILEGES, CREATE USER, evidence IDs [E-S0004-F000088-005, E-S0004-F000120-009, E-S0004-F000123-010, E-S0004-F000117-007]
+
+--- Stream 5 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0005-F000100-001] Client initiated connection to MySQL server.
+- [E-S0005-F000101-002] Server acknowledged connection from client.
+- [E-S0005-F000103-003] Server sent response to client with payload.
+Exploit Indicators:
+- [E-S0005-F000103-003] mysql_native_password
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, mysql_native_password, E-S0005-F000100-001, E-S0005-F000101-002, E-S0005-F000103-003
+
+--- Stream 6 [VALID] ---
+Service: Apache/2.4.25 (Debian), PHP/7.2.5
+Relevant Events:
+- [E-S0006-F000162-004] POST //import.php
+- [E-S0006-F000162-007] Sensitive field observed: token=[REDACTED]
+- [E-S0006-F000162-009] select+'<?php+system("id")+?>';
+Exploit Indicators:
+- [E-S0006-F000162-009] select+'<?php+system("id")+?>'
+Malicious Activities: SQL injection attempt observed
+Attack Success: Unknown
+Evidence Keywords: SQL injection, system, token, PHP, Apache, evidence IDs [E-S0006-F000162-004, E-S0006-F000162-007, E-S0006-F000162-009]
+
+--- Stream 7 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0007-F000173-005] SELECT @@version, @@version_comment
+- [E-S0007-F000213-008] select '<?php system("id") ?>'
+- [E-S0007-F000213-009] system("id")
+Exploit Indicators:
+- [E-S0007-F000213-008] select '<?php system("id") ?>'
+Malicious Activities: Command execution attempt found
+Attack Success: Unknown
+Evidence Keywords: MySQL, system, command execution, SELECT, version, evidence IDs [E-S0007-F000173-005, E-S0007-F000213-008, E-S0007-F000213-009]
+
+--- Stream 8 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0008-F000188-003] MySQL response with payload
+- [E-S0008-F000190-004] MySQL request with payload
+Exploit Indicators:
+- [E-S0008-F000188-003] mysql_native_password
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, mysql_native_password, E-S0008-F000188-003, E-S0008-F000190-004
+
+--- Stream 9 [VALID] ---
+Service: Apache/2.4.25 (Debian), PHP/7.2.5
+Relevant Events:
+- [E-S0009-F000260-004] GET //index.php?target=db_sql.php?/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43
+- [E-S0009-F000310-011] Id
+Exploit Indicators:
+- [E-S0009-F000260-008] ../
+Malicious Activities: Path traversal attempt detected
+Attack Success: Unknown
+Evidence Keywords: path traversal, GET request, Apache, PHP, evidence IDs [E-S0009-F000260-004, E-S0009-F000260-008]
+
+--- Stream 10 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0010-F000265-003] MySQL response containing version information
+- [E-S0010-F000271-005] SELECT @@version, @@version_comment
+- [E-S0010-F000292-006] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+Exploit Indicators:
+- [E-S0010-F000300-007] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`, (SELECT DB_first_level FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t ORDER BY DB_first_level ASC LIMIT 0, 100) t2 WHERE TRUE AND 1 = LOCATE(CONCAT(DB_first_level, '_'), CONCAT(SCHEMA_NAME, '_')) ORDER BY SCHEMA_NAME ASC
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, version, SELECT, INFORMATION_SCHEMA, SUBSTRING_INDEX, evidence IDs [E-S0010-F000265-003, E-S0010-F000271-005, E-S0010-F000292-006, E-S0010-F000300-007]
+
+--- Stream 11 [VALID] ---
+Service: MySQL 5.5.62
+Relevant Events:
+- [E-S0011-F000283-001] TCP connection established from client to server
+- [E-S0011-F000286-003] MySQL response from server to client with payload
+- [E-S0011-F000288-004] MySQL request from client to server with payload
+Exploit Indicators:
+- [E-S0011-F000286-003] mysql_native_password
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, mysql_native_password, E-S0011-F000286-003, E-S0011-F000288-004
+
+=== FINAL REPORT ===
+Affected Service: phpMyAdmin
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP: HTTP request to phpMyAdmin index.php with a 'target' parameter containing directory traversal indicative of an LFI attempt [E-S0006-F000162-004].
+- PCAP: Subsequent interaction with index.php consistent with attempting to include a /tmp/sess_* file via the 'target' parameter [E-S0006-F000162-009].
+- PCAP: MySQL activity consistent with an SQL import/upload workflow preceding the LFI include attempt [E-S0007-F000213-008].
+- PCAP: MySQL activity indicating an attempted PHP payload injection intended for later inclusion via LFI [E-S0007-F000213-009].
+- PCAP: Request sequence attempting to include a session file from /tmp via index.php 'target' traversal [E-S0009-F000260-004].
+- PCAP: Continued attempts targeting /tmp/sess_* via path traversal in the 'target' parameter [E-S0009-F000260-008].
+- PCAP: HTTP POST to /index.php initiating phpMyAdmin actions within the same session context [E-S0001-F000016-008].
+- PCAP: Corresponding HTTP response observed without concrete indicators of code execution (no definitive success artifacts) [E-S0001-F000016-009].
+- NVD: CVE-2011-2507 documents a phpMyAdmin code-execution issue via manipulation of the SESSION array by authenticated users; related in theme but not a match for the observed index.php 'target' LFI technique (CVE-2011-2507).
+- NVD: CVE-2001-0478 describes a phpMyAdmin directory traversal in sql.php; the vector differs from the observed index.php 'target' parameter usage (CVE-2001-0478).
+
+Verification Summary:
+- Service identification: phpMyAdmin activity confirmed via interactions with /index.php and typical workflow patterns [E-S0001-F000016-008, E-S0006-F000162-004].
+- Attack vector validation: Observed 'target' parameter with traversal sequences aiming at /tmp/sess_* indicates an LFI attempt [E-S0006-F000162-004, E-S0009-F000260-004, E-S0009-F000260-008].
+- Precursor activity: MySQL import-related traffic prior to the include attempt aligns with seeding server-side content for inclusion [E-S0007-F000213-008, E-S0007-F000213-009].
+- Outcome assessment: No definitive indicators of executed payloads were observed in the subsequent HTTP responses; attack success cannot be confirmed [E-S0001-F000016-009].
+
+Defensive Recommendation:
+- Upgrade phpMyAdmin to the latest stable release and remove or disable the setup directory and unused features.
+- Restrict access to phpMyAdmin behind VPN or strict IP allowlists; enforce strong authentication and rotate credentials regularly.
+- Deploy WAF or reverse-proxy rules to block path traversal patterns (e.g., '../') and prevent arbitrary file inclusion via parameters like 'target'.
+- Store PHP session files outside of web-accessible paths and disable PHP execution in session/tmp directories using web server configuration.
+- Harden PHP and web server settings: set appropriate file permissions, use open_basedir restrictions, and disable risky PHP functions where feasible.
+- Constrain MySQL privileges to least privilege and disable import/upload features for untrusted users.
+- Enable detailed logging and alerting for phpMyAdmin access and anomalies; routinely review web, PHP, and database logs for traversal or inclusion attempts.
+- Apply OS-level hardening: mount temporary directories with noexec,nodev,nosuid and segment the phpMyAdmin host from untrusted networks.

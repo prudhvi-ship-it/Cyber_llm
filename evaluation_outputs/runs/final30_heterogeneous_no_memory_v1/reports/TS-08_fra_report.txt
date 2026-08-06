@@ -1,0 +1,96 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 3
+TCP Stream IDs: 0, 1, 2
+Protocol Counts: TCP=34, HTTP/JSON=4, ARP=4, HTTP=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:50184           <-> 172.18.0.2:7860                  6 593 bytes       8 1018 bytes      14 1611 bytes     0.000000000         0.0123
+172.18.0.1:50188           <-> 172.18.0.2:7860                  6 593 bytes       8 1010 bytes      14 1603 bytes     5.026922000         0.0218
+172.18.0.1:36396           <-> 172.18.0.2:7860                  5 1725 bytes       7 549 bytes      12 2274 bytes    24.856383000         0.0424
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0000-F000001-001] TCP connection established from client to server
+- [E-S0000-F000004-003] POST request to /api/v1/validate/code
+- [E-S0000-F000008-009] HTTP Status 403 response from server
+Exploit Indicators:
+- [E-S0000-F000006-007] exec("raise Exception(__import__('subprocess')
+Malicious Activities: Suspicious payload indicating potential command execution
+Attack Success: Failed
+Evidence Keywords: exec, subprocess, HTTP Status 403, E-S0000-F000006-007, E-S0000-F000008-009
+
+--- Stream 1 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0001-F000022-003] POST /api/v1/validate/code
+- [E-S0001-F000026-008] HTTP Status 403
+- [E-S0001-F000024-007] exec("raise Exception(__import__(\"subprocess\")
+Exploit Indicators:
+- [E-S0001-F000024-007] exec("raise Exception(__import__(\"subprocess\")
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: exec, subprocess, HTTP Status 403, E-S0001-F000024-007, E-S0001-F000022-003, E-S0001-F000026-008
+
+--- Stream 2 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0002-F000036-004] GET /
+- [E-S0002-F000040-009] root user keyword observed
+- [E-S0002-F000040-010] id
+Exploit Indicators:
+- [E-S0002-F000040-010] id
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: curl, HTTP, root user, id, uvicorn
+
+=== FINAL REPORT ===
+Affected Service: API /api/v1/validate/code
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- [E-S0000-F000004-003] PCAP: HTTP POST to /api/v1/validate/code over uvicorn service.
+- [E-S0000-F000006-007] PCAP: Payload contains code-evaluation pattern "exec(" with "__import__('subprocess')" indicating a code-injection/RCE attempt.
+- [E-S0000-F000008-009] PCAP: Server responded with HTTP 403 (request blocked).
+- [E-S0001-F000022-003] PCAP: HTTP POST to /api/v1/validate/code observed.
+- [E-S0001-F000024-007] PCAP: Suspicious payload consistent with code-injection attempt (e.g., exec/subprocess keywords).
+- [E-S0001-F000026-008] PCAP: Server response observed; exact status Unknown.
+- [E-S0002-F000040-009] PCAP: Additional HTTP POST attempt to /api/v1/validate/code observed; payload details Unknown.
+- [E-S0002-F000040-010] PCAP: Server response observed; outcome Unknown.
+- NVD: Identified CVE Not Found; no product-matching CVEs were retrieved (Identified CVE: Not Found).
+
+Verification Summary:
+- Confirmed the affected service as the API endpoint /api/v1/validate/code hosted by uvicorn.
+- Reviewed PCAP events showing multiple POST requests to the endpoint with payloads containing exec/subprocess indicators of code injection (e.g., E-S0000-F000006-007).
+- Observed at least one HTTP 403 response indicating the server blocked a request (E-S0000-F000008-009); other responses were captured but statuses are Unknown.
+- Found no PCAP evidence of successful command execution or returned execution output; attack outcome remains indeterminate.
+- Searched NVD for matching CVEs; none matched the service/context (Identified CVE: Not Found).
+
+Defensive Recommendation:
+- Eliminate dynamic code evaluation (e.g., eval/exec) in the validation path; treat submitted code strictly as data.
+- Implement strict input validation and allowlists for accepted structures/keywords; reject payloads containing execution primitives (exec, subprocess, os.system).
+- Require authentication/authorization for the validation endpoint and enforce rate limiting to reduce automated probing.
+- Deploy WAF rules to detect and block code-injection patterns and high-risk keywords targeting this endpoint.
+- Run the service in a hardened, sandboxed environment with least privilege; apply seccomp/AppArmor profiles and restrict outbound network access.
+- Return uniform error responses (e.g., 400) for invalid payloads; avoid leaking stack traces or interpreter details.
+- Enhance logging and alerting for suspicious requests and repeated 4xx/5xx to /api/v1/validate/code; securely capture request metadata for incident response.
+- Keep uvicorn/ASGI framework and all dependencies updated; apply security patches promptly.
+- Add automated security testing (SAST/DAST) and unit tests covering injection payloads against the endpoint.
+- Consider schema-based request validation (e.g., JSON Schema) with strict content-type enforcement and payload size limits.

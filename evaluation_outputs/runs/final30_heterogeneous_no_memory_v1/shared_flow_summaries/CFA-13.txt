@@ -1,0 +1,30 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=4, TCP=23, MDNS=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.19.0.1:34736           <-> 172.19.0.2:4506                 10 973 bytes      13 1385 bytes      23 2358 bytes     0.000543000         0.0774
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Unknown
+Relevant Events:
+- [E-S0000-F000019-003] root user keyword observed
+- [E-S0000-F000020-005] cmd.exe
+- [E-S0000-F000019-004] LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=
+Exploit Indicators:
+- [E-S0000-F000019-004] subprocess.call('touch /tmp/POC',shell=True)
+Malicious Activities: Command execution observed
+Attack Success: Succeeded
+Evidence Keywords: root, cmd.exe, subprocess.call, touch, /tmp/POC, LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=

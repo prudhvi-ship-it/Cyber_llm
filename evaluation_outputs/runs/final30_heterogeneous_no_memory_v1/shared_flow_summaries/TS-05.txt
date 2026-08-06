@@ -1,0 +1,43 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: TCP=16, HTTP=4, ARP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:50168           <-> 172.18.0.2:3000                  4 453 bytes       6 483 bytes      10 936 bytes     0.000000000         0.0096
+172.18.0.1:55670           <-> 172.18.0.2:3000                  4 453 bytes       6 564 bytes      10 1017 bytes    10.025536000         0.0064
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0000-F000004-004] GET /
+- [E-S0000-F000004-005] Host: 172.17.0.1:3000
+- [E-S0000-F000006-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0000-F000006-008] HTTP Status 307
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: HTTP, curl, 307, redirect, GET, login
+
+--- Stream 1 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0001-F000018-004] GET /
+- [E-S0001-F000018-005] Host: 172.17.0.1:3000
+- [E-S0001-F000020-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0001-F000018-006] User-Agent: curl/7.68.0
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP, GET, 307, curl, redirect, evidence IDs: [E-S0001-F000018-004, E-S0001-F000018-005, E-S0001-F000020-008]

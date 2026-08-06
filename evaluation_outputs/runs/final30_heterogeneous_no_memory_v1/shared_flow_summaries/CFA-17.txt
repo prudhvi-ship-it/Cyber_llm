@@ -1,0 +1,30 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: MDNS=2, ARP=4, TCP=11, OpenWire=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:55040           <-> 172.18.0.2:61616                 6 803 bytes       6 410 bytes      12 1213 bytes     8.449037000        16.2085
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: ActiveMQ 5.14.2
+Relevant Events:
+- [E-S0000-F000008-003] OpenWire protocol communication observed
+- [E-S0000-F000005-001] TCP connection established from client to server
+- [E-S0000-F000006-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0000-F000008-003] ActiveMQ version and platform details revealed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: ActiveMQ, OpenWire, 5.14.2, TCP, Linux, Oracle Corporation

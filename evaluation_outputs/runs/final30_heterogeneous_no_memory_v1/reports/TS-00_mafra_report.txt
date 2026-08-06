@@ -1,0 +1,147 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=12, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:49424           <-> 172.18.0.2:2222                  8 1542 bytes      10 1081 bytes      18 2623 bytes     0.000135000         1.5382
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: SSH (OpenSSH 8.9)
+Relevant Events:
+- [E-S0000-F000008-004] SSHv2 connection established
+- [E-S0000-F000008-005] Erlang service identified
+- [E-S0000-F000012-006] SSHv2 payload with command execution
+Exploit Indicators:
+- [E-S0000-F000012-006] exec....Fos:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw==")))
+Malicious Activities: Command execution detected
+Attack Success: Succeeded
+Evidence Keywords: SSH, OpenSSH 8.9, Erlang, command execution, base64 decode, exec
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Erlang",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Erlang",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Command Execution",
+    "technique": "SSHv2 exec channel invoking Erlang os:cmd with base64-decoded payload",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000012-006",
+      "E-S0000-F000008-005",
+      "E-S0000-F000008-004"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No specific CVE indicated; evidence shows generic command execution via Erlang over SSH."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000012-006",
+    "E-S0000-F000008-005",
+    "E-S0000-F000008-004"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Erlang
+Attack Type: Remote Command Execution
+Attack Success: Success
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: High
+Score: 4/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "High",
+  "reasons": [
+    "Observed activity is generic SSHv2 exec of Erlang os:cmd (post-auth command execution) without evidence of exploiting a specific vulnerability.",
+    "Flow identifies the SSH service as OpenSSH 8.9; CVE candidates like CVE-2025-32433 concern the Erlang/OTP SSH server and require unauthenticated RCE, which is not evidenced.",
+    "No indicators match other listed CVEs (e.g., Terrapin handshake manipulation, HTTP inets traversal, RNG key guessing).",
+    "NVD retrieval product is Erlang/OTP with unknown version, but there are no exploit-specific artifacts tying the attack to any candidate.",
+    "Both Analyst and Verifier marked CVE as Not Applicable, and no contradicting evidence is present."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Erlang
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000012-006]: SSHv2 payload with command execution.
+- PCAP [E-S0000-F000008-005]: Erlang service identified.
+- PCAP [E-S0000-F000008-004]: SSHv2 connection established.
+
+Verification Summary:
+- Affected service: Erlang.
+- Attack type: Remote Command Execution.
+- Attack technique: SSHv2 exec channel invoking Erlang os:cmd with base64-decoded payload.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Observed activity is generic SSHv2 exec of Erlang os:cmd (post-auth command execution) without evidence of exploiting a specific vulnerability.
+- CVE assessment: Flow identifies the SSH service as OpenSSH 8.9; CVE candidates like CVE-2025-32433 concern the Erlang/OTP SSH server and require unauthenticated RCE, which is not evidenced.
+- CVE assessment: No indicators match other listed CVEs (e.g., Terrapin handshake manipulation, HTTP inets traversal, RNG key guessing).
+- CVE assessment: NVD retrieval product is Erlang/OTP with unknown version, but there are no exploit-specific artifacts tying the attack to any candidate.
+- CVE assessment: Both Analyst and Verifier marked CVE as Not Applicable, and no contradicting evidence is present.
+
+Defensive Recommendation:
+- Implement strong authentication mechanisms for SSH access to Erlang systems.
+- Regularly review and restrict SSH access to only necessary users and IP addresses.
+- Monitor SSH logs for unusual command execution patterns or unauthorized access attempts.
+- Ensure Erlang applications and their underlying operating systems are patched and up-to-date.
+- Implement least privilege principles for Erlang processes, limiting their ability to execute arbitrary commands.
+- Consider using a jump box or bastion host for SSH access to internal systems.
+- Implement an Intrusion Detection/Prevention System (IDPS) to detect and block suspicious SSH activity.

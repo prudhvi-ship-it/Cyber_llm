@@ -1,0 +1,63 @@
+=== FRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=11, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:45828           <-> 172.18.0.2:2222                  8 1531 bytes       9 1015 bytes      17 2546 bytes     0.000180000         1.5442
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: SSH (OpenSSH_8.9)
+Relevant Events:
+- [E-S0000-F000006-003] SSH connection initiated from client to server
+- [E-S0000-F000008-004] SSHv2 response from server to client
+- [E-S0000-F000012-006] SSHv2 data sent from client to server
+Exploit Indicators:
+- [E-S0000-F000008-005] exec....Fos:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw==")))
+Malicious Activities: Command execution attempt detected
+Attack Success: Unknown
+Evidence Keywords: SSH, OpenSSH_8.9, Erlang, exec, command execution, base64, decode
+
+=== FINAL REPORT ===
+Affected Service: SSH
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP: SSH service identified as OpenSSH_8.9 during connection setup between 172.18.0.1:45828 and 172.18.0.2:2222 [E-S0000-F000006-003].
+- PCAP: Server responded on SSHv2, confirming active SSH service on 172.18.0.2:2222 [E-S0000-F000008-004].
+- PCAP: Client sent SSHv2 data indicating an exec request [E-S0000-F000012-006].
+- PCAP: Detected payload consistent with Erlang os:cmd invocation via base64 decode: exec...os:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw=="))) [E-S0000-F000008-005].
+- NVD: No product-matching CVEs found for SSH Remote Command execution query (Identified CVE: Not Found).
+
+Verification Summary:
+- Validated the affected service as SSH (OpenSSH_8.9) on 172.18.0.2:2222 from the PCAP connection setup and server response [E-S0000-F000006-003, E-S0000-F000008-004].
+- Confirmed an exec-style command attempt over SSH carrying an Erlang os:cmd payload, obfuscated via base64, sent from client to server [E-S0000-F000012-006, E-S0000-F000008-005].
+- Could not confirm command execution results or system state changes in the PCAP; no observable command output or follow-up evidence of effects was present, so attack success remains Unknown.
+- NVD search returned no matching CVEs for the observed behavior; no specific vulnerability was identified (Identified CVE: Not Found).
+
+Defensive Recommendation:
+- Harden SSH access: enforce key-based authentication, disable password logins, and enable multi-factor authentication where supported.
+- Restrict SSH exposure: limit to trusted management networks, apply firewall rules, and consider port-knocking or VPN gating.
+- Constrain post-auth actions: use ForceCommand or restricted shells for service accounts; deny interactive shells where not required.
+- Enable and monitor detailed SSH logging and intrusion detection for exec requests and patterns such as base64-decode strings or os:cmd indicators.
+- Implement account and command allow-lists; use sudoers with least-privilege and command auditing.
+- Deploy rate limiting and lockout controls (e.g., fail2ban) and centralize logs for correlation.
+- Regularly update OpenSSH and system packages to the latest stable, security-patched versions.
+- Conduct host-based verification on the target for potential indicators (e.g., unexpected files or processes) and ensure EDR coverage for interpreter misuse.

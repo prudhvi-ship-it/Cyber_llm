@@ -1,85 +1,61 @@
-import re
+"""Deterministic consensus calculation over validated agent outputs."""
+
+from contracts import (
+    AnalystOutput,
+    Confidence,
+    ConsensusDecision,
+    Decision,
+    NOT_FOUND,
+    VerificationResult,
+    VerifierOutput,
+)
 
 
 class ConsensusManager:
-    def extract_field(self, text, field_name):
-        pattern = rf"{field_name}:\s*(.+)"
-        match = re.search(pattern, text, re.IGNORECASE)
-        if match:
-            return match.group(1).strip()
-        return "Unknown"
-
-    def calculate(self, analyst_output, verifier_output):
-        service = self.extract_field(analyst_output, "Service")
-        attack = self.extract_field(analyst_output, "Attack Type")
-        cve = self.extract_field(analyst_output, "Possible CVE")
-
-        verification_result = self.extract_field(
-            verifier_output,
-            "Verification Result"
-        )
-        service_supported = self.extract_field(
-            verifier_output,
-            "Service Supported"
-        )
-        attack_supported = self.extract_field(
-            verifier_output,
-            "Attack Supported"
-        )
-        cve_supported = self.extract_field(
-            verifier_output,
-            "CVE Supported"
-        )
-        verifier_confidence = self.extract_field(
-            verifier_output,
-            "Confidence"
-        )
-
+    def calculate(
+        self,
+        analyst_output: AnalystOutput,
+        verifier_output: VerifierOutput,
+    ) -> ConsensusDecision:
         score = 0
 
-        if service_supported.lower().startswith("yes"):
+        if verifier_output.service_supported == Decision.YES.value:
+            score += 1
+        if verifier_output.attack_supported == Decision.YES.value:
+            score += 1
+        if verifier_output.success_supported == Decision.YES.value:
+            score += 1
+        max_score = 4
+        if analyst_output.cve.candidate != NOT_FOUND:
+            max_score += 1
+            if verifier_output.cve_supported == Decision.YES.value:
+                score += 1
+        if verifier_output.verification_result == VerificationResult.SUPPORTED.value:
             score += 1
 
-        if attack_supported.lower().startswith("yes"):
-            score += 1
-
-        if cve_supported.lower().startswith("yes"):
-            score += 1
-
-        if verification_result.lower().startswith("supported"):
-            score += 1
-
-        if score >= 3:
-            overall_confidence = "High"
-        elif score == 2:
-            overall_confidence = "Medium"
+        ratio = score / max_score
+        if ratio == 1.0:
+            overall_confidence = Confidence.HIGH
+        elif ratio >= 0.5:
+            overall_confidence = Confidence.MEDIUM
         else:
-            overall_confidence = "Low"
+            overall_confidence = Confidence.LOW
 
-        return {
-            "service": service,
-            "attack": attack,
-            "cve": cve,
-            "verification_result": verification_result,
-            "service_supported": service_supported,
-            "attack_supported": attack_supported,
-            "cve_supported": cve_supported,
-            "verifier_confidence": verifier_confidence,
-            "overall_confidence": overall_confidence,
-            "score": score
-        }
+        return ConsensusDecision(
+            service=analyst_output.service.primary,
+            attack=analyst_output.attack.type,
+            attack_success=analyst_output.attack.success,
+            cve=analyst_output.cve.candidate,
+            verification_result=verifier_output.verification_result,
+            service_supported=verifier_output.service_supported,
+            attack_supported=verifier_output.attack_supported,
+            success_supported=verifier_output.success_supported,
+            cve_supported=verifier_output.cve_supported,
+            verifier_confidence=verifier_output.confidence,
+            overall_confidence=overall_confidence,
+            score=score,
+            max_score=max_score,
+        )
 
-    def format(self, consensus):
-        return f"""
-=== CONSENSUS SUMMARY ===
-Service: {consensus["service"]}
-Attack Type: {consensus["attack"]}
-CVE: {consensus["cve"]}
-Verification Result: {consensus["verification_result"]}
-Service Supported: {consensus["service_supported"]}
-Attack Supported: {consensus["attack_supported"]}
-CVE Supported: {consensus["cve_supported"]}
-Verifier Confidence: {consensus["verifier_confidence"]}
-Overall Confidence: {consensus["overall_confidence"]}
-Score: {consensus["score"]}/4
-"""
+    def format(self, consensus: ConsensusDecision) -> str:
+        return consensus.to_text()

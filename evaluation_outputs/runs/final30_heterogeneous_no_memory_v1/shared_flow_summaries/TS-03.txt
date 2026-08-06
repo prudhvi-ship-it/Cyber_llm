@@ -1,0 +1,41 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=4, TCP=16, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:33004           <-> 172.18.0.2:5173                  4 778 bytes       6 717 bytes      10 1495 bytes     0.000147000         0.0240
+172.18.0.1:33014           <-> 172.18.0.2:5173                  5 844 bytes       5 657 bytes      10 1501 bytes     0.024102000         0.0060
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Vite (version not explicitly visible)
+Relevant Events:
+- [E-S0000-F000006-004] GET /@fs/etc/passwd
+- [E-S0000-F000008-008] HTTP Status 403
+Exploit Indicators:
+- [E-S0000-F000006-004] GET /@fs/etc/passwd
+Malicious Activities: Attempted access to sensitive file (/etc/passwd)
+Attack Success: Failed
+Evidence Keywords: GET, /etc/passwd, 403 Forbidden, Vite, evidence IDs [E-S0000-F000006-004, E-S0000-F000008-008]
+
+--- Stream 1 [VALID] ---
+Service: Vite (version not visible)
+Relevant Events:
+- [E-S0001-F000016-004] GET /@fs/etc/passwd?raw??
+- [E-S0001-F000018-008] HTTP Status 403
+Exploit Indicators:
+- [E-S0001-F000016-004] GET /@fs/etc/passwd?raw??
+Malicious Activities: Attempted access to /etc/passwd
+Attack Success: Failed
+Evidence Keywords: Vite, /etc/passwd, 403 Forbidden, E-S0001-F000016-004, E-S0001-F000018-008

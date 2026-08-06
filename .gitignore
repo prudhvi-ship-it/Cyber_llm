@@ -1,1 +1,25 @@
+# API keys and local configuration
 .env
+.env.*
+!.env.example
+
+# Python virtual environments
+venv/
+.venv/
+venv_copied_backup/
+
+# Python-generated cache files
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Backup files
+*.bak
+
+# Editor and Windows files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Microsoft.Services.Store.winmd

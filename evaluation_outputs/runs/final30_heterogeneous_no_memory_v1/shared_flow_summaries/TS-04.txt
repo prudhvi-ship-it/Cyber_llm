@@ -1,0 +1,42 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=2, TCP=20, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:48170           <-> 172.18.0.2:3000                  6 9666 bytes       8 696 bytes      14 10 kB        10.169293000         0.1211
+172.18.0.1:40342           <-> 172.18.0.2:3000                  4 453 bytes       6 483 bytes      10 936 bytes     0.000125000         0.1493
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: HTTP/1.1 (curl/7.68.0)
+Relevant Events:
+- [E-S0000-F000006-004] GET /
+- [E-S0000-F000008-008] HTTP Status 307
+Exploit Indicators:
+- [E-S0000-F000006-006] User-Agent: curl/7.68.0
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP, 307, curl, GET, redirect, evidence IDs [E-S0000-F000006-004, E-S0000-F000008-008]
+
+--- Stream 1 [VALID] ---
+Service: Next.js (version not explicitly visible)
+Relevant Events:
+- [E-S0001-F000016-004] GET /
+- [E-S0001-F000020-008] admin keyword observed
+- [E-S0001-F000018-007] HTTP Status 200
+Exploit Indicators:
+- [E-S0001-F000020-008] admin keyword observed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Next.js, admin, HTTP Status 200, GET /, curl/7.68.0, evidence ID E-S0001-F000020-008

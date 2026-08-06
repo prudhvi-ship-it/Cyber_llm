@@ -1,0 +1,56 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 3
+TCP Stream IDs: 0, 1, 2
+Protocol Counts: TCP=34, HTTP/JSON=4, ARP=4, HTTP=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:50184           <-> 172.18.0.2:7860                  6 593 bytes       8 1018 bytes      14 1611 bytes     0.000000000         0.0123
+172.18.0.1:50188           <-> 172.18.0.2:7860                  6 593 bytes       8 1010 bytes      14 1603 bytes     5.026922000         0.0218
+172.18.0.1:36396           <-> 172.18.0.2:7860                  5 1725 bytes       7 549 bytes      12 2274 bytes    24.856383000         0.0424
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0000-F000001-001] TCP connection established from client to server
+- [E-S0000-F000004-003] POST request to /api/v1/validate/code
+- [E-S0000-F000008-009] HTTP Status 403 response from server
+Exploit Indicators:
+- [E-S0000-F000006-007] exec("raise Exception(__import__('subprocess')
+Malicious Activities: Suspicious payload indicating potential command execution
+Attack Success: Failed
+Evidence Keywords: exec, subprocess, HTTP Status 403, E-S0000-F000006-007, E-S0000-F000008-009
+
+--- Stream 1 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0001-F000022-003] POST /api/v1/validate/code
+- [E-S0001-F000026-008] HTTP Status 403
+- [E-S0001-F000024-007] exec("raise Exception(__import__(\"subprocess\")
+Exploit Indicators:
+- [E-S0001-F000024-007] exec("raise Exception(__import__(\"subprocess\")
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: exec, subprocess, HTTP Status 403, E-S0001-F000024-007, E-S0001-F000022-003, E-S0001-F000026-008
+
+--- Stream 2 [VALID] ---
+Service: uvicorn
+Relevant Events:
+- [E-S0002-F000036-004] GET /
+- [E-S0002-F000040-009] root user keyword observed
+- [E-S0002-F000040-010] id
+Exploit Indicators:
+- [E-S0002-F000040-010] id
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: curl, HTTP, root user, id, uvicorn

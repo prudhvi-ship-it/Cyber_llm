@@ -1,0 +1,148 @@
+=== MAFRA FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: MDNS=2, ARP=4, TCP=11, OpenWire=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:55040           <-> 172.18.0.2:61616                 6 803 bytes       6 410 bytes      12 1213 bytes     8.449037000        16.2085
+================================================================================
+
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: ActiveMQ 5.14.2
+Relevant Events:
+- [E-S0000-F000008-003] OpenWire protocol communication observed
+- [E-S0000-F000005-001] TCP connection established from client to server
+- [E-S0000-F000006-002] TCP connection response from server to client
+Exploit Indicators:
+- [E-S0000-F000008-003] ActiveMQ version and platform details revealed
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: ActiveMQ, OpenWire, 5.14.2, TCP, Linux, Oracle Corporation
+
+=== ANALYST OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "ActiveMQ",
+    "application": "ActiveMQ 5.14.2",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Reconnaissance",
+    "technique": "Service Version Enumeration",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000008-003",
+      "E-S0000-F000005-001",
+      "E-S0000-F000006-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No exploitation observed; only version and platform disclosure via OpenWire (E-S0000-F000008-003)."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "Success of the attack is unknown"
+  ],
+  "evidence_check": [
+    "E-S0000-F000008-003",
+    "E-S0000-F000005-001",
+    "E-S0000-F000006-002"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: ActiveMQ
+Attack Type: Reconnaissance
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Medium
+Overall Confidence: Medium
+Score: 2/4
+
+=== CVE VALIDATION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "Not Applicable",
+  "confidence": "High",
+  "reasons": [
+    "Only Apache ActiveMQ 5.14.2 OpenWire traffic on port 61616 was observed; evidence indicates version enumeration/reconnaissance, not exploitation.",
+    "No HTTP/web console traffic present, so webconsole XSS issues (e.g., CVE-2020-1941, CVE-2018-8006) are not supported by the PCAP.",
+    "No MQTT frames observed, which does not support CVE-2019-0222.",
+    "No JMX/RMI registry interaction observed, which does not support CVE-2020-13920.",
+    "Both Analyst and Verifier indicate no applicable CVE and no exploitation indicators in the evidence."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: ActiveMQ
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000008-003]: OpenWire protocol communication observed.
+- PCAP [E-S0000-F000005-001]: TCP connection established from client to server.
+- PCAP [E-S0000-F000006-002]: TCP connection response from server to client.
+
+Verification Summary:
+- Affected service: ActiveMQ.
+- Attack type: Reconnaissance.
+- Attack technique: Service Version Enumeration.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 2/4.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Only Apache ActiveMQ 5.14.2 OpenWire traffic on port 61616 was observed; evidence indicates version enumeration/reconnaissance, not exploitation.
+- CVE assessment: No HTTP/web console traffic present, so webconsole XSS issues (e.g., CVE-2020-1941, CVE-2018-8006) are not supported by the PCAP.
+- CVE assessment: No MQTT frames observed, which does not support CVE-2019-0222.
+- CVE assessment: No JMX/RMI registry interaction observed, which does not support CVE-2020-13920.
+- CVE assessment: Both Analyst and Verifier indicate no applicable CVE and no exploitation indicators in the evidence.
+- Unsupported claim: Success of the attack is unknown
+
+Defensive Recommendation:
+- Ensure ActiveMQ is running the latest stable version to mitigate known vulnerabilities.
+- Implement network segmentation to restrict access to ActiveMQ services from untrusted networks.
+- Monitor network traffic for unusual connection attempts or reconnaissance activities targeting ActiveMQ ports.
+- Review ActiveMQ configuration for unnecessary exposed services or information disclosure.
+- Consider implementing an intrusion detection system (IDS) to detect and alert on service version enumeration attempts.
