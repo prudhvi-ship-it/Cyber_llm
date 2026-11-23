@@ -15,11 +15,16 @@ The source snapshot reviewed for these instructions is commit `4842db3`.
 All 30 PCAPs referenced by `MAFRA_Eval30/ground_truth.csv` are present. A dataset
 checksum manifest and an offline check are provided in `reproduction/`.
 
-A clean installation and live end-to-end rerun have **not yet been verified**.
-The recorded environment passes `pip check` and both command-line help commands,
-but reports a Pydantic V1 compatibility warning on Python 3.14. See
-[the verification record](docs/REPRODUCIBILITY.md) for checks completed and checks
-still needed. A successful Git push alone does not establish reproducibility.
+A fresh Windows virtual environment successfully installed the package-version
+snapshot exported from the working environment and passed `pip check`. In that
+fresh clone, the 30-PCAP checksum check, the CFA-00 TShark preflight, and imports
+of the pipeline, evaluator, and MCP server also passed. `requirements.txt` now
+records those package versions, excluding bootstrap tools.
+
+Live MCP startup and end-to-end analysis have **not been verified in the fresh
+clone**. Python 3.14 still reports a Pydantic V1 compatibility warning. See
+[the verification record](docs/REPRODUCIBILITY.md) for the exact scope and
+remaining limits.
 
 ## Recorded environment
 
@@ -60,9 +65,14 @@ here. The direct executable paths below avoid the need to activate the venv.
 If the `py` launcher is unavailable, use the full path to your Python 3.14
 executable to create the venv.
 
-MCP is pinned to the reported installed version. Its transitive dependencies are
-not all locked by these two requirement files, so a full environment lock is
-still pending. Initial setup may also need Internet access for tokenizer data.
+`requirements.txt` contains the Windows package-version snapshot that installed
+successfully in the fresh environment, including MCP and its dependencies.
+`requirements-mcp.txt` repeats the same MCP version pin for compatibility with
+the existing installation command. The snapshot pins `idna==3.20`,
+`httpx2==2.13.1`, and `httpcore2==2.13.1`; the earlier `idna==3.11` pin prevented
+fresh installation. This is a Windows version snapshot, without distribution
+hashes, not a verified cross-platform lock. Initial setup may also need Internet
+access for tokenizer data.
 
 ## 2. Configure local credentials
 

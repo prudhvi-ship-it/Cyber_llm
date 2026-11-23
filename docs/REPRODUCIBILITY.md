@@ -3,11 +3,26 @@
 Reviewed source: commit `4842db3`, supplied as `MAFRA_Repro_Review.zip`.
 Review date: 2026-11-23.
 
+Follow-up verification used a fresh clone at `01c7d10` and a newly created
+Python 3.14 Windows virtual environment. The first installation attempt using
+the committed requirements failed because `idna==3.11` conflicted with MCP's
+`httpx2` dependency. Exporting the working environment's installed package
+versions resolved the conflict. That snapshot installed successfully in the
+fresh venv and passed `pip check`.
+
+The corrected `requirements.txt` contains those versions, excluding `pip`,
+`setuptools`, and `wheel`. No model or analysis code was changed by this fix.
+
 ## Checks completed
 
 | Check | Result | Scope |
 | --- | --- | --- |
 | Existing environment `pip check` | Passed | User's installed Windows environment |
+| Fresh environment installation | Passed using exported package versions | Fresh Windows Python 3.14 venv; original committed pins initially failed |
+| Fresh environment `pip check` | Passed | No broken requirements reported |
+| Fresh clone dataset checksums | All 30 PCAPs and ground-truth CSV matched | `MAFRA_Reproduction` clone |
+| Fresh clone TShark preflight | Valid | CFA-00, 3,252 bytes, TCP streams 0 and 1 |
+| Fresh clone pipeline/evaluator/MCP imports | Passed with Pydantic V1 warning | Includes `Client` and `MCPServer` imports |
 | Current pipeline `--help` | Passed with Pydantic V1 warning | User's installed environment |
 | Evaluator `--help` | Passed with the same warning | User's installed environment |
 | Python source syntax | All 111 original scripts parsed | Review environment, Python 3.12.14; no imports required |
@@ -22,9 +37,9 @@ environment. These selected tests do not validate the full installed stack or
 the MCP server. No real model requests or live vulnerability searches were made
 during this review.
 
-The Windows PowerShell installer was reviewed but could not be executed in the
-Linux review environment. It is restricted to the reviewed commit and a clean
-working tree so an unexpected local revision is not overwritten.
+The initial PowerShell installer was subsequently run successfully in the
+user's Windows project. It applied the six support files and created an external
+backup before the documentation update was committed as `01c7d10`.
 
 The supplied `reproduction/check_dataset.py` verifies the ground-truth CSV,
 case IDs, PCAP paths, byte sizes, and SHA-256 hashes. Its manifest is tied to the
@@ -36,6 +51,8 @@ that Git can introduce on Windows. PCAP hashes are over the original bytes.
 - Replace the incomplete README with setup, configuration, offline checks,
   MCP startup, one-case analysis, full evaluation, and saved-plot commands.
 - Pin `requirements-mcp.txt` to the reported SDK version, `mcp==2.2.0`.
+- Refresh `requirements.txt` from the installed package versions that succeeded
+  in the fresh Windows venv, including `idna==3.20` and MCP dependencies.
 - Extend `.env.example` with Serper, optional NVD, explicit same-model settings,
   disabled memory, and the MCP endpoint.
 - Add a dataset manifest and a standard-library integrity check.
@@ -46,23 +63,28 @@ code, prompts, scoring, PCAPs, and saved results. Its backup is stored outside
 the Git repository. The two generated reports previously excluded after the
 credential-pattern check remain excluded.
 
-## Remaining checks before claiming a runnable reproduction
+## Verification scope and remaining checks
 
-1. Apply and commit this update, then clone that commit into a new directory.
-2. Create a new virtual environment without reusing the existing `.venv`.
-3. Install both requirement files and run `pip check` there.
-4. Run the dataset check, CLI help, and PCAP preflight from the README.
-5. Start MCP and confirm the expected tool is available at the configured URL.
-6. Supply local credentials and finish the one-PCAP analysis. Inspect the report,
+Fresh environment installation, declared dependency consistency, dataset
+integrity, TShark access to the sample PCAP, and application/MCP imports have
+passed on Windows. These are the verified reproduction checks.
+
+The following live checks were skipped at the user's request:
+
+1. Start MCP in the fresh clone and confirm the expected tool is available at
+   the configured URL.
+2. Supply local credentials and finish a one-PCAP analysis. Inspect the report,
    evidence audit, and terminal log for retrieval or model errors.
-7. Run all 30 cases under a new run ID with the explicitly recorded model,
-   profile, memory mode, and notebook setting. Check the status and telemetry.
+3. Rerun all 30 cases under a new run ID and inspect completion and telemetry.
 
-The review attempted dependency resolution, but access to the Python package
-registry was blocked with HTTP 403. It could not establish package availability,
-install a fresh environment, or validate Windows MCP startup. No TShark
-executable was available in the review environment. These checks must be
-completed on a machine with the required software and network access.
+The project has a tested Windows installation snapshot and offline checks. A
+fresh live end-to-end reproduction has not been established, and new benchmark
+scores must not be claimed from these checks.
+
+The separate Linux review environment could not access the package registry
+(HTTP 403) and had no TShark executable. The Windows checks above were performed
+later by the user and supersede the earlier pending installation status. The
+selected regression test results remain scoped to the Linux review environment.
 
 ## Python warning and dependency locking
 
@@ -78,23 +100,18 @@ this documentation update. If the fresh test fails because of it, evaluate a
 supported interpreter/package combination in another new environment and rerun
 the checks. Do not describe that changed combination as the historical one.
 
-The main requirements file pins listed packages, and MCP is pinned separately.
-This is not a complete lock of MCP's transitive dependencies. After a successful
-fresh installation and smoke test, record the interpreter, OS, TShark, commit,
-and full installed package versions. For example, locally:
+The original requirements file was a stale package snapshot. The working
+environment contained `mcp==2.2.0`, `httpx2==2.13.1`, and `idna==3.20`, while the
+file still pinned `idna==3.11`. The new `requirements.txt` records the exported
+Windows package versions that installed successfully in the fresh venv, with
+bootstrap tools excluded. MCP is pinned to the same version in both requirement
+files. The export includes platform-specific packages such as `pywin32`.
 
-```powershell
-.\.venv\Scripts\python.exe --version
-tshark --version
-git rev-parse HEAD
-.\.venv\Scripts\python.exe -m pip list --format=freeze > requirements-resolved-windows.txt
-```
-
-That export records installed distributions and versions without source URLs.
-Review it before publishing. Platform-specific dependencies mean it must not
-be advertised as a verified Linux or macOS lock. Test installing the exported
-versions in a second fresh Windows environment before treating it as a
-validated environment lock.
+This snapshot does not include distribution hashes, downloaded wheels, or an
+offline package mirror. It must not be described as a validated Linux/macOS
+lock. The snapshot installation used pip 26.2.1; pip itself is not a runtime
+dependency in the corrected requirements file. Record interpreter, OS, TShark,
+commit, and installed package versions when repeating the procedure.
 
 ## Saved experiments and exact-result limits
 
