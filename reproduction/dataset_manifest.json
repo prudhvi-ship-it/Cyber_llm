@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "source_commit": "4842db32acdaa84246c5005ca46381bc87370863",
+  "case_count": 30,
+  "ground_truth": {
+    "path": "MAFRA_Eval30/ground_truth.csv",
+    "normalization": "UTF-8 without BOM; platform newlines normalized to LF",
+    "sha256": "8a790a9847e5a16d9ec287e28f1ecf61fa1c76f33e83e05b9783e690cdf8f011"
+  },
+  "cases": [
+    {
+      "id": "CFA-00",
+      "path": "MAFRA_Eval30/pcaps/CFA_event0_CVE-2022-24706.pcap",
+      "size_bytes": 3252,
+      "sha256": "b945d2ecfa0225d5678a8eb59c4523bbd3a4dfc407404f6564e59dc1ba37dcb0"
+    },
+    {
+      "id": "CFA-01",
+      "path": "MAFRA_Eval30/pcaps/CFA_event1_CVE-2021-43798.pcap",
+      "size_bytes": 743488,
+      "sha256": "7591ad1678b02c620eea15a05985a667167f7b339e2c321d6e42bfc618fa12ff"
+    },
+    {
+      "id": "CFA-02",
+      "path": "MAFRA_Eval30/pcaps/CFA_event2_CVE-2021-41773.pcap",
+      "size_bytes": 15451,
+      "sha256": "820df2265943fb6a8094962cc27deaf2120d8bfcbc78a25fe6a80f813f49f96a"
+    },
+    {
+      "id": "CFA-03",
+      "path": "MAFRA_Eval30/pcaps/CFA_event3_CVE-2021-42013.pcap",
+      "size_bytes": 15226,
+      "sha256": "f826987547eac6f6fbae349a973ea1feae4a09abd7975669d0ada1b48653c78e"
+    },
+    {
+      "id": "CFA-04",
+      "path": "MAFRA_Eval30/pcaps/CFA_event4_CVE-2024-23897.pcap",
+      "size_bytes": 3105484,
+      "sha256": "6ac7f7b1c1d3ff1137586866c7cc59a22a912dddfe885dbbe1c63482e61ed0c1"
+    },
+    {
+      "id": "CFA-05",
+      "path": "MAFRA_Eval30/pcaps/CFA_event5_CVE-2023-23752.pcap",
+      "size_bytes": 219572,
+      "sha256": "8fb38480793bc1155ec32cb4e3de78a95fadae45c5cab22110b73cf030a570ef"
+    },
+    {
+      "id": "CFA-06",
+      "path": "MAFRA_Eval30/pcaps/CFA_event6_CVE-2021-44228.pcap",
+      "size_bytes": 3341,
+      "sha256": "d07732d2812e8c25aaa2bdf6c78e55cf0e2fa4c9080bf94069eea1146884f3a8"
+    },
+    {
+      "id": "CFA-07",
+      "path": "MAFRA_Eval30/pcaps/CFA_event7_CVE-2016-5734.pcap",
+      "size_bytes": 71531,
+      "sha256": "4ab23f5c4fc64c5cde1e7dc28ee198bcc12e63f3addb973dc5f1f0799129dadd"
+    },
+    {
+      "id": "CFA-08",
+      "path": "MAFRA_Eval30/pcaps/CFA_event8_CVE-2018-12613.pcap",
+      "size_bytes": 88063,
+      "sha256": "0debf6e439a4c8723a11f1bd5f1dddeca824c70b91aac1eabe7dc94b30d4b50f"
+    },
+    {
+      "id": "CFA-09",
+      "path": "MAFRA_Eval30/pcaps/CFA_event9_CVE-2022-46169.pcap",
+      "size_bytes": 296120,
+      "sha256": "7508125edf254673c2818c3309d3e4054fc11daa269484ed8779168b71cb48b8"
+    },
+    {
+      "id": "CFA-10",
+      "path": "MAFRA_Eval30/pcaps/CFA_event10_CVE-2020-11981_fail.pcap",
+      "size_bytes": 37500,
+      "sha256": "c781de72b04f4296aaf622f02f3b5de9451fbd5710040137e799238d7842ea10"
+    },
+    {
+      "id": "CFA-11",
+      "path": "MAFRA_Eval30/pcaps/CFA_event11_CVE-2020-11981_sucess.pcap",
+      "size_bytes": 191022,
+      "sha256": "d621823d7c2d7a8f0d95bf9da8ea975dfe16ebae00fac6f3a7ffed7a5251fd4a"
+    },
+    {
+      "id": "CFA-12",
+      "path": "MAFRA_Eval30/pcaps/CFA_event12_CVE-2020-11651_fail.pcap",
+      "size_bytes": 3011,
+      "sha256": "b0b95f6ac09a6139ebbee68ac64122e71dfbdd67dedf458be05f74dc8b591d1e"
+    },
+    {
+      "id": "CFA-13",
+      "path": "MAFRA_Eval30/pcaps/CFA_event13_CVE-2020-11651_sucess.pcap",
+      "size_bytes": 3208,
+      "sha256": "46b2f15091d36612144b0fa0d3e1a49cab577539d730731029069ae34ed500df"
+    },
+    {
+      "id": "CFA-14",
+      "path": "MAFRA_Eval30/pcaps/CFA_event14_cve-2021-45232_fail.pcap",
+      "size_bytes": 58098,
+      "sha256": "197fa6463aadb1ad2b35316d557155038d4674e9a57f6fc35a606bdc54abc5cc"
+    },
+    {
+      "id": "CFA-15",
+      "path": "MAFRA_Eval30/pcaps/CFA_event15_CVE-2021-45232_success.pcap",
+      "size_bytes": 83834,
+      "sha256": "1f05f3fc151172b2f34d70cc75e66cd2a871596ddfcd2fe3103a307c70d616d8"
+    },
+    {
+      "id": "CFA-16",
+      "path": "MAFRA_Eval30/pcaps/CFA_event16_cve-2017-15709_fail.pcap",
+      "size_bytes": 1324,
+      "sha256": "2dffcb8e26b37b6853eeff52c04eec21c91b884d0c2553f8d69126c3846d9625"
+    },
+    {
+      "id": "CFA-17",
+      "path": "MAFRA_Eval30/pcaps/CFA_event17_cve-2017-15709_success.pcap",
+      "size_bytes": 1887,
+      "sha256": "80c5f6731bdc30cb15b9aa8940233c5295ecdcbecade86e189c1d2f9e5535459"
+    },
+    {
+      "id": "CFA-18",
+      "path": "MAFRA_Eval30/pcaps/CFA_event18_cve-2021-22205_fail.pcap",
+      "size_bytes": 12065905,
+      "sha256": "6e284dfc0e8040cbfb33af68f5bced96d35a011e0184bd72be98a6c9620cc787"
+    },
+    {
+      "id": "CFA-19",
+      "path": "MAFRA_Eval30/pcaps/CFA_event19_cve-2021-22205_success.pcap",
+      "size_bytes": 21683134,
+      "sha256": "b99ff8479c66c0ff261d688a755dbc479aac10db64ed507b9092aff7f1988361"
+    },
+    {
+      "id": "TS-00",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event0_CVE-2025-32433.pcap",
+      "size_bytes": 3051,
+      "sha256": "c42fe6de15331f5c64470e1a99ee2822cea879b3d8f077e2e903935c348343d1"
+    },
+    {
+      "id": "TS-01",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event1_CVE-2025-32433-failed.pcap",
+      "size_bytes": 2958,
+      "sha256": "c5185d30fecd9ea44c700313cbf99e7561f59f5f59df2e7e0351fcae2573f400"
+    },
+    {
+      "id": "TS-02",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event2_cve-2025-30208_success.pcap",
+      "size_bytes": 8397,
+      "sha256": "7759923a93bd7a036a15850d98c1f4a2349414391f408e67ee2b8dd12165fc5f"
+    },
+    {
+      "id": "TS-03",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event3_cve-2025-30208_fail.pcap",
+      "size_bytes": 3572,
+      "sha256": "5e482539e2e543ba8096a4caf1228e2616847b49b7ed23e46adc6f69dfb69d3e"
+    },
+    {
+      "id": "TS-04",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event4_cve-2025-29927_success.pcap",
+      "size_bytes": 11822,
+      "sha256": "0cd1f60e0f21a899acd7a0b17cab84901d7d20e3cdbf4753c415eef686ecc9bc"
+    },
+    {
+      "id": "TS-05",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event5_cve-2025-29927_fail.pcap",
+      "size_bytes": 2529,
+      "sha256": "9aa914104d38caffde736eb027854938abdf86f2be1cdd585708b4ae6a3deb31"
+    },
+    {
+      "id": "TS-06",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event6_cve-2025-3248_success_1.pcap",
+      "size_bytes": 2239,
+      "sha256": "de986cb7b0f5d62f485abec2a361007383864b030c36d985969989f24e553725"
+    },
+    {
+      "id": "TS-07",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event7_cve-2025-3248_success_2.pcap",
+      "size_bytes": 123917,
+      "sha256": "751f74cd62e9ca463ac9ff80b01e54cab4323f573e58f31339717b8a14f4f40a"
+    },
+    {
+      "id": "TS-08",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event8_cve-2025-3248_fail.pcap",
+      "size_bytes": 6384,
+      "sha256": "50ee2445396617eae5f9e50a24bb401cda79ddaa1a2d81e401dac43ff0f44b48"
+    },
+    {
+      "id": "TS-09",
+      "path": "MAFRA_Eval30/pcaps/TestSet_event9_cve-2025-24813_fail.pcap",
+      "size_bytes": 30304,
+      "sha256": "4d9ec94499e50d6686ef38293bb1f72ce10b3887c86a4bc5db9c24f7798eabdf"
+    }
+  ]
+}
