@@ -223,3 +223,18 @@ saved evidence, completion status, and metrics. See
 | `tests/` | Regression tests |
 | `reproduction/` | Dataset checksums and offline integrity check |
 | `docs/` | Reproduction notes and optional training-memory instructions |
+
+
+## Included evaluation artifacts
+
+The shared repository keeps the three model runs listed above and the completed
+heterogeneous FRA/MAFRA baseline in
+`evaluation_outputs/runs/final30_heterogeneous_no_memory_v1/`. Their result CSVs,
+manifests, status files, reports, and audit records are retained. The dataset
+folder contains the original capture files; generated reports beside those
+captures are excluded because run-specific reports are kept with their runs.
+
+Earlier experiment passes, pilot capture copies, demo and smoke-test outputs,
+old patch instructions, and superseded plot exports are archived outside the
+working repository. The source code, regression tests, reproducibility checks,
+and all 30 evaluation inputs remain available.
