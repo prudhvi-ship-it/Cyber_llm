@@ -68,3 +68,14 @@ Microsoft.Services.Store.winmd
 /thesis_graphs/figure2_cve_accuracy.png
 /thesis_graphs/figure2_cve_accuracy.svg
 /thesis_graphs/plotted_values_and_sources.csv
+
+
+# Removed unreferenced diagnostic and compatibility scripts
+/audit_corrections_preflight.py
+/cve_preflight.py
+/eval_runner.py
+/evaluation/parser.py
+/evaluation_preflight.py
+/experiment_preflight.py
+/memory_preflight.py
+/pipeline_contract_preflight.py

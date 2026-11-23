@@ -238,3 +238,8 @@ Earlier experiment passes, pilot capture copies, demo and smoke-test outputs,
 old patch instructions, and superseded plot exports are archived outside the
 working repository. The source code, regression tests, reproducibility checks,
 and all 30 evaluation inputs remain available.
+
+Standalone diagnostic scripts and compatibility aliases that were no longer
+referenced have been removed. Use `main_mafra_mcp.py` for analysis,
+`python -m evaluation.run_eval` for evaluation, `pcap_preflight.py` for
+packet-access checks, and `reproduction/check_dataset.py` for input checks.
