@@ -1,0 +1,318 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=11, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:45828           <-> 172.18.0.2:2222                  8 1531 bytes       9 1015 bytes      17 2546 bytes     0.000180000         1.5442
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:45828 -> 172.18.0.2:2222 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.2:2222 -> 172.18.0.1:45828 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:45828 -> 172.18.0.2:2222 (SSH)
+- [E-S0000-F000008-004 | server->client] 172.18.0.2:2222 -> 172.18.0.1:45828 (SSHv2)
+- [E-S0000-F000012-006 | client->server] 172.18.0.1:45828 -> 172.18.0.2:2222 (SSHv2)
+- [E-S0000-F000008-005 | server->client] Erlang
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:45828 -> 172.18.0.2:2222; packets=17; client->server=9, server->client=8; role_hint=other protocol/application candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: SSH (OpenSSH 8.9 and Erlang/5.2.10)
+Relevant Events: The flow involves an SSH connection attempt from 172.18.0.1 to 172.18.0.2 on port 2222. The client is using OpenSSH 8.9, and the server is identified as Erlang/5.2.10.
+Malicious Activities: The payload contains a suspicious command execution attempt using Erlang's `os:cmd` function to execute a base64-decoded command. This indicates an attempt to execute a command on the server, which is a potential exploitation attempt targeting the SSH service.
+Attack Success: Failed (There is no evidence of successful command execution or observable effects from the command).
+Evidence: 
+- [E-S0000-F000006-003 | client->server | epoch=1752238490.506752] SSH connection initiation from client.
+- [E-S0000-F000008-004 | server->client | epoch=1752238490.522334] SSHv2 response from server, identified as Erlang.
+- [E-S0000-F000012-006 | client->server | epoch=1752238491.035400] SSHv2 payload containing the suspicious command execution attempt.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SSH",
+    "application": "Erlang",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Command Execution",
+    "technique": "os:cmd function with base64-decoded command",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000006-003",
+      "E-S0000-F000008-004",
+      "E-S0000-F000012-006"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No specific CVE could be identified from the packet evidence."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SSH",
+    "application": "Erlang",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Command Execution",
+    "technique": "os:cmd function with base64-decoded command",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000006-003",
+      "E-S0000-F000008-004",
+      "E-S0000-F000012-006"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2025-32433",
+    "confidence": "Medium",
+    "reason": "The packet evidence shows an attempt to execute a command using Erlang's os:cmd function, which aligns with the description of CVE-2025-32433 involving Erlang/OTP SSH server vulnerabilities. This association is based on packet observations and model knowledge, not a confirmed online advisory."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000006-003",
+    "E-S0000-F000008-004",
+    "E-S0000-F000012-006"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: SSH
+Attack Type: Command Execution
+Attack Success: Fail
+CVE: CVE-2025-32433
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: Medium
+Overall Confidence: Medium
+Score: 4/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: SSH Command Execution Vulnerability
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T02:10:43.623161+00:00
+Candidate CVEs: CVE-2025-32433, CVE-2023-51385, CVE-2010-0168, CVE-2017-9001
+Sources: 8
+
+Source 1: CISA KEV
+Title: Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.
+Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2023-51385: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2023-51385
+Summary: In ssh in OpenSSH before 9.6, OS command injection might occur if a user name or host name has shell metacharacters, and this name is referenced by an expansion token in certain situations. For example, an untrusted Git repository can have a submodule with shell metacharacters in a user name or host name.
+Supports: Web-cited CVE-2023-51385 was retrieved independently from NVD; applicability and exploitation are unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2010-0168: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2010-0168
+Summary: The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting.
+Supports: NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2017-9001: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2017-9001
+Summary: Aruba ClearPass 6.6.3 and later includes a feature called "SSH Lockout", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with "root" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable.
+Supports: NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: OpenSSH CVE-2024-6387 RCE Vulnerability
+URL: https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability, which is a signal handler race condition in OpenSSH's server (sshd), allows unauthenticated remote code execution (RCE) as ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH Server Versions Affected by the regreSSHion Vulnerability Understanding the Potential Impact of regreSSHion Vulnerability on OpenSSH Exploits Immediate Steps to Mitigate the SSH Vulnerability Technical Details of the OpenSSH Exploit (CVE-2024-6387) Qualys QID Coverage for Detecting the OpenSSH Exploit Discover Vulnerable OpenSSH Assets with Qualys CyberSecurity Asset Management (CSAM) Enhancing Your Security Posture with Qualys VMDR to Detect and Remediate OpenSSH Vulnerabilities Unified Dashboard for regreSSHion: Track Exposure and Remediation of OpenSSH Exploits Automatically Patch regreSSHion Vulnerabilities with Qualys Patch Management Detect and Remediate CVE-2024-6387 (Open SSH Vulnerability) with Qualys TotalCloud Container Security Qualys Products and Customer Responsibilities Frequently Asked Questions (FAQs) The Qualys Threat Research Unit (TRU) has discovered a Remote Unauthenticated Code Execution (RCE) vulnerability in OpenSSH’s server (sshd) in glibc-based Linux systems. CVE assigned to this vulnerability is CVE-2024-6387. The vulnerability, which is a signal handler race condition in OpenSSH’s server (sshd), allows unauthenticated remote code execution (RCE) as root on glibc-based Linux systems; that presents a significant security risk. This race condition affects sshd in its default configuration. Based on searches using Censys and Shodan, we have identified over 14 million potentially vulnerable OpenSSH server instances exposed to the Internet. Anonymized data from Qualys CSAM 3.0 with External Attack Surface Management data reveals that approximately 700,000 external internet-facing instances are vulnerable. This accounts for 31% of all internet-facing instances with OpenSSH in our global customer base. Inte In our security analysis, we identified that this vulnerability is a regression of the previously patched vulnerability CVE-2006-5051, which was reported in 2006. A regression in this context means that a flaw, once fixed, has reappeared in a subsequent software release, typically due to changes or updates that inadvertently reintroduce the issue. This incident highlights the crucial role of thorough regression testi Qualys has developed a working exploit for the regreSSHion vulnerability. As part of the disclosure process, we successfully demonstrated the exploit to the OpenSSH team to assist with their understanding and remediation efforts. We do not release our exploits, as we must allow time for patches to be applied. However, even though the exploit is complex, we believe that other independent researchers will be able to re About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH (Open Secure Shell) is a suite of secure networking utilities based on the Secure Shell (SSH) protocol, which is vital for secure communication over unsecured networks. It provides robust encryption to ensure privacy and secure file transfers, making it an essential tool for remote server management and secure data communication. Known for its extensive security an
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: SSH ProxyCommand Command Injection
+URL: https://www.sonicwall.com/blog/ssh-proxycommand-command-injection
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). To trigger this vulnerability, an attacker must convince a user to connect to a malicious URL using the vulnerability version of SSH in a ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] SonicWall Capture Labs threat research team became aware of a command injection threat within OpenSSH versions before 9.6, assessed its impact, and developed mitigation measures for the vulnerability. OpenSSH is a widely used connectivity tool for encrypted, remote login, both standalone and embedded in enterprise and consumer applications. CVE-2023-51385 allows an attacker to inject commands into the command line if the client utilizes the ProxyCommand parameter within their configuration file for the connecting server. There is no known active exploitation at the time of writing, likely due to the requirements around exploitation. While exploitation requirements reduce the risk of exploitation, several well-known applications and services utilize this This vulnerability has been assigned the Common Vulnerabilities and Exposures (CVE) identifier CVE-2023-51385. CVSS score is 9.8 (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H), based on the following metrics: Attack vector is network. Attack complexity is low. Privileges required is none. User interaction is none. The impact of this vulnerability on data confidentiality is high. The impact of this vulnerability on data integrity is high. The impact of this vulnerability on data availability is high. Advanced usage of OpenSSH includes the ability to provide a configuration file that can perform actions when initiating an SSH connection. One of those actions is ProxyCommand. ProxyCommand allows the user to specify a command to execute within the context of the user’s current shell during the connection process. The reason the keyword includes “proxy” is the intention is for the user to be able to proxy a connectio Triggering the Vulnerability To trigger this vulnerability, an attacker must convince a user to connect to a malicious URL using the vulnerability version of SSH in a scenario where the end user uses ProxyCommand within their configuration file for the connecting server. As the end-user needs a specific configuration, this reduces the likelihood of exploitation. However, there are several well-known applications and services that utilize this fe Assuming the previously mentioned conditions are met, exploitation can occur any time SSH is leveraged. This includes standard connections such as SSH and SCP. The discovering researcher, vin01, released a proof of concept that leverages Github’s clone command using SSH to open the MacOS calculator. This can also be done on Linux or Windows operating systems with slight modifications. To execute the proof of concept, Figure 1 Local SSH Config File When git recursively attempts to get the submodules from the repository, shown in Figure 2, the vulnerability is triggered and exploited. Figure 2 Repository submodules The video in Figure 3 demonstrates leveraging this proof of concept on a Linux workstation to execute calculator. Figure 3 - Linux workstation exploitation To ensure SonicWall customers are prepared for any exploitation that may occur due to this vulnerability, the following signatures have been released: SPY:520 "Malformed-gitmodules gitmodules.OT_1" Remediation Recommendations OpenSSH has released an update to address the i
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: OS Command Injection Vulnerability in SSH ...
+URL: https://github.com/coollabsio/coolify/security/advisories/GHSA-9wqm-fg79-4748
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability in the execution of commands on remote servers allows an authenticated user to execute arbitrary code on the local Coolify ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: SSH access is a vulnerability, how? : r/sysadmin
+URL: https://www.reddit.com/r/sysadmin/comments/9v6v2o/ssh_access_is_a_vulnerability_how/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Any exposed service is a vulnerability when you look at it from a security perspective though. It's something else that can be breached.
+Supports: None
+Contradicts: None
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000006-003]: 172.18.0.1:45828 -> 172.18.0.2:2222 (SSH).
+- PCAP [E-S0000-F000008-004]: 172.18.0.2:2222 -> 172.18.0.1:45828 (SSHv2).
+- PCAP [E-S0000-F000012-006]: 172.18.0.1:45828 -> 172.18.0.2:2222 (SSHv2).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [CISA KEV] Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-51385: NVD vulnerability record: In ssh in OpenSSH before 9.6, OS command injection might occur if a user name or host name has shell metacharacters, and this name is referenced by an expansion token in certain situations. For example, an untrusted Git repository can have a submodule with shell metacharacters in a user name or host name. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-51385 Supports: Web-cited CVE-2023-51385 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-0168: NVD vulnerability record: The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-0168 Supports: NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-9001: NVD vulnerability record: Aruba ClearPass 6.6.3 and later includes a feature called "SSH Lockout", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with "root" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-9001 Supports: NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] OpenSSH CVE-2024-6387 RCE Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability, which is a signal handler race condition in OpenSSH's server (sshd), allows unauthenticated remote code execution (RCE) as ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH Server Versions Affected by the regreSSHion Vulnerability Understanding the Potential Impact of regreSSHion Vulnerability on OpenSSH Exploits Immediate Steps to Mitigate the SSH Vulnerability Technical Details of the OpenSSH Exploit (CVE-2024-6387) Qualys QID Coverage for Detecting the OpenSSH Exploit Discover Vulnerable OpenSSH Assets with Qualys CyberSecurity Asset Management (CSAM) Enhancing Your Security Posture with Qualys VMDR to Detect and Remediate OpenSSH Vulnerabilities Unified Dashboard for regreSSHion: Track Exposure and Remediation of OpenSSH Exploits Automatically Patch regreSSHion Vulnerabilities with Qualys Patch Management Detect and Remediate CVE-2024-6387 (Open SSH Vulnerability) with Qualys TotalCloud Container Security Qualys Products and Customer Responsibilities Frequently Asked Questions (FAQs) The Qualys Threat Research Unit (TRU) has discovered a Remote Unauthenticated Code Execution (RCE) vulnerability in OpenSSH’s server (sshd) in glibc-based Linux systems. CVE assigned to this vulnerability is CVE-2024-6387. The vulnerability, which is a signal handler race condition in OpenSSH’s server (sshd), allows unauthenticated remote code execution (RCE) as root on glibc-based Linux systems; that presents a significant security risk. This race condition affects sshd in its default configuration. Based on searches using Censys and Shodan, we have identified over 14 million potentially vulnerable OpenSSH server instances exposed to the Internet. Anonymized data from Qualys CSAM 3.0 with External Attack Surface Management data reveals that approximately 700,000 external internet-facing instances are vulnerable. This accounts for 31% of all internet-facing instances with OpenSSH in our global customer base. Inte In our security analysis, we identified that this vulnerability is a regression of the previously patched vulnerability CVE-2006-5051, which was reported in 2006. A regression in this context means that a flaw, once fixed, has reappeared in a subsequent software release, typically due to changes or updates that inadvertently reintroduce the issue. This incident highlights the crucial role of thorough regression testi Qualys has developed a working exploit for the regreSSHion vulnerability. As part of the disclosure process, we successfully demonstrated the exploit to the OpenSSH team to assist with their understanding and remediation efforts. We do not release our exploits, as we must allow time for patches to be applied. However, even though the exploit is complex, we believe that other independent researchers will be able to re About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH (Open Secure Shell) is a suite of secure networking utilities based on the Secure Shell (SSH) protocol, which is vital for secure communication over unsecured networks. It provides robust encryption to ensure privacy and secure file transfers, making it an essential tool for remote server management and secure data communication. Known for its extensive security an Source: https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server
+- ONLINE RESEARCH LEAD [Serper web result] SSH ProxyCommand Command Injection: UNTRUSTED WEB RESEARCH (not PCAP evidence). To trigger this vulnerability, an attacker must convince a user to connect to a malicious URL using the vulnerability version of SSH in a ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] SonicWall Capture Labs threat research team became aware of a command injection threat within OpenSSH versions before 9.6, assessed its impact, and developed mitigation measures for the vulnerability. OpenSSH is a widely used connectivity tool for encrypted, remote login, both standalone and embedded in enterprise and consumer applications. CVE-2023-51385 allows an attacker to inject commands into the command line if the client utilizes the ProxyCommand parameter within their configuration file for the connecting server. There is no known active exploitation at the time of writing, likely due to the requirements around exploitation. While exploitation requirements reduce the risk of exploitation, several well-known applications and services utilize this This vulnerability has been assigned the Common Vulnerabilities and Exposures (CVE) identifier CVE-2023-51385. CVSS score is 9.8 (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H), based on the following metrics: Attack vector is network. Attack complexity is low. Privileges required is none. User interaction is none. The impact of this vulnerability on data confidentiality is high. The impact of this vulnerability on data integrity is high. The impact of this vulnerability on data availability is high. Advanced usage of OpenSSH includes the ability to provide a configuration file that can perform actions when initiating an SSH connection. One of those actions is ProxyCommand. ProxyCommand allows the user to specify a command to execute within the context of the user’s current shell during the connection process. The reason the keyword includes “proxy” is the intention is for the user to be able to proxy a connectio Triggering the Vulnerability To trigger this vulnerability, an attacker must convince a user to connect to a malicious URL using the vulnerability version of SSH in a scenario where the end user uses ProxyCommand within their configuration file for the connecting server. As the end-user needs a specific configuration, this reduces the likelihood of exploitation. However, there are several well-known applications and services that utilize this fe Assuming the previously mentioned conditions are met, exploitation can occur any time SSH is leveraged. This includes standard connections such as SSH and SCP. The discovering researcher, vin01, released a proof of concept that leverages Github’s clone command using SSH to open the MacOS calculator. This can also be done on Linux or Windows operating systems with slight modifications. To execute the proof of concept, Figure 1 Local SSH Config File When git recursively attempts to get the submodules from the repository, shown in Figure 2, the vulnerability is triggered and exploited. Figure 2 Repository submodules The video in Figure 3 demonstrates leveraging this proof of concept on a Linux workstation to execute calculator. Figure 3 - Linux workstation exploitation To ensure SonicWall customers are prepared for any exploitation that may occur due to this vulnerability, the following signatures have been released: SPY:520 "Malformed-gitmodules gitmodules.OT_1" Remediation Recommendations OpenSSH has released an update to address the i Source: https://www.sonicwall.com/blog/ssh-proxycommand-command-injection
+- ONLINE [Serper web result] OS Command Injection Vulnerability in SSH ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability in the execution of commands on remote servers allows an authenticated user to execute arbitrary code on the local Coolify ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/coollabsio/coolify/security/advisories/GHSA-9wqm-fg79-4748
+- ONLINE [Serper web result] SSH access is a vulnerability, how? : r/sysadmin: UNTRUSTED WEB RESEARCH (not PCAP evidence). Any exposed service is a vulnerability when you look at it from a security perspective though. It's something else that can be breached. Source: https://www.reddit.com/r/sysadmin/comments/9v6v2o/ssh_access_is_a_vulnerability_how/
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2023-51385
+- https://nvd.nist.gov/vuln/detail/CVE-2010-0168
+- https://nvd.nist.gov/vuln/detail/CVE-2017-9001
+- https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server
+- https://www.sonicwall.com/blog/ssh-proxycommand-command-injection
+- https://github.com/coollabsio/coolify/security/advisories/GHSA-9wqm-fg79-4748
+- https://www.reddit.com/r/sysadmin/comments/9v6v2o/ssh_access_is_a_vulnerability_how/
+
+Search status: Valid
+Search query: SSH Command Execution Vulnerability
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2025-32433",
+  "cve_supported": "Yes",
+  "confidence": "Medium",
+  "reasons": [
+    "Analyst proposed CVE-2025-32433; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: SSH
+Associated CVE candidate (Analyst): CVE-2025-32433
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2025-32433
+Attack: Failed
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000006-003]: 172.18.0.1:45828 -> 172.18.0.2:2222 (SSH).
+- PCAP [E-S0000-F000008-004]: 172.18.0.2:2222 -> 172.18.0.1:45828 (SSHv2).
+- PCAP [E-S0000-F000012-006]: 172.18.0.1:45828 -> 172.18.0.2:2222 (SSHv2).
+- ONLINE [CISA KEV] Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-51385: NVD vulnerability record: In ssh in OpenSSH before 9.6, OS command injection might occur if a user name or host name has shell metacharacters, and this name is referenced by an expansion token in certain situations. For example, an untrusted Git repository can have a submodule with shell metacharacters in a user name or host name. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-51385 Supports: Web-cited CVE-2023-51385 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-0168: NVD vulnerability record: The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-0168 Supports: NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-9001: NVD vulnerability record: Aruba ClearPass 6.6.3 and later includes a feature called "SSH Lockout", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with "root" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-9001 Supports: NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] OpenSSH CVE-2024-6387 RCE Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability, which is a signal handler race condition in OpenSSH's server (sshd), allows unauthenticated remote code execution (RCE) as ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH Server Versions Affected by the regreSSHion Vulnerability Understanding the Potential Impact of regreSSHion Vulnerability on OpenSSH Exploits Immediate Steps to Mitigate the SSH Vulnerability Technical Details of the OpenSSH Exploit (CVE-2024-6387) Qualys QID Coverage for Detecting the OpenSSH Exploit Discover Vulnerable OpenSSH Assets with Qualys CyberSecurity Asset Management (CSAM) Enhancing Your Security Posture with Qualys VMDR to Detect and Remediate OpenSSH Vulnerabilities Unified Dashboard for regreSSHion: Track Exposure and Remediation of OpenSSH Exploits Automatically Patch regreSSHion Vulnerabilities with Qualys Patch Management Detect and Remediate CVE-2024-6387 (Open SSH Vulnerability) with Qualys TotalCloud Container Security Qualys Products and Customer Responsibilities Frequently Asked Questions (FAQs) The Qualys Threat Research Unit (TRU) has discovered a Remote Unauthenticated Code Execution (RCE) vulnerability in OpenSSH’s server (sshd) in glibc-based Linux systems. CVE assigned to this vulnerability is CVE-2024-6387. The vulnerability, which is a signal handler race condition in OpenSSH’s server (sshd), allows unauthenticated remote code execution (RCE) as root on glibc-based Linux systems; that presents a significant security risk. This race condition affects sshd in its default configuration. Based on searches using Censys and Shodan, we have identified over 14 million potentially vulnerable OpenSSH server instances exposed to the Internet. Anonymized data from Qualys CSAM 3.0 with External Attack Surface Management data reveals that approximately 700,000 external internet-facing instances are vulnerable. This accounts for 31% of all internet-facing instances with OpenSSH in our global customer base. Inte In our security analysis, we identified that this vulnerability is a regression of the previously patched vulnerability CVE-2006-5051, which was reported in 2006. A regression in this context means that a flaw, once fixed, has reappeared in a subsequent software release, typically due to changes or updates that inadvertently reintroduce the issue. This incident highlights the crucial role of thorough regression testi Qualys has developed a working exploit for the regreSSHion vulnerability. As part of the disclosure process, we successfully demonstrated the exploit to the OpenSSH team to assist with their understanding and remediation efforts. We do not release our exploits, as we must allow time for patches to be applied. However, even though the exploit is complex, we believe that other independent researchers will be able to re About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH (Open Secure Shell) is a suite of secure networking utilities based on the Secure Shell (SSH) protocol, which is vital for secure communication over unsecured networks. It provides robust encryption to ensure privacy and secure file transfers, making it an essential tool for remote server management and secure data communication. Known for its extensive security an Source: https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server
+- ONLINE RESEARCH LEAD [Serper web result] SSH ProxyCommand Command Injection: UNTRUSTED WEB RESEARCH (not PCAP evidence). To trigger this vulnerability, an attacker must convince a user to connect to a malicious URL using the vulnerability version of SSH in a ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] SonicWall Capture Labs threat research team became aware of a command injection threat within OpenSSH versions before 9.6, assessed its impact, and developed mitigation measures for the vulnerability. OpenSSH is a widely used connectivity tool for encrypted, remote login, both standalone and embedded in enterprise and consumer applications. CVE-2023-51385 allows an attacker to inject commands into the command line if the client utilizes the ProxyCommand parameter within their configuration file for the connecting server. There is no known active exploitation at the time of writing, likely due to the requirements around exploitation. While exploitation requirements reduce the risk of exploitation, several well-known applications and services utilize this This vulnerability has been assigned the Common Vulnerabilities and Exposures (CVE) identifier CVE-2023-51385. CVSS score is 9.8 (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H), based on the following metrics: Attack vector is network. Attack complexity is low. Privileges required is none. User interaction is none. The impact of this vulnerability on data confidentiality is high. The impact of this vulnerability on data integrity is high. The impact of this vulnerability on data availability is high. Advanced usage of OpenSSH includes the ability to provide a configuration file that can perform actions when initiating an SSH connection. One of those actions is ProxyCommand. ProxyCommand allows the user to specify a command to execute within the context of the user’s current shell during the connection process. The reason the keyword includes “proxy” is the intention is for the user to be able to proxy a connectio Triggering the Vulnerability To trigger this vulnerability, an attacker must convince a user to connect to a malicious URL using the vulnerability version of SSH in a scenario where the end user uses ProxyCommand within their configuration file for the connecting server. As the end-user needs a specific configuration, this reduces the likelihood of exploitation. However, there are several well-known applications and services that utilize this fe Assuming the previously mentioned conditions are met, exploitation can occur any time SSH is leveraged. This includes standard connections such as SSH and SCP. The discovering researcher, vin01, released a proof of concept that leverages Github’s clone command using SSH to open the MacOS calculator. This can also be done on Linux or Windows operating systems with slight modifications. To execute the proof of concept, Figure 1 Local SSH Config File When git recursively attempts to get the submodules from the repository, shown in Figure 2, the vulnerability is triggered and exploited. Figure 2 Repository submodules The video in Figure 3 demonstrates leveraging this proof of concept on a Linux workstation to execute calculator. Figure 3 - Linux workstation exploitation To ensure SonicWall customers are prepared for any exploitation that may occur due to this vulnerability, the following signatures have been released: SPY:520 "Malformed-gitmodules gitmodules.OT_1" Remediation Recommendations OpenSSH has released an update to address the i Source: https://www.sonicwall.com/blog/ssh-proxycommand-command-injection
+- ONLINE [Serper web result] OS Command Injection Vulnerability in SSH ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability in the execution of commands on remote servers allows an authenticated user to execute arbitrary code on the local Coolify ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/coollabsio/coolify/security/advisories/GHSA-9wqm-fg79-4748
+- ONLINE [Serper web result] SSH access is a vulnerability, how? : r/sysadmin: UNTRUSTED WEB RESEARCH (not PCAP evidence). Any exposed service is a vulnerability when you look at it from a security perspective though. It's something else that can be breached. Source: https://www.reddit.com/r/sysadmin/comments/9v6v2o/ssh_access_is_a_vulnerability_how/
+
+Verification Summary:
+- Affected service: SSH.
+- Attack type: Command Execution.
+- Attack technique: os:cmd function with base64-decoded command.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 4/5.
+- Consensus attack outcome: Fail.
+- Validated CVE: CVE-2025-32433.
+- CVE assessment: Analyst proposed CVE-2025-32433; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: SSH Command Execution Vulnerability.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2023-51385
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2010-0168
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-9001
+- Evidence-source URL: https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server
+- Evidence-source URL: https://www.sonicwall.com/blog/ssh-proxycommand-command-injection
+- Evidence-source URL: https://github.com/coollabsio/coolify/security/advisories/GHSA-9wqm-fg79-4748
+- Evidence-source URL: https://www.reddit.com/r/sysadmin/comments/9v6v2o/ssh_access_is_a_vulnerability_how/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply mitigations per vendor instructions for Erlang/OTP SSH server.
+- Follow applicable BOD 22-01 guidance for cloud services.
+- Discontinue use of the product if mitigations are unavailable.

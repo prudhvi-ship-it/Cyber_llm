@@ -1,0 +1,396 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=4, TCP=16, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:43246           <-> 172.18.0.2:5173                  4 778 bytes       6 717 bytes      10 1495 bytes     0.000190000         0.0238
+172.18.0.1:43254           <-> 172.18.0.2:5173                  5 5669 bytes       5 657 bytes      10 6326 bytes     0.022433000         0.0215
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0001-F000014-004 | client->server] GET /@fs/etc/passwd?raw??
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:43246 -> 172.18.0.2:5173 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43246 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:43246 -> 172.18.0.2:5173 (HTTP)
+- [E-S0000-F000008-007 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43246 (HTTP)
+- [E-S0000-F000006-004 | client->server] GET /@fs/etc/passwd
+- [E-S0000-F000006-005 | client->server] Host: 172.17.0.1:5173
+- [E-S0000-F000006-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+- [E-S0000-F000008-008 | server->client] HTTP Status 403
+- [E-S0001-F000011-001 | client->server] 172.18.0.1:43254 -> 172.18.0.2:5173 (TCP)
+- [E-S0001-F000012-002 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43254 (TCP)
+- [E-S0001-F000014-003 | client->server] 172.18.0.1:43254 -> 172.18.0.2:5173 (HTTP)
+- [E-S0001-F000018-007 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43254 (HTTP)
+- [E-S0001-F000014-004 | client->server] GET /@fs/etc/passwd?raw??
+- [E-S0001-F000014-005 | client->server] Host: 172.17.0.1:5173
+- [E-S0001-F000014-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+- [E-S0001-F000018-008 | server->client] HTTP Status 200
+- [E-S0001-F000018-009 | server->client] Content-Type: text/javascript
+- [E-S0001-F000018-010 | server->client] root user keyword observed
+- [E-S0001-F000018-011 | server->client] /bin/bash
+- [E-S0001-F000018-012 | server->client] eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhc3N3ZD9yYXc/Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IFwicm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaFxcbmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuYmluOng6MjoyOmJpbjovYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jp...[TRUNCATED]
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:43246 -> 172.18.0.2:5173; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.1:43254 -> 172.18.0.2:5173; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: HTTP on port 5173 (likely Vite dev server; version not visible)
+
+Relevant Events: 172.18.0.1 (client) sent an HTTP GET to 172.18.0.2:5173 requesting /@fs/etc/passwd, a path commonly used to request local filesystem reads on Vite dev servers. The server responded with HTTP 403 Forbidden, indicating the request was blocked. The Host header used 172.17.0.1:5173 while the connection target was 172.18.0.2:5173, suggesting scanning/probing behavior that did not rely on Host-based vhosting.
+
+Malicious Activities: Attempted local file disclosure/path traversal against the HTTP service using the /@fs/ route (likely targeting a Vite dev server).
+
+Attack Success: Failed
+
+Evidence: 
+- [E-S0000-F000006-004] Client requested GET /@fs/etc/passwd (attempted LFD/path traversal).
+- [E-S0000-F000006-005] Host header set to 172.17.0.1:5173 while destination was 172.18.0.2:5173 (probing/mismatched Host).
+- [E-S0000-F000006-006] User-Agent: Chrome on Windows (generic scanner/browser).
+- [E-S0000-F000008-008] Server responded HTTP 403 Forbidden (request blocked; no file contents returned).
+- [E-S0000-F000003-001, E-S0000-F000004-002] TCP connection between 172.18.0.1:43246 and 172.18.0.2:5173 confirming client-server roles.
+
+--- Stream 1 [VALID] ---
+Service: HTTP dev server on port 5173 (Vite dev server; version not visible)
+
+Relevant Events: 172.18.0.1 (client) requested /@fs/etc/passwd?raw?? from 172.18.0.2:5173 and received a 200 OK with a JavaScript module response that exposes the file contents, consistent with Vite’s /@fs raw file exposure. The Host header was mismatched (172.17.0.1:5173), indicating probing/scanning behavior. No authentication or login activity was observed.
+
+Malicious Activities: Successful local file disclosure (path traversal/LFD) against the Vite dev server via /@fs/etc/passwd?raw??, exposing system account data.
+
+Attack Success: Succeeded
+
+Evidence:
+- E-S0001-F000014-004: Client requested GET /@fs/etc/passwd?raw?? (attempted local file read via Vite /@fs).
+- E-S0001-F000014-005: Host: 172.17.0.1:5173 (mismatched Host vs destination; probing).
+- E-S0001-F000018-008: Server responded HTTP Status 200 (request allowed).
+- E-S0001-F000018-009: Content-Type: text/javascript (ES module response typical of Vite ?raw).
+- E-S0001-F000018-010: “root” keyword observed in server response (indicative of /etc/passwd content).
+- E-S0001-F000018-011: “/bin/bash” string observed in server response (further supports /etc/passwd disclosure).
+- E-S0001-F000018-012: Base64-encoded source map present for the returned module, embedding the disclosed file data.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite dev server",
+    "application": "Vite",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Arbitrary File Read",
+    "technique": "Path traversal/local file disclosure via Vite /@fs with ?raw returning /etc/passwd as a JS module",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000014-004",
+      "E-S0001-F000018-008",
+      "E-S0001-F000018-009",
+      "E-S0001-F000018-010",
+      "E-S0001-F000018-011",
+      "E-S0001-F000018-012"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "Distinctive Vite /@fs ?raw local file read is observed, but the packets do not reveal a specific version/advisory to map to a known CVE."
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite dev server",
+    "application": "Vite",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Arbitrary File Read",
+    "technique": "Local file disclosure via Vite @fs allow-list bypass using double-? query (?raw??) to return /etc/passwd as an ES module",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000014-004",
+      "E-S0001-F000018-008",
+      "E-S0001-F000018-009",
+      "E-S0001-F000018-010",
+      "E-S0001-F000018-011",
+      "E-S0001-F000018-012"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2025-30208",
+    "confidence": "High",
+    "reason": "Packets show an HTTP GET to /@fs/etc/passwd with a double-? query suffix (?raw??) [E-S0001-F000014-004] and a 200 OK JS module response containing /etc/passwd data [E-S0001-F000018-008..012]. This distinctive @fs allow-list bypass using ?raw?? matches CVE-2025-30208 for the Vite dev server. Other Vite issues (e.g., WebSocket-based GHSA or double-slash fs.deny bypass CVE-2023-34092) do not fit the observed HTTP @fs + ?raw?? mechanism. The installed version is unknown; association is based on PCAP mechanism matching the CVE description."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000006-004",
+    "E-S0000-F000008-008",
+    "E-S0001-F000014-004",
+    "E-S0001-F000018-008",
+    "E-S0001-F000018-009",
+    "E-S0001-F000018-010",
+    "E-S0001-F000018-011",
+    "E-S0001-F000018-012"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Vite dev server
+Attack Type: Arbitrary File Read
+Attack Success: Success
+CVE: CVE-2025-30208
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: High
+Overall Confidence: High
+Score: 5/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Vite dev server arbitrary file read packet clues: endpoint etc passwd
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-30T05:59:59.276522+00:00
+Candidate CVEs: CVE-2025-31125, CVE-2023-34092, CVE-2025-30208, CVE-2025-31486
+Sources: 8
+
+Source 1: CISA KEV
+Title: Vite Vitejs Improper Access Control Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Vite Vitejs: Vite Vitejs contains an improper access control vulnerability that exposes content of non-allowed files using ?inline&import or ?raw?import. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.
+Supports: CISA KEV identifies CVE-2025-31125 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2023-34092: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2023-34092
+Summary: Vite provides frontend tooling. Prior to versions 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, and 4.3.9, Vite Server Options (`server.fs.deny`) can be bypassed using double forward-slash (//) allows any unauthenticated user to read file from the Vite root-path of the application including the default `fs.deny` settings (`['.env', '.env.*', '*.{crt,pem}']`). Only users explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected, and only files in the immediate Vite project root folder could be exposed. This issue is fixed in vite@4.3.9, vite@4.2.3, vite@4.1.5, vite@4.0.5, vite@3.2.7, and vite@2.9.16.
+Supports: NVD lists CVE-2023-34092 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2025-30208: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-30208
+Summary: Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue.
+Supports: NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2025-31486: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-31486
+Summary: Vite is a frontend tooling framework for javascript. The contents of arbitrary files can be returned to the browser. By adding ?.svg with ?.wasm?init or with sec-fetch-dest: script header, the server.fs.deny restriction was able to bypass. This bypass is only possible if the file is smaller than build.assetsInlineLimit (default: 4kB) and when using Vite 6.0+. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. This vulnerability is fixed in 4.5.12, 5.4.17, 6.0.14, 6.1.4, and 6.2.5.
+Supports: NVD lists CVE-2025-31486 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...
+URL: https://www.offsec.com/blog/cve-2025-30208/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server's filesystem by abusing Vite's @fs URL ... | Webpage text: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs URL handling to access sensitive files. CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server’s filesystem by abusing Vite’s @fs URL handling. CVE ID: CVE-2025-30208 Impact: Information Disclosure Authentication Required: No Vulnerable Component: @fs path handler in the Vite Dev Server This issue affects applications running Vite in development mode, exposing sensitive server-side files if the dev server is accessible remotely. Vite supports special paths like /@fs/absolute/path to import files directly from the filesystem during development. Normally, Vite restricts access to files outside its allow list (i.e., project root). However, by appending ?import&raw?? to the request, an attacker can bypass this protection and force Vite to read and return arbitrary file contents as a raw ES module export. Conditions for Exploitation The application is running Vite dev server (typically on port 5173). The server is remotely accessible (e.g., exposed over the internet or intranet). The attacker can issue crafted HTTP GET requests to the dev server. The target file is readable by the user running the Vite process. $ curl "http://localhost:5173/@fs/etc/passwd" Security bypass (vulnerable): $ curl "http://localhost:5173/@fs/etc/passwd?import&raw??" export default "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash\n"; //# sourceMappingURL=data:application/json;base64,... The double question marks (??) confuse Vite’s import parser, bypassing the default allow list restriction and enabling arbitrary file disclosure. The server responds with file content wrapped in an ES module export default. Never expose Vite’s dev server to the public internet. Upgrade Vite to the latest patched version where this bypass is fixed. Consider running the dev server behind a local-only proxy or with strict firewall rules.
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Vite Vulnerable to Arbitrary File Read via Vite Dev Server ...
+URL: https://github.com/advisories/GHSA-p9ff-h696-f583
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Integrity of the VULNERABLE SYSTEM is impacted when an attacker makes unauthorized modification of system data. Integrity is also impacted when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket server.fs check was not enforced to the fetchModule method that is exposed in Vite dev server's WebSocket. Only apps that match the following conditions are affected: explicitly exposes the Vite dev server to the network (using --host or server.host config option) WebSocket is not disabled by server.ws: false Arbitrary files on the server (development machine, CI environment, container, etc.) can be exposed. If it is possible to connect to the Vite dev server’s WebSocket without an Origin header, an attacker can invoke fetchModule via the custom WebSocket event vite:invoke and combine file://... with ?raw (or ?inline) to retrieve the contents of arbitrary files on the server as a JavaScript string (e.g., export default "..."). The access control enforced in the HTTP request path (such as server.fs.allow) is not applied to this WebSocket-based execution path. Start the dev server on the target Example (used during validation with this repository): pnpm -C playground/alias exec vite --host 0.0.0.0 --port 5173 Confirm that access is blocked via the HTTP path (example: arbitrary file) curl -i 'http://localhost:5173/@fs/etc/passwd?raw' Result: 403 Restricted (outside the allow list) Confirm that the same file can be retrieved via the WebSocket path By connecting to the HMR WebSocket without an Origin header and sending a vite:invoke request that calls fetchModule with a file://... URL and ?raw, the file contents are returned as a JavaScript module. https://github.com/vitejs/vite/releases/tag/v6.4.2 https://github.com/vitejs/vite/releases/tag/v7.3.2 https://github.com/vitejs/vite/releases/tag/v8.0.5 https://nvd.nist.gov/vuln/detail/CVE-2026-39363 Published to the GitHub Advisory Database Published by the National Vulnerability Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and executio
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Vite Arbitrary File Read vulnerability (CVE-2025-30208)
+URL: https://nsfocusglobal.com/vite-arbitrary-file-read-vulnerability-cve-2025-30208/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Note: Affects applications that expose the Vite development server to the network (enable –host or configure server.host). Unaffected Version.
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: GHSA-p9ff-h696-f583: Vite Vulnerable to Arbitrary File ...
+URL: https://www.google.com/goto?url=CAESdgHrOzAV2mooHVXP4gLi6vjNtCwxoywIC9YyLciET87zzAz8CGCkY-rC0GTjX4UMAm3VacAvOf0k3HN72u4bC2z0_WVbtutIskP6ODM7wOOyzdORwX5VGk5eVXss_vznbHi-dXH2MyWgNxh4o9u0904zZx9J73s&gsessionid=1gRr345yVsZgOWnERO--GTJRA2Yr6qarSmfeJJwGgkICum0Am_z5jA
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). GHSA-p9ff-h696-f583: Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket. April 6, 2026. server.fs check was not enforced to ...
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found | Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found | Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000014-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 200.
+- PCAP [E-S0001-F000018-009]: Content-Type: text/javascript.
+- PCAP [E-S0001-F000018-010]: root user keyword observed.
+- PCAP [E-S0001-F000018-011]: /bin/bash.
+- PCAP [E-S0001-F000018-012]: eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhc3N3ZD9yYXc/Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IFwicm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaFxcbmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuYmluOng6MjoyOmJpbjovYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jp...[TRUNCATED].
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [CISA KEV] Vite Vitejs Improper Access Control Vulnerability: Vite Vitejs: Vite Vitejs contains an improper access control vulnerability that exposes content of non-allowed files using ?inline&import or ?raw?import. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-31125 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-34092: NVD vulnerability record: Vite provides frontend tooling. Prior to versions 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, and 4.3.9, Vite Server Options (`server.fs.deny`) can be bypassed using double forward-slash (//) allows any unauthenticated user to read file from the Vite root-path of the application including the default `fs.deny` settings (`['.env', '.env.*', '*.{crt,pem}']`). Only users explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected, and only files in the immediate Vite project root folder could be exposed. This issue is fixed in vite@4.3.9, vite@4.2.3, vite@4.1.5, vite@4.0.5, vite@3.2.7, and vite@2.9.16. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-34092 Supports: NVD lists CVE-2023-34092 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2025-30208: NVD vulnerability record: Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-30208 Supports: NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-31486: NVD vulnerability record: Vite is a frontend tooling framework for javascript. The contents of arbitrary files can be returned to the browser. By adding ?.svg with ?.wasm?init or with sec-fetch-dest: script header, the server.fs.deny restriction was able to bypass. This bypass is only possible if the file is smaller than build.assetsInlineLimit (default: 4kB) and when using Vite 6.0+. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. This vulnerability is fixed in 4.5.12, 5.4.17, 6.0.14, 6.1.4, and 6.2.5. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-31486 Supports: NVD lists CVE-2025-31486 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server's filesystem by abusing Vite's @fs URL ... | Webpage text: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs URL handling to access sensitive files. CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server’s filesystem by abusing Vite’s @fs URL handling. CVE ID: CVE-2025-30208 Impact: Information Disclosure Authentication Required: No Vulnerable Component: @fs path handler in the Vite Dev Server This issue affects applications running Vite in development mode, exposing sensitive server-side files if the dev server is accessible remotely. Vite supports special paths like /@fs/absolute/path to import files directly from the filesystem during development. Normally, Vite restricts access to files outside its allow list (i.e., project root). However, by appending ?import&raw?? to the request, an attacker can bypass this protection and force Vite to read and return arbitrary file contents as a raw ES module export. Conditions for Exploitation The application is running Vite dev server (typically on port 5173). The server is remotely accessible (e.g., exposed over the internet or intranet). The attacker can issue crafted HTTP GET requests to the dev server. The target file is readable by the user running the Vite process. $ curl "http://localhost:5173/@fs/etc/passwd" Security bypass (vulnerable): $ curl "http://localhost:5173/@fs/etc/passwd?import&raw??" export default "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash\n"; //# sourceMappingURL=data:application/json;base64,... The double question marks (??) confuse Vite’s import parser, bypassing the default allow list restriction and enabling arbitrary file disclosure. The server responds with file content wrapped in an ES module export default. Never expose Vite’s dev server to the public internet. Upgrade Vite to the latest patched version where this bypass is fixed. Consider running the dev server behind a local-only proxy or with strict firewall rules. Source: https://www.offsec.com/blog/cve-2025-30208/
+- ONLINE RESEARCH LEAD [Serper web result] Vite Vulnerable to Arbitrary File Read via Vite Dev Server ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Integrity of the VULNERABLE SYSTEM is impacted when an attacker makes unauthorized modification of system data. Integrity is also impacted when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket server.fs check was not enforced to the fetchModule method that is exposed in Vite dev server's WebSocket. Only apps that match the following conditions are affected: explicitly exposes the Vite dev server to the network (using --host or server.host config option) WebSocket is not disabled by server.ws: false Arbitrary files on the server (development machine, CI environment, container, etc.) can be exposed. If it is possible to connect to the Vite dev server’s WebSocket without an Origin header, an attacker can invoke fetchModule via the custom WebSocket event vite:invoke and combine file://... with ?raw (or ?inline) to retrieve the contents of arbitrary files on the server as a JavaScript string (e.g., export default "..."). The access control enforced in the HTTP request path (such as server.fs.allow) is not applied to this WebSocket-based execution path. Start the dev server on the target Example (used during validation with this repository): pnpm -C playground/alias exec vite --host 0.0.0.0 --port 5173 Confirm that access is blocked via the HTTP path (example: arbitrary file) curl -i 'http://localhost:5173/@fs/etc/passwd?raw' Result: 403 Restricted (outside the allow list) Confirm that the same file can be retrieved via the WebSocket path By connecting to the HMR WebSocket without an Origin header and sending a vite:invoke request that calls fetchModule with a file://... URL and ?raw, the file contents are returned as a JavaScript module. https://github.com/vitejs/vite/releases/tag/v6.4.2 https://github.com/vitejs/vite/releases/tag/v7.3.2 https://github.com/vitejs/vite/releases/tag/v8.0.5 https://nvd.nist.gov/vuln/detail/CVE-2026-39363 Published to the GitHub Advisory Database Published by the National Vulnerability Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and executio Source: https://github.com/advisories/GHSA-p9ff-h696-f583
+- ONLINE [Serper web result] Vite Arbitrary File Read vulnerability (CVE-2025-30208): UNTRUSTED WEB RESEARCH (not PCAP evidence). Note: Affects applications that expose the Vite development server to the network (enable –host or configure server.host). Unaffected Version. Source: https://nsfocusglobal.com/vite-arbitrary-file-read-vulnerability-cve-2025-30208/
+- ONLINE [Serper web result] GHSA-p9ff-h696-f583: Vite Vulnerable to Arbitrary File ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). GHSA-p9ff-h696-f583: Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket. April 6, 2026. server.fs check was not enforced to ... Source: https://www.google.com/goto?url=CAESdgHrOzAV2mooHVXP4gLi6vjNtCwxoywIC9YyLciET87zzAz8CGCkY-rC0GTjX4UMAm3VacAvOf0k3HN72u4bC2z0_WVbtutIskP6ODM7wOOyzdORwX5VGk5eVXss_vznbHi-dXH2MyWgNxh4o9u0904zZx9J73s&gsessionid=1gRr345yVsZgOWnERO--GTJRA2Yr6qarSmfeJJwGgkICum0Am_z5jA
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2023-34092
+- https://nvd.nist.gov/vuln/detail/CVE-2025-30208
+- https://nvd.nist.gov/vuln/detail/CVE-2025-31486
+- https://www.offsec.com/blog/cve-2025-30208/
+- https://github.com/advisories/GHSA-p9ff-h696-f583
+- https://nsfocusglobal.com/vite-arbitrary-file-read-vulnerability-cve-2025-30208/
+- https://www.google.com/goto?url=CAESdgHrOzAV2mooHVXP4gLi6vjNtCwxoywIC9YyLciET87zzAz8CGCkY-rC0GTjX4UMAm3VacAvOf0k3HN72u4bC2z0_WVbtutIskP6ODM7wOOyzdORwX5VGk5eVXss_vznbHi-dXH2MyWgNxh4o9u0904zZx9J73s&gsessionid=1gRr345yVsZgOWnERO--GTJRA2Yr6qarSmfeJJwGgkICum0Am_z5jA
+
+Search status: Valid
+Search query: Vite dev server arbitrary file read packet clues: endpoint etc passwd
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2025-30208",
+  "cve_supported": "Yes",
+  "confidence": "High",
+  "reasons": [
+    "Analyst proposed CVE-2025-30208; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Vite dev server
+Associated CVE candidate (Analyst): CVE-2025-30208
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2025-30208
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000014-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 200.
+- PCAP [E-S0001-F000018-009]: Content-Type: text/javascript.
+- PCAP [E-S0001-F000018-010]: root user keyword observed.
+- PCAP [E-S0001-F000018-011]: /bin/bash.
+- PCAP [E-S0001-F000018-012]: eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhc3N3ZD9yYXc/Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IFwicm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaFxcbmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuYmluOng6MjoyOmJpbjovYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jp...[TRUNCATED].
+- ONLINE RESEARCH LEAD [CISA KEV] Vite Vitejs Improper Access Control Vulnerability: Vite Vitejs: Vite Vitejs contains an improper access control vulnerability that exposes content of non-allowed files using ?inline&import or ?raw?import. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-31125 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-34092: NVD vulnerability record: Vite provides frontend tooling. Prior to versions 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, and 4.3.9, Vite Server Options (`server.fs.deny`) can be bypassed using double forward-slash (//) allows any unauthenticated user to read file from the Vite root-path of the application including the default `fs.deny` settings (`['.env', '.env.*', '*.{crt,pem}']`). Only users explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected, and only files in the immediate Vite project root folder could be exposed. This issue is fixed in vite@4.3.9, vite@4.2.3, vite@4.1.5, vite@4.0.5, vite@3.2.7, and vite@2.9.16. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-34092 Supports: NVD lists CVE-2023-34092 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2025-30208: NVD vulnerability record: Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-30208 Supports: NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-31486: NVD vulnerability record: Vite is a frontend tooling framework for javascript. The contents of arbitrary files can be returned to the browser. By adding ?.svg with ?.wasm?init or with sec-fetch-dest: script header, the server.fs.deny restriction was able to bypass. This bypass is only possible if the file is smaller than build.assetsInlineLimit (default: 4kB) and when using Vite 6.0+. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. This vulnerability is fixed in 4.5.12, 5.4.17, 6.0.14, 6.1.4, and 6.2.5. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-31486 Supports: NVD lists CVE-2025-31486 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server's filesystem by abusing Vite's @fs URL ... | Webpage text: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs URL handling to access sensitive files. CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server’s filesystem by abusing Vite’s @fs URL handling. CVE ID: CVE-2025-30208 Impact: Information Disclosure Authentication Required: No Vulnerable Component: @fs path handler in the Vite Dev Server This issue affects applications running Vite in development mode, exposing sensitive server-side files if the dev server is accessible remotely. Vite supports special paths like /@fs/absolute/path to import files directly from the filesystem during development. Normally, Vite restricts access to files outside its allow list (i.e., project root). However, by appending ?import&raw?? to the request, an attacker can bypass this protection and force Vite to read and return arbitrary file contents as a raw ES module export. Conditions for Exploitation The application is running Vite dev server (typically on port 5173). The server is remotely accessible (e.g., exposed over the internet or intranet). The attacker can issue crafted HTTP GET requests to the dev server. The target file is readable by the user running the Vite process. $ curl "http://localhost:5173/@fs/etc/passwd" Security bypass (vulnerable): $ curl "http://localhost:5173/@fs/etc/passwd?import&raw??" export default "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash\n"; //# sourceMappingURL=data:application/json;base64,... The double question marks (??) confuse Vite’s import parser, bypassing the default allow list restriction and enabling arbitrary file disclosure. The server responds with file content wrapped in an ES module export default. Never expose Vite’s dev server to the public internet. Upgrade Vite to the latest patched version where this bypass is fixed. Consider running the dev server behind a local-only proxy or with strict firewall rules. Source: https://www.offsec.com/blog/cve-2025-30208/
+- ONLINE RESEARCH LEAD [Serper web result] Vite Vulnerable to Arbitrary File Read via Vite Dev Server ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Integrity of the VULNERABLE SYSTEM is impacted when an attacker makes unauthorized modification of system data. Integrity is also impacted when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket server.fs check was not enforced to the fetchModule method that is exposed in Vite dev server's WebSocket. Only apps that match the following conditions are affected: explicitly exposes the Vite dev server to the network (using --host or server.host config option) WebSocket is not disabled by server.ws: false Arbitrary files on the server (development machine, CI environment, container, etc.) can be exposed. If it is possible to connect to the Vite dev server’s WebSocket without an Origin header, an attacker can invoke fetchModule via the custom WebSocket event vite:invoke and combine file://... with ?raw (or ?inline) to retrieve the contents of arbitrary files on the server as a JavaScript string (e.g., export default "..."). The access control enforced in the HTTP request path (such as server.fs.allow) is not applied to this WebSocket-based execution path. Start the dev server on the target Example (used during validation with this repository): pnpm -C playground/alias exec vite --host 0.0.0.0 --port 5173 Confirm that access is blocked via the HTTP path (example: arbitrary file) curl -i 'http://localhost:5173/@fs/etc/passwd?raw' Result: 403 Restricted (outside the allow list) Confirm that the same file can be retrieved via the WebSocket path By connecting to the HMR WebSocket without an Origin header and sending a vite:invoke request that calls fetchModule with a file://... URL and ?raw, the file contents are returned as a JavaScript module. https://github.com/vitejs/vite/releases/tag/v6.4.2 https://github.com/vitejs/vite/releases/tag/v7.3.2 https://github.com/vitejs/vite/releases/tag/v8.0.5 https://nvd.nist.gov/vuln/detail/CVE-2026-39363 Published to the GitHub Advisory Database Published by the National Vulnerability Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and executio Source: https://github.com/advisories/GHSA-p9ff-h696-f583
+- ONLINE [Serper web result] Vite Arbitrary File Read vulnerability (CVE-2025-30208): UNTRUSTED WEB RESEARCH (not PCAP evidence). Note: Affects applications that expose the Vite development server to the network (enable –host or configure server.host). Unaffected Version. Source: https://nsfocusglobal.com/vite-arbitrary-file-read-vulnerability-cve-2025-30208/
+- ONLINE [Serper web result] GHSA-p9ff-h696-f583: Vite Vulnerable to Arbitrary File ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). GHSA-p9ff-h696-f583: Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket. April 6, 2026. server.fs check was not enforced to ... Source: https://www.google.com/goto?url=CAESdgHrOzAV2mooHVXP4gLi6vjNtCwxoywIC9YyLciET87zzAz8CGCkY-rC0GTjX4UMAm3VacAvOf0k3HN72u4bC2z0_WVbtutIskP6ODM7wOOyzdORwX5VGk5eVXss_vznbHi-dXH2MyWgNxh4o9u0904zZx9J73s&gsessionid=1gRr345yVsZgOWnERO--GTJRA2Yr6qarSmfeJJwGgkICum0Am_z5jA
+
+Verification Summary:
+- Affected service: Vite dev server.
+- Attack type: Arbitrary File Read.
+- Attack technique: Local file disclosure via Vite @fs allow-list bypass using double-? query (?raw??) to return /etc/passwd as an ES module.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2025-30208.
+- CVE assessment: Analyst proposed CVE-2025-30208; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Vite dev server arbitrary file read packet clues: endpoint etc passwd.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2023-34092
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-30208
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-31486
+- Evidence-source URL: https://www.offsec.com/blog/cve-2025-30208/
+- Evidence-source URL: https://github.com/advisories/GHSA-p9ff-h696-f583
+- Evidence-source URL: https://nsfocusglobal.com/vite-arbitrary-file-read-vulnerability-cve-2025-30208/
+- Evidence-source URL: https://www.google.com/goto?url=CAESdgHrOzAV2mooHVXP4gLi6vjNtCwxoywIC9YyLciET87zzAz8CGCkY-rC0GTjX4UMAm3VacAvOf0k3HN72u4bC2z0_WVbtutIskP6ODM7wOOyzdORwX5VGk5eVXss_vznbHi-dXH2MyWgNxh4o9u0904zZx9J73s&gsessionid=1gRr345yVsZgOWnERO--GTJRA2Yr6qarSmfeJJwGgkICum0Am_z5jA
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- Evidence limitation: Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- Evidence limitation: Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Immediately stop exposing the Vite dev server to networks; remove --host/server.host exposure and restrict via firewall/VPN.
+- Upgrade Vite to a fixed version per NVD CVE-2025-30208: 6.2.3, 6.1.2, 6.0.12, 5.4.15, or 4.5.10.
+- Add HTTP/WAF rules to block external access to /@fs and query patterns like '?raw??' and '?import&raw??'.
+- Harden dev environments: enforce access controls (mTLS or auth), IP allow-listing, and strict server.fs.allow settings.
+- Review logs for additional @fs access and potential disclosure of sensitive files (e.g., .env, keys); rotate credentials if exposure is suspected.
+- Segregate development from production; avoid running Vite dev server on shared or internet-reachable hosts.

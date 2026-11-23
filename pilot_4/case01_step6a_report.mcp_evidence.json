@@ -1,0 +1,101 @@
+{
+  "status": "Valid",
+  "query": "Grafana Grafana Path Traversal Arbitrary file read via /public/plugins directory traversal CVE-2021-43798",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Grafana Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Grafana Labs Grafana: Grafana contains a path traversal vulnerability that could allow access to local files. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2021-43798 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-43798: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798",
+      "snippet": "Grafana is an open-source platform for monitoring and observability. Grafana versions 8.0.0-beta1 through 8.3.0 (except for patched versions) iss vulnerable to directory traversal, allowing access to local files. The vulnerable URL path is: `<grafana_host_url>/public/plugins//`, where is the plugin ID for any installed plugin. At no time has Grafana Cloud been vulnerable. Users are advised to upgrade to patched versions 8.0.7, 8.1.8, 8.2.7, or 8.3.1. The GitHub Security Advisory contains more information about vulnerable URL paths, mitigation, and the disclosure timeline.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-43798 for a product matching 'Grafana'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-43813: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-43813",
+      "snippet": "Grafana is an open-source platform for monitoring and observability. Grafana prior to versions 8.3.2 and 7.5.12 contains a directory traversal vulnerability for fully lowercase or fully uppercase .md files. The vulnerability is limited in scope, and only allows access to files with the extension .md to authenticated users only. Grafana Cloud instances have not been affected by the vulnerability. Users should upgrade to patched versions 8.3.2 or 7.5.12. For users who cannot upgrade, running a reverse proxy in front of Grafana that normalizes the PATH of the request will mitigate the vulnerability. The proxy will have to also be able to handle url encoded paths. Alternatively, for fully lowercase or fully uppercase .md files, users can block /api/plugins/.*/markdown/.* without losing any functionality beyond inlined plugin help text.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-43813 for a product matching 'Grafana'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Security Advisories",
+      "url": "https://grafana.com/security/security-advisories/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Security advisories and CVE records for Grafana Labs products, with severity, affected products, and fixed versions.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Operator - Namespaced User Path Traversal",
+      "url": "https://grafana.com/security/security-advisories/cve-2026-11769/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This patch includes a MEDIUM severity security fix for a path traversal/privilege escalation vulnerability in the Grafana Operator. Summary. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Operator - Namespaced User Path Traversal We have released version 5.24.0 of the Grafana Operator. This patch includes a MEDIUM severity security fix for a path traversal/privilege escalation vulnerability in the Grafana Operator. The Grafana Operator supports loading dashboards & library panels using the jsonnet data templating language. The jsonnet expression is evaluated in the context of the operator manager pod. It is possible for a malicious user who can create Dashboard or LibraryPanel resources for a Grafana instance to obtain the Kubernetes service account token of the Grafana Operator manager. All Grafana Operator versions <= 5.23 - apiGroups: [\"grafana.integreatly.org\"] resources: [\"grafanadashboards\", \"grafanalibrarypanels\"]",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "An update on 0day CVE-2021-43798",
+      "url": "https://grafana.com/blog/an-update-on-0day-cve-2021-43798-grafana-directory-traversal/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Yesterday, we released an update to Grafana fixing a directory traversal attack tracked under CVE-2021-43798. We wanted to blog about it again ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] An update on 0day CVE-2021-43798: Grafana directory traversal Note:We released fixes for CVE-2021-41090 and CVE-2021-43798 within 24 hours and mixed them up in one of the three blog posts. To make it clear: CVE-2021-41090 is for the Grafana Agent and CVE-2021-43798 is for Grafana the software. Only CVE-2021-43798 was a 0day exploit. Yesterday, we released an update to Grafana fixing a directory traversal attack tracked under CVE-2021-43798. Second, given the AWS outage yesterday, we wanted to re-amplify the message that all users should upgrade their Grafana 8.x instances as soon as possible. Please upgrade your Grafana 8.x instances Again, we are re-releasing this information largely to raise awareness and get all users to upgrade their Grafana 8.x instances. If you have any of those, please UPGRADE RIGHT NOW. This blog post will wait for you until you’re done — promise! Mitigate vulnerability in Grafana Cloud",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2021-43798 Detail - NVD",
+      "url": "https://nvd.nist.gov/vuln/detail/cve-2021-43798",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Grafana versions 8.0.0-beta1 through 8.3.0 (except for patched versions) iss vulnerable to directory traversal, allowing access to local files.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T01:11:07.442532+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2021-43798",
+    "CVE-2021-43813"
+  ],
+  "retrieval_errors": []
+}

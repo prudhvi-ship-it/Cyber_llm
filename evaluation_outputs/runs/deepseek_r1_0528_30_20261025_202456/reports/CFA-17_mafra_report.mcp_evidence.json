@@ -1,0 +1,105 @@
+{
+  "status": "Valid",
+  "query": "ActiveMQ 5.14.2 unknown attack web vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Apache ActiveMQ Improper Input Validation Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Apache ActiveMQ: The Fileserver web application in Apache ActiveMQ allows remote attackers to upload and execute arbitrary files via an HTTP PUT followed by an HTTP MOVE request Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2016-3088 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2016-6810: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-6810",
+      "snippet": "In Apache ActiveMQ 5.x before 5.14.2, an instance of a cross-site scripting vulnerability was identified to be present in the web based administration console. The root cause of this issue is improper user data output validation.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2016-6810 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-0684: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-0684",
+      "snippet": "Cross-site scripting (XSS) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote authenticated users to inject arbitrary web script or HTML via the JMSDestination parameter in a queue action.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-0684 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-1244: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-1244",
+      "snippet": "Cross-site request forgery (CSRF) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote attackers to hijack the authentication of unspecified victims for requests that create queues via the JMSDestination parameter in a queue action.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-1244 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache ActiveMQ 5.x < 5.14.2 Web-based Administration ...",
+      "url": "https://www.tenable.com/plugins/nessus/95920",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The remote host is running a web application that is affected by a cross-site scripting vulnerability. (Nessus Plugin ID 95920) | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Apache ActiveMQ 5.x < 5.14.2 Web-based Administration Console Unspecified XSS medium Nessus Plugin ID 95920 SynopsisThe remote host is running a web application that is affected by a cross-site scripting vulnerability. DescriptionThe version of Apache ActiveMQ running on the remote host is 5.x prior to 5.14.2. It is, therefore, affected by a cross-site scripting (XSS) vulnerability in the web-based administration console due to improper validation of user-supplied input. An unauthenticated, remote attacker can exploit this, by convincing a user to follow a specially crafted link, to execute arbitrary script code in a user's browser SolutionUpgrade to Apache ActiveMQ version 5.14.2 or later. http://www.nessus.org/u?a49dee8c File Name: activemq_5_14_2.nasl Configuration: Enable thorough checks (optional) Supported Sensors: Nessus Agent, Nessus Enable CGI Scanning: true Vector: CVSS2#AV:N/AC:M/Au:N/C:N/I:P/A:N CVSS Score Source: CVE-2016-6810 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N Temporal Vector: CVSS:3.0/E:F/RL:O/RC:X Vulnerability Information CPE: cpe:/a:apache:activemq Required KB Items: installed_sw/Apache ActiveMQ Exploit Ease: Exploits are available Patch Publication Date: 12/9/2016 Vulnerability Publication Date: 12/9/2016 CVE: CVE-2016-6810",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-34197 ActiveMQ RCE via Jolokia API",
+      "url": "https://horizon3.ai/attack-research/disclosures/cve-2026-34197-activemq-rce-jolokia/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-34197 is a remote code execution vulnerability in Apache ActiveMQ Classic that has been hiding in plain sight for 13 years.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Critical Vulnerability in Apache ActiveMQ Classic",
+      "url": "https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-034/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Background. Apache has released security updates to address a code injection vulnerability (CVE-2026-34197) affecting Apache ActiveMQ Classic. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Critical Vulnerability in Apache ActiveMQ Classic Critical Vulnerability in Apache ActiveMQ Classic Apache has released security updates to address a critical vulnerability in Apache ActiveMQ Classic. Users and administrators of affected products are advised to update to the latest versions immediately. Apache has released security updates to address a code injection vulnerability (CVE-2026-34197) affecting Apache ActiveMQ Classic. Successful exploitation of this vulnerability could allow an authenticated attacker to perform arbitrary code execution on the affected system. On versions 6.0.0 through 6.1.1, when chained with CVE-2024-32114, the vulnerability can be exploited by an unauthenticated attacker, potentially resulting in full compromise of the affected system. This vulnerability affects the following Apache ActiveMQ Classic versions: - Apache ActiveMQ versions prior to 5.19.4 - Apache ActiveMQ versions 6.0.0 through 6.2.2 - Apache ActiveMQ Broker versions prior to 5.19.4 - Apache ActiveMQ Broker versions 6.0.0 through 6.2.2 Users and administrators of affected products are advised to update to the latest versions immediately. https://activemq.apache.org/security-advisories.data/CVE-2026-34197-announcement.txt (opens in new tab) https://nvd.nist.gov/vuln/detail/CVE-2026-34197 (opens in new tab) https://horizon3.ai/attack-research/disclosures/cve-2026-34197-activemq-rce-jolokia/ (opens in new tab)",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache ActiveMQ 5.14.1 CVE Patching",
+      "url": "https://tomitribe.com/cve/apache-activemq/5.14.1/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The Java OpenWire protocol marshaller is vulnerable to Remote Code Execution. This vulnerability may allow a remote attacker with network access to either a ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Common Vulnerabilities & Exposures (CVE) Supported lifecycle: Extended Support CVEs: CVE-2020-13920, CVE-2017-15709, CVE-2015-7559, CVE-2018-11775, CVE-2022-22971, CVE-2022-23305, CVE-2019-17571, CVE-2020-11994, CVE-2023-20861, CVE-2022-23307, CVE-2018-1270, CVE-2022-22950, CVE-2022-22968, CVE-2022-23302, CVE-2022-22965, CVE-2023-20863, CVE-2020-11971, CVE-2018-1257, CVE-2023-26464, CVE-2019-0194, CVE-2017-5643, CVE-2021-4104, CVE-2018-8027, and CVE-2023-46604 CVE Affecting Apache ActiveMQ 5.14.1 CVE-2023-46604 The Java OpenWire protocol marshaller is vulnerable to Remote Code Execution. This vulnerability may allow a remote attacker with network access to either a Java-based OpenWire broker or client to run arbitrary shell commands by manipulating serialized class types in the OpenWire protocol to cause either the client or the broker (respectively) to instantiate any class on the classpath. Users are recommended to upgrade both brokers and clients to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3 CVE-2023-20863 In spring framework versions prior to 5.2.24 release+ ,5.3.27+ and 6.0.8+ , it is possible for a user to provide a specially crafted SpEL expression that may cause a denial-of-service (DoS) condition. CVE-2023-20861 In Spring Framework versions 6.0.0 - 6.0.6, 5.3.0 - 5.3.25, 5.2.0.RELEASE - 5.2.22.RELEASE, and older unsupported versions, it is possible for a user to provide a specially crafted SpEL expression that may cause a denial-of-service (DoS) condition. Denial-of-service vulnerability CVE-2023-26464 ** UNSUPPORTED WHEN ASSIGNED ** When using the Chainsaw or SocketAppender components with Log4j 1.x on JRE less than 1.7, an attacker that manages to cause a logging entry involving a specially-crafted (ie, deeply nested) hashmap or hashtable (depending on which logging component is in use) to be processed could exhaust the available memory in the virtual machine and achieve Denial of Service when the object is deserialized. This issue affects Apache Log4j before 2. Affected users are recommended to update to Log4j 2.x. NOTE: This vulnerability only affects products that are no longer supported by the maintainer. CVE-2022-22971 In spring framework versions prior to 5.3.20+ , 5.2.22+ and old unsupported versions, application with a STOMP over WebSocket endpoint is vulnerable to a denial of service attack by an authenticated user. CVE-2022-22968 In Spring Framework versions 5.3.0 - 5.3.18, 5.2.0 - 5.2.20, and older unsupported versions, the patterns for disallowedFields on a DataBinder are case sensitive which means a field is not effectively protected unless it is listed with both upper and lower case for the first character of the field, including upper and lower case for the first character of all nested fields within the property path. Data Binding Rules Vulnerability CVE-2022-22965 A Spring MVC or Spring WebFlux application running on JDK 9+ may be vulnerable to remote code execution (RCE) via data binding. The specific exploit requires the application to run on Tomcat as a WAR deployment. If the application is deployed as a Spring Boot executable jar, i.e. the default, it is not vulnerable to the exploi",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:43:02.450649+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2016-3088",
+    "CVE-2016-6810",
+    "CVE-2010-0684",
+    "CVE-2010-1244"
+  ],
+  "retrieval_errors": [
+    "Context-only product/version research: CVE results are leads, not proof of an observed attack."
+  ]
+}

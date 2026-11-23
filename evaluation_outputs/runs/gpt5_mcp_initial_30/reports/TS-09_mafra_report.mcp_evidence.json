@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "Apache Tomcat 9.0.97 Unauthenticated File Upload HTTP PUT arbitrary file write",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Apache Tomcat on Windows Remote Code Execution Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Apache Tomcat: When running Apache Tomcat on Windows with HTTP PUTs enabled, it is possible to upload a JSP file to the server via a specially crafted request. This JSP could then be requested and any code it contained would be executed by the server. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2017-12615 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2008-0457: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2008-0457",
+      "snippet": "Unrestricted file upload vulnerability in the FileUpload class running on the Symantec LiveState Apache Tomcat server, as used by Symantec Backup Exec System Recovery Manager 7.0 and 7.0.1, allows remote attackers to upload and execute arbitrary JSP files via unknown vectors.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2008-0457 for a product matching 'Apache Tomcat'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2001-0829: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2001-0829",
+      "snippet": "A cross-site scripting vulnerability in Apache Tomcat 3.2.1 allows a malicious webmaster to embed Javascript in a request for a .JSP file, which causes the Javascript to be inserted into an error message.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2001-0829 for a product matching 'Apache Tomcat'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2002-0493: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2002-0493",
+      "snippet": "Apache Tomcat may be started without proper security settings if errors are encountered while reading the web.xml file, which could allow attackers to bypass intended restrictions.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2002-0493 for a product matching 'Apache Tomcat'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 9 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-9.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Apache Tomcat 9.x vulnerabilities of Apache Tomcat® 9.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Apache Tomcat version that you are using. For Tomcat 9.0 those are",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 11 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-11.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 11.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: Apache Tomcat 11.x vulnerabilities of Apache Tomcat® 11.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Apache Tomcat version that you are using. For Tomcat 11.0.x those are",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 10 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-10.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 10.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: Apache Tomcat 10.x vulnerabilities of Apache Tomcat® 10.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Please note that Tomcat 10.0.x has reached",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 8 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-8.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 8.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: Apache Tomcat 8.x vulnerabilities of Apache Tomcat® 8.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Please note that Tomcat 8.0.x has reached",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:54:35.926231+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2001-0829",
+    "CVE-2002-0493",
+    "CVE-2008-0457",
+    "CVE-2017-12615"
+  ],
+  "retrieval_errors": []
+}

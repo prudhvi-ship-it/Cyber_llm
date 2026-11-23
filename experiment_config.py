@@ -27,14 +27,14 @@ HETEROGENEOUS_DEFAULTS = {
     "fra_reasoner": "openai/gpt-5",
     "cve_selector": "openai/gpt-5",
     "mafra_analyst": "openai/gpt-5",
-    "mafra_verifier": "anthropic/claude-3-haiku",
+    "mafra_verifier": "openai/gpt-5",
     "mafra_cve_validator": "openai/gpt-5",
     "mafra_reporter": "google/gemini-2.5-flash",
 }
 
 LEGACY_ROLE_ALIASES = {
     "gpt": "openai/gpt-5",
-    "claude": "anthropic/claude-3-haiku",
+    "claude": "openai/gpt-5",
     "gemini": "google/gemini-2.5-flash",
 }
 
@@ -73,7 +73,14 @@ def experiment_manifest(profile: str | None = None) -> dict[str, object]:
     return {
         "profile": selected_profile,
         "provider_gateway": "OpenRouter",
-        "temperature": float(os.getenv("FRA_LLM_TEMPERATURE", "0")),
+        "temperature": (
+            None
+            if all(
+                resolve_model(role, selected_profile).startswith("openai/gpt-5")
+                for role in MODEL_ROLES
+            )
+            else float(os.getenv("FRA_LLM_TEMPERATURE", "0"))
+        ),
         "timeout_seconds": float(os.getenv("FRA_LLM_TIMEOUT", "180")),
         "max_provider_retries": int(os.getenv("FRA_LLM_MAX_RETRIES", "2")),
         "memory_mode": os.getenv("FRA_MEMORY_MODE", "disabled"),
@@ -81,3 +88,4 @@ def experiment_manifest(profile: str | None = None) -> dict[str, object]:
             role: resolve_model(role, selected_profile) for role in MODEL_ROLES
         },
     }
+

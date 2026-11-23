@@ -1,0 +1,699 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 5
+TCP Stream IDs: 0, 1, 2, 3, 4
+Protocol Counts: ARP=4, TCP=123, HTTP=6, MySQL=145, HTTP/JSON=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:50618           <-> 172.18.0.2:3306                 35 11 kB          49 6080 bytes      84 17 kB         0.256556000         0.0576
+172.18.0.3:50596           <-> 172.18.0.2:3306                 29 13 kB          38 4222 bytes      67 17 kB         0.097250000         0.0432
+172.18.0.3:50610           <-> 172.18.0.2:3306                 29 3446 bytes      34 3411 bytes      63 6857 bytes     0.173337000         0.0556
+172.18.0.3:50580           <-> 172.18.0.2:3306                 16 1550 bytes      18 1466 bytes      34 3016 bytes     0.054334000         0.0140
+172.18.0.1:3
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 0; score=9/12; frame=190; HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0000-F000044-012 | server->client] Location: http://localhost:8080/index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000190-027 | client->server] POST //tbl_find_replace.php
+- [E-S0000-F000276-031 | server->client] Server response contains uid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000276-032 | server->client] Server response contains gid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000190-033 | client->server] HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:38434 -> 172.18.0.3:80 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.3:80 -> 172.18.0.1:38434 (TCP)
+- [E-S0000-F000008-007 | client->server] 172.18.0.1:38434 -> 172.18.0.3:80 (HTTP)
+- [E-S0000-F000044-010 | server->client] 172.18.0.3:80 -> 172.18.0.1:38434 (HTTP)
+- [E-S0000-F000188-025 | server->client] 172.18.0.3:80 -> 172.18.0.1:38434 (HTTP/JSON)
+- [E-S0000-F000006-003 | client->server] POST //?lang=en
+- [E-S0000-F000006-004 | client->server] Host: localhost:8080
+- [E-S0000-F000006-005 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0000-F000006-006 | client->server] Content-Type: application/x-www-form-urlencoded
+- [E-S0000-F000044-011 | server->client] HTTP Status 302
+- [E-S0000-F000044-012 | server->client] Location: http://localhost:8080/index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000044-013 | server->client] Content-Type: text/html
+- [E-S0000-F000044-014 | server->client] Server response X-Powered-By: PHP/5.3.29
+- [E-S0000-F000048-019 | client->server] GET /index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000113-020 | server->client] OPTIONS inline-script
+- [E-S0000-F000113-021 | server->client] HTTP Status 200
+- [E-S0000-F000113-022 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0000-F000123-024 | client->server] POST //import.php
+- [E-S0000-F000188-026 | server->client] Content-Type: application/json
+- [E-S0000-F000190-027 | client->server] POST //tbl_find_replace.php
+- [E-S0000-F000008-008 | client->server] Sensitive field observed: pma_username=[REDACTED]
+- [E-S0000-F000008-009 | client->server] Sensitive field observed: pma_password=[REDACTED]
+- [E-S0000-F000044-015 | server->client] Sensitive field observed: token=[REDACTED]
+- [E-S0000-F000044-016 | server->client] Cookie header observed: [REDACTED]
+- [E-S0000-F000113-023 | server->client] ID
+- [E-S0000-F000276-029 | server->client] uid=33
+- [E-S0000-F000276-030 | server->client] gid=33
+- [E-S0000-F000276-031 | server->client] Server response contains uid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000276-032 | server->client] Server response contains gid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000044-017 | server->client] 3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000044-018 | server->client] phpMyAdmin
+- [E-S0000-F000190-028 | client->server] useRegex=on
+- [E-S0000-F000190-033 | client->server] HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0001-F000012-001 | client->server] 172.18.0.3:50580 -> 172.18.0.2:3306 (TCP)
+- [E-S0001-F000013-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50580 (TCP)
+- [E-S0001-F000015-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50580 (MySQL)
+- [E-S0001-F000017-004 | client->server] 172.18.0.3:50580 -> 172.18.0.2:3306 (MySQL)
+- [E-S0001-F000017-005 | client->server] root user keyword observed
+- [E-S0001-F000025-006 | client->server] SELECT @@version, @@version_comment
+- [E-S0001-F000029-007 | client->server] SHOW VARIABLES LIKE 'character_set_results'
+- [E-S0002-F000050-001 | client->server] 172.18.0.3:50596 -> 172.18.0.2:3306 (TCP)
+- [E-S0002-F000051-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50596 (TCP)
+- [E-S0002-F000053-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50596 (MySQL)
+- [E-S0002-F000055-004 | client->server] 172.18.0.3:50596 -> 172.18.0.2:3306 (MySQL)
+- [E-S0002-F000055-005 | client->server] root user keyword observed
+- [E-S0002-F000071-006 | client->server] SELECT * FROM information_schema.CHARACTER_SETS
+- [E-S0002-F000075-007 | client->server] SELECT * FROM information_schema.COLLATIONS
+- [E-S0002-F000081-009 | client->server] SELECT 1 FROM mysql.user LIMIT 1
+- [E-S0002-F000084-010 | client->server] SHOW GRANTS
+- [E-S0002-F000087-012 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0002-F000090-013 | client->server] SELECT CURRENT_USER()
+- [E-S0002-F000093-014 | client->server] SELECT 1 FROM (SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`COLUMN_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE...[TRUNCATED]
+- [E-S0002-F000093-015 | client->server] UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES`) t WHERE `IS_GRANTABLE` = 'YES' AND '''root''@''...[TRUNCATED]
+- [E-S0002-F000099-016 | client->server] SELECT 1 FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE `PRIVILEGE_TYPE` = 'CREATE USER' AND '''root''@''%''' LIKE `GRANTEE` LIMIT 1
+- [E-S0002-F000103-017 | client->server] SELECT USER()
+- [E-S0002-F000105-018 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`, (SELECT DB_first_level FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t ORDER BY DB_first_level ASC LIMIT 0, 100) t2 WHERE 1 = LOCATE(CONCAT(DB_first_level, '_'), CONC...[TRUNCATED]
+- [E-S0002-F000107-019 | client->server] SELECT COUNT(*) FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t
+- [E-S0002-F000111-020 | client->server] SHOW MASTER LOGS
+- [E-S0002-F000077-008 | server->client] ID
+- [E-S0002-F000085-011 | server->client] 81F5E21E35407D884A6CD4A731AEBFB6AF209E1B
+- [E-S0003-F000125-001 | client->server] 172.18.0.3:50610 -> 172.18.0.2:3306 (TCP)
+- [E-S0003-F000126-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50610 (TCP)
+- [E-S0003-F000128-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50610 (MySQL)
+- [E-S0003-F000130-004 | client->server] 172.18.0.3:50610 -> 172.18.0.2:3306 (MySQL)
+- [E-S0003-F000130-005 | client->server] root user keyword observed
+- [E-S0003-F000146-006 | client->server] SHOW TABLES FROM `test`
+- [E-S0003-F000150-007 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0003-F000158-008 | client->server] CREATE TABLE `prgpwn` (
+- [E-S0003-F000161-009 | client->server] INSERT INTO `prgpwn` (`first`) VALUES (UNHEX('302F6500'))
+- [E-S0003-F000161-010 | client->server] UNHEX('302F6500')
+- [E-S0003-F000166-012 | client->server] SELECT CURRENT_USER()
+- [E-S0003-F000168-013 | client->server] SELECT `PRIVILEGE_TYPE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE GRANTEE='''root''@''%''' AND PRIVILEGE_TYPE='EVENT'
+- [E-S0003-F000172-014 | client->server] SELECT `PRIVILEGE_TYPE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE GRANTEE='''root''@''%''' AND PRIVILEGE_TYPE='TRIGGER'
+- [E-S0003-F000161-011 | client->server] UNHEX(
+- [E-S0004-F000192-001 | client->server] 172.18.0.3:50618 -> 172.18.0.2:3306 (TCP)
+- [E-S0004-F000193-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50618 (TCP)
+- [E-S0004-F000195-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50618 (MySQL)
+- [E-S0004-F000197-004 | client->server] 172.18.0.3:50618 -> 172.18.0.2:3306 (MySQL)
+- [E-S0004-F000197-005 | client->server] root user keyword observed
+- [E-S0004-F000213-006 | client->server] SHOW TABLES FROM `test`
+- [E-S0004-F000217-007 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0004-F000221-008 | client->server] SHOW FULL COLUMNS FROM `test`.`prgpwn`
+- [E-S0004-F000223-009 | server->client] select,insert,update,references   
+- [E-S0004-F000223-010 | server->client] update,references   
+- [E-S0004-F000225-011 | client->server] SHOW INDEXES FROM `test`.`prgpwn`
+- [E-S0004-F000227-012 | client->server] CREATE TABLE `test`.`prgpwn`
+- [E-S0004-F000227-013 | client->server] SHOW CREATE TABLE `test`.`prgpwn`
+- [E-S0004-F000228-014 | server->client] Create Table -    �     �   x  prgpwnpCREATE TABLE `prgpwn` (
+- [E-S0004-F000230-015 | client->server] SHOW VARIABLES LIKE 'character_set_connection'
+- [E-S0004-F000233-016 | client->server] SELECT `first`, 1, COUNT(*) FROM `test`.`prgpwn` WHERE `first` RLIKE '0/e ' COLLATE utf8mb4_bin GROUP BY `first` ORDER BY `first` ASC
+- [E-S0004-F000236-018 | client->server] SHOW  COLUMNS FROM `test`.`prgpwn`
+- [E-S0004-F000241-019 | client->server] SELECT TABLE_NAME
+- [E-S0004-F000244-020 | client->server] SELECT CURRENT_USER()
+- [E-S0004-F000247-021 | client->server] SELECT `PRIVILEGE_TYPE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE GRANTEE='''root''@''%''' AND PRIVILEGE_TYPE='TRIGGER'
+- [E-S0004-F000256-022 | client->server] SHOW VARIABLES LIKE 'lower_case_table_names'
+- [E-S0004-F000262-023 | client->server] SELECT *,
+- [E-S0004-F000233-017 | client->server] /e
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:38434 -> 172.18.0.3:80; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.3:50580 -> 172.18.0.2:3306; packets=34; client->server=18, server->client=16; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 2: 172.18.0.3:50596 -> 172.18.0.2:3306; packets=67; client->server=38, server->client=29; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 3: 172.18.0.3:50610 -> 172.18.0.2:3306; packets=63; client->server=34, server->client=29; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 4: 172.18.0.3:50618 -> 172.18.0.2:3306; packets=84; client->server=49, server->client=35; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- phpMyAdmin application candidate: phpMyAdmin identifier observed.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: phpMyAdmin (version not visible; PHP/5.3.29 backend)
+
+Relevant Events: 
+- 172.18.0.1 (python-requests client) attempted phpMyAdmin login via POST and was redirected with a session token and cookies; subsequent requests loaded the phpMyAdmin interface (suggesting authenticated session).
+- The client then POSTed to phpMyAdmin’s tbl_find_replace endpoint with useRegex=on and replaceWith=system(id); attempting server-side command execution.
+- The server returned JSON containing uid=33(www-data) and gid=33(www-data), indicating the id command executed on the web server user.
+
+Malicious Activities: 
+- Remote command execution against phpMyAdmin via the Find and Replace feature using regex evaluation: replaceWith=system(id); with useRegex=on sent to /tbl_find_replace.php.
+
+Attack Success: Succeeded
+
+Evidence: 
+- [E-S0000-F000006-003] POST //?lang=en (phpMyAdmin login attempt)
+- [E-S0000-F000008-008] pma_username field sent
+- [E-S0000-F000008-009] pma_password field sent
+- [E-S0000-F000044-011] HTTP 302 after login attempt
+- [E-S0000-F000044-012] Redirect to index.php with token and phpMyAdmin parameter
+- [E-S0000-F000044-018] phpMyAdmin identifier observed in server response
+- [E-S0000-F000044-014] X-Powered-By: PHP/5.3.29 (server technology)
+- [E-S0000-F000048-019] GET /index.php with token (authenticated interface access)
+- [E-S0000-F000190-027] POST //tbl_find_replace.php (attack vector)
+- [E-S0000-F000190-028] useRegex=on parameter present
+- [E-S0000-F000190-033] Indicator excerpt shows replaceWith=system(id); ... ajax_request=true (explicit command invocation)
+- [E-S0000-F000276-029] Server response contains uid=33 (command output)
+- [E-S0000-F000276-030] Server response contains gid=33 (command output)
+- [E-S0000-F000276-031] Server response contains uid=33(www-data)
+- [E-S0000-F000276-032] Server response contains gid=33(www-data)
+
+--- Stream 1 [VALID] ---
+Service: MySQL database (version not deterministically visible in this stream)
+
+Relevant Events: 
+- 172.18.0.3 initiated a MySQL connection to 172.18.0.2:3306 and sent an authentication packet using mysql_native_password with user “root”; subsequent SQL queries indicate the session proceeded. 
+- The client queried server metadata (SELECT @@version, @@version_comment) and configuration (SHOW VARIABLES LIKE 'character_set_results'), consistent with application startup/introspection by a web app or phpMyAdmin-like frontend.
+
+Malicious Activities: 
+- None observed within this MySQL stream.
+- Correlated (prior stream): Remote command execution against phpMyAdmin via the Find and Replace feature using useRegex=on and replaceWith=system(id); resulting in command output (uid/gid) returned by the server.
+
+Attack Success: Succeeded (in prior HTTP/phpMyAdmin stream); this MySQL stream shows normal backend DB activity
+
+Evidence: 
+- [E-S0001-F000015-003] Server->client MySQL greeting on 172.18.0.2:3306 (confirms MySQL service)
+- [E-S0001-F000017-004] Client->server MySQL auth phase packet from 172.18.0.3
+- [E-S0001-F000017-005] “root” user keyword observed in MySQL authentication attempt
+- [E-S0001-F000025-006] Client issues SELECT @@version, @@version_comment (server metadata query)
+- [E-S0001-F000029-007] Client issues SHOW VARIABLES LIKE 'character_set_results' (configuration query)
+- [E-S0000-F000190-027] Prior stream: POST to /tbl_find_replace.php (phpMyAdmin attack vector)
+- [E-S0000-F000190-028] Prior stream: useRegex=on parameter present
+- [E-S0000-F000190-033] Prior stream: replaceWith=system(id) observed (command execution attempt)
+- [E-S0000-F000276-029] Prior stream: Server response contains uid=33 (command output)
+- [E-S0000-F000276-031] Prior stream: Server response contains uid=33(www-data) (command output)
+
+--- Stream 2 [VALID] ---
+Service: MySQL database (version not visible in this flow)
+
+Relevant Events: 
+- 172.18.0.3 connected to 172.18.0.2:3306 and authenticated to MySQL using the “root” account over mysql_native_password; subsequent queries executed, indicating a successful login [E-S0002-F000053-003], [E-S0002-F000055-005].
+- The client enumerated server metadata and privileges: CHARACTER_SETS and COLLATIONS listings [E-S0002-F000071-006], [E-S0002-F000075-007]; checked mysql.user existence [E-S0002-F000081-009]; requested SHOW GRANTS [E-S0002-F000084-010] with a password-hash indicator returned [E-S0002-F000085-011]; listed schemas and checked current/connected user [E-S0002-F000087-012], [E-S0002-F000090-013], [E-S0002-F000103-017]; probed grantability and specific privileges [E-S0002-F000093-014], [E-S0002-F000093-015], [E-S0002-F000099-016]; and issued SHOW MASTER LOGS [E-S0002-F000111-020].
+- Flow context: This DB session originates from the web/app host (172.18.0.3) that, in a prior flow, served phpMyAdmin to the attacker.
+
+Malicious Activities: 
+- None directly observed in this MySQL stream; activity is consistent with phpMyAdmin/backend enumeration.
+- Correlated prior HTTP/phpMyAdmin stream shows remote command execution via the Find & Replace feature using useRegex=on with replaceWith=system(id); server returned uid/gid of www-data, confirming RCE on the web server [E-S0000-F000190-027], [E-S0000-F000190-028], [E-S0000-F000190-033], [E-S0000-F000276-029], [E-S0000-F000276-030], [E-S0000-F000276-031], [E-S0000-F000276-032].
+
+Attack Success: Succeeded
+
+Evidence: 
+- [E-S0002-F000053-003] MySQL server greeting from 172.18.0.2:3306 (confirms MySQL service).
+- [E-S0002-F000055-005] Client authentication uses user “root” (mysql_native_password).
+- [E-S0002-F000071-006] SELECT * FROM information_schema.CHARACTER_SETS (metadata enumeration).
+- [E-S0002-F000075-007] SELECT * FROM information_schema.COLLATIONS (metadata enumeration).
+- [E-S0002-F000081-009] SELECT 1 FROM mysql.user LIMIT 1 (user table existence check).
+- [E-S0002-F000084-010] SHOW GRANTS (privilege enumeration).
+- [E-S0002-F000085-011] Password-hash indicator observed in SHOW GRANTS response (privileges information returned).
+- [E-S0002-F000087-012] SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA (schema listing).
+- [E-S0002-F000090-013] SELECT CURRENT_USER() (session identity check).
+- [E-S0002-F000093-014], [E-S0002-F000093-015] Privilege grantability probe across INFORMATION_SCHEMA privilege tables.
+- [E-S0002-F000099-016] SELECT … FROM USER_PRIVILEGES WHERE PRIVILEGE_TYPE='CREATE USER' (privilege probing).
+- [E-S0002-F000103-017] SELECT USER() (connection identity check).
+- [E-S0002-F000111-020] SHOW MASTER LOGS (replication/logging probe).
+- Prior HTTP/phpMyAdmin RCE confirmation: [E-S0000-F000190-027], [E-S0000-F000190-028], [E-S0000-F000190-033], [E-S0000-F000276-029], [E-S0000-F000276-030], [E-S0000-F000276-031], [E-S0000-F000276-032].
+
+--- Stream 3 [VALID] ---
+Service: MySQL database (version not visible)
+
+Relevant Events: 
+- 172.18.0.3 connected to 172.18.0.2:3306, performed MySQL authentication as root, and proceeded to run queries, indicating a successful login [E-S0003-F000128-003], [E-S0003-F000130-004], [E-S0003-F000130-005], [E-S0003-F000146-006].
+- The client enumerated schemas and adjusted session settings, then modified the DB by creating a table prgpwn in the test schema and inserting binary data via UNHEX; it also repeatedly checked CURRENT_USER() and probed EVENT/TRIGGER privileges via INFORMATION_SCHEMA [E-S0003-F000150-007], [E-S0003-F000158-008], [E-S0003-F000161-009], [E-S0003-F000161-010], [E-S0003-F000161-011], [E-S0003-F000166-012], [E-S0003-F000168-013], [E-S0003-F000172-014].
+- Correlation: In a prior HTTP/phpMyAdmin flow, the attacker triggered remote command execution via the Find & Replace feature (useRegex=on; replaceWith=system(id)), with the server returning uid=33(www-data), confirming RCE on the web host that initiates this MySQL session [E-S0000-F000190-027], [E-S0000-F000190-028], [E-S0000-F000190-033], [E-S0000-F000276-029], [E-S0000-F000276-031].
+
+Malicious Activities: 
+- Post-auth database modification and reconnaissance from the web/app host: CREATE TABLE prgpwn and binary insert via UNHEX (suspicious staging), plus targeted privilege probing for EVENT/TRIGGER (likely persistence/abuse) [E-S0003-F000158-008], [E-S0003-F000161-009], [E-S0003-F000161-010], [E-S0003-F000161-011], [E-S0003-F000168-013], [E-S0003-F000172-014].
+- Correlated prior web-layer exploit: phpMyAdmin Find & Replace RCE confirmed by command output in the HTTP response [E-S0000-F000190-027], [E-S0000-F000190-028], [E-S0000-F000190-033], [E-S0000-F000276-029], [E-S0000-F000276-031].
+
+Attack Success: Succeeded
+
+Evidence: 
+- [E-S0003-F000128-003] MySQL server greeting (confirms MySQL service on 172.18.0.2:3306)
+- [E-S0003-F000130-004] Client begins MySQL auth
+- [E-S0003-F000130-005] root user keyword observed in authentication
+- [E-S0003-F000146-006] SHOW TABLES FROM `test` (post-auth query indicates successful login)
+- [E-S0003-F000150-007] SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA (schema enumeration)
+- [E-S0003-F000158-008] CREATE TABLE `prgpwn` (...) (database modification)
+- [E-S0003-F000161-009] INSERT INTO `prgpwn` (...) VALUES (UNHEX('302F6500')) (binary insert)
+- [E-S0003-F000161-010] UNHEX('302F6500') payload noted
+- [E-S0003-F000161-011] UNHEX( indicator flagged (binary content)
+- [E-S0003-F000166-012] SELECT CURRENT_USER() (identity check)
+- [E-S0003-F000168-013] USER_PRIVILEGES query for EVENT (privilege probing)
+- [E-S0003-F000172-014] USER_PRIVILEGES query for TRIGGER (privilege probing)
+- [E-S0000-F000190-027] Prior HTTP POST to /tbl_find_replace.php (phpMyAdmin attack vector)
+- [E-S0000-F000190-028] useRegex=on parameter in prior HTTP attack
+- [E-S0000-F000190-033] replaceWith=system(id) in prior HTTP attack
+- [E-S0000-F000276-029], [E-S0000-F000276-031] Prior HTTP response contained uid=33(www-data) (confirms RCE)
+
+--- Stream 4 [VALID] ---
+Service: MySQL database (version not visible)
+
+Relevant Events: 
+- 172.18.0.3 authenticated to 172.18.0.2:3306 as root and issued schema/table discovery and maintenance queries, focusing on the test.prgpwn table (SHOW TABLES/SCHEMATA/COLUMNS/INDEXES/CREATE TABLE, SHOW VARIABLES, information_schema.TABLES introspection, and CURRENT_USER/privilege checks).
+- The session ran a regex-based SELECT against test.prgpwn using a pattern containing “/e”, consistent with phpMyAdmin Find/Replace workflows.
+
+Malicious Activities: 
+- Post-authentication database modification and reconnaissance: CREATE TABLE test.prgpwn and detailed enumeration of its structure and server settings; targeted privilege probing for TRIGGER (likely capability assessment).
+- Presence of the “/e” regex indicator in a query suggests linkage to phpMyAdmin Find/Replace exploitation. Correlated prior flow shows confirmed phpMyAdmin RCE via replaceWith=system(id) with command output returned, indicating the web host initiating this DB session was already compromised.
+
+Attack Success: Succeeded
+
+Evidence: 
+- MySQL service and authentication:
+  - [E-S0004-F000195-003] MySQL server greeting (confirms MySQL on 172.18.0.2:3306)
+  - [E-S0004-F000197-005] root user keyword observed during MySQL authentication
+- Schema/table enumeration and modification:
+  - [E-S0004-F000213-006] SHOW TABLES FROM `test`
+  - [E-S0004-F000217-007] SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA
+  - [E-S0004-F000221-008] SHOW FULL COLUMNS FROM `test`.`prgpwn`
+  - [E-S0004-F000225-011] SHOW INDEXES FROM `test`.`prgpwn`
+  - [E-S0004-F000227-012] CREATE TABLE `test`.`prgpwn`
+  - [E-S0004-F000227-013] SHOW CREATE TABLE `test`.`prgpwn`
+  - [E-S0004-F000228-014] Server returned table DDL for prgpwn (structure present)
+- Regex and privilege probes:
+  - [E-S0004-F000233-016] SELECT … WHERE `first` RLIKE '0/e.' COLLATE utf8mb4_bin (regex query)
+  - [E-S0004-F000233-017] “/e” indicator observed (suspicious phpMyAdmin regex modifier)
+  - [E-S0004-F000244-020] SELECT CURRENT_USER() (session identity check)
+  - [E-S0004-F000247-021] USER_PRIVILEGES probe for TRIGGER on '''root''@''%'''
+- Server/config introspection:
+  - [E-S0004-F000230-015] SHOW VARIABLES LIKE 'character_set_connection'
+  - [E-S0004-F000256-022] SHOW VARIABLES LIKE 'lower_case_table_names'
+  - [E-S0004-F000262-023] information_schema.TABLES query enumerating details for test.prgpwn
+- Correlated prior phpMyAdmin RCE (confirmed):
+  - [E-S0000-F000190-027] POST to /tbl_find_replace.php (attack vector)
+  - [E-S0000-F000190-028] useRegex=on parameter
+  - [E-S0000-F000190-033] replaceWith=system(id)
+  - [E-S0000-F000276-029], [E-S0000-F000276-031] HTTP response contained uid=33(www-data) confirming command execution on the web server
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "phpMyAdmin",
+    "application": "phpMyAdmin",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "PHP",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Remote Command Execution",
+    "technique": "Exploit Public-Facing Application (T1190)",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000044-018",
+      "E-S0000-F000044-014",
+      "E-S0000-F000044-012",
+      "E-S0000-F000190-027",
+      "E-S0000-F000190-028",
+      "E-S0000-F000190-033",
+      "E-S0000-F000276-029",
+      "E-S0000-F000276-030",
+      "E-S0000-F000276-031",
+      "E-S0000-F000276-032"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "Observed RCE via phpMyAdmin tbl_find_replace.php using useRegex=on and replaceWith=system(id); with '/e'-style regex behavior indicated, but the exact phpMyAdmin version/CVE cannot be reliably identified from packets alone."
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "phpMyAdmin",
+    "application": "phpMyAdmin",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "PHP",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Remote Command Execution",
+    "technique": "Exploit Public-Facing Application (T1190)",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000044-012",
+      "E-S0000-F000044-014",
+      "E-S0000-F000044-018",
+      "E-S0000-F000190-027",
+      "E-S0000-F000190-028",
+      "E-S0000-F000190-033",
+      "E-S0000-F000276-029",
+      "E-S0000-F000276-030",
+      "E-S0000-F000276-031",
+      "E-S0000-F000276-032",
+      "E-S0004-F000233-017"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "PCAP shows authenticated access to phpMyAdmin followed by POST //tbl_find_replace.php with useRegex=on and replaceWith=system(id); [E-S0000-F000190-027, E-S0000-F000190-028, E-S0000-F000190-033]. The server response contains uid=33(www-data) and gid=33(www-data) [E-S0000-F000276-029, E-S0000-F000276-030, E-S0000-F000276-031, E-S0000-F000276-032], confirming RCE via regex evaluation in the Find & Replace workflow. A distinct '/e' regex indicator is also present in correlated DB activity [E-S0004-F000233-017], fitting a preg_replace '/e' evaluation path in phpMyAdmin’s tbl_find_replace functionality. Retrieved leads such as CVE-2022-0813 (info disclosure via invalid lang/cookie), CVE-2009-1151 (setup.php config code injection), and CVE-2001-1060 (command injection in tbl_copy.php/tbl_rename.php) target different files or mechanisms and do not match this tbl_find_replace.php regex-evaluation RCE. One external lead references a Metasploit module mentioning tbl_find_replace.php and null-termination execution, which aligns with the observed mechanism, but no definitive CVE mapping was identified during research. This association is therefore based on packet observations and product/mechanism knowledge, not on a confirmed advisory for this specific endpoint."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000044-012",
+    "E-S0000-F000044-014",
+    "E-S0000-F000044-018",
+    "E-S0000-F000048-019",
+    "E-S0000-F000190-027",
+    "E-S0000-F000190-028",
+    "E-S0000-F000190-033",
+    "E-S0000-F000276-029",
+    "E-S0000-F000276-030",
+    "E-S0000-F000276-031",
+    "E-S0000-F000276-032",
+    "E-S0004-F000233-017"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: phpMyAdmin
+Attack Type: Remote Command Execution
+Attack Success: Success
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: High
+Score: 4/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: phpMyAdmin tbl_find_replace packet clues: endpoint tbl find replace | phpMyAdmin find replace vulnerability packet clues: endpoint tbl find replace | phpMyAdmin tbl_find_replace.php packet clues: endpoint tbl find replace
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-29T23:17:09.844313+00:00
+Candidate CVEs: CVE-2009-1151, CVE-2001-1060, CVE-2005-0543, CVE-2005-0544
+Sources: 14
+
+Source 1: CISA KEV
+Title: phpMyAdmin Remote Code Execution Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: phpMyAdmin phpMyAdmin: Setup script used to generate configuration can be fooled using a crafted POST request to include arbitrary PHP code in generated configuration file. Required action: Apply updates per vendor instructions.
+Supports: CISA KEV identifies CVE-2009-1151 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2001-1060: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2001-1060
+Summary: phpMyAdmin 2.2.0rc3 and earlier allows remote attackers to execute arbitrary commands by inserting them into (1) the strCopyTableOK argument in tbl_copy.php, or (2) the strRenameTableOK argument in tbl_rename.php.
+Supports: NVD lists CVE-2001-1060 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2005-0543: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2005-0543
+Summary: Cross-site scripting (XSS) vulnerability in phpMyAdmin 2.6.1 allows remote attackers to inject arbitrary HTML and web script via (1) the strServer, cfg[BgcolorOne], or strServerChoice parameters in select_server.lib.php, (2) the bg_color or row_no parameters in display_tbl_links.lib.php, the left_font_family parameter in theme_left.css.php, or the right_font_family parameter in theme_right.css.php.
+Supports: NVD lists CVE-2005-0543 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2005-0544: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2005-0544
+Summary: phpMyAdmin 2.6.1 allows remote attackers to obtain the full path of the server via direct requests to (1) sqlvalidator.lib.php, (2) sqlparser.lib.php, (3) select_theme.lib.php, (4) select_lang.lib.php, (5) relation_cleanup.lib.php, (6) header_meta_style.inc.php, (7) get_foreign.lib.php, (8) display_tbl_links.lib.php, (9) display_export.lib.php, (10) db_table_exists.lib.php, (11) charset_conversion.lib.php, (12) ufpdf.php, (13) mysqli.dbi.lib.php, (14) setup.php, or (15) cookie.auth.lib.php, which reveals the path in a PHP error message.
+Supports: NVD lists CVE-2005-0544 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: Find and Replace text in the entire table using a MySQL ...
+URL: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Usually I use manual find to replace text in a MySQL database using phpMyAdmin. I'm tired of it now, how can I run a query to find and replace a text ...
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Security policy — phpMyAdmin 5.2.1 documentation
+URL: https://anderlecht.be/phpmyadmin/doc/html/security.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ...
+Supports: None
+Contradicts: None
+
+Source 7: Official vendor webpage
+Title: Configuration — phpMyAdmin 5.2.4-dev documentation
+URL: https://docs.phpmyadmin.net/en/latest/config.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). All configurable data is placed in config.inc.php in phpMyAdmin's toplevel directory. If this file does not exist, please refer to the Installation section to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] All configurable data is placed in config.inc.php in phpMyAdmin’s toplevel directory. If this file does not exist, please refer to the Installation section to create one. This file only needs to contain the parameters you want to change from their corresponding default value in libraries/config.default.php (this file is not intended for changes). Examples for examples of configurations If a directive is missing from your file, you can just add another line with the file. This file is for over-writing the defaults; if you wish to use the default value there’s no need to add a line here. The parameters which relate to design (like colors) are placed in themes/themename/scss/_variables.scss. You might also want to create config.footer.inc.php and config.header.inc.php files to add your site specific code to be included on start and end of each page. Some distributions (eg. Debian or Ubuntu) store config.inc.php in /etc/phpmyadmin instead of within phpMyAdmin sources. Changed in version 4.6.5: This setting was not available in phpMyAdmin 4.6.0 - 4.6.4. Sets here the complete URL (with full path) to your phpMyAdmin installation’s directory. E.g. https://www.example.net/path_to_your_phpMyAdmin_directory/. Note also that the URL on most of web servers are case sensitive (even on Windows). Don’t forget the trailing slash at the end. Starting with version 2.3.0, it is advisable to try leaving this blank. In most cases phpMyAdmin automatically detects the proper setting. Users of port forwarding or complex reverse proxy setup might need to set this. A good test is to browse a table, edit a row and save it. There should be an error message if phpMyAdmin is having trouble auto–detecting the correct value. If you get an error that this must be set or if the autodetect code fails to detect your path, please post a bug report on our bug tracker so 1.40 When accessing phpMyAdmin via an Apache reverse proxy, cookie login does not work., 2.5 Each time I want to insert or change a row or drop a database or a table, an error 404 (page not found) is displayed or, with HTTP or cookie authentication, I’m asked to log in again. What’s wrong?, 4.7 Authentication window is displayed more than once, why?, 5.16 With Internet Explorer, I get “Access is denied” Javascript er $cfg['PmaNoRelation_DisableWarning'] Starting with version 2.3.0 phpMyAdmin offers a lot of features to work with master / foreign – tables (see $cfg['Servers'][$i]['pmadb']). up and it does not work for you, have a look on the Structure page of one database where you would like to use it. You will find a link that will analyze why those features have been disabled. If you do not want to use those features set this variable to true to stop this message from appearing. Added in version 4.8.0: This is supported since phpMyAdmin 4.8.0. Configure authentication logging destination. Failed (or all, depending on $cfg['AuthLogSuccess']) authentication attempts will be logged according to this directive: Let phpMyAdmin automatically choose between syslog and php. Log using syslog, using AUTH facility, on most systems this ends up Log into PHP SAPI logging. Any other value is tr
+Supports: None
+Contradicts: None
+
+Source 8: Official vendor webpage
+Title: phpMyAdmin 1.3.0
+URL: https://www.phpmyadmin.net/files/1.3.0/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Added the possibility to specify the length of input- fields when inserting to a table. Changed the input-fields to have a maxlength equivalent ... | Webpage text: Changed display_table() to show the number of found records. Changed display_table() to align=right for numeric fields. Changed all PHP3 opening tags to the XML-compliant version. Added a "query by example" to tbl_select.php3. Added the possibility to specify the length of input- fields when inserting to a table. Changed the input-fields to have a maxlength equivalent to the field's size. Bugfix: Corrected a typo in tbl_create.php3 Added a checkbox to the load-data-infile function to allow existing data to be overwritten. Added authentification: now you can log with any valid MySQL- user (through HTTP-auth). Added the possibility to show only one database (useful when you want to let users adminstrate one own database). Added an "Empty" command to tbl_properties.php3. Added support for UNIQUE keys when creating a table or adding a field. Bugfix: the dump of a table didn't show the correct table-name. Bugfix: Inserting a CVS-file with single-quote enclosed fields didn't work. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement.
+Supports: None
+Contradicts: None
+
+Source 9: Serper web result
+Title: phpMyAdmin 4.5.4.1 - Download - Information - Readme
+URL: https://phpsources.net/script/php/phpmyadmin/14-189_phpmyadmin,4.5.4.1
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Ancienne version compatible avec PHP 5.5 à 7.0 et MySQL/MariaDB 5.5. Elle a été supportée jusqu'au 1er avril 2016. | Webpage text: Version de correction de bugs. - issue #11892 Error with PMA 4.4.15.3 - issue #11896 Remove hard dependency on phpseclib Download phpMyAdmin 4.5.4.1 Taille ZIP compressé : 10.02 MB Taille ZIP décompressé : 31.9 MB Nombre total d'entrées : 2167 Version PHP compatible : 7.2 Arborescence (sur 2 niveaux) |-- /phpMyAdmin-4.5.4.1-all-languages |-- browse_foreigners.php |-- config.sample.inc.php |-- db_central_columns.php |-- db_sql_autocomplete.php |-- config.manyhosts.inc.php |-- cross_framing_protection.js |-- db_central_columns.js |-- server_status_advisor.js |-- server_status_monitor.js |-- server_status_processes.js |-- server_status_queries.js |-- server_status_sorter.js |-- server_status_variables.js |-- server_user_groups.js |-- tbl_gis_visualization.js |-- tbl_zoom_plot_jqplot.js |-- DatabaseInterface.class.php |-- DisplayResults.class.php |-- Error_Handler.class.php |-- List_Database.class.php |-- OutputBuffering.class.php |-- RecentFavoriteTable.class.php |-- SavedSearches.class.php |-- ServerStatusData.class.php |-- StorageEngine.class.php |-- StringAbstractType.class.php |-- StringCType.class.php |-- StringNativeType.class.php |-- SystemDatabase.class.php |-- Theme_Manager.class.php |-- VersionInformation.php |-- browse_foreigners.lib.php |-- build_html_for_db.lib.php |-- central_columns.lib.php |-- charset_conversion.lib.php |-- check_user_privileges.lib.php |-- create_addfield.lib.php |-- data_dictionary_relations.lib.php |-- database_interface.inc.php |-- db_table_exists.lib.php |-- display_change_password.lib.php |-- display_create_database.lib.php |-- display_create_table.lib.php |-- display_export.inc.php |-- display_export.lib.php |-- display_git_revision.lib.php |-- display_import.lib.php |-- display_import_ajax.lib.php |-- display_select_lang.lib.php |-- iconv_wrapper.lib.php |-- information_schema_relations.lib.php |-- ip_allow_deny.lib.php |-- kanji-encoding.lib.php |-- language_stats.inc.php |-- mysql_charsets.inc.php |-- mysql_charsets.lib.php |-- mysql_relations.lib.php |-- normalization.lib.php |-- parse_analyze.inc.php |-- plugin_interface.lib.php |-- relation_cleanup.lib.php |-- replication_gui.lib.php |-- select_server.lib.php |-- server_bin_log.lib.php |-- server_collations.lib.php |-- server_common.inc.php |-- server_common.lib.php |-- server_databases.lib.php |-- server_engines.lib.php |-- server_plugins.lib.php |-- server_privileges.lib.php |-- server_status.lib.php |-- server_status_advisor.lib.php |-- server_status_monitor.lib.php |-- server_status_processes.lib.php |-- server_status_queries.lib.php |-- server_status_variables.lib.php |-- server_user_groups.lib.php |-- server_variables.lib.php |-- special_schema_links.lib.php |-- sql_query_form.lib.php |-- tbl_columns_definition_form.inc.php |-- transformations.lib.php |-- url_generating.lib.php |-- user_preferences.inc.php |-- user_preferences.lib.php |-- zip_extension.lib.php |-- phpunit.xml.nocoverage |-- server_collations.php |-- server_privileges.php |-- server_replication.php |-- server_status_advisor.php |-- server_status_monitor.php |-- server_status_processes.php |-- server_status_queries.php |-- server_status_variables.php |-- server_user_groups.php |-- show_config_errors.php |-- create_tables_drizzle.sql |-- upgrade_co
+Supports: None
+Contradicts: None
+
+Source 10: Serper web result
+Title: CVE-2022-0813: phpMyAdmin Information Disclosure Flaw
+URL: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-0813 CVE-2022-0813: phpMyAdmin Information Disclosure Flaw CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin 5.1.1 and earlier that allows attackers to retrieve sensitive data via invalid requests. This article covers technical details, affected versions, and mitigation. Published: February 17, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2022-0813 Overview CVE-2022-0813 is an Information Exposure vulnerability affecting phpMyAdmin versions 5.1.1 and earlier. The vulnerability allows remote attackers to retrieve potentially sensitive information by crafting invalid requests that target specific application parameters. This affects the lang parameter, the pma_parameter, and the cookie section of phpMyAdmin. Unauthenticated attackers can remotely extract sensitive configuration and application data from vulnerable phpMyAdmin installations without requiring any user interaction. phpMyAdmin versions up to and including 5.1.1 phpMyAdmin 4.x versions prior to 4.9.10 2022-02-11 - phpMyAdmin releases security patches in versions 4.9.10 and 5.1.3 2022-03-10 - CVE-2022-0813 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-0813 This vulnerability (CWE-200: Exposure of Sensitive Information to an Unauthorized Actor) allows attackers to extract sensitive information from phpMyAdmin installations through malformed request handling. The application fails to properly validate and sanitize certain input parameters before processing, leading to information disclosure when error conditions are triggered. The vulnerability can be exploited remotely over the network without authentication and requires no user interaction. The primary security impact is confidentiality breach, as attackers can potentially access sensitive configuration data, session information, or internal application details that should not be exposed to unauthorized users. The root cause of this vulnerability lies in improper input validation within phpMyAdmin's request handling mechanism. When the application receives malformed or invalid values for the lang parameter, pma_parameter, or cookie data, it fails to properly sanitize error responses. This insufficient error handling allows internal application state and configuration details to leak to remote attackers through verbose erro The attack vector is network-based and requires no privileges or user interaction. An attacker can exploit this vulnerability by sending specially crafted HTTP requests to a vulnerable phpMyAdmin installation. By manipulating the lang parameter, pma_parameter, or cookie values with invalid data, the attacker can trigger error conditions that expose sensitive internal information. The vulnerability manifests in the request parameter handling routines where invalid input triggers information-disclosing error responses. For detailed technical analysis, refer to the I
+Supports: None
+Contradicts: None
+
+Source 11: Serper web result
+Title: metasploit-framework/modules/exploits/multi/http ...
+URL: https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/multi/http/phpmyadmin_null_termination_exec.rb
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This module requires Metasploit: https://metasploit.com/download 'phpMyAdmin 'tbl_find_replace.php'), | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.
+Supports: None
+Contradicts: None
+
+Source 12: Serper web result
+Title: MySQL Search and Replace Example
+URL: https://www.webhostface.com/kb/knowledgebase/mysql-search-replace/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn how to use PhpMyAdmin commands to make a MySQL Search and Replace. Use the MySQL query to change the domain of your WordPress website. | Webpage text: Toll Free: 1-866-389-6676 Home/Knowledge Base/WordPress If you would like to perform a Search and Replace in your MySQL Database without using plugins you can easily do that through phpMyAdmin, in this tutorial we will show how to perform that for WordPress Posts. The MySQL Search and Replace is particularly useful when changing the domain of your WordPress website. Open your phpMyAdmin tool from your cPanel account Navigate to the Database of your WordPress installation and select the `wpDbPrefix_posts` table * Note: If you’re not certain what your Database is you can find out that through your wp-config.php file You should be able to see that the Column that we’ll need to edit is called `guid` Click on the “SQL” tab on the top of your phpMyAdmin interface MySQL Search and Replace Query for WordPress UPDATE `wpqw_posts` SET guid = REPLACE(guid, 'https://oldUrl.com/', 'https://newUrl.com/') WHERE `guid` LIKE 'https://oldUrl.com/%'; Performing this to replace https://example.com to https://newExample.com makes the following changes to the database You might want to replace another Column’s Data for your MySQL Database, not only limited to WordPress’ Posts MySQL Search and Replace Query UPDATE `MySQL_Table` SET `MySQL_Table_Column` = REPLACE(`MySQL_Table_Column`, 'oldString', 'newString') WHERE `MySQL_Table_Column` LIKE 'oldString%'; When Should I use MySQL Search and Replace? Doing a Search and Replace via SQL could be dangerous if you have links that you’re unaware of which shouldn’t be changed. You should Search and Replace only when you’re convinced that you have to change the text in your Database. You should always perform a Database backup before proceeding with any manual changes. This can easily be done through phpMyAdmin: Get a new cheap cpanel hosting account with unlimited number of MYSQL databases. SSD MYSQL hosting on a greatly discounted price – 40% OFF the regular price – starting from $2.94/mo only!
+Supports: None
+Contradicts: None
+
+Source 13: Serper web result
+Title: How to search MySQL tables in phpMyAdmin
+URL: https://www.networksolutions.com/help/article/searching-mysql-tables-in-phpmyadmin
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn how to search MySQL tables in phpMyAdmin using the query-by-example feature. This step-by-step guide helps you find specific data in your database.
+Supports: None
+Contradicts: None
+
+Source 14: Official vendor webpage
+Title: Security policy — phpMyAdmin 5.2.2 documentation
+URL: https://docs.phpmyadmin.net/en/release_5_2_2/security.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ... | Webpage text: The phpMyAdmin developer team is putting lot of effort to make phpMyAdmin as secure as possible. But still web application like phpMyAdmin can be vulnerable to a number of attacks and new ways to exploit are still being explored. For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get’s assigned a CVE ID as well. We might group similar vulnerabilities to one PMASA (eg. multiple XSS vulnerabilities can be announced If you think you’ve found a vulnerability, please see Reporting security issues. In this section, we will describe typical vulnerabilities, which can appear in our code base. This list is by no means complete, it is intended to show Cross-site scripting (XSS) When phpMyAdmin shows a piece of user data, e.g. something inside a user’s database, all html special chars have to be escaped. When this escaping is missing somewhere a malicious user might fill a database with specially crafted content to trick an other user of that database into executing something. This could for example be a piece of JavaScript code that would do any number of phpMyAdmin tries to escape all userdata before it is rendered into html for the Cross-site scripting on Wikipedia Cross-site request forgery (CSRF) An attacker would trick a phpMyAdmin user into clicking on a link to provoke some action in phpMyAdmin. This link could either be sent via email or some random website. If successful this the attacker would be able to perform some action with the users privileges. To mitigate this phpMyAdmin requires a token to be sent on sensitive requests. The idea is that an attacker does not poses the currently valid token to include in the presented link. The token is regenerated for every login, so it’s generally valid only for limited time, what makes it harder for attacker to obtain valid one. Cross-site request forgery on Wikipedia As the whole purpose of phpMyAdmin is to preform sql queries, this is not our first concern. SQL injection is sensitive to us though when it concerns the mysql control connection. This controlconnection can have additional privileges which the logged in user does not poses. E.g. access the phpMyAdmin configuration storage. User data that is included in (administrative) queries should always be run through DatabaseInterface::escapeString(). SQL injection on Wikipedia phpMyAdmin on its own does not rate limit authentication attempts in any way. This is caused by need to work in stateless environment, where there is no way to protect against such kind of things. To mitigate this, you can use Captcha or utilize external tools such as fail2ban, this is more details described in Securing your phpMyAdmin installation. Brute force attack on Wikipedia Reporting security issues Should you find a security issue in the phpMyAdmin programming code, please contact the phpMyAdmin security team in advance before publishing it. This way we can prepare a fix and release the fix together with your announcement. You will be also given credit in our security announcement. You can optionally encrypt your report with PGP key ID DA68AB39218AB947 with following fingerprint: pub 4096R/DA68AB39218AB947 2016-08-02 Key fingerprint = 5BAD 38CF B980 50B9
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for www.networksolutions.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for anderlecht.be: HTTPError: HTTP Error 404: Not Found | Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for vuldb.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for labs.gauntletai.com: HTTPError: HTTP Error 302: Found
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000044-012]: Location: http://localhost:8080/index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7.
+- PCAP [E-S0000-F000044-014]: Server response X-Powered-By: PHP/5.3.29.
+- PCAP [E-S0000-F000044-018]: phpMyAdmin.
+- PCAP [E-S0000-F000190-027]: POST //tbl_find_replace.php.
+- PCAP [E-S0000-F000190-028]: useRegex=on.
+- PCAP [E-S0000-F000190-033]: HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0000-F000276-029]: uid=33.
+- PCAP [E-S0000-F000276-030]: gid=33.
+- PCAP [E-S0000-F000276-031]: Server response contains uid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0000-F000276-032]: Server response contains gid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0004-F000233-017]: /e.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [CISA KEV] phpMyAdmin Remote Code Execution Vulnerability: phpMyAdmin phpMyAdmin: Setup script used to generate configuration can be fooled using a crafted POST request to include arbitrary PHP code in generated configuration file. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2009-1151 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2001-1060: NVD vulnerability record: phpMyAdmin 2.2.0rc3 and earlier allows remote attackers to execute arbitrary commands by inserting them into (1) the strCopyTableOK argument in tbl_copy.php, or (2) the strRenameTableOK argument in tbl_rename.php. Source: https://nvd.nist.gov/vuln/detail/CVE-2001-1060 Supports: NVD lists CVE-2001-1060 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2005-0543: NVD vulnerability record: Cross-site scripting (XSS) vulnerability in phpMyAdmin 2.6.1 allows remote attackers to inject arbitrary HTML and web script via (1) the strServer, cfg[BgcolorOne], or strServerChoice parameters in select_server.lib.php, (2) the bg_color or row_no parameters in display_tbl_links.lib.php, the left_font_family parameter in theme_left.css.php, or the right_font_family parameter in theme_right.css.php. Source: https://nvd.nist.gov/vuln/detail/CVE-2005-0543 Supports: NVD lists CVE-2005-0543 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2005-0544: NVD vulnerability record: phpMyAdmin 2.6.1 allows remote attackers to obtain the full path of the server via direct requests to (1) sqlvalidator.lib.php, (2) sqlparser.lib.php, (3) select_theme.lib.php, (4) select_lang.lib.php, (5) relation_cleanup.lib.php, (6) header_meta_style.inc.php, (7) get_foreign.lib.php, (8) display_tbl_links.lib.php, (9) display_export.lib.php, (10) db_table_exists.lib.php, (11) charset_conversion.lib.php, (12) ufpdf.php, (13) mysqli.dbi.lib.php, (14) setup.php, or (15) cookie.auth.lib.php, which reveals the path in a PHP error message. Source: https://nvd.nist.gov/vuln/detail/CVE-2005-0544 Supports: NVD lists CVE-2005-0544 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Find and Replace text in the entire table using a MySQL ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Usually I use manual find to replace text in a MySQL database using phpMyAdmin. I'm tired of it now, how can I run a query to find and replace a text ... Source: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+- ONLINE [Serper web result] Security policy — phpMyAdmin 5.2.1 documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ... Source: https://anderlecht.be/phpmyadmin/doc/html/security.html
+- ONLINE [Official vendor webpage] Configuration — phpMyAdmin 5.2.4-dev documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). All configurable data is placed in config.inc.php in phpMyAdmin's toplevel directory. If this file does not exist, please refer to the Installation section to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] All configurable data is placed in config.inc.php in phpMyAdmin’s toplevel directory. If this file does not exist, please refer to the Installation section to create one. This file only needs to contain the parameters you want to change from their corresponding default value in libraries/config.default.php (this file is not intended for changes). Examples for examples of configurations If a directive is missing from your file, you can just add another line with the file. This file is for over-writing the defaults; if you wish to use the default value there’s no need to add a line here. The parameters which relate to design (like colors) are placed in themes/themename/scss/_variables.scss. You might also want to create config.footer.inc.php and config.header.inc.php files to add your site specific code to be included on start and end of each page. Some distributions (eg. Debian or Ubuntu) store config.inc.php in /etc/phpmyadmin instead of within phpMyAdmin sources. Changed in version 4.6.5: This setting was not available in phpMyAdmin 4.6.0 - 4.6.4. Sets here the complete URL (with full path) to your phpMyAdmin installation’s directory. E.g. https://www.example.net/path_to_your_phpMyAdmin_directory/. Note also that the URL on most of web servers are case sensitive (even on Windows). Don’t forget the trailing slash at the end. Starting with version 2.3.0, it is advisable to try leaving this blank. In most cases phpMyAdmin automatically detects the proper setting. Users of port forwarding or complex reverse proxy setup might need to set this. A good test is to browse a table, edit a row and save it. There should be an error message if phpMyAdmin is having trouble auto–detecting the correct value. If you get an error that this must be set or if the autodetect code fails to detect your path, please post a bug report on our bug tracker so 1.40 When accessing phpMyAdmin via an Apache reverse proxy, cookie login does not work., 2.5 Each time I want to insert or change a row or drop a database or a table, an error 404 (page not found) is displayed or, with HTTP or cookie authentication, I’m asked to log in again. What’s wrong?, 4.7 Authentication window is displayed more than once, why?, 5.16 With Internet Explorer, I get “Access is denied” Javascript er $cfg['PmaNoRelation_DisableWarning'] Starting with version 2.3.0 phpMyAdmin offers a lot of features to work with master / foreign – tables (see $cfg['Servers'][$i]['pmadb']). up and it does not work for you, have a look on the Structure page of one database where you would like to use it. You will find a link that will analyze why those features have been disabled. If you do not want to use those features set this variable to true to stop this message from appearing. Added in version 4.8.0: This is supported since phpMyAdmin 4.8.0. Configure authentication logging destination. Failed (or all, depending on $cfg['AuthLogSuccess']) authentication attempts will be logged according to this directive: Let phpMyAdmin automatically choose between syslog and php. Log using syslog, using AUTH facility, on most systems this ends up Log into PHP SAPI logging. Any other value is tr Source: https://docs.phpmyadmin.net/en/latest/config.html
+- ONLINE [Official vendor webpage] phpMyAdmin 1.3.0: UNTRUSTED WEB RESEARCH (not PCAP evidence). Added the possibility to specify the length of input- fields when inserting to a table. Changed the input-fields to have a maxlength equivalent ... | Webpage text: Changed display_table() to show the number of found records. Changed display_table() to align=right for numeric fields. Changed all PHP3 opening tags to the XML-compliant version. Added a "query by example" to tbl_select.php3. Added the possibility to specify the length of input- fields when inserting to a table. Changed the input-fields to have a maxlength equivalent to the field's size. Bugfix: Corrected a typo in tbl_create.php3 Added a checkbox to the load-data-infile function to allow existing data to be overwritten. Added authentification: now you can log with any valid MySQL- user (through HTTP-auth). Added the possibility to show only one database (useful when you want to let users adminstrate one own database). Added an "Empty" command to tbl_properties.php3. Added support for UNIQUE keys when creating a table or adding a field. Bugfix: the dump of a table didn't show the correct table-name. Bugfix: Inserting a CVS-file with single-quote enclosed fields didn't work. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement. Source: https://www.phpmyadmin.net/files/1.3.0/
+- ONLINE [Serper web result] phpMyAdmin 4.5.4.1 - Download - Information - Readme: UNTRUSTED WEB RESEARCH (not PCAP evidence). Ancienne version compatible avec PHP 5.5 à 7.0 et MySQL/MariaDB 5.5. Elle a été supportée jusqu'au 1er avril 2016. | Webpage text: Version de correction de bugs. - issue #11892 Error with PMA 4.4.15.3 - issue #11896 Remove hard dependency on phpseclib Download phpMyAdmin 4.5.4.1 Taille ZIP compressé : 10.02 MB Taille ZIP décompressé : 31.9 MB Nombre total d'entrées : 2167 Version PHP compatible : 7.2 Arborescence (sur 2 niveaux) |-- /phpMyAdmin-4.5.4.1-all-languages |-- browse_foreigners.php |-- config.sample.inc.php |-- db_central_columns.php |-- db_sql_autocomplete.php |-- config.manyhosts.inc.php |-- cross_framing_protection.js |-- db_central_columns.js |-- server_status_advisor.js |-- server_status_monitor.js |-- server_status_processes.js |-- server_status_queries.js |-- server_status_sorter.js |-- server_status_variables.js |-- server_user_groups.js |-- tbl_gis_visualization.js |-- tbl_zoom_plot_jqplot.js |-- DatabaseInterface.class.php |-- DisplayResults.class.php |-- Error_Handler.class.php |-- List_Database.class.php |-- OutputBuffering.class.php |-- RecentFavoriteTable.class.php |-- SavedSearches.class.php |-- ServerStatusData.class.php |-- StorageEngine.class.php |-- StringAbstractType.class.php |-- StringCType.class.php |-- StringNativeType.class.php |-- SystemDatabase.class.php |-- Theme_Manager.class.php |-- VersionInformation.php |-- browse_foreigners.lib.php |-- build_html_for_db.lib.php |-- central_columns.lib.php |-- charset_conversion.lib.php |-- check_user_privileges.lib.php |-- create_addfield.lib.php |-- data_dictionary_relations.lib.php |-- database_interface.inc.php |-- db_table_exists.lib.php |-- display_change_password.lib.php |-- display_create_database.lib.php |-- display_create_table.lib.php |-- display_export.inc.php |-- display_export.lib.php |-- display_git_revision.lib.php |-- display_import.lib.php |-- display_import_ajax.lib.php |-- display_select_lang.lib.php |-- iconv_wrapper.lib.php |-- information_schema_relations.lib.php |-- ip_allow_deny.lib.php |-- kanji-encoding.lib.php |-- language_stats.inc.php |-- mysql_charsets.inc.php |-- mysql_charsets.lib.php |-- mysql_relations.lib.php |-- normalization.lib.php |-- parse_analyze.inc.php |-- plugin_interface.lib.php |-- relation_cleanup.lib.php |-- replication_gui.lib.php |-- select_server.lib.php |-- server_bin_log.lib.php |-- server_collations.lib.php |-- server_common.inc.php |-- server_common.lib.php |-- server_databases.lib.php |-- server_engines.lib.php |-- server_plugins.lib.php |-- server_privileges.lib.php |-- server_status.lib.php |-- server_status_advisor.lib.php |-- server_status_monitor.lib.php |-- server_status_processes.lib.php |-- server_status_queries.lib.php |-- server_status_variables.lib.php |-- server_user_groups.lib.php |-- server_variables.lib.php |-- special_schema_links.lib.php |-- sql_query_form.lib.php |-- tbl_columns_definition_form.inc.php |-- transformations.lib.php |-- url_generating.lib.php |-- user_preferences.inc.php |-- user_preferences.lib.php |-- zip_extension.lib.php |-- phpunit.xml.nocoverage |-- server_collations.php |-- server_privileges.php |-- server_replication.php |-- server_status_advisor.php |-- server_status_monitor.php |-- server_status_processes.php |-- server_status_queries.php |-- server_status_variables.php |-- server_user_groups.php |-- show_config_errors.php |-- create_tables_drizzle.sql |-- upgrade_co Source: https://phpsources.net/script/php/phpmyadmin/14-189_phpmyadmin,4.5.4.1
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2022-0813: phpMyAdmin Information Disclosure Flaw: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-0813 CVE-2022-0813: phpMyAdmin Information Disclosure Flaw CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin 5.1.1 and earlier that allows attackers to retrieve sensitive data via invalid requests. This article covers technical details, affected versions, and mitigation. Published: February 17, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2022-0813 Overview CVE-2022-0813 is an Information Exposure vulnerability affecting phpMyAdmin versions 5.1.1 and earlier. The vulnerability allows remote attackers to retrieve potentially sensitive information by crafting invalid requests that target specific application parameters. This affects the lang parameter, the pma_parameter, and the cookie section of phpMyAdmin. Unauthenticated attackers can remotely extract sensitive configuration and application data from vulnerable phpMyAdmin installations without requiring any user interaction. phpMyAdmin versions up to and including 5.1.1 phpMyAdmin 4.x versions prior to 4.9.10 2022-02-11 - phpMyAdmin releases security patches in versions 4.9.10 and 5.1.3 2022-03-10 - CVE-2022-0813 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-0813 This vulnerability (CWE-200: Exposure of Sensitive Information to an Unauthorized Actor) allows attackers to extract sensitive information from phpMyAdmin installations through malformed request handling. The application fails to properly validate and sanitize certain input parameters before processing, leading to information disclosure when error conditions are triggered. The vulnerability can be exploited remotely over the network without authentication and requires no user interaction. The primary security impact is confidentiality breach, as attackers can potentially access sensitive configuration data, session information, or internal application details that should not be exposed to unauthorized users. The root cause of this vulnerability lies in improper input validation within phpMyAdmin's request handling mechanism. When the application receives malformed or invalid values for the lang parameter, pma_parameter, or cookie data, it fails to properly sanitize error responses. This insufficient error handling allows internal application state and configuration details to leak to remote attackers through verbose erro The attack vector is network-based and requires no privileges or user interaction. An attacker can exploit this vulnerability by sending specially crafted HTTP requests to a vulnerable phpMyAdmin installation. By manipulating the lang parameter, pma_parameter, or cookie values with invalid data, the attacker can trigger error conditions that expose sensitive internal information. The vulnerability manifests in the request parameter handling routines where invalid input triggers information-disclosing error responses. For detailed technical analysis, refer to the I Source: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- ONLINE [Serper web result] metasploit-framework/modules/exploits/multi/http ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This module requires Metasploit: https://metasploit.com/download 'phpMyAdmin 'tbl_find_replace.php'), | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/multi/http/phpmyadmin_null_termination_exec.rb
+- ONLINE [Serper web result] MySQL Search and Replace Example: UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn how to use PhpMyAdmin commands to make a MySQL Search and Replace. Use the MySQL query to change the domain of your WordPress website. | Webpage text: Toll Free: 1-866-389-6676 Home/Knowledge Base/WordPress If you would like to perform a Search and Replace in your MySQL Database without using plugins you can easily do that through phpMyAdmin, in this tutorial we will show how to perform that for WordPress Posts. The MySQL Search and Replace is particularly useful when changing the domain of your WordPress website. Open your phpMyAdmin tool from your cPanel account Navigate to the Database of your WordPress installation and select the `wpDbPrefix_posts` table * Note: If you’re not certain what your Database is you can find out that through your wp-config.php file You should be able to see that the Column that we’ll need to edit is called `guid` Click on the “SQL” tab on the top of your phpMyAdmin interface MySQL Search and Replace Query for WordPress UPDATE `wpqw_posts` SET guid = REPLACE(guid, 'https://oldUrl.com/', 'https://newUrl.com/') WHERE `guid` LIKE 'https://oldUrl.com/%'; Performing this to replace https://example.com to https://newExample.com makes the following changes to the database You might want to replace another Column’s Data for your MySQL Database, not only limited to WordPress’ Posts MySQL Search and Replace Query UPDATE `MySQL_Table` SET `MySQL_Table_Column` = REPLACE(`MySQL_Table_Column`, 'oldString', 'newString') WHERE `MySQL_Table_Column` LIKE 'oldString%'; When Should I use MySQL Search and Replace? Doing a Search and Replace via SQL could be dangerous if you have links that you’re unaware of which shouldn’t be changed. You should Search and Replace only when you’re convinced that you have to change the text in your Database. You should always perform a Database backup before proceeding with any manual changes. This can easily be done through phpMyAdmin: Get a new cheap cpanel hosting account with unlimited number of MYSQL databases. SSD MYSQL hosting on a greatly discounted price – 40% OFF the regular price – starting from $2.94/mo only! Source: https://www.webhostface.com/kb/knowledgebase/mysql-search-replace/
+- ONLINE [Serper web result] How to search MySQL tables in phpMyAdmin: UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn how to search MySQL tables in phpMyAdmin using the query-by-example feature. This step-by-step guide helps you find specific data in your database. Source: https://www.networksolutions.com/help/article/searching-mysql-tables-in-phpmyadmin
+- ONLINE [Official vendor webpage] Security policy — phpMyAdmin 5.2.2 documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ... | Webpage text: The phpMyAdmin developer team is putting lot of effort to make phpMyAdmin as secure as possible. But still web application like phpMyAdmin can be vulnerable to a number of attacks and new ways to exploit are still being explored. For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get’s assigned a CVE ID as well. We might group similar vulnerabilities to one PMASA (eg. multiple XSS vulnerabilities can be announced If you think you’ve found a vulnerability, please see Reporting security issues. In this section, we will describe typical vulnerabilities, which can appear in our code base. This list is by no means complete, it is intended to show Cross-site scripting (XSS) When phpMyAdmin shows a piece of user data, e.g. something inside a user’s database, all html special chars have to be escaped. When this escaping is missing somewhere a malicious user might fill a database with specially crafted content to trick an other user of that database into executing something. This could for example be a piece of JavaScript code that would do any number of phpMyAdmin tries to escape all userdata before it is rendered into html for the Cross-site scripting on Wikipedia Cross-site request forgery (CSRF) An attacker would trick a phpMyAdmin user into clicking on a link to provoke some action in phpMyAdmin. This link could either be sent via email or some random website. If successful this the attacker would be able to perform some action with the users privileges. To mitigate this phpMyAdmin requires a token to be sent on sensitive requests. The idea is that an attacker does not poses the currently valid token to include in the presented link. The token is regenerated for every login, so it’s generally valid only for limited time, what makes it harder for attacker to obtain valid one. Cross-site request forgery on Wikipedia As the whole purpose of phpMyAdmin is to preform sql queries, this is not our first concern. SQL injection is sensitive to us though when it concerns the mysql control connection. This controlconnection can have additional privileges which the logged in user does not poses. E.g. access the phpMyAdmin configuration storage. User data that is included in (administrative) queries should always be run through DatabaseInterface::escapeString(). SQL injection on Wikipedia phpMyAdmin on its own does not rate limit authentication attempts in any way. This is caused by need to work in stateless environment, where there is no way to protect against such kind of things. To mitigate this, you can use Captcha or utilize external tools such as fail2ban, this is more details described in Securing your phpMyAdmin installation. Brute force attack on Wikipedia Reporting security issues Should you find a security issue in the phpMyAdmin programming code, please contact the phpMyAdmin security team in advance before publishing it. This way we can prepare a fix and release the fix together with your announcement. You will be also given credit in our security announcement. You can optionally encrypt your report with PGP key ID DA68AB39218AB947 with following fingerprint: pub 4096R/DA68AB39218AB947 2016-08-02 Key fingerprint = 5BAD 38CF B980 50B9 Source: https://docs.phpmyadmin.net/en/release_5_2_2/security.html
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2001-1060
+- https://nvd.nist.gov/vuln/detail/CVE-2005-0543
+- https://nvd.nist.gov/vuln/detail/CVE-2005-0544
+- https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+- https://anderlecht.be/phpmyadmin/doc/html/security.html
+- https://docs.phpmyadmin.net/en/latest/config.html
+- https://www.phpmyadmin.net/files/1.3.0/
+- https://phpsources.net/script/php/phpmyadmin/14-189_phpmyadmin,4.5.4.1
+- https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/multi/http/phpmyadmin_null_termination_exec.rb
+- https://www.webhostface.com/kb/knowledgebase/mysql-search-replace/
+- https://www.networksolutions.com/help/article/searching-mysql-tables-in-phpmyadmin
+- https://docs.phpmyadmin.net/en/release_5_2_2/security.html
+
+Search status: Valid
+Search query: phpMyAdmin tbl_find_replace packet clues: endpoint tbl find replace | phpMyAdmin find replace vulnerability packet clues: endpoint tbl find replace | phpMyAdmin tbl_find_replace.php packet clues: endpoint tbl find replace
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for www.networksolutions.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for anderlecht.be: HTTPError: HTTP Error 404: Not Found
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for vuldb.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for labs.gauntletai.com: HTTPError: HTTP Error 302: Found
+- 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: phpMyAdmin
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000044-012]: Location: http://localhost:8080/index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7.
+- PCAP [E-S0000-F000044-014]: Server response X-Powered-By: PHP/5.3.29.
+- PCAP [E-S0000-F000044-018]: phpMyAdmin.
+- PCAP [E-S0000-F000190-027]: POST //tbl_find_replace.php.
+- PCAP [E-S0000-F000190-028]: useRegex=on.
+- PCAP [E-S0000-F000190-033]: HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0000-F000276-029]: uid=33.
+- PCAP [E-S0000-F000276-030]: gid=33.
+- PCAP [E-S0000-F000276-031]: Server response contains uid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0000-F000276-032]: Server response contains gid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0004-F000233-017]: /e.
+- ONLINE RESEARCH LEAD [CISA KEV] phpMyAdmin Remote Code Execution Vulnerability: phpMyAdmin phpMyAdmin: Setup script used to generate configuration can be fooled using a crafted POST request to include arbitrary PHP code in generated configuration file. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2009-1151 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2001-1060: NVD vulnerability record: phpMyAdmin 2.2.0rc3 and earlier allows remote attackers to execute arbitrary commands by inserting them into (1) the strCopyTableOK argument in tbl_copy.php, or (2) the strRenameTableOK argument in tbl_rename.php. Source: https://nvd.nist.gov/vuln/detail/CVE-2001-1060 Supports: NVD lists CVE-2001-1060 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2005-0543: NVD vulnerability record: Cross-site scripting (XSS) vulnerability in phpMyAdmin 2.6.1 allows remote attackers to inject arbitrary HTML and web script via (1) the strServer, cfg[BgcolorOne], or strServerChoice parameters in select_server.lib.php, (2) the bg_color or row_no parameters in display_tbl_links.lib.php, the left_font_family parameter in theme_left.css.php, or the right_font_family parameter in theme_right.css.php. Source: https://nvd.nist.gov/vuln/detail/CVE-2005-0543 Supports: NVD lists CVE-2005-0543 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2005-0544: NVD vulnerability record: phpMyAdmin 2.6.1 allows remote attackers to obtain the full path of the server via direct requests to (1) sqlvalidator.lib.php, (2) sqlparser.lib.php, (3) select_theme.lib.php, (4) select_lang.lib.php, (5) relation_cleanup.lib.php, (6) header_meta_style.inc.php, (7) get_foreign.lib.php, (8) display_tbl_links.lib.php, (9) display_export.lib.php, (10) db_table_exists.lib.php, (11) charset_conversion.lib.php, (12) ufpdf.php, (13) mysqli.dbi.lib.php, (14) setup.php, or (15) cookie.auth.lib.php, which reveals the path in a PHP error message. Source: https://nvd.nist.gov/vuln/detail/CVE-2005-0544 Supports: NVD lists CVE-2005-0544 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Find and Replace text in the entire table using a MySQL ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Usually I use manual find to replace text in a MySQL database using phpMyAdmin. I'm tired of it now, how can I run a query to find and replace a text ... Source: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+- ONLINE [Serper web result] Security policy — phpMyAdmin 5.2.1 documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ... Source: https://anderlecht.be/phpmyadmin/doc/html/security.html
+- ONLINE [Official vendor webpage] Configuration — phpMyAdmin 5.2.4-dev documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). All configurable data is placed in config.inc.php in phpMyAdmin's toplevel directory. If this file does not exist, please refer to the Installation section to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] All configurable data is placed in config.inc.php in phpMyAdmin’s toplevel directory. If this file does not exist, please refer to the Installation section to create one. This file only needs to contain the parameters you want to change from their corresponding default value in libraries/config.default.php (this file is not intended for changes). Examples for examples of configurations If a directive is missing from your file, you can just add another line with the file. This file is for over-writing the defaults; if you wish to use the default value there’s no need to add a line here. The parameters which relate to design (like colors) are placed in themes/themename/scss/_variables.scss. You might also want to create config.footer.inc.php and config.header.inc.php files to add your site specific code to be included on start and end of each page. Some distributions (eg. Debian or Ubuntu) store config.inc.php in /etc/phpmyadmin instead of within phpMyAdmin sources. Changed in version 4.6.5: This setting was not available in phpMyAdmin 4.6.0 - 4.6.4. Sets here the complete URL (with full path) to your phpMyAdmin installation’s directory. E.g. https://www.example.net/path_to_your_phpMyAdmin_directory/. Note also that the URL on most of web servers are case sensitive (even on Windows). Don’t forget the trailing slash at the end. Starting with version 2.3.0, it is advisable to try leaving this blank. In most cases phpMyAdmin automatically detects the proper setting. Users of port forwarding or complex reverse proxy setup might need to set this. A good test is to browse a table, edit a row and save it. There should be an error message if phpMyAdmin is having trouble auto–detecting the correct value. If you get an error that this must be set or if the autodetect code fails to detect your path, please post a bug report on our bug tracker so 1.40 When accessing phpMyAdmin via an Apache reverse proxy, cookie login does not work., 2.5 Each time I want to insert or change a row or drop a database or a table, an error 404 (page not found) is displayed or, with HTTP or cookie authentication, I’m asked to log in again. What’s wrong?, 4.7 Authentication window is displayed more than once, why?, 5.16 With Internet Explorer, I get “Access is denied” Javascript er $cfg['PmaNoRelation_DisableWarning'] Starting with version 2.3.0 phpMyAdmin offers a lot of features to work with master / foreign – tables (see $cfg['Servers'][$i]['pmadb']). up and it does not work for you, have a look on the Structure page of one database where you would like to use it. You will find a link that will analyze why those features have been disabled. If you do not want to use those features set this variable to true to stop this message from appearing. Added in version 4.8.0: This is supported since phpMyAdmin 4.8.0. Configure authentication logging destination. Failed (or all, depending on $cfg['AuthLogSuccess']) authentication attempts will be logged according to this directive: Let phpMyAdmin automatically choose between syslog and php. Log using syslog, using AUTH facility, on most systems this ends up Log into PHP SAPI logging. Any other value is tr Source: https://docs.phpmyadmin.net/en/latest/config.html
+- ONLINE [Official vendor webpage] phpMyAdmin 1.3.0: UNTRUSTED WEB RESEARCH (not PCAP evidence). Added the possibility to specify the length of input- fields when inserting to a table. Changed the input-fields to have a maxlength equivalent ... | Webpage text: Changed display_table() to show the number of found records. Changed display_table() to align=right for numeric fields. Changed all PHP3 opening tags to the XML-compliant version. Added a "query by example" to tbl_select.php3. Added the possibility to specify the length of input- fields when inserting to a table. Changed the input-fields to have a maxlength equivalent to the field's size. Bugfix: Corrected a typo in tbl_create.php3 Added a checkbox to the load-data-infile function to allow existing data to be overwritten. Added authentification: now you can log with any valid MySQL- user (through HTTP-auth). Added the possibility to show only one database (useful when you want to let users adminstrate one own database). Added an "Empty" command to tbl_properties.php3. Added support for UNIQUE keys when creating a table or adding a field. Bugfix: the dump of a table didn't show the correct table-name. Bugfix: Inserting a CVS-file with single-quote enclosed fields didn't work. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement. Source: https://www.phpmyadmin.net/files/1.3.0/
+- ONLINE [Serper web result] phpMyAdmin 4.5.4.1 - Download - Information - Readme: UNTRUSTED WEB RESEARCH (not PCAP evidence). Ancienne version compatible avec PHP 5.5 à 7.0 et MySQL/MariaDB 5.5. Elle a été supportée jusqu'au 1er avril 2016. | Webpage text: Version de correction de bugs. - issue #11892 Error with PMA 4.4.15.3 - issue #11896 Remove hard dependency on phpseclib Download phpMyAdmin 4.5.4.1 Taille ZIP compressé : 10.02 MB Taille ZIP décompressé : 31.9 MB Nombre total d'entrées : 2167 Version PHP compatible : 7.2 Arborescence (sur 2 niveaux) |-- /phpMyAdmin-4.5.4.1-all-languages |-- browse_foreigners.php |-- config.sample.inc.php |-- db_central_columns.php |-- db_sql_autocomplete.php |-- config.manyhosts.inc.php |-- cross_framing_protection.js |-- db_central_columns.js |-- server_status_advisor.js |-- server_status_monitor.js |-- server_status_processes.js |-- server_status_queries.js |-- server_status_sorter.js |-- server_status_variables.js |-- server_user_groups.js |-- tbl_gis_visualization.js |-- tbl_zoom_plot_jqplot.js |-- DatabaseInterface.class.php |-- DisplayResults.class.php |-- Error_Handler.class.php |-- List_Database.class.php |-- OutputBuffering.class.php |-- RecentFavoriteTable.class.php |-- SavedSearches.class.php |-- ServerStatusData.class.php |-- StorageEngine.class.php |-- StringAbstractType.class.php |-- StringCType.class.php |-- StringNativeType.class.php |-- SystemDatabase.class.php |-- Theme_Manager.class.php |-- VersionInformation.php |-- browse_foreigners.lib.php |-- build_html_for_db.lib.php |-- central_columns.lib.php |-- charset_conversion.lib.php |-- check_user_privileges.lib.php |-- create_addfield.lib.php |-- data_dictionary_relations.lib.php |-- database_interface.inc.php |-- db_table_exists.lib.php |-- display_change_password.lib.php |-- display_create_database.lib.php |-- display_create_table.lib.php |-- display_export.inc.php |-- display_export.lib.php |-- display_git_revision.lib.php |-- display_import.lib.php |-- display_import_ajax.lib.php |-- display_select_lang.lib.php |-- iconv_wrapper.lib.php |-- information_schema_relations.lib.php |-- ip_allow_deny.lib.php |-- kanji-encoding.lib.php |-- language_stats.inc.php |-- mysql_charsets.inc.php |-- mysql_charsets.lib.php |-- mysql_relations.lib.php |-- normalization.lib.php |-- parse_analyze.inc.php |-- plugin_interface.lib.php |-- relation_cleanup.lib.php |-- replication_gui.lib.php |-- select_server.lib.php |-- server_bin_log.lib.php |-- server_collations.lib.php |-- server_common.inc.php |-- server_common.lib.php |-- server_databases.lib.php |-- server_engines.lib.php |-- server_plugins.lib.php |-- server_privileges.lib.php |-- server_status.lib.php |-- server_status_advisor.lib.php |-- server_status_monitor.lib.php |-- server_status_processes.lib.php |-- server_status_queries.lib.php |-- server_status_variables.lib.php |-- server_user_groups.lib.php |-- server_variables.lib.php |-- special_schema_links.lib.php |-- sql_query_form.lib.php |-- tbl_columns_definition_form.inc.php |-- transformations.lib.php |-- url_generating.lib.php |-- user_preferences.inc.php |-- user_preferences.lib.php |-- zip_extension.lib.php |-- phpunit.xml.nocoverage |-- server_collations.php |-- server_privileges.php |-- server_replication.php |-- server_status_advisor.php |-- server_status_monitor.php |-- server_status_processes.php |-- server_status_queries.php |-- server_status_variables.php |-- server_user_groups.php |-- show_config_errors.php |-- create_tables_drizzle.sql |-- upgrade_co Source: https://phpsources.net/script/php/phpmyadmin/14-189_phpmyadmin,4.5.4.1
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2022-0813: phpMyAdmin Information Disclosure Flaw: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-0813 CVE-2022-0813: phpMyAdmin Information Disclosure Flaw CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin 5.1.1 and earlier that allows attackers to retrieve sensitive data via invalid requests. This article covers technical details, affected versions, and mitigation. Published: February 17, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2022-0813 Overview CVE-2022-0813 is an Information Exposure vulnerability affecting phpMyAdmin versions 5.1.1 and earlier. The vulnerability allows remote attackers to retrieve potentially sensitive information by crafting invalid requests that target specific application parameters. This affects the lang parameter, the pma_parameter, and the cookie section of phpMyAdmin. Unauthenticated attackers can remotely extract sensitive configuration and application data from vulnerable phpMyAdmin installations without requiring any user interaction. phpMyAdmin versions up to and including 5.1.1 phpMyAdmin 4.x versions prior to 4.9.10 2022-02-11 - phpMyAdmin releases security patches in versions 4.9.10 and 5.1.3 2022-03-10 - CVE-2022-0813 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-0813 This vulnerability (CWE-200: Exposure of Sensitive Information to an Unauthorized Actor) allows attackers to extract sensitive information from phpMyAdmin installations through malformed request handling. The application fails to properly validate and sanitize certain input parameters before processing, leading to information disclosure when error conditions are triggered. The vulnerability can be exploited remotely over the network without authentication and requires no user interaction. The primary security impact is confidentiality breach, as attackers can potentially access sensitive configuration data, session information, or internal application details that should not be exposed to unauthorized users. The root cause of this vulnerability lies in improper input validation within phpMyAdmin's request handling mechanism. When the application receives malformed or invalid values for the lang parameter, pma_parameter, or cookie data, it fails to properly sanitize error responses. This insufficient error handling allows internal application state and configuration details to leak to remote attackers through verbose erro The attack vector is network-based and requires no privileges or user interaction. An attacker can exploit this vulnerability by sending specially crafted HTTP requests to a vulnerable phpMyAdmin installation. By manipulating the lang parameter, pma_parameter, or cookie values with invalid data, the attacker can trigger error conditions that expose sensitive internal information. The vulnerability manifests in the request parameter handling routines where invalid input triggers information-disclosing error responses. For detailed technical analysis, refer to the I Source: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- ONLINE [Serper web result] metasploit-framework/modules/exploits/multi/http ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This module requires Metasploit: https://metasploit.com/download 'phpMyAdmin 'tbl_find_replace.php'), | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/multi/http/phpmyadmin_null_termination_exec.rb
+- ONLINE [Serper web result] MySQL Search and Replace Example: UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn how to use PhpMyAdmin commands to make a MySQL Search and Replace. Use the MySQL query to change the domain of your WordPress website. | Webpage text: Toll Free: 1-866-389-6676 Home/Knowledge Base/WordPress If you would like to perform a Search and Replace in your MySQL Database without using plugins you can easily do that through phpMyAdmin, in this tutorial we will show how to perform that for WordPress Posts. The MySQL Search and Replace is particularly useful when changing the domain of your WordPress website. Open your phpMyAdmin tool from your cPanel account Navigate to the Database of your WordPress installation and select the `wpDbPrefix_posts` table * Note: If you’re not certain what your Database is you can find out that through your wp-config.php file You should be able to see that the Column that we’ll need to edit is called `guid` Click on the “SQL” tab on the top of your phpMyAdmin interface MySQL Search and Replace Query for WordPress UPDATE `wpqw_posts` SET guid = REPLACE(guid, 'https://oldUrl.com/', 'https://newUrl.com/') WHERE `guid` LIKE 'https://oldUrl.com/%'; Performing this to replace https://example.com to https://newExample.com makes the following changes to the database You might want to replace another Column’s Data for your MySQL Database, not only limited to WordPress’ Posts MySQL Search and Replace Query UPDATE `MySQL_Table` SET `MySQL_Table_Column` = REPLACE(`MySQL_Table_Column`, 'oldString', 'newString') WHERE `MySQL_Table_Column` LIKE 'oldString%'; When Should I use MySQL Search and Replace? Doing a Search and Replace via SQL could be dangerous if you have links that you’re unaware of which shouldn’t be changed. You should Search and Replace only when you’re convinced that you have to change the text in your Database. You should always perform a Database backup before proceeding with any manual changes. This can easily be done through phpMyAdmin: Get a new cheap cpanel hosting account with unlimited number of MYSQL databases. SSD MYSQL hosting on a greatly discounted price – 40% OFF the regular price – starting from $2.94/mo only! Source: https://www.webhostface.com/kb/knowledgebase/mysql-search-replace/
+- ONLINE [Serper web result] How to search MySQL tables in phpMyAdmin: UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn how to search MySQL tables in phpMyAdmin using the query-by-example feature. This step-by-step guide helps you find specific data in your database. Source: https://www.networksolutions.com/help/article/searching-mysql-tables-in-phpmyadmin
+- ONLINE [Official vendor webpage] Security policy — phpMyAdmin 5.2.2 documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ... | Webpage text: The phpMyAdmin developer team is putting lot of effort to make phpMyAdmin as secure as possible. But still web application like phpMyAdmin can be vulnerable to a number of attacks and new ways to exploit are still being explored. For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get’s assigned a CVE ID as well. We might group similar vulnerabilities to one PMASA (eg. multiple XSS vulnerabilities can be announced If you think you’ve found a vulnerability, please see Reporting security issues. In this section, we will describe typical vulnerabilities, which can appear in our code base. This list is by no means complete, it is intended to show Cross-site scripting (XSS) When phpMyAdmin shows a piece of user data, e.g. something inside a user’s database, all html special chars have to be escaped. When this escaping is missing somewhere a malicious user might fill a database with specially crafted content to trick an other user of that database into executing something. This could for example be a piece of JavaScript code that would do any number of phpMyAdmin tries to escape all userdata before it is rendered into html for the Cross-site scripting on Wikipedia Cross-site request forgery (CSRF) An attacker would trick a phpMyAdmin user into clicking on a link to provoke some action in phpMyAdmin. This link could either be sent via email or some random website. If successful this the attacker would be able to perform some action with the users privileges. To mitigate this phpMyAdmin requires a token to be sent on sensitive requests. The idea is that an attacker does not poses the currently valid token to include in the presented link. The token is regenerated for every login, so it’s generally valid only for limited time, what makes it harder for attacker to obtain valid one. Cross-site request forgery on Wikipedia As the whole purpose of phpMyAdmin is to preform sql queries, this is not our first concern. SQL injection is sensitive to us though when it concerns the mysql control connection. This controlconnection can have additional privileges which the logged in user does not poses. E.g. access the phpMyAdmin configuration storage. User data that is included in (administrative) queries should always be run through DatabaseInterface::escapeString(). SQL injection on Wikipedia phpMyAdmin on its own does not rate limit authentication attempts in any way. This is caused by need to work in stateless environment, where there is no way to protect against such kind of things. To mitigate this, you can use Captcha or utilize external tools such as fail2ban, this is more details described in Securing your phpMyAdmin installation. Brute force attack on Wikipedia Reporting security issues Should you find a security issue in the phpMyAdmin programming code, please contact the phpMyAdmin security team in advance before publishing it. This way we can prepare a fix and release the fix together with your announcement. You will be also given credit in our security announcement. You can optionally encrypt your report with PGP key ID DA68AB39218AB947 with following fingerprint: pub 4096R/DA68AB39218AB947 2016-08-02 Key fingerprint = 5BAD 38CF B980 50B9 Source: https://docs.phpmyadmin.net/en/release_5_2_2/security.html
+
+Verification Summary:
+- Affected service: phpMyAdmin.
+- Attack type: Remote Command Execution.
+- Attack technique: Exploit Public-Facing Application (T1190).
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Consensus attack outcome: Success.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: phpMyAdmin tbl_find_replace packet clues: endpoint tbl find replace | phpMyAdmin find replace vulnerability packet clues: endpoint tbl find replace | phpMyAdmin tbl_find_replace.php packet clues: endpoint tbl find replace.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2001-1060
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2005-0543
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2005-0544
+- Evidence-source URL: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+- Evidence-source URL: https://anderlecht.be/phpmyadmin/doc/html/security.html
+- Evidence-source URL: https://docs.phpmyadmin.net/en/latest/config.html
+- Evidence-source URL: https://www.phpmyadmin.net/files/1.3.0/
+- Evidence-source URL: https://phpsources.net/script/php/phpmyadmin/14-189_phpmyadmin,4.5.4.1
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- Evidence-source URL: https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/multi/http/phpmyadmin_null_termination_exec.rb
+- Evidence-source URL: https://www.webhostface.com/kb/knowledgebase/mysql-search-replace/
+- Evidence-source URL: https://www.networksolutions.com/help/article/searching-mysql-tables-in-phpmyadmin
+- Evidence-source URL: https://docs.phpmyadmin.net/en/release_5_2_2/security.html
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for www.networksolutions.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for anderlecht.be: HTTPError: HTTP Error 404: Not Found
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for vuldb.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for labs.gauntletai.com: HTTPError: HTTP Error 302: Found
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Upgrade phpMyAdmin to a currently supported version and decommission PHP 5.3.29; set a supported PHP runtime and remove 'X-Powered-By' exposure (expose_php=Off).
+- Restrict phpMyAdmin access: bind to localhost, require VPN or IP allowlisting, and/or place behind an authenticated reverse proxy; avoid exposing it directly to the Internet.
+- Audit and neutralize regex-evaluation code paths: remove any preg_replace '/e' usage and sanitize Find & Replace features to prevent code evaluation.
+- Deploy a WAF or reverse proxy ruleset to block suspicious requests to //tbl_find_replace.php, flag useRegex=on with function names like system/exec/shell_exec, and detect null-termination or regex injection patterns.
+- Harden PHP runtime: disable dangerous functions (system, exec, shell_exec, passthru, popen), enforce open_basedir, and minimize error verbosity in production.
+- Enforce least privilege: run the web server as a non-privileged user, confine the application with SELinux/AppArmor/containers, and restrict database and filesystem permissions.
+- Enhance monitoring and alerting: log and alert on POSTs to phpMyAdmin operational endpoints (e.g., tbl_find_replace.php), unexpected 200 responses with command-like output, and authentication anomalies.
+- Perform incident response for confirmed RCE: rotate credentials, review webroot for webshells/backdoors, validate database integrity, and compare system state against known-good baselines.
+- Limit or remove phpMyAdmin from production environments; prefer CLI/database administration over secure management networks whenever feasible.
+- Maintain CSRF protections and consider MFA for administrative portals; regularly review phpMyAdmin security announcements (PMASA) and apply vendor patches promptly.

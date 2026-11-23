@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "Joomla Joomla CMS Privilege escalation via unauthorized database tampering Direct SQL INSERTs into Joomla j_users and j_user_usergroup_map using MySQL root to create an admin (Super Users group_id 8)",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Widget Factory Joomla Content Editor Improper Access Control Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Widget Factory Joomla Content Editor : Widget Factory Joomla Content Editor contains an improper access control vulnerability which could allow for upload and execution of PHP code via the creation of new editor profiles for unauthenticated users.  Required action: Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA’s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA’s “Forensics Triage Requirements” (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2026-48907 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-3771: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-3771",
+      "snippet": "Multiple cross-site scripting (XSS) vulnerabilities in Joomla! before 1.0.4 allow remote attackers to inject arbitrary web script or HTML via (1) \"GET and other variables\" and (2) \"SEF\".",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-3771 for a product matching 'Joomla'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-3772: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-3772",
+      "snippet": "Multiple SQL injection vulnerabilities in Joomla! before 1.0.4 allow remote attackers to execute arbitrary SQL commands via the (1) Itemid variable in the Polls modules and (2) multiple unspecified methods in the mosDBTable class.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-3772 for a product matching 'Joomla'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-4650: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-4650",
+      "snippet": "Joomla! 1.03 does not restrict the number of \"Search\" Mambots, which allows remote attackers to cause a denial of service (resource consumption) via a large number of Search Mambots.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-4650 for a product matching 'Joomla'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Joomla – From Nowhere to High Privilege",
+      "url": "https://www.fortinet.com/blog/threat-research/joomla-from-no-one-to-the-highest-privilege",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). When I saw the CVE-2016-8869-“Elevated Privileges” vulnerability in Joomla, the first thing I thought of was the Joomla Privilege Escalation ... | Webpage excerpt: Joomla – From Nowhere to High Privilege Joomla, a popular free and open-source content management system, just released version 3.6.4 that fixed two critical vulnerabilities: [CVE-2016-8870] - Core - Account Creation: attackers can exploit this vulnerability to create any account in a Joomla system regardless of whether its registration has been disabled. [CVE-2016-8869] - Core - Elevated Privileges: with the vulnerability above, an attacker not only can register an account in a vulnerable system, but also register with the highest privilege – Administrator. The “Account creation” vulnerability is addressed in the patch located here https://github.com/joomla/joomla-cms/commit/bae1d43938c878480cfd73671e4945211538fdcf. In this patch, however, they simply removed the “register” function. This is an interesting fix looks because Joomla’s default registration flow does not use this register function. Instead, it uses the register function found in https://github.com/joomla/jo Now, by taking a look at how Joomla has implemented registration, we can understand why this additional function in user.php can be harmful to the system: Figure 1 – Joomla register request",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-48904: Joomla Privilege Escalation Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2026-48904/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-48904 is a privilege escalation vulnerability in Joomla. Learn about its impact, affected versions, and mitigation methods. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Vulnerability Database/CVE-2026-48904 CVE-2026-48904: Joomla Privilege Escalation Vulnerability CVE-2026-48904 is a privilege escalation vulnerability in Joomla caused by improper access checks in the com_users group editing webservice endpoint. This article covers technical details, affected versions, impact, and mitigation. CVE-2026-48904 is a privilege escalation vulnerability in Joomla! affecting the com_users group editing webservice endpoint. An improper access check [CWE-284] allows attackers to manipulate user group assignments through the REST API without proper authorization validation. The flaw enables unauthenticated network-based attackers to escalate privileges and modify user group membership, potentially granting administr Attackers can exploit the com_users webservice endpoint over the network without authentication to alter user group assignments, leading to full privilege escalation against the integrity of the Joomla! application. Joomla! CMS (multiple versions affected by the com_users webservice endpoint flaw) Joomla! installations exposing the REST API webservices",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Security Announcements",
+      "url": "https://developer.joomla.org/security-centre.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This feed provides announcements of resolved security issues in Joomla! software releases. For more information about the Joomla! Security Strike Team ... | Webpage excerpt: This feed provides announcements of resolved security issues in Joomla! software releases. For more information about the Joomla! Security Strike Team (JSST) and its processes, please review our Security article. To report potential security issues, please follow the guidelines in the above referenced article. Please note that we are only able to provide support for the Joomla! CMS, Joomla! Framework, and *.joomla.org network of websites. Joomla! CMS versions 1.5.0-5.4.8, 6.0.0-6.1.3 The JSST at the Joomla! Security Centre. Joomla! CMS versions 1.5.0-5.4.8, 6.0.0-6.1.3 The JSST at the Joomla! Security Centre.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Attackers are exploiting critical vulnerabilities in Joomla's ...",
+      "url": "https://www.facebook.com/CSAsingapore/posts/attackers-are-exploiting-critical-vulnerabilities-in-joomlas-sp-page-builder-and/1329312559386316/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Attackers are exploiting critical vulnerabilities in Joomla's SP Page Builder and Page Builder CK extensions to upload malicious files and ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:58:47.525276+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2005-3771",
+    "CVE-2005-3772",
+    "CVE-2005-4650",
+    "CVE-2026-48907"
+  ],
+  "retrieval_errors": []
+}

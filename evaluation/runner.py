@@ -123,3 +123,37 @@ def run_mafra(
         telemetry_path=telemetry_path,
         memory_audit_path=memory_audit_path,
     )
+
+
+def run_mafra_mcp(
+    pcap_path,
+    *,
+    report_output=None,
+    mcp_url=None,
+    investigation_notebook="enabled",
+    run_id="evaluation",
+    memory_mode="disabled",
+    profile=DEFAULT_EXPERIMENT_PROFILE,
+    telemetry_path=None,
+    memory_audit_path=None,
+):
+    """Run MCP directly on the PCAP so in-process packet checks are preserved."""
+    arguments = [
+        "--pcap", pcap_path,
+        "--memory-mode", memory_mode,
+        "--investigation-notebook", investigation_notebook,
+    ]
+    if report_output is not None:
+        arguments.extend(["--report-output", report_output])
+    if mcp_url is not None:
+        arguments.extend(["--mcp-url", mcp_url])
+    return run_command(
+        "main_mafra_mcp.py",
+        arguments,
+        run_id=run_id,
+        memory_mode=memory_mode,
+        profile=profile,
+        system_name="MAFRA_MCP",
+        telemetry_path=telemetry_path,
+        memory_audit_path=memory_audit_path,
+    )

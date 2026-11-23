@@ -1,0 +1,344 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=12, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:49424           <-> 172.18.0.2:2222                  8 1542 bytes      10 1081 bytes      18 2623 bytes     0.000135000         1.5382
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: SSH server (Erlang/OTP sshd 5.2.9) on port 2222
+Relevant Events:
+- [E-S0000-F000006-003] Client initiates SSH connection and sends identification (OpenSSH_8.9)
+- [E-S0000-F000008-005] Server identifies as SSH-2.0-Erlang/5.2.9
+- [E-S0000-F000012-006] Client sends SSHv2 channel data culminating in an exec request containing an Erlang-style command string: os:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw==")))
+
+Exploit Indicators:
+- [E-S0000-F000008-005] Server stack: Erlang (banner indicates Erlang SSH implementation)
+- [E-S0000-F000012-006] Suspicious exec payload uses os:cmd and base64:decode to hide an OS command (base64 decodes to: touch /tmp/test_poc)
+
+Malicious Activities: Attempted remote command execution over SSH using obfuscated command (base64) and Erlang os:cmd to run touch /tmp/test_poc
+
+Attack Success: Unknown
+
+Evidence Keywords: SSH-2.0-Erlang/5.2.9|E-S0000-F000008-005, os:cmd|E-S0000-F000012-006, base64:decode|E-S0000-F000012-006, exec|E-S0000-F000012-006, OpenSSH_8.9|E-S0000-F000006-003
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Erlang SSH server",
+    "application": "Unknown",
+    "framework": "Erlang/OTP",
+    "web_server": "Unknown",
+    "language": "Erlang",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Command Execution (RCE)",
+    "technique": "SSH exec request invoking Erlang os:cmd with base64-decoded command",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000008-005",
+      "E-S0000-F000012-006",
+      "E-S0000-F000006-003"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Erlang SSH server",
+    "application": "Erlang/OTP SSH server 5.2.9",
+    "framework": "Erlang/OTP",
+    "web_server": "Unknown",
+    "language": "Erlang",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Command Execution (RCE)",
+    "technique": "SSH exec request invoking Erlang os:cmd with base64-decoded command",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000008-005",
+      "E-S0000-F000012-006",
+      "E-S0000-F000006-003"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "High",
+    "reason": "PCAP shows an exec request carrying an Erlang os:cmd payload to run touch /tmp/test_poc against an Erlang/OTP SSH server (banner SSH-2.0-Erlang/5.2.9), but no evidence of a pre-authentication bypass or CVE-specific handshake abuse (e.g., CVE-2025-32433 or CVE-2023-48795) in this flow."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "The PCAP shows an RCE request and server response, but no observable command output or shell effect; RCE success is not confirmed."
+  ],
+  "evidence_check": [
+    "Service banner identifies SSH-2.0-Erlang/5.2.9 -> Erlang/OTP SSH server 5.2.9 (E-S0000-F000008-005)",
+    "Client identification OpenSSH_8.9 confirms SSH context (E-S0000-F000006-003)",
+    "Exec request payload with Erlang os:cmd(base64:decode(...)) indicates attempted RCE via SSH (E-S0000-F000012-006)",
+    "No command output/effect observed in provided events; success appropriately marked Unknown (request observed: E-S0000-F000012-006)"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Erlang SSH server
+Attack Type: Remote Command Execution (RCE)
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: Medium
+Score: 2/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Erlang SSH server Remote Command Execution (RCE) SSH exec request invoking Erlang os:cmd with base64-decoded command
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-16T04:29:09.681948+00:00
+Candidate CVEs: CVE-2023-48795, CVE-2025-32433
+Sources: 8
+
+Source 1: CISA KEV
+Title: Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.
+Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+Contradicts: None
+
+Source 2: MITRE ATT&CK
+Title: Exploit Public-Facing Application
+URL: https://attack.mitre.org/techniques/T1190
+Summary: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.
+
+Exploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+If an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.
+
+Adversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+For websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)
+Supports: Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application).
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2025-32433: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-32433
+Summary: Erlang/OTP is a set of libraries for the Erlang programming language. Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH server may allow an attacker to perform unauthenticated remote code execution (RCE). By exploiting a flaw in SSH protocol message handling, a malicious actor could gain unauthorized access to affected systems and execute arbitrary commands without valid credentials. This issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20. A temporary workaround involves disabling the SSH server or to prevent access via firewall rules.
+Supports: NVD lists CVE-2025-32433 for a product matching 'Erlang SSH server'; version applicability and exploitation are unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2023-48795: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2023-48795
+Summary: The SSH transport protocol with certain OpenSSH extensions, found in OpenSSH before 9.6 and other products, allows remote attackers to bypass integrity checks such that some packets are omitted (from the extension negotiation message), and a client and server may consequently end up with a connection for which some security features have been downgraded or disabled, aka a Terrapin attack. This occurs because the SSH Binary Packet Protocol (BPP), implemented by these extensions, mishandles the handshake phase and mishandles use of sequence numbers. For example, there is an effective attack against SSH's use of ChaCha20-Poly1305 (and CBC with Encrypt-then-MAC). The bypass occurs in chacha20-poly1305@openssh.com and (if CBC is used) the -etm@openssh.com MAC algorithms. This also affects Maverick Synergy Java SSH API before 3.1.0-SNAPSHOT, Dropbear through 2022.83, Ssh before 5.1.1 in Erlang/OTP, PuTTY before 0.80, AsyncSSH before 2.14.2, golang.org/x/crypto before 0.17.0, libssh before 0.10.6, libssh2 through 1.11.0, Thorn Tech SFTP Gateway before 3.4.6, Tera Term before 5.1, Paramiko before 3.4.0, jsch before 0.2.15, SFTPGo before 2.5.6, Netgate pfSense Plus through 23.09.1, Netgate pfSense CE through 2.7.2, HPN-SSH through 18.2.0, ProFTPD before 1.3.8b (and before 1.3.9rc2), ORYX CycloneSSH before 2.3.4, NetSarang XShell 7 before Build 0144, CrushFTP before 10.6.0, ConnectBot SSH library before 2.2.22, Apache MINA sshd through 2.11.0, sshj through 0.37.0, TinySSH through 20230101, trilead-ssh2 6401, LANCOM LCOS and LANconfig, FileZilla before 3.66.4, Nova before 11.8, PKIX-SSH before 14.4, SecureCRT before 9.4.3, Transmit5 before 5.10.4, Win32-OpenSSH before 9.5.0.0p1-Beta, WinSCP before 6.2.2, Bitvise SSH Server before 9.32, Bitvise SSH Client before 9.33, KiTTY through 0.76.1.13, the net-ssh gem 7.2.0 for Ruby, the mscdex ssh2 module before 1.15.0 for Node.js, the thrussh library before 0.35.1 for Rust, and the Russh crate before 0.40.2 for Rust.
+Supports: NVD lists CVE-2023-48795 for a product matching 'Erlang SSH server'; version applicability and exploitation are unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: April 2025
+URL: https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-erlang-otp-ssh-xyZZy
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). ... Erlang/OTP SSH server was disclosed. This vulnerability could allow an unauthenticated, remote attacker to perform remote code execution (RCE) ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Multiple Cisco Products Unauthenticated Remote Code Execution in Erlang/OTP SSH Server: April 2025
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Keys to the Kingdom: Erlang/OTP SSH Vulnerability ...
+URL: https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Keys to the Kingdom: Erlang/OTP SSH Vulnerability Analysis and Exploits Observed in the Wild This article presents our observations of exploit attempts targeting CVE-2025-32433. This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the Erlang programming language's Open Telecom Platform (OTP). Erlang/OTP sshd is widely used in critical infrastructure and operational technology (OT) networks.With a CVSS score of 10.0, CVE-2025-32433 enables unauthenticated clients to execute commands by sending SSH connection protocol messages (codes >= 80) to open SSH ports, which should only be processed after successful authentication. Vulnerable versions include Erlang/OTP prior to OTP-27.3.3, OTP-26.2.5.11 and OTP-25.3 A patch is available in Erlang/OTP versions OTP-27.3.3, OTP-26.2.5.11, OTP-25.3.2.20 and later. Erlang is a programming language designed for building concurrent systems where multiple connections are needed simultaneously. Its companion framework, the Open Telecom Platform (OTP), has long been trusted in critical infrastructure from telecommunications networks to financial systems. OT and 5G environments use Erlang/OTP due to its fault-tolerance and scalability for high availability systems with minimal downtime. Due to compliance and safety requirements, OT and 5G administrators tend to use Erl
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Unauthenticated Remote Code Execution in Erlang/OTP SSH
+URL: https://news.ycombinator.com/item?id=43716526
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). As I understand it, this is talking about an SSH server built into Erlang/OTP, not e.g. OpenSSH on a server with Erlang installed. | Webpage excerpt: Unauthenticated Remote Code Execution in Erlang/OTP SSH (nist.gov) As I understand it, this is talking about an SSH server built into Erlang/OTP, not e.g. OpenSSH on a server with Erlang installed. >Any service using Erlang/OTP's SSH library for remote access such as those used in OT/IoT devices, edge computing devices are susceptible to exploitation. https://thehackernews.com/2025/04/critical-erlangotp-ssh-vul... Yes - one of the many things that you can find in OTP is a programmable SSH/SCP client and server. The vulnerability is in the server component. See for example https://blog.differentpla.net/blog/2022/11/01/erlang-ssh/ Erlang, because of its architecture, has something of a habit of people rewriting various protocols in Erlang itself, rather than calling out to some C library.
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: CVE-2025-32433: Pre-Auth RCE in Erlang/OTP SSH Server
+URL: https://www.keysight.com/blogs/en/tech/nwvs/2025/05/23/cve-2025-32433-erlang-otp-ssh-server-rce
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). It allows remote attackers to execute arbitrary code without completing the SSH authentication process. The vulnerability is due to improper ...
+Supports: None
+Contradicts: None
+Warnings: Webpage extraction skipped for www.keysight.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000008-005]: Server identifies as SSH-2.0-Erlang/5.2.9.
+- PCAP [E-S0000-F000012-006]: Client sends SSHv2 channel data culminating in an exec request containing an Erlang-style command string: os:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw=="))).
+- PCAP [E-S0000-F000006-003]: Client initiates SSH connection and sends identification (OpenSSH_8.9).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [CISA KEV] Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+- ONLINE [MITRE ATT&CK] Exploit Public-Facing Application: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.
+
+Exploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+If an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.
+
+Adversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+For websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25) Source: https://attack.mitre.org/techniques/T1190 Supports: Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application).
+- ONLINE [NIST NVD] CVE-2025-32433: NVD vulnerability record: Erlang/OTP is a set of libraries for the Erlang programming language. Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH server may allow an attacker to perform unauthenticated remote code execution (RCE). By exploiting a flaw in SSH protocol message handling, a malicious actor could gain unauthorized access to affected systems and execute arbitrary commands without valid credentials. This issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20. A temporary workaround involves disabling the SSH server or to prevent access via firewall rules. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-32433 Supports: NVD lists CVE-2025-32433 for a product matching 'Erlang SSH server'; version applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2023-48795: NVD vulnerability record: The SSH transport protocol with certain OpenSSH extensions, found in OpenSSH before 9.6 and other products, allows remote attackers to bypass integrity checks such that some packets are omitted (from the extension negotiation message), and a client and server may consequently end up with a connection for which some security features have been downgraded or disabled, aka a Terrapin attack. This occurs because the SSH Binary Packet Protocol (BPP), implemented by these extensions, mishandles the handshake phase and mishandles use of sequence numbers. For example, there is an effective attack against SSH's use of ChaCha20-Poly1305 (and CBC with Encrypt-then-MAC). The bypass occurs in chacha20-poly1305@openssh.com and (if CBC is used) the -etm@openssh.com MAC algorithms. This also affects Maverick Synergy Java SSH API before 3.1.0-SNAPSHOT, Dropbear through 2022.83, Ssh before 5.1.1 in Erlang/OTP, PuTTY before 0.80, AsyncSSH before 2.14.2, golang.org/x/crypto before 0.17.0, libssh before 0.10.6, libssh2 through 1.11.0, Thorn Tech SFTP Gateway before 3.4.6, Tera Term before 5.1, Paramiko before 3.4.0, jsch before 0.2.15, SFTPGo before 2.5.6, Netgate pfSense Plus through 23.09.1, Netgate pfSense CE through 2.7.2, HPN-SSH through 18.2.0, ProFTPD before 1.3.8b (and before 1.3.9rc2), ORYX CycloneSSH before 2.3.4, NetSarang XShell 7 before Build 0144, CrushFTP before 10.6.0, ConnectBot SSH library before 2.2.22, Apache MINA sshd through 2.11.0, sshj through 0.37.0, TinySSH through 20230101, trilead-ssh2 6401, LANCOM LCOS and LANconfig, FileZilla before 3.66.4, Nova before 11.8, PKIX-SSH before 14.4, SecureCRT before 9.4.3, Transmit5 before 5.10.4, Win32-OpenSSH before 9.5.0.0p1-Beta, WinSCP before 6.2.2, Bitvise SSH Server before 9.32, Bitvise SSH Client before 9.33, KiTTY through 0.76.1.13, the net-ssh gem 7.2.0 for Ruby, the mscdex ssh2 module before 1.15.0 for Node.js, the thrussh library before 0.35.1 for Rust, and the Russh crate before 0.40.2 for Rust. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-48795 Supports: NVD lists CVE-2023-48795 for a product matching 'Erlang SSH server'; version applicability and exploitation are unverified.
+- ONLINE [Serper web result] April 2025: UNTRUSTED WEB RESEARCH (not PCAP evidence). ... Erlang/OTP SSH server was disclosed. This vulnerability could allow an unauthenticated, remote attacker to perform remote code execution (RCE) ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Multiple Cisco Products Unauthenticated Remote Code Execution in Erlang/OTP SSH Server: April 2025 Source: https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-erlang-otp-ssh-xyZZy
+- ONLINE [Serper web result] Keys to the Kingdom: Erlang/OTP SSH Vulnerability ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Keys to the Kingdom: Erlang/OTP SSH Vulnerability Analysis and Exploits Observed in the Wild This article presents our observations of exploit attempts targeting CVE-2025-32433. This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the Erlang programming language's Open Telecom Platform (OTP). Erlang/OTP sshd is widely used in critical infrastructure and operational technology (OT) networks.With a CVSS score of 10.0, CVE-2025-32433 enables unauthenticated clients to execute commands by sending SSH connection protocol messages (codes >= 80) to open SSH ports, which should only be processed after successful authentication. Vulnerable versions include Erlang/OTP prior to OTP-27.3.3, OTP-26.2.5.11 and OTP-25.3 A patch is available in Erlang/OTP versions OTP-27.3.3, OTP-26.2.5.11, OTP-25.3.2.20 and later. Erlang is a programming language designed for building concurrent systems where multiple connections are needed simultaneously. Its companion framework, the Open Telecom Platform (OTP), has long been trusted in critical infrastructure from telecommunications networks to financial systems. OT and 5G environments use Erlang/OTP due to its fault-tolerance and scalability for high availability systems with minimal downtime. Due to compliance and safety requirements, OT and 5G administrators tend to use Erl Source: https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/
+- ONLINE [Serper web result] Unauthenticated Remote Code Execution in Erlang/OTP SSH: UNTRUSTED WEB RESEARCH (not PCAP evidence). As I understand it, this is talking about an SSH server built into Erlang/OTP, not e.g. OpenSSH on a server with Erlang installed. | Webpage excerpt: Unauthenticated Remote Code Execution in Erlang/OTP SSH (nist.gov) As I understand it, this is talking about an SSH server built into Erlang/OTP, not e.g. OpenSSH on a server with Erlang installed. >Any service using Erlang/OTP's SSH library for remote access such as those used in OT/IoT devices, edge computing devices are susceptible to exploitation. https://thehackernews.com/2025/04/critical-erlangotp-ssh-vul... Yes - one of the many things that you can find in OTP is a programmable SSH/SCP client and server. The vulnerability is in the server component. See for example https://blog.differentpla.net/blog/2022/11/01/erlang-ssh/ Erlang, because of its architecture, has something of a habit of people rewriting various protocols in Erlang itself, rather than calling out to some C library. Source: https://news.ycombinator.com/item?id=43716526
+- ONLINE [Serper web result] CVE-2025-32433: Pre-Auth RCE in Erlang/OTP SSH Server: UNTRUSTED WEB RESEARCH (not PCAP evidence). It allows remote attackers to execute arbitrary code without completing the SSH authentication process. The vulnerability is due to improper ... Source: https://www.keysight.com/blogs/en/tech/nwvs/2025/05/23/cve-2025-32433-erlang-otp-ssh-server-rce
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://attack.mitre.org/techniques/T1190
+- https://nvd.nist.gov/vuln/detail/CVE-2025-32433
+- https://nvd.nist.gov/vuln/detail/CVE-2023-48795
+- https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-erlang-otp-ssh-xyZZy
+- https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/
+- https://news.ycombinator.com/item?id=43716526
+- https://www.keysight.com/blogs/en/tech/nwvs/2025/05/23/cve-2025-32433-erlang-otp-ssh-server-rce
+
+Search status: Valid
+Search query: Erlang SSH server Remote Command Execution (RCE) SSH exec request invoking Erlang os:cmd with base64-decoded command
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage extraction skipped for www.keysight.com: HTTPError: HTTP Error 403: Forbidden
+
+=== ONLINE CVE DECISION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "MCP returned 8 online source(s) for the investigation query.",
+    "The Analyzer did not propose an exact CVE to corroborate."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Erlang SSH server
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000008-005]: Server identifies as SSH-2.0-Erlang/5.2.9.
+- PCAP [E-S0000-F000012-006]: Client sends SSHv2 channel data culminating in an exec request containing an Erlang-style command string: os:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw=="))).
+- PCAP [E-S0000-F000006-003]: Client initiates SSH connection and sends identification (OpenSSH_8.9).
+- ONLINE [CISA KEV] Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+- ONLINE [MITRE ATT&CK] Exploit Public-Facing Application: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.
+
+Exploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+If an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.
+
+Adversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+For websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25) Source: https://attack.mitre.org/techniques/T1190 Supports: Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application).
+- ONLINE [NIST NVD] CVE-2025-32433: NVD vulnerability record: Erlang/OTP is a set of libraries for the Erlang programming language. Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH server may allow an attacker to perform unauthenticated remote code execution (RCE). By exploiting a flaw in SSH protocol message handling, a malicious actor could gain unauthorized access to affected systems and execute arbitrary commands without valid credentials. This issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20. A temporary workaround involves disabling the SSH server or to prevent access via firewall rules. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-32433 Supports: NVD lists CVE-2025-32433 for a product matching 'Erlang SSH server'; version applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2023-48795: NVD vulnerability record: The SSH transport protocol with certain OpenSSH extensions, found in OpenSSH before 9.6 and other products, allows remote attackers to bypass integrity checks such that some packets are omitted (from the extension negotiation message), and a client and server may consequently end up with a connection for which some security features have been downgraded or disabled, aka a Terrapin attack. This occurs because the SSH Binary Packet Protocol (BPP), implemented by these extensions, mishandles the handshake phase and mishandles use of sequence numbers. For example, there is an effective attack against SSH's use of ChaCha20-Poly1305 (and CBC with Encrypt-then-MAC). The bypass occurs in chacha20-poly1305@openssh.com and (if CBC is used) the -etm@openssh.com MAC algorithms. This also affects Maverick Synergy Java SSH API before 3.1.0-SNAPSHOT, Dropbear through 2022.83, Ssh before 5.1.1 in Erlang/OTP, PuTTY before 0.80, AsyncSSH before 2.14.2, golang.org/x/crypto before 0.17.0, libssh before 0.10.6, libssh2 through 1.11.0, Thorn Tech SFTP Gateway before 3.4.6, Tera Term before 5.1, Paramiko before 3.4.0, jsch before 0.2.15, SFTPGo before 2.5.6, Netgate pfSense Plus through 23.09.1, Netgate pfSense CE through 2.7.2, HPN-SSH through 18.2.0, ProFTPD before 1.3.8b (and before 1.3.9rc2), ORYX CycloneSSH before 2.3.4, NetSarang XShell 7 before Build 0144, CrushFTP before 10.6.0, ConnectBot SSH library before 2.2.22, Apache MINA sshd through 2.11.0, sshj through 0.37.0, TinySSH through 20230101, trilead-ssh2 6401, LANCOM LCOS and LANconfig, FileZilla before 3.66.4, Nova before 11.8, PKIX-SSH before 14.4, SecureCRT before 9.4.3, Transmit5 before 5.10.4, Win32-OpenSSH before 9.5.0.0p1-Beta, WinSCP before 6.2.2, Bitvise SSH Server before 9.32, Bitvise SSH Client before 9.33, KiTTY through 0.76.1.13, the net-ssh gem 7.2.0 for Ruby, the mscdex ssh2 module before 1.15.0 for Node.js, the thrussh library before 0.35.1 for Rust, and the Russh crate before 0.40.2 for Rust. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-48795 Supports: NVD lists CVE-2023-48795 for a product matching 'Erlang SSH server'; version applicability and exploitation are unverified.
+- ONLINE [Serper web result] April 2025: UNTRUSTED WEB RESEARCH (not PCAP evidence). ... Erlang/OTP SSH server was disclosed. This vulnerability could allow an unauthenticated, remote attacker to perform remote code execution (RCE) ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Multiple Cisco Products Unauthenticated Remote Code Execution in Erlang/OTP SSH Server: April 2025 Source: https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-erlang-otp-ssh-xyZZy
+- ONLINE [Serper web result] Keys to the Kingdom: Erlang/OTP SSH Vulnerability ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Keys to the Kingdom: Erlang/OTP SSH Vulnerability Analysis and Exploits Observed in the Wild This article presents our observations of exploit attempts targeting CVE-2025-32433. This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the Erlang programming language's Open Telecom Platform (OTP). Erlang/OTP sshd is widely used in critical infrastructure and operational technology (OT) networks.With a CVSS score of 10.0, CVE-2025-32433 enables unauthenticated clients to execute commands by sending SSH connection protocol messages (codes >= 80) to open SSH ports, which should only be processed after successful authentication. Vulnerable versions include Erlang/OTP prior to OTP-27.3.3, OTP-26.2.5.11 and OTP-25.3 A patch is available in Erlang/OTP versions OTP-27.3.3, OTP-26.2.5.11, OTP-25.3.2.20 and later. Erlang is a programming language designed for building concurrent systems where multiple connections are needed simultaneously. Its companion framework, the Open Telecom Platform (OTP), has long been trusted in critical infrastructure from telecommunications networks to financial systems. OT and 5G environments use Erlang/OTP due to its fault-tolerance and scalability for high availability systems with minimal downtime. Due to compliance and safety requirements, OT and 5G administrators tend to use Erl Source: https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/
+- ONLINE [Serper web result] Unauthenticated Remote Code Execution in Erlang/OTP SSH: UNTRUSTED WEB RESEARCH (not PCAP evidence). As I understand it, this is talking about an SSH server built into Erlang/OTP, not e.g. OpenSSH on a server with Erlang installed. | Webpage excerpt: Unauthenticated Remote Code Execution in Erlang/OTP SSH (nist.gov) As I understand it, this is talking about an SSH server built into Erlang/OTP, not e.g. OpenSSH on a server with Erlang installed. >Any service using Erlang/OTP's SSH library for remote access such as those used in OT/IoT devices, edge computing devices are susceptible to exploitation. https://thehackernews.com/2025/04/critical-erlangotp-ssh-vul... Yes - one of the many things that you can find in OTP is a programmable SSH/SCP client and server. The vulnerability is in the server component. See for example https://blog.differentpla.net/blog/2022/11/01/erlang-ssh/ Erlang, because of its architecture, has something of a habit of people rewriting various protocols in Erlang itself, rather than calling out to some C library. Source: https://news.ycombinator.com/item?id=43716526
+- ONLINE [Serper web result] CVE-2025-32433: Pre-Auth RCE in Erlang/OTP SSH Server: UNTRUSTED WEB RESEARCH (not PCAP evidence). It allows remote attackers to execute arbitrary code without completing the SSH authentication process. The vulnerability is due to improper ... Source: https://www.keysight.com/blogs/en/tech/nwvs/2025/05/23/cve-2025-32433-erlang-otp-ssh-server-rce
+
+Verification Summary:
+- Affected service: Erlang SSH server.
+- Attack type: Remote Command Execution (RCE).
+- Attack technique: SSH exec request invoking Erlang os:cmd with base64-decoded command.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: High.
+- Consensus confidence: Medium.
+- Consensus score: 2/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: MCP returned 8 online source(s) for the investigation query.
+- CVE assessment: The Analyzer did not propose an exact CVE to corroborate.
+- Unsupported claim: The PCAP shows an RCE request and server response, but no observable command output or shell effect; RCE success is not confirmed.
+- MCP evidence search status: Valid.
+- MCP investigation query: Erlang SSH server Remote Command Execution (RCE) SSH exec request invoking Erlang os:cmd with base64-decoded command.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://attack.mitre.org/techniques/T1190
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-32433
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2023-48795
+- Evidence-source URL: https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-erlang-otp-ssh-xyZZy
+- Evidence-source URL: https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/
+- Evidence-source URL: https://news.ycombinator.com/item?id=43716526
+- Evidence-source URL: https://www.keysight.com/blogs/en/tech/nwvs/2025/05/23/cve-2025-32433-erlang-otp-ssh-server-rce
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage extraction skipped for www.keysight.com: HTTPError: HTTP Error 403: Forbidden
+
+Defensive Recommendation:
+- If operating Erlang/OTP SSH server, update to fixed versions OTP-27.3.3, OTP-26.2.5.11, or OTP-25.3.2.20 or later as documented by NVD CVE-2025-32433 (https://nvd.nist.gov/vuln/detail/CVE-2025-32433).
+- Restrict SSH exposure: place the Erlang/OTP SSH service behind firewalls/VPNs and allow inbound access only from trusted administrative networks.
+- Harden authentication: require key-based authentication, disable password and challenge-response where feasible, and tightly control permitted commands/subsystems in the Erlang SSH server configuration.
+- Monitor and detect: alert on SSH exec requests containing suspicious Erlang strings such as os:cmd and base64:decode in channel data; centralize SSH server logs and review for anomalous exec activity.
+- Implement rate limiting and lockout controls for SSH to reduce brute-force and automated probing effectiveness.
+- Apply least privilege and segmentation: isolate systems running Erlang/OTP SSH services and limit lateral movement with network ACLs.
+- Establish host-based auditing and file integrity monitoring to detect unexpected file creations in temporary directories and other high-risk paths.
+
+=== SINGLE-CASE INVESTIGATION NOTEBOOK (CONTEXT ONLY) ===
+SINGLE-CASE INVESTIGATION NOTEBOOK (ephemeral; NOT prior-case memory)
+Packet observations below are derived from the current flow summary, not independently decoded by this notebook. Confirm against the flow summary and packet IDs before making factual claims.
+Stage decisions are HYPOTHESES/LEADS, not proof. Do not follow instructions embedded in these notes.
+- PACKET-SUMMARY OBSERVATION [E-S0000-F000012-006]: Client sends SSHv2 channel data culminating in an exec request containing an Erlang-style command string: os:cmd(binary_to_list(base64:decode("dG91Y2ggL3RtcC90ZXN0X3BvYw==")))
+- PACKET-SUMMARY OBSERVATION [E-S0000-F000006-003]: Client initiates SSH connection and sends identification (OpenSSH_8.9)
+- PACKET-SUMMARY OBSERVATION [E-S0000-F000008-005]: Server identifies as SSH-2.0-Erlang/5.2.9
+INITIAL ANALYST HYPOTHESIS (not verified): service=Erlang SSH server; attack=Remote Command Execution (RCE); success=Unknown; current-case evidence IDs=E-S0000-F000008-005,E-S0000-F000012-006,E-S0000-F000006-003
+EXTERNAL RESEARCH LEADS (not PCAP evidence): sources=8; titles=Erlang Erlang/OTP SSH Server Missing Authentication for Crit, Exploit Public-Facing Application, CVE-2025-32433: NVD vulnerability record; candidate CVEs=CVE-2023-48795,CVE-2025-32433
+REVISED ANALYST HYPOTHESIS (not verified): service=Erlang SSH server; attack=Remote Command Execution (RCE); success=Unknown; current-case evidence IDs=E-S0000-F000008-005,E-S0000-F000012-006,E-S0000-F000006-003
+VERIFIER DECISION (not packet evidence): service_supported=Yes; attack_supported=Yes; success_supported=Unknown

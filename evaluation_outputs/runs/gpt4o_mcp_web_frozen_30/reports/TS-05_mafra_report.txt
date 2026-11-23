@@ -1,0 +1,237 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: TCP=16, HTTP=4, ARP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:50168           <-> 172.18.0.2:3000                  4 453 bytes       6 483 bytes      10 936 bytes     0.000000000         0.0096
+172.18.0.1:55670           <-> 172.18.0.2:3000                  4 453 bytes       6 564 bytes      10 1017 bytes    10.025536000         0.0064
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0000-F000006-009 | server->client] Location: /login
+- [E-S0001-F000018-007 | client->server] X-Middleware-Subrequest: middleware:middleware:middleware:middleware:middleware
+- [E-S0001-F000020-010 | server->client] Location: /login
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Web Server (unknown version)
+Relevant Events:
+- [E-S0000-F000004-004] GET request to root path (/)
+- [E-S0000-F000006-008] HTTP Status 307 Temporary Redirect
+- [E-S0000-F000006-009] Redirect to /login
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP Status 307, Redirect, E-S0000-F000004-004, E-S0000-F000006-008, E-S0000-F000006-009
+
+--- Stream 1 [VALID] ---
+Service: Web Application (unknown version)
+Relevant Events:
+- [E-S0001-F000018-004] GET request to /
+- [E-S0001-F000020-009] HTTP Status 307 Temporary Redirect
+- [E-S0001-F000020-010] Redirect Location: /login
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: HTTP Status 307, Redirect, [E-S0001-F000018-004], [E-S0001-F000020-009], [E-S0001-F000020-010]
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Unknown",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000006-009",
+      "E-S0001-F000018-007",
+      "E-S0001-F000020-010"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Web Application",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "HTTP Redirect",
+    "technique": "Potential Middleware Subrequest Exposure",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000006-009",
+      "E-S0001-F000018-007",
+      "E-S0001-F000020-010"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2025-30218",
+    "confidence": "Low",
+    "reason": "Presence of X-Middleware-Subrequest header suggests potential exposure, but no direct evidence of exploitation."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "No",
+  "unsupported_claims": [
+    "CVE-2025-30218"
+  ],
+  "evidence_check": [
+    "E-S0000-F000006-009",
+    "E-S0001-F000018-007",
+    "E-S0001-F000020-010"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Web Application
+Attack Type: HTTP Redirect
+Attack Success: Unknown
+CVE: CVE-2025-30218
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: No
+Verifier Confidence: Medium
+Overall Confidence: Low
+Score: 2/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: packet clues: header middleware subrequest
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-22T05:48:08.994790+00:00
+Candidate CVEs: CVE-2025-30218
+Sources: 1
+
+Source 1: NIST NVD
+Title: CVE-2025-30218: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-30218
+Summary: Next.js is a React framework for building full-stack web applications. To mitigate CVE-2025-29927, Next.js validated the x-middleware-subrequest-id which persisted across multiple incoming requests. However, this subrequest ID is sent to all requests, even if the destination is not the same host as the Next.js application. Initiating a fetch request to a third-party within Middleware will send the x-middleware-subrequest-id to that third party. This vulnerability is fixed in 12.3.6, 13.5.10, 14.2.26, and 15.2.4.
+Supports: NVD lists CVE-2025-30218 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000006-009]: Redirect to /login.
+- PCAP [E-S0001-F000018-007]: Description unavailable in flow summary; verify this reference against the original capture.
+- PCAP [E-S0001-F000020-010]: Redirect Location: /login.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [NIST NVD] CVE-2025-30218: NVD vulnerability record: Next.js is a React framework for building full-stack web applications. To mitigate CVE-2025-29927, Next.js validated the x-middleware-subrequest-id which persisted across multiple incoming requests. However, this subrequest ID is sent to all requests, even if the destination is not the same host as the Next.js application. Initiating a fetch request to a third-party within Middleware will send the x-middleware-subrequest-id to that third party. This vulnerability is fixed in 12.3.6, 13.5.10, 14.2.26, and 15.2.4. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-30218 Supports: NVD lists CVE-2025-30218 as a research lead; product identity, version applicability, and exploitation remain unverified.
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2025-30218
+
+Search status: Valid
+Search query: packet clues: header middleware subrequest
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- 1 cited packet reference(s) lack a matching description in the saved flow summary; they are NOT independently verified by the report formatter.
+
+=== ONLINE CVE DECISION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "MCP returned 1 online source(s) for the investigation query.",
+    "The Verifier did not support the proposed CVE."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Web Application
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000006-009]: Redirect to /login.
+- PCAP [E-S0001-F000018-007]: Description unavailable in flow summary; verify this reference against the original capture.
+- PCAP [E-S0001-F000020-010]: Redirect Location: /login.
+- ONLINE [NIST NVD] CVE-2025-30218: NVD vulnerability record: Next.js is a React framework for building full-stack web applications. To mitigate CVE-2025-29927, Next.js validated the x-middleware-subrequest-id which persisted across multiple incoming requests. However, this subrequest ID is sent to all requests, even if the destination is not the same host as the Next.js application. Initiating a fetch request to a third-party within Middleware will send the x-middleware-subrequest-id to that third party. This vulnerability is fixed in 12.3.6, 13.5.10, 14.2.26, and 15.2.4. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-30218 Supports: NVD lists CVE-2025-30218 as a research lead; product identity, version applicability, and exploitation remain unverified.
+
+Verification Summary:
+- Affected service: Web Application.
+- Attack type: HTTP Redirect.
+- Attack technique: Potential Middleware Subrequest Exposure.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 2/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: MCP returned 1 online source(s) for the investigation query.
+- CVE assessment: The Verifier did not support the proposed CVE.
+- Unsupported claim: CVE-2025-30218
+- MCP evidence search status: Valid.
+- MCP investigation query: packet clues: header middleware subrequest.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-30218
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: 1 cited packet reference(s) lack a matching description in the saved flow summary; they are NOT independently verified by the report formatter.
+
+Defensive Recommendation:
+- Review and update middleware configurations to ensure subrequest headers are not exposed to unintended third parties.
+- Consider upgrading Next.js to versions 12.3.6, 13.5.10, 14.2.26, or 15.2.4 to mitigate potential vulnerabilities related to x-middleware-subrequest-id.

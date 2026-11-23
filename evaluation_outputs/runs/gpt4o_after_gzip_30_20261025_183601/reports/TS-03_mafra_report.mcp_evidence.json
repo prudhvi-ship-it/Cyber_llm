@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "Vite path traversal vulnerability endpoint etc passwd packet clues: endpoint etc passwd",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Vite Vitejs Improper Access Control Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Vite Vitejs: Vite Vitejs contains an improper access control vulnerability that exposes content of non-allowed files using ?inline&import or ?raw?import. Only apps explicitly exposing the Vite dev server to the network (using --host or server.host config option) are affected. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2025-31125 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-59140: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-59140",
+      "snippet": "backlash parses collected strings with escapes. On 8 September 2025, the npm publishing account for backslash was taken over after a phishing attack. Version 0.2.1 was published, functionally identical to the previous patch version, but with a malware payload added attempting to redirect cryptocurrency transactions to the attacker's own addresses from within browser environments. Local environments, server environments, command line applications, etc. are not affected. If the package was used in a browser context (e.g. a direct <script> inclusion, or via a bundling tool such as Babel, Rollup, Vite, Next.js, etc.) there is a chance the malware still exists and such bundles will need to be rebuilt. The malware seemingly only targets cryptocurrency transactions and wallets such as MetaMask. npm removed the offending package from the registry over the course of the day on 8 September, preventing further downloads from npm proper. On 13 September, the package owner published new patch versions to help cache-bust those using private registries who might still have the compromised version cached. Users should upgrade to the latest patch version, completely remove their node_modules directory, clean their package manager's global cache, and rebuild any browser bundles from scratch. Those operating private registries or registry mirrors should purge the offending versions from any caches. This issues is resolved in 0.2.2.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-59140 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-59141: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-59141",
+      "snippet": "simple-swizzle swizzles function arguments. On 8 September 2025, the npm publishing account for simple-swizzle was taken over after a phishing attack. Version 0.2.3 was published, functionally identical to the previous patch version, but with a malware payload added attempting to redirect cryptocurrency transactions to the attacker's own addresses from within browser environments. Local environments, server environments, command line applications, etc. are not affected. If the package was used in a browser context (e.g. a direct <script> inclusion, or via a bundling tool such as Babel, Rollup, Vite, Next.js, etc.) there is a chance the malware still exists and such bundles will need to be rebuilt. The malware seemingly only targets cryptocurrency transactions and wallets such as MetaMask. npm removed the offending package from the registry over the course of the day on 8 September, preventing further downloads from npm proper. On 13 September, the package owner published new patch versions to help cache-bust those using private registries who might still have the compromised version cached. Users should update to the latest patch version, completely remove their node_modules directory, clean their package manager's global cache, and rebuild any browser bundles from scratch. Those operating private registries or registry mirrors should purge the offending versions from any caches. This issue is resolved in 0.2.4.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-59141 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-59142: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-59142",
+      "snippet": "color-string is a parser and generator for CSS color strings. On 8 September 2025, the npm publishing account for color-string was taken over after a phishing attack. Version 2.1.1 was published, functionally identical to the previous patch version, but with a malware payload added attempting to redirect cryptocurrency transactions to the attacker's own addresses from within browser environments. Local environments, server environments, command line applications, etc. are not affected. If the package was used in a browser context (e.g. a direct <script> inclusion, or via a bundling tool such as Babel, Rollup, Vite, Next.js, etc.) there is a chance the malware still exists and such bundles will need to be rebuilt. The malware seemingly only targets cryptocurrency transactions and wallets such as MetaMask. npm removed the offending package from the registry over the course of the day on 8 September. On 13 September, the package owner published new patch versions to help cache-bust those using private registries who might still have the compromised version cached. This issue has been resolved in 2.1.2.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-59142 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...",
+      "url": "https://www.offsec.com/blog/cve-2025-30208/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs ... | Webpage text: �\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�}iz�H���>E\u0016�ۏ|&@�\u0004(S.Y��.�KY�].�> \u0004�$,\u0010�\u0001P\u0014����;̯9�\\c�2'���\u0004\bp�([��{^-\"3�KdDd,�D>�ɏ�l6�d����\u0007���n4��hT#~�tka�Ԉ\u0017�iڭ�nrV�&\u000f���� �h�\u0012o�&)ͺ���O$�&r#wD���N�q�A�8�h\u0004���� ���=IS4S�\u0015M������I�Aa���,q�\u0019y\u0012���\u0001��y��_�)y�fCr���4Iݐ<��a�\u000fZ����G���K�q\u0016�Qi0��ԋ�2�v�$��\u0004\u0006\u0005\u0003\"n� �OX��0��� � �� \"ِrh\u000114��#h��4��e�O�$\"�x ��\u001b�\u0011cx�e��jM�S9��S��^M�'�\u0014Wi�4�� �Z3\u0015\u0018\u0019� ˾�4�25UuL�0,��Z�7m�6\\�ݣ��Lr�{~w4��t�N�;��`� �������4�J+\u0000�\u000f�W\u0006��+\u0007�H�t۲ڮbK�����Sɱݾ��|ӱ \u0018*�� �\u0007!�:h2 �\"���/,��q⽾xf�=p%���\u0007U��R+�u�={u���y��~r�`��\u0002בK ���\u0013�/���w�1[~�\"U�{!C�Z���c⬑�\u000f����\u001a�陴1\u00140�0N����ǆ�׮mW��Q�OpE\u0013�\u0019\u0019d�g��� �c\u0010(1Ǟ<�� '���\u0011� ?;m<<����d\u001a�\u000f���?���'�o���N���I��r�6�f�L�q� ��]���_G�M�\"�'�~Y��e�F \b�zD��1�� �s\u0018�h��\u0004�&�:�\u0018p�Uc�C�v3,$������ �\u0004x�Q�H9n\u0006�3[R��\u0004�7�n�\u0013n\u0017d�;\u0003��a� ��~کն\u0002�Mg���Ii\u0006r��a�s&\u0003��U\u000f�a ���\u000fm����+��\u0004�z\u0019��6pƲG\u0014X�փ�۸j�9��~�M\u0010$P �����삮\b@c���@�\u0018��\u0000(�;\u0003o�)�MK^\u000f�^��\u0015G�,��KFߠ��� �1���\u0000��;\u0003m\u0000��\u0017��u�s{ ��f�U&�o��{Pn\u0005����%�\u000f�\u000f<���Ӎ�uz\u0014#�c@}Q�qɲ�O]��Tip���ŠK\u001bWM�c�U�� L��\u0012��S��̱� �S�B�J�\u001aM�~T�]_���~S� ;������߃��߆�_=L?{����2�͑�г��ŋÝ���:�G��� 院>�zF�N�l�yo���(y���ǳ�?$N{���Վ�IȌ �\u0005=�`�~L�ݍ�]'��l-��a*�.\u0015n�1�\b\u0010+}~L�tʺ5US3 ]]�dUe3�ǐ���`��`�8� =\u001a���� M���u���4N|�\u0004�ډ��uC��kdg��i�� \\*��_Bw�%���R��8�Ɩ\u0014�S����x\b^ 4\u0014ѭ�� �([l�}w\u0014���.��\u0018\u0006�|\u0011G�\u00177w\" f iJ{g\u0001��$q\u0018��d5\"W\u0014�d�yGU�\u0017[yG�Z��h@b�\u0003\u001b�ǋ_�����⿷�1�ڷ�\u0011�WzT\u0014E�Z�j=` �\u0001i\u0015~/\u0018\u0007M�+���\u000em7�o��%��ݤ.I�T\u001a'qJ�/�z��ϊ��T�qc\u0007��� x{Ũ�q�0�+9��(�`�}�<\u0011���\u0017IqN(O\u0002la<�g�o���˛\u0019�n�0㥘�\u0014�-�A��-�MA�S��6�E���lԋ�<\u0005��h��*m7o�\u0017�!u��\\\u0004|F����P�7/�fY\"�M�\u0017�M�0 �\u0014�������C���=����\\�\u0003�\"��l�LD.f�\u0014���\u0007�hpK]M�\u0002 ��%`�4ˣ=w�I��[ �� \u000e���\u0019��h\\�n0��\\%�%t@/V�\u0002�*\u0010VT�:`ʥL[����4���@�tx�U\u0005)��$I��! t�{\u0007S\\4���r��q\\!�m��BC�5��U*�c����Ql����-�_\u0012\u0000�)V�b=00O.\u0017\u0011u%�{I��\u0007�鐂�+3�F�\u0006~�y\u001a��K&w��\u0011�\u0001��:�\u0016א}�)b�k�\u0003� zuMQ�j�D3�V!����j�Q��$�UO����� ��(K�\u0002�!u\u0006�v�m����F8\u0010\u0000Hh\\u�d�+����\u0000 �sK�_�،hR�b�1�g#ָd֛��i�\u0003��dk\u0000���G��$�?���\u0018~��f\u0019�^�e����t \u001b��0���!��Zh@U4��\u0016�\u0010\u0016�d����f�7���k~h^_m�\u000e�\u00056��m6\u001a��\u0004����\u0016������\u0019\u0006J%�;�R.�:�����n�Y�\u0013�a�zq�L\"��\u000f°�\u0010��f�k/��ҡ��6� �� �\u000fև\u000f�J<]�Ɵ���r~\u0016���r���&���z�s@��l4����Ho���#�'�z�� t�B�XW�3D��Kyk���B~�p��Jm�����U�z�����p��W3��i�u ��n\u0010�<`��Ơ��L�8 p5\u000f��NBU��\u0004n��a����\u0019\u0006�O��f��6 N'�i�4%�Vxm\u0000�M��A�/zl�z�t�;\u0018Ǚ�\u0014F��v��\u0017< ���&��X���}��-j?rӼ���ف���*K62.��T��s \u0012FR�O��\b/?�\u0016�\u0014[�(B���#�!�6 �,�\u0018q �\u0000iMmN�j#�cY����لm�*\u0001V1K�?�Í��E��?\u0000Ҳ '\bX�*,/���]\u0005�V���ʏK\u0001*.��%�\u0013`lD\u0001�\u0001��56�\u001a�\u0011�hE#\u001a�uzY$��ɱс� �p\u0002��r [�&9\u0015�_i��r��B?�\u0015�w���`���Ǎ�]L����k*����_^\u0012�j�\u0001\u0017�\u00122;�\u0005\u0010w��w6�8F�0N��r��\u0013�%e��1э���\u001a\bl�T�u��^�u_\u0007ͲQu͠���\u001a�UVG\u0015� ��(C�S�\u0000m�5(���Y�� s��% ���J*�����O�˪ɿ!o��\b�'x�� S7��M\u0018\u0007菺�T� �\u0005�Q]^s�(��F�\u0017��-���Ȥ�_Ѻ�ztb�i���}% C\u0004��&�2j�\u0005x��*�\u0018\u0011�,hVc/W,s#Na���[��\u000e5Є\u001a ���e_{u\u0013\u0004�/�X��)\u0013@M�a����2� �_\u0018k�\u0001u����L�+\u0019a_D,'/)�/\u0014TK58��ɍ�ޥ �tB/�\u0019�(��a�p���\u001a#ϒ.J&�KG�� ���Zdat�\u0002�yIS\b_1o����������9�澢���J\u00171\u0004�h��(��ݨ\u0000\u000e��(�-��۪@h(�x \u0018/�iv\u0016�@��9sJ��^�a(9d*��/� U[1����\"\\�\u0017CW!��/�\u000f�\u0010��&O�a��_� \u0003�\u0011��GMiw�ҝ�AVg �7\u001a���V=�a_��������^^5\u001a2�K��:v�f�pC�S¿�28;X������\u000e�V�ʿ\u0002 ����&��o䀝\u0010�vO�����U~�\u0001�� ����N �\u000fn�=�� ����.�Y��Sm��c�ty\u0019��)���Z�\u0018�x���):l ����\u00195.�~ ��r\u0013����~�\u001a9�[ �Iڌ�ّ�!�_'`�Ⱨ�-� C��q�\u0013���vc�]�\u0010\u001b��S���I��6���I�\u0001��Cp\u0004�!\u0000��$qR?��R\u0017d4I3\" ƑO\u001bW��z�E��C<�\u000f\u000f�g�%;�ר�:F�㠢.\" ����)P�\u001a%\u0002F�����zƏ��\u0004�g]l�\u0011@Ň�\u0010>�>h���{a�/\u0019���I��\b�>����\u0004j����HO� \u0013߯\u001a w��\u0015Σ���~@����� ����i��\u0010�*�z��b�/�^* �|\u00010YS�d�m$vS��\u0005���aB\u0017�\u0014�9���<=|�/.I\\�\bU�e\u0019�|:\u0019S�ճa�6Ow��\u00184l��6Ŝ*~\u001a�|&]��BO�L��\u0001&��\u0019�Ο����ũ�� ݍAyz\u0019��D��L\u0006�� �q���1�#�\u0014�G$�",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2025-58751/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-58751 is a path traversal vulnerability in Vitejs Vite. Learn about its impact, affected versions, and mitigation methods for your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2025-58751 CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability CVE-2025-58751 is a path traversal flaw in Vitejs Vite that allows bypassing server.fs settings to serve unauthorized files. This article covers the technical details, affected versions, security impact, and mitigation. CVE-2025-58751 Overview CVE-2025-58751 is a path traversal vulnerability [CWE-22] in Vite, a widely used frontend tooling framework for JavaScript. The flaw allows the Vite development server to serve files that bypass the server.fs restrictions when a symlink exists inside the public directory. Attackers can request files whose names share a prefix with entries in the public directory to read files outside intended boundaries. The issue af Attackers on the same network as an exposed Vite dev server can read files outside the server.fs.allow boundary when a symlink exists in the public directory. 2025-09-08 - CVE-2025-58751 published to NVD 2026-06-17 - Last updated in NVD database Technical Details for CVE-2025-58751 Vite's development server serves static assets from the public directory in addition to source files governed by the server.fs allow-list. The vulnerability stems from how the underlying sirv static file handler resolves requested paths against public directory entries. Files whose names start with the same prefix as an entry in the public directory were served without applying the server.fs filesystem restrictions. When a symlink is present inside the public directory, this prefix-matching behavior allows an attacker to construct requests that follow the symlink and reach files outside the project workspace. The result is unauthorized read access to files that server.fs.allow was configured to protect. The CWE-22 classification reflects the path traversal characteristic of the flaw. The root cause is improper path normalization in the static file middleware. The public directory lookup used a prefix comparison rather than strict path segment equality, and symlink targets were not validated against the server.fs allow-list. Fix commits in both vitejs/vite and the upstream lukeed/sirv project correct the path handling. Exploitation requires network reachability to a Vite dev server started with --host or a truthy server.host config value. The attacker sends crafted HTTP requests to the dev server with paths that share a prefix with a symlinked entry in the public directory. Since Vite dev servers are intended for local development, production deployments are not directly affected, but shared networks, coworking spaces, and cloud de The vulnerability does not enable code execution or write access. Impact is confined to confidentiality of local files reachable through the symlink target. Detection Methods for CVE-2025-58751 Unexpected HTTP GET requests to the Vite dev server for paths that share a prefix with files in the public directory but include additional characters or traversal segments. Access log entries showing successful 200 responses for files that resolve outside the project root through a symlink target. Pre",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Rule Request: Vite.js /@fs/ Path Traversal (CVE-2025-30208)",
+      "url": "https://github.com/coreruleset/coreruleset/issues/4404",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Hi, I recently noticed some attack attempts in my server logs targeting the Vite.js development server /@fs/ endpoint. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Directory Traversal (Path Traversal)",
+      "url": "https://www.invicti.com/learn/directory-traversal-path-traversal",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn what directory (path) traversal is, how dot-dot-slash attacks expose arbitrary files on the server file system, common bypass techniques, ... | Webpage text: Invicti named a Leader in IDC MarketScape: Worldwide DAST 2026 Vendor Assessment. Read now. Cross-site scripting (XSS): Payloads & vulnerability guide Cross-site request forgery (CSRF) Directory listing: vulnerabilities & risks explained Integer overflow: Vulnerabilities, attacks & examples Insecure direct object references (IDOR) OS command injection: Payloads, prevention & attacks Local file inclusion (LFI) SQL injection (SQLi): Prevention, examples & attacks Server-side request forgery (SSRF): Attack types & risks Unvalidated redirects and forwards XML external entity (XXE) injection: Attacks & examples Remote code execution (RCE) Remote file inclusion (RFI) Broken link hijacking (BLH) Cross-frame scripting (XFS) High orbit ion cannon (HOIC) Low Orbit Ion Cannon (LOIC) Man-in-the-middle attacks (MITM) Session hijacking: Detection, defense & prevention Session fixation: Attacks, vulnerabilities & prevention Slowloris DDoS attack: Detection & mitigation Web cache poisoning: Attacks & vulnerabilities explained HTTP strict transport security (HSTS): Examples, misconfigurations & fixes Interactive application security testing (IAST) tools Static application security testing (SAST) Software composition analysis (SCA) Web application firewall (WAF) What is DAST? A guide to dynamic application security testing Directory traversal (path traversal) What is directory traversal? Directory traversal – also called path traversal – is a web vulnerability that lets an attacker access arbitrary files on a server file system outside the web application’s intended directory, such as the document root or an approved upload folder. Directory (path) traversal is possible when an application uses untrusted input to build or select a path on the server file system. Successful attacks can expose sensitive data like configuration files, credentials, logs, or source code, and the information gained is often used to enable follow-on attacks. While traversal is frequently associated with reading files, in some scenarios it can, when combined with other How directory traversal attacks work Directory traversal is a boundary-breaking bug. The application intends to allow access only to a specific directory (for example, a folder of user-uploaded images), but a crafted path causes the application to “escape” that directory and read from elsewhere on the filesystem. The usual starting point for traversal is the web root directory. The importance of the web root Websites and applications run on a web server that serves content from a location called the web document root or web root folder. The document root usually contains subdirectories for each hosted application. On Linux/UNIX with Apache, a typical root folder is /var/www/ On Windows with Microsoft IIS, a typical document root is C:\\inetpub\\wwwroot Developers often write application code that accesses files under the web root or within an application subdirectory. A common example is storing user-uploaded images under a directory such as /var/www/my_app/images/ and then allowing other users to request an image by filename. A typical traversal vulnerability follows a simple pattern: The application accepts a filename or path segment from an HTTP request",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:12:23.182969+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-31125",
+    "CVE-2025-59140",
+    "CVE-2025-59141",
+    "CVE-2025-59142"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for security.stackexchange.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

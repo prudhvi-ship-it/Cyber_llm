@@ -1,0 +1,103 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_80c5f6731bdc30cb15b9
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event17_cve-2017-15709_success_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: ActiveMQ
+  Attack Type: Remote Code Execution
+  Attack Success: Unknown
+  CVE: CVE-2023-46604
+  Overall Confidence: Low
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-17_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-17_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-17_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: ActiveMQ
+Associated CVE candidate (Analyst): CVE-2023-46604
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000005-001]: 172.18.0.1:55040 -> 172.18.0.2:61616 (TCP).
+- PCAP [E-S0000-F000006-002]: 172.18.0.2:61616 -> 172.18.0.1:55040 (TCP).
+- PCAP [E-S0000-F000008-003]: 172.18.0.2:61616 -> 172.18.0.1:55040 (OpenWire).
+- ONLINE RESEARCH LEAD [CISA KEV] Apache ActiveMQ Improper Input Validation Vulnerability: Apache ActiveMQ: Apache ActiveMQ contains an improper input validation vulnerability that allows for code injection. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2026-34197 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-13920: NVD vulnerability record: Apache ActiveMQ uses LocateRegistry.createRegistry() to create the JMX RMI registry and binds the server to the "jmxrmi" entry. It is possible to connect to the registry without authentication and call the rebind method to rebind jmxrmi to something else. If an attacker creates another server to proxy the original, and bound that, he effectively becomes a man in the middle and is able to intercept the credentials when an user connects. Upgrade to Apache ActiveMQ 5.15.12. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-13920 Supports: Web-cited CVE-2020-13920 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-15709: NVD vulnerability record: When using the OpenWire protocol in ActiveMQ versions 5.14.0 to 5.15.2 it was found that certain system details (such as the OS and kernel version) are exposed as plain text. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-15709 Supports: Web-cited CVE-2017-15709 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-0684: NVD vulnerability record: Cross-site scripting (XSS) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote authenticated users to inject arbitrary web script or HTML via the JMSDestination parameter in a queue action. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-0684 Supports: NVD lists CVE-2010-0684 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Apache ActiveMQ 5.14.2 CVE Patching: UNTRUSTED WEB RESEARCH (not PCAP evidence). The Java OpenWire protocol marshaller is vulnerable to Remote Code Execution. This vulnerability may allow a remote attacker with network access to either a ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Common Vulnerabilities & Exposures (CVE) Supported lifecycle: Extended Support CVEs: CVE-2020-13920, CVE-2017-15709, CVE-2015-7559, CVE-2018-11775, CVE-2022-22971, CVE-2022-23305, CVE-2019-17571, CVE-2020-11994, CVE-2023-20861, CVE-2022-23307, CVE-2018-1270, CVE-2022-22950, CVE-2022-22968, CVE-2022-23302, CVE-2022-22965, CVE-2023-20863, CVE-2020-11971, CVE-2018-1257, CVE-2023-26464, CVE-2019-0194, CVE-2017-5643, CVE-2021-4104, CVE-2018-8027, and CVE-2023-46604 CVE Affecting Apache ActiveMQ 5.14.2 CVE-2023-46604 The Java OpenWire protocol marshaller is vulnerable to Remote Code Execution. This vulnerability may allow a remote attacker with network access to either a Java-based OpenWire broker or client to run arbitrary shell commands by manipulating serialized class types in the OpenWire protocol to cause either the client or the broker (respectively) to instantiate any class on the classpath. Users are recommended to upgrade both brokers and clients to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3 CVE-2023-20863 In spring framework versions prior to 5.2.24 release+ ,5.3.27+ and 6.0.8+ , it is possible for a user to provide a specially crafted SpEL expression that may cause a denial-of-service (DoS) condition. CVE-2023-20861 In Spring Framework versions 6.0.0 - 6.0.6, 5.3.0 - 5.3.25, 5.2.0.RELEASE - 5.2.22.RELEASE, and older unsupported versions, it is possible for a user to provide a specially crafted SpEL expression that may cause a denial-of-service (DoS) condition. Denial-of-service vulnerability CVE-2023-26464 ** UNSUPPORTED WHEN ASSIGNED ** When using the Chainsaw or SocketAppender components with Log4j 1.x on JRE less than 1.7, an attacker that manages to cause a logging entry involving a specially-crafted (ie, deeply nested) hashmap or hashtable (depending on which logging component is in use) to be processed could exhaust the available memory in the virtual machine and achieve Denial of Service when the object is deserialized. This issue affects Apache Log4j before 2. Affected users are recommended to update to Log4j 2.x. NOTE: This vulnerability only affects products that are no longer supported by the maintainer. CVE-2022-22971 In spring framework versions prior to 5.3.20+ , 5.2.22+ and old unsupported versions, application with a STOMP over WebSocket endpoint is vulnerable to a denial of service attack by an authenticated user. CVE-2022-22968 In Spring Framework versions 5.3.0 - 5.3.18, 5.2.0 - 5.2.20, and older unsupported versions, the patterns for disallowedFields on a DataBinder are case sensitive which means a field is not effectively protected unless it is listed with both upper and lower case for the first character of the field, including upper and lower case for the first character of all nested fields within the property path. Data Binding Rules Vulnerability CVE-2022-22965 A Spring MVC or Spring WebFlux application running on JDK 9+ may be vulnerable to remote code execution (RCE) via data binding. The specific exploit requires the application to run on Tomcat as a WAR deployment. If the application is deployed as a Spring Boot executable jar, i.e. the default, it is not vulnerable to the exploi Source: https://tomitribe.com/cve/apache-activemq/5.14.2/
+- ONLINE [Serper web result] Apache Activemq 5.14.2 Observation Footprint: UNTRUSTED WEB RESEARCH (not PCAP evidence). Find Apache Activemq 5.14.2 country and industry Internet observation data and associated CVEs, via Bitsight's Groma Internet scanner. Source: https://www.bitsight.com/de/groma-explorer/apache/activemq/5142
+- ONLINE [Serper web result] NVD Vulnerability Search - NIST: UNTRUSTED WEB RESEARCH (not PCAP evidence). Improper Authorization vulnerability in Apache ActiveMQ. An authenticated low-privilege Web Console user by default can access /admin/* paths in the Web Console ... Source: https://nvd.nist.gov/vuln/search?resultType=records&cpeFilterMode=cpe&cpeName=cpe:2.3:a:apache:activemq:5.14.2:*:*:*:*:*:*:*
+- ONLINE RESEARCH LEAD [Serper web result] K55444705: Apache ActiveMQ vulnerability CVE-2016-6810: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability can allow a remote attacker to use unspecified HTML-injection to cause a denial-of-service (DoS) attack on the system. Source: https://my.f5.com/manage/s/article/K55444705
+
+Verification Summary:
+- Affected service: ActiveMQ.
+- Attack type: Remote Code Execution.
+- Attack technique: Java OpenWire protocol marshaller.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: No.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Unsupported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 1/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2023-46604; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: attack type: Remote Code Execution
+- Unsupported claim: attack technique: Java OpenWire protocol marshaller
+- Unsupported claim: cve candidate: CVE-2023-46604
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Valid.
+- MCP investigation query: ActiveMQ 5.14.2 vulnerability.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-13920
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-15709
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2010-0684
+- Evidence-source URL: https://tomitribe.com/cve/apache-activemq/5.14.2/
+- Evidence-source URL: https://www.bitsight.com/de/groma-explorer/apache/activemq/5142
+- Evidence-source URL: https://nvd.nist.gov/vuln/search?resultType=records&cpeFilterMode=cpe&cpeName=cpe:2.3:a:apache:activemq:5.14.2:*:*:*:*:*:*:*
+- Evidence-source URL: https://my.f5.com/manage/s/article/K55444705
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Context-only product/version research: CVE results are leads, not proof of an observed attack.
+- Evidence limitation: Webpage read unavailable for www.bitsight.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply mitigations per vendor instructions for Apache ActiveMQ.
+- Follow applicable BOD 22-01 guidance for cloud services.
+- Consider upgrading to a more recent version of Apache ActiveMQ if vulnerabilities are confirmed.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

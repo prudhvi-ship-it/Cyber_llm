@@ -1,0 +1,275 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: RESP=67, TCP=51, RESP/JSON=13
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:6379            <-> 172.18.0.7:45572                16 2528 bytes      32 2192 bytes      48 4720 bytes     0.000000000        16.5143
+172.18.0.7:45638           <-> 172.18.0.2:6379                  9 630 bytes      18 8013 bytes      27 8643 bytes     0.882430000        16.0402
+172.18.0.2:6379            <-> 172.18.0.7:45616                 9 594 bytes       9 7671 bytes      18 8265 bytes     0.883338000        16.0398
+172.18.0.2:6379            <-> 172.18.0.6:49268                 9 594 bytes       9 7608 bytes      18 8202 bytes     0.883621000        16.0404
+172.18.0.6:
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0000-F000001-001] Client sent a BRPOP command to the server
+- [E-S0000-F000002-002] Server responded to the BRPOP command
+- [E-S0000-F000003-003] Client sent a TCP packet with no payload
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: BRPOP, E-S0000-F000001-001, E-S0000-F000002-002, E-S0000-F000003-003
+
+--- Stream 1 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0001-F000004-001] Client sent a PUBLISH command to Redis server
+- [E-S0001-F000005-003] Server responded to the PUBLISH command
+- [E-S0001-F000004-002] Indicator of potential event enabling in payload
+Exploit Indicators:
+- [E-S0001-F000004-002] enable_events
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: PUBLISH, enable_events, E-S0001-F000004-001, E-S0001-F000004-002, E-S0001-F000005-003
+
+--- Stream 2 [VALID] ---
+Service: Celery (version not visible)
+Relevant Events:
+- [E-S0002-F000007-001] Client sent a message to the server using the RESP protocol.
+- [E-S0002-F000008-003] Server acknowledged the message with a TCP response.
+- [E-S0002-F000007-002] Message contains a base64-encoded JSON payload with method "enable_events".
+Exploit Indicators:
+- [E-S0002-F000007-002] enable_events
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: enable_events, E-S0002-F000007-002
+
+--- Stream 3 [VALID] ---
+Service: Redis
+Relevant Events:
+- [E-S0003-F000009-001] Client sent a message to the server using RESP/JSON protocol.
+- [E-S0003-F000010-003] Server responded to the client using RESP protocol.
+- [E-S0003-F000011-004] Client sent a TCP packet to the server.
+Exploit Indicators:
+- [E-S0003-F000009-002] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, JSON, PUBLISH, worker.heartbeat, E-S0003-F000009-001, E-S0003-F000010-003, E-S0003-F000011-004
+
+--- Stream 4 [VALID] ---
+Service: Celery 4.4.2
+Relevant Events:
+- [E-S0004-F000012-001] Communication from client to server using RESP protocol
+- [E-S0004-F000013-003] Acknowledgment from server to client
+- [E-S0004-F000012-002] Celery worker heartbeat message
+Exploit Indicators:
+- [E-S0004-F000012-002] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Celery, worker.heartbeat, E-S0004-F000012-002, E-S0004-F000013-003, E-S0004-F000012-001
+
+--- Stream 5 [VALID] ---
+Service: Celery 4.4.2
+Relevant Events:
+- [E-S0005-F000014-001] Communication from client to server using RESP protocol
+- [E-S0005-F000014-002] Celery worker heartbeat message with version 4.4.2
+- [E-S0005-F000015-003] TCP acknowledgment from server to client
+Exploit Indicators:
+- [E-S0005-F000014-002] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Celery, worker.heartbeat, version 4.4.2, E-S0005-F000014-002, E-S0005-F000014-001, E-S0005-F000015-003
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Celery",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0002-F000007-002",
+      "E-S0001-F000004-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Celery",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0002-F000007-002",
+      "E-S0001-F000004-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "Unknown"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Unknown",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "attack.type",
+    "attack.technique",
+    "attack.success"
+  ],
+  "evidence_check": [
+    "E-S0002-F000007-002",
+    "E-S0001-F000004-002"
+  ],
+  "confidence": "Unknown"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Celery
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Unknown
+Overall Confidence: Low
+Score: 1/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Abstain
+Query: Celery 4.4.2
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-22T05:31:47.235573+00:00
+Candidate CVEs: None
+Sources: 0
+Warnings: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0002-F000007-002]: Message contains a base64-encoded JSON payload with method "enable_events".
+- PCAP [E-S0001-F000004-002]: Indicator of potential event enabling in payload.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- None
+
+=== SOURCE URLS ===
+- None
+
+Search status: Abstain
+Search query: Celery 4.4.2
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- No online source was returned by the MCP search.
+- Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== ONLINE CVE DECISION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "MCP online evidence retrieval was unavailable or failed.",
+    "The Analyzer did not propose an exact CVE to corroborate."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Celery
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0002-F000007-002]: Message contains a base64-encoded JSON payload with method "enable_events".
+- PCAP [E-S0001-F000004-002]: Indicator of potential event enabling in payload.
+
+Verification Summary:
+- Affected service: Celery.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Unknown.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: MCP online evidence retrieval was unavailable or failed.
+- CVE assessment: The Analyzer did not propose an exact CVE to corroborate.
+- Unsupported claim: attack.type
+- Unsupported claim: attack.technique
+- Unsupported claim: attack.success
+- MCP evidence search status: Abstain.
+- MCP investigation query: Celery 4.4.2.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Monitor network traffic for unusual patterns or payloads.
+- Ensure Celery configurations are secure and up-to-date.
+- Implement strict access controls and logging for Celery services.

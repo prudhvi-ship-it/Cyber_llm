@@ -1,11 +1,12 @@
 import argparse
 from datetime import datetime, timezone
 import os
+import json
 import re
 import pandas as pd
 
 from evaluation.loader import load_ground_truth
-from evaluation.runner import run_fra, run_mafra, run_shared_preprocessing
+from evaluation.runner import run_fra, run_mafra, run_mafra_mcp, run_shared_preprocessing
 from evaluation.report_reader import parse_saved_report
 from evaluation.matcher import match_text, match_cve, match_vulnerable, match_success
 from evaluation.labels import display_label, parse_binary_label
@@ -25,7 +26,7 @@ from experiment_config import EXPERIMENT_PROFILES, experiment_manifest
 from memory_manager import MemoryManager
 
 
-EVALUATION_SCHEMA_VERSION = "4.1-evidence-rag-audited-runs"
+EVALUATION_SCHEMA_VERSION = "4.3-mafra-mcp-candidate-and-verified"
 
 
 def parse_memory_status(output):
@@ -56,20 +57,21 @@ def require_training_rag(run_id):
     return health
 
 
-def load_existing_results(results_csv):
+def load_existing_results(results_csv, *, allow_graphs_legacy=False):
     if results_csv.exists():
         existing = pd.read_csv(results_csv)
-        if (
-            "evaluation_schema_version" not in existing.columns
-            or not existing["evaluation_schema_version"]
-            .astype(str)
-            .eq(EVALUATION_SCHEMA_VERSION)
-            .all()
-        ):
+        versions = (
+            existing["evaluation_schema_version"].astype(str)
+            if "evaluation_schema_version" in existing.columns
+            else pd.Series(dtype=str)
+        )
+        accepted = {EVALUATION_SCHEMA_VERSION}
+        if allow_graphs_legacy:
+            accepted.add("4.2-mafra-mcp-single-run")
+        if versions.empty or not versions.isin(accepted).all():
             raise ValueError(
-                "The existing evaluation CSV uses the old incorrect scoring. "
-                "Do not use --resume with it. Run a fresh evaluation so every "
-                "case is recalculated with tri-state scoring."
+                "Evaluation schema mismatch. Use a fresh --run-id for new scoring; "
+                "--resume cannot mix old and new metric definitions."
             )
         return existing
     return pd.DataFrame()
@@ -79,8 +81,25 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--graphs-only", action="store_true",
+        help="Read a saved evaluation CSV and generate report-ready PNGs; never run PCAPs or LLMs.",
+    )
     parser.add_argument("--skip-fra", action="store_true")
     parser.add_argument("--skip-mafra", action="store_true")
+    parser.add_argument(
+        "--mafra-mcp-only", action="store_true",
+        help="Evaluate current MAFRA-MCP directly from each PCAP (no local FRA).",
+    )
+    parser.add_argument(
+        "--mcp-url", default=None,
+        help="MCP endpoint passed to main_mafra_mcp.py (default: project configuration).",
+    )
+    parser.add_argument(
+        "--investigation-notebook", choices=["enabled", "disabled"],
+        default="enabled",
+        help="Ephemeral per-case notebook (MAFRA-MCP-only mode).",
+    )
     parser.add_argument(
         "--run-id",
         default=None,
@@ -99,6 +118,53 @@ def main():
         help="Default preserves the proposed GPT/Claude/Gemini MAFRA system.",
     )
     args = parser.parse_args()
+    if args.graphs_only:
+        # EXIT EARLY before any evaluation, manifest updates or API-related setup.
+        if not args.run_id:
+            parser.error("--graphs-only requires --run-id")
+        if args.resume or args.limit is not None or args.skip_fra or args.skip_mafra:
+            parser.error("Use --graphs-only with --run-id only (no evaluation options).")
+        run_id = validate_run_id(args.run_id)
+        paths = build_run_paths(OUTPUT_DIR, run_id)
+        if not paths.results_csv.is_file():
+            parser.error(f"Saved evaluation CSV not found: {paths.results_csv}")
+        if not paths.manifest.is_file():
+            parser.error(f"Experiment manifest not found: {paths.manifest}")
+        manifest = json.loads(paths.manifest.read_text(encoding="utf-8"))
+        if manifest.get("run_id") != run_id:
+            parser.error("The experiment manifest run ID does not match the selected run.")
+        active_systems = manifest.get("active_systems")
+        if not isinstance(active_systems, list) or not active_systems:
+            parser.error("The experiment manifest does not identify the evaluated systems.")
+        saved_df = load_existing_results(paths.results_csv, allow_graphs_legacy=True)
+        if saved_df.empty:
+            parser.error("The saved evaluation CSV is empty.")
+        if "run_id" not in saved_df.columns or not saved_df["run_id"].astype(str).eq(run_id).all():
+            parser.error("The saved evaluation CSV contains a different run ID.")
+        if "MAFRA-MCP" in manifest.get("evaluated_implementation", ""):
+            from evaluation import metrics as metric_plot_labels
+            from evaluation import graphs as graph_plot_labels
+            metric_plot_labels.SYSTEM_LABELS["mafra"] = "MAFRA-MCP"
+            graph_plot_labels.SYSTEM_LABELS["mafra"] = "MAFRA-MCP"
+        summary_df = calculate_summary(saved_df, systems=active_systems)
+        stats_df = calculate_classification_stats(saved_df, systems=active_systems)
+        output_dir = paths.root / "graphs_report_ready"
+        create_graphs(
+            saved_df, summary_df, stats_df,
+            graph_dir=output_dir, systems=active_systems, report_ready=True,
+        )
+        print(f"Report-ready graphs saved in: {output_dir}")
+        print("Existing CSV, reports, original graphs, and experiment metadata were not modified.")
+        return
+    if args.mafra_mcp_only:
+        if args.skip_mafra:
+            parser.error("--mafra-mcp-only cannot be combined with --skip-mafra")
+        # Both documented profiles are supported. Child processes inherit
+        # the explicit profile, and the manifest records all resolved models.
+        # Do not silently swap a heterogeneous run into fair_same_model.
+        if args.memory_mode != "disabled":
+            parser.error("MAFRA-MCP initial evaluation requires --memory-mode disabled")
+        args.skip_fra = True
     if args.resume and not args.run_id:
         raise ValueError("--resume requires the original --run-id.")
     run_id = validate_run_id(args.run_id or datetime.now(timezone.utc).strftime(
@@ -108,6 +174,14 @@ def main():
     profile = args.profile
     if args.skip_fra and args.skip_mafra:
         raise ValueError("FRA and MAFRA cannot both be skipped.")
+    # Keep legacy column keys for existing scoring functions, but label
+    # the single-system plots/tables with the implementation actually run.
+    if args.mafra_mcp_only:
+        from evaluation import metrics as metric_plot_labels
+        from evaluation import graphs as graph_plot_labels
+        metric_plot_labels.SYSTEM_LABELS["mafra"] = "MAFRA-MCP"
+        graph_plot_labels.SYSTEM_LABELS["mafra"] = "MAFRA-MCP"
+
     active_systems = []
     if not args.skip_fra:
         active_systems.append("fra")
@@ -148,12 +222,44 @@ def main():
             f"cases={training_rag_health['count']}"
         )
     print(f"Experiment profile: {profile}")
-    print("Shared flow summary: enabled (same input for FRA and MAFRA)")
+    print(
+        "Shared flow summary: disabled (preserve MAFRA-MCP in-process packet verification)"
+        if args.mafra_mcp_only
+        else "Shared flow summary: enabled (same input for FRA and MAFRA)"
+    )
 
     initial_manifest = experiment_manifest(profile)
+    if args.resume and args.mafra_mcp_only:
+        if not paths.manifest.exists():
+            raise FileNotFoundError("Cannot resume: experiment manifest is missing")
+        previous = json.loads(paths.manifest.read_text(encoding="utf-8"))
+        checks = {
+            "profile": profile,
+            "models": initial_manifest["models"],
+            "temperature": initial_manifest["temperature"],
+            "evaluated_implementation": "MAFRA-MCP Step6A",
+            "shared_flow_summary": False,
+            "investigation_notebook": args.investigation_notebook,
+            "mcp_url": args.mcp_url or "environment_default",
+            "memory_mode": memory_mode,
+        }
+        changed = [key for key, expected in checks.items() if previous.get(key) != expected]
+        if changed:
+            raise ValueError(
+                "Refusing to mix evaluation configurations during --resume. "
+                f"Changed settings: {changed}"
+            )
     initial_manifest["run_id"] = run_id
     initial_manifest["evaluation_schema_version"] = EVALUATION_SCHEMA_VERSION
     initial_manifest["active_systems"] = active_systems
+    initial_manifest["evaluated_implementation"] = (
+        "MAFRA-MCP Step6A" if args.mafra_mcp_only else "legacy FRA/MAFRA"
+    )
+    initial_manifest["shared_flow_summary"] = not args.mafra_mcp_only
+    initial_manifest["investigation_notebook"] = (
+        args.investigation_notebook if args.mafra_mcp_only else "not-applicable"
+    )
+    initial_manifest["mcp_url"] = args.mcp_url or "environment_default"
     initial_manifest["training_rag_health"] = training_rag_health
     write_json(paths.manifest, initial_manifest)
 
@@ -208,8 +314,10 @@ def main():
 
         print(f"\n[{index + 1}/{total}] Running {case_id}: {pcap_path}")
 
-        if args.skip_fra and args.skip_mafra:
-            shared_run = {"output": "Skipped", "runtime": 0, "crashed": False}
+        if args.mafra_mcp_only:
+            # Shared preprocessing loses in-process Step5B packet verifier signals.
+            # MAFRA-MCP must analyze PCAP directly, as in the validated pilot.
+            shared_run = {"output": "Not used", "runtime": 0, "crashed": False}
         else:
             shared_run = run_shared_preprocessing(
                 pcap_path,
@@ -283,21 +391,40 @@ def main():
                 "report_found": False,
             }
         else:
-            mafra_run = run_mafra(
-                pcap_path,
-                flow_summary_file=shared_summary_path,
-                report_output=mafra_report_path,
-                run_id=run_id,
-                memory_mode=memory_mode,
-                profile=profile,
-                telemetry_path=telemetry_path,
-                memory_audit_path=memory_audit_path,
-            )
+            if args.mafra_mcp_only:
+                mafra_run = run_mafra_mcp(
+                    pcap_path,
+                    report_output=mafra_report_path,
+                    mcp_url=args.mcp_url,
+                    investigation_notebook=args.investigation_notebook,
+                    run_id=run_id,
+                    memory_mode=memory_mode,
+                    profile=profile,
+                    telemetry_path=telemetry_path,
+                    memory_audit_path=memory_audit_path,
+                )
+            else:
+                mafra_run = run_mafra(
+                    pcap_path,
+                    flow_summary_file=shared_summary_path,
+                    report_output=mafra_report_path,
+                    run_id=run_id,
+                    memory_mode=memory_mode,
+                    profile=profile,
+                    telemetry_path=telemetry_path,
+                    memory_audit_path=memory_audit_path,
+                )
             (raw_output_dir / f"{case_id}_mafra_stdout.txt").write_text(
                 mafra_run["output"], encoding="utf-8"
             )
             mafra = parse_saved_report(mafra_report_path)
-            mafra_run["crashed"] = bool(mafra_run["crashed"] or not mafra["report_found"])
+            # An inconclusive forensic result is not a subprocess crash.
+            # Preserve Unknown/Not Found predictions for accuracy scoring;
+            # count a crash only if the process failed or its report is absent.
+            # Agent/model parsing errors remain separately visible in telemetry.
+            mafra_run["crashed"] = bool(
+                mafra_run["crashed"] or not mafra["report_found"]
+            )
 
         row = {
             "evaluation_schema_version": EVALUATION_SCHEMA_VERSION,
@@ -305,7 +432,7 @@ def main():
             "run_id": run_id,
             "memory_mode": memory_mode,
             "experiment_profile": profile,
-            "shared_flow_summary": True,
+            "shared_flow_summary": not args.mafra_mcp_only,
             "benchmark": case["Benchmark"],
             "pcap": case["PCAP File"],
 
@@ -333,6 +460,13 @@ def main():
             "mafra_attack_type": mafra["attack_type"],
             "mafra_attack_success": mafra["attack_success"],
             "mafra_cve": mafra["cve"],
+            # Diagnostic / associated-CVE metric: NEVER overwrite mafra_cve.
+            # Final confirmed-CVE accuracy continues to use mafra_cve.
+            "mafra_cve_candidate": mafra.get("cve_candidate", "Not Found"),
+            "mafra_cve_candidate_support": mafra.get("cve_candidate_support", "Unknown"),
+            "mafra_cve_supported": mafra.get("cve_supported", "Not Found"),
+            "mafra_verification_result": mafra.get("verification_result", "Not Found"),
+            "mafra_overall_confidence": mafra.get("overall_confidence", "Not Found"),
             "mafra_vulnerable": mafra["vulnerable"],
             "mafra_report_found": mafra["report_found"],
             "mafra_memory_status": (
@@ -350,6 +484,9 @@ def main():
 
         row["fra_cve_match"] = match_cve(row["expected_cve"], row["fra_cve"])
         row["mafra_cve_match"] = match_cve(row["expected_cve"], row["mafra_cve"])
+        row["mafra_cve_candidate_match"] = match_cve(
+            row["expected_cve"], row["mafra_cve_candidate"]
+        )
 
         row["fra_vulnerable_match"] = match_vulnerable(row["expected_vulnerable"], row["fra_vulnerable"])
         row["mafra_vulnerable_match"] = match_vulnerable(row["expected_vulnerable"], row["mafra_vulnerable"])
@@ -411,6 +548,7 @@ def main():
             telemetry_error_count=int(
                 current_telemetry["status"].eq("error").sum()
             ),
+            single_system_evaluation=args.mafra_mcp_only,
         )
         write_json(paths.status, progress_status)
         print(f"Saved progress after {case_id}")
@@ -448,11 +586,20 @@ def main():
         skipped_fra=args.skip_fra,
         skipped_mafra=args.skip_mafra,
         telemetry_error_count=int(final_telemetry["status"].eq("error").sum()),
+        single_system_evaluation=args.mafra_mcp_only,
     )
     manifest = experiment_manifest(profile)
     manifest["run_id"] = run_id
     manifest["evaluation_schema_version"] = EVALUATION_SCHEMA_VERSION
     manifest["active_systems"] = active_systems
+    manifest["evaluated_implementation"] = (
+        "MAFRA-MCP Step6A" if args.mafra_mcp_only else "legacy FRA/MAFRA"
+    )
+    manifest["shared_flow_summary"] = not args.mafra_mcp_only
+    manifest["investigation_notebook"] = (
+        args.investigation_notebook if args.mafra_mcp_only else "not-applicable"
+    )
+    manifest["mcp_url"] = args.mcp_url or "environment_default"
     manifest["training_rag_health"] = training_rag_health
     write_json(paths.status, completeness)
     write_json(paths.manifest, manifest)

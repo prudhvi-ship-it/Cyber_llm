@@ -1,0 +1,98 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_46b2f15091d36612144b
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event13_CVE-2020-11651_sucess_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: SaltStack
+  Attack Type: Command Execution
+  Attack Success: Fail
+  CVE: CVE-2020-16846
+  Overall Confidence: Medium
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-13_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-13_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-13_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: SaltStack
+Associated CVE candidate (Analyst): CVE-2020-16846
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2020-16846
+Attack: Failed
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000019-003]: root user keyword observed.
+- PCAP [E-S0000-F000020-005]: cmd.exe.
+- PCAP [E-S0000-F000019-004]: LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=.
+- ONLINE RESEARCH LEAD [CISA KEV] SaltStack Salt Path Traversal Vulnerability: SaltStack Salt: SaltStack Salt contains a path traversal vulnerability in the salt-master process ClearFuncs which allows directory access to authenticated users. Salt users who follow fundamental internet security guidelines and best practices are not affected by this vulnerability. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2020-11652 as exploited in the wild.
+- ONLINE [NIST NVD] CVE-2020-16846: NVD vulnerability record: An issue was discovered in SaltStack Salt through 3002. Sending crafted web requests to the Salt API, with the SSH client enabled, can result in shell injection. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-16846 Supports: Web-cited CVE-2020-16846 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-25592: NVD vulnerability record: In SaltStack Salt through 3002, salt-netapi improperly validates eauth credentials and tokens. A user can bypass authentication and invoke Salt SSH. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-25592 Supports: Web-cited CVE-2020-25592 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-5200: NVD vulnerability record: Salt-api in SaltStack Salt before 2015.8.13, 2016.3.x before 2016.3.5, and 2016.11.x before 2016.11.2 allows arbitrary command execution on a salt-master via Salt's ssh_client. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-5200 Supports: NVD lists CVE-2017-5200 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CVE-2020-16846: SaltStack Salt RCE Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-16846 CVE-2020-16846: SaltStack Salt RCE Vulnerability CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt that allows shell injection via crafted web requests to the Salt API. This article covers technical details, affected versions, impact, and mitigation. Published: March 11, 2026 CVE-2020-16846 Overview CVE-2020-16846 is a critical shell injection vulnerability discovered in SaltStack Salt through version 3002. The vulnerability allows unauthenticated remote attackers to execute arbitrary operating system commands by sending specially crafted web requests to the Salt API when the SSH client feature is enabled. This command injection flaw (CWE-78) represents a severe security risk for organizations using SaltStack Sa This vulnerability enables unauthenticated remote code execution through shell injection in the Salt API, allowing complete system compromise. CISA has added this vulnerability to the Known Exploited Vulnerabilities catalog, confirming active exploitation in the wild. SaltStack Salt through version 3002 (including versions 3001, 3002, and earlier) Debian Linux 9.0 and 10.0 November 3, 2020 - SaltStack publicly disclosed CVE-2020-16846 along with two other CVEs November 6, 2020 - CVE-2020-16846 published to NVD November 7, 2025 - Last updated in NVD database Technical Details for CVE-2020-16846 This shell injection vulnerability exists in SaltStack Salt's REST API implementation when the SSH client functionality is enabled. The flaw stems from improper input validation and sanitization of user-supplied data within API requests. When an attacker sends a crafted web request to the Salt API endpoint, the malicious input is passed directly to shell commands without adequate escaping or validation, enabling arbi The vulnerability is particularly dangerous because it can be exploited remotely over the network without requiring any authentication credentials. The Salt API, designed to provide programmatic access to Salt functionality, becomes a direct attack vector when SSH client features are active. Successful exploitation grants attackers the same privileges as the Salt master process, which typically runs with elevated per The root cause of CVE-2020-16846 is improper neutralization of special elements used in an OS command (CWE-78). The Salt API fails to properly sanitize input parameters before incorporating them into shell commands executed via the SSH client functionality. User-controlled data containing shell metacharacters (such as semicolons, pipes, backticks, or command substitution syntax) is processed without escaping, allowin The attack vector for this vulnerability is network-based, targeting the Salt API's HTTP/HTTPS endpoints. An attacker can exploit this vulnerability by: Identifying exposed Salt API instances with SSH client functionality enabled Crafting malicious HTTP requests containing shell injection payloads in vulnerable parameters Sending the crafted requests to the Salt API endpoint The injected commands execute on the Salt master server with its associated pr Source: https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2020-25592 — SaltStack Authentication Bypass and ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). In SaltStack Salt through 3002, salt-netapi improperly validates eauth credentials and tokens. A user can bypass authentication and invoke ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+- ONLINE [Serper web result] Web Attack: SaltStack Remote Code Execution CVE-2020 ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Additional Information. A shell injection vulnerability exists in SaltStack where an unauthenticated user with network access to the Salt API can use shell ... Source: https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32723
+- ONLINE [Serper web result] SaltStack Salt SSH Command Injection Vulnerability (CVE ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). SaltStack fixed the way the command is executed by the API. The patched version no longer uses the system shell in order to execute the command. | Webpage text: SaltStack Salt SSH Command Injection Vulnerability (CVE-2020-16846) cve-2020-16846, November 17, 2020, 2:48am Recently, a command injection vulnerability was disclosed in SaltStack configuration management tool. SaltStack is a python-based automation framework that allows developers to build event based automation. SaltStack uses the terms “master” to describe the component that schedules and manages the executed jobs and “minion” to describe the workers that executes those jobs. SaltStack supports several methods of managing “minions”, one of those methods is over an SSH connection and that is where the vulnerability resided. To allow the “master” to connect to the “minion” over the SSH protocol the SaltStack SSH library uses the “ssh-keygen” tool in order to generate the key to be used by the “master”. One of the methods to trigger such SSH connection between the “master” and the “minion” i Before the patch the command would run using the system shell which made it vulnerable to command injections. image_282939.png575×175 28.3 KB Figure 1: The vulnerable “gen_key” method When triggering the vulnerable code we can see that we can indeed inject a new arbitrary command to the existing “ssh-keygen” command executed by SaltStack SSH library. image_282939.png1006×201 59.7 KB Figure 2: Arbitrary command injected to the “ssh-keygen” command SaltStack fixed the way the command is executed by the API. The patched version no longer uses the system shell in order to execute the command. Furthermore, to prevent a possible shell argument injection, SaltStack API is now using a safer way to pass arguments as an array to the safer “subprocess.call” function. image_282939.png483×194 17.6 KB Figure 3: The patched “gen_key” method Mitigation with Advanced WAF Advanced WAF customers under any supported version are already protected against this vulnerability as the Proof of Concept exploit of the vulnerability is detected by existing Command Execution signatures. We will also work to release a dedicated signature for this vulnerability in the next ASM Security Update. image_282939.png508×250 9.15 KB Figure 4: Exploitation attempt blocked with attack signature 200003069 image_282939.png509×249 17.2 KB Figure 5: Exploitation attempt blocked with attack signature 200003693 ssh: Common Criteria mode initialized AWAF Detection Inconsistency Between Similar Test Payloads F5 Threat Report - December 10th, 2025 F5 Threat Report - September 17th, 2025 F5 Threat Report - November 26th, 2025 Source: https://community.f5.com/t/saltstack-salt-ssh-command-injection-vulnerability-cve-2020-16846/66695
+
+Verification Summary:
+- Affected service: SaltStack.
+- Attack type: Command Execution.
+- Attack technique: Attempted command execution using SaltStack's command execution functionality.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 4/5.
+- Consensus attack outcome: Fail.
+- Validated CVE: CVE-2020-16846.
+- CVE assessment: Analyst proposed CVE-2020-16846; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: SaltStack command execution vulnerability.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-16846
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-25592
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-5200
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+- Evidence-source URL: https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+- Evidence-source URL: https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=32723
+- Evidence-source URL: https://community.f5.com/t/saltstack-salt-ssh-command-injection-vulnerability-cve-2020-16846/66695
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: Webpage read unavailable for connect.tenable.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply updates per vendor instructions to mitigate CVE-2020-16846.
+- Ensure SaltStack configurations follow fundamental internet security guidelines and best practices.
+- Regularly audit and monitor SaltStack API endpoints for unusual activity.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

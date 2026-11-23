@@ -1,0 +1,11 @@
+{
+  "status": "Abstain",
+  "query": "ActiveMQ 5.14.2",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:38:56.702241+00:00",
+  "sources": [],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified."
+  ]
+}

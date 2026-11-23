@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "SaltStack Command Execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "SaltStack Salt Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "SaltStack Salt: SaltStack Salt contains a path traversal vulnerability in the salt-master process ClearFuncs which allows directory access to authenticated users. Salt users who follow fundamental internet security guidelines and best practices are not affected by this vulnerability. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2020-11652 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-5200: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-5200",
+      "snippet": "Salt-api in SaltStack Salt before 2015.8.13, 2016.3.x before 2016.3.5, and 2016.11.x before 2016.11.2 allows arbitrary command execution on a salt-master via Salt's ssh_client.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-5200 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2019-17361: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-17361",
+      "snippet": "In SaltStack Salt through 2019.2.0, the salt-api NET API with the ssh client enabled is vulnerable to command injection. This allows an unauthenticated attacker with network access to the API endpoint to execute arbitrary code on the salt-api host.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2019-17361 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-28243: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-28243",
+      "snippet": "An issue was discovered in SaltStack Salt before 3002.5. The minion's restartcheck is vulnerable to command injection via a crafted process name. This allows for a local privilege escalation by any user able to create a files on the minion in a non-blacklisted directory.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2020-28243 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-3144: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-3144",
+      "snippet": "In SaltStack Salt before 3002.5, eauth tokens can be used once after expiration. (They might be used to run command against the salt master or minions.)",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-3144 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "How to log salt commands run on the salt master? : r/saltstack",
+      "url": "https://www.reddit.com/r/saltstack/comments/zg6kai/how_to_log_salt_commands_run_on_the_salt_master/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). I'd like to log when users run salt commands at the CLI on the salt master. How can I log the below commands along with user and time? Thanks. ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Saltstack",
+      "url": "https://wiki.archlinux.org/title/Saltstack",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Salt commands allow for a vast set of functions to be executed and for specific minion and groups of minions to be targeted for execution. This ... | Webpage excerpt: Salt delivers a dynamic communication bus for instrastructures that can be used for orchestration, remote execution, configuration management and much more. Salt is at its core a Remote Execution solution. Running pre-defined or arbitrary commands on remote hosts. Salt functions on a master/minion topology. A master server acts as a central control bus for the clients (called minions), and the minions connect back to the master. The Salt master can also be started in the foreground in debug mode, greatly increasing the command output: Salt authenticates minion using public key encryption and authentication. For a minion to start accepting commands from the master the minion keys need to be accepted. The salt-key command is used to manage all of the keys on the master. To list the keys that are on the master run salt-key list command: After connecting and accepting the minion on the Salt master, you can now send commands to the minion. Salt commands allow for a vast set of functions to be executed and for specific minion and groups of minions to be targeted for execution. This makes the salt command very powerful, but the command is also very usable, and easy to understand. The salt command is comprised of command options, target specification, the function to execute, and arguments to the function. A simple command to start with looks like this: The * is the target, which speci",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "A-Salt: attacking SaltStack",
+      "url": "https://skylightcyber.com/2023/02/09/a-salt-attacking-saltstack/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Common salt 'reactor' patterns are vulnerable to template injections, resulting in command execution. This means we can potentially run ... | Webpage excerpt: A-Salt: attacking SaltStack SaltStack is an IT orchestration platform, similar to Puppet or Ansible. This blog post introduces a set of common misconfigurations we’ve encountered in the wild, as well as a novel template injection technique that can achieve remote code execution on a salt-master (or master-of-masters) server. With a bit of luck, you can go from a basic presence in a network, to the keys to the kingdom, and potentially neighbouri If this is your first time reading about Salt (aka SaltStack), it is a relatively new entrant to the IT orchestration field, alongside the likes of Ansible and Puppet. And because of that relative youth there is not very much in the security space written up on it. This post was written with the aim of helping anyone who is on a pentest/red team and finds themselves in a network running Salt as well as those tasked w With PowerCorp in the background, I’ve got four and a half things anyone testing Salt security should have in their arsenal. The first three are dead simple misconfigurations, but can prove very effective in taking down an environment. The last one and a half are much tastier and are where we achieved command execution across our target environment. Common salt ‘reactor’ patterns are vulnerable to template injections, resulting in command execution. This means we can potentially run arbitrary code on the master, its minions,",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:33:23.893228+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2020-11652",
+    "CVE-2017-5200",
+    "CVE-2019-17361",
+    "CVE-2020-28243",
+    "CVE-2021-3144"
+  ],
+  "retrieval_errors": []
+}

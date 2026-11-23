@@ -1,0 +1,138 @@
+{
+  "status": "Valid",
+  "query": "ActiveMQ 5.17.3 exploit vulnerability | the the the vulnerability ActiveMQ 5.17.3",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Apache ActiveMQ Improper Input Validation Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Apache ActiveMQ: Apache ActiveMQ contains an improper input validation vulnerability that allows for code injection. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2026-34197 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-0684: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-0684",
+      "snippet": "Cross-site scripting (XSS) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote authenticated users to inject arbitrary web script or HTML via the JMSDestination parameter in a queue action.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-0684 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-1244: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-1244",
+      "snippet": "Cross-site request forgery (CSRF) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote attackers to hijack the authentication of unspecified victims for requests that create queues via the JMSDestination parameter in a queue action.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-1244 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-1587: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-1587",
+      "snippet": "The Jetty ResourceHandler in Apache ActiveMQ 5.x before 5.3.2 and 5.4.x before 5.4.0 allows remote attackers to read JSP source code via a // (slash slash) initial substring in a URI for (1) admin/index.jsp, (2) admin/queues.jsp, or (3) admin/topics.jsp.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-1587 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache ActiveMQ Remote Code Execution ...",
+      "url": "https://www.sonicwall.com/blog/apache-activemq-remote-code-execution-cve_2023_46604",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The SonicWall Capture Labs Threat Research team has observed attackers targeting a critical vulnerability affecting Apache ActiveMQ allowing ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The SonicWall Capture Labs Threat Research team has observed attackers targeting a critical vulnerability affecting Apache ActiveMQ allowing a remote attacker with network access to a broker to run arbitrary shell commands by manipulating serialized class types in the OpenWire protocol to cause the broker to instantiate any class on the classpath. The vulnerability is categorized as an Unbounded deserialization resul Apache ActiveMQ 5.18.0 before 5.18.3 Apache ActiveMQ 5.17.0 before 5.17.6 Apache ActiveMQ 5.16.0 before 5.16.7 Apache ActiveMQ before 5.15.16 Apache ActiveMQ Legacy OpenWire Module 5.18.0 before 5.18.3 Apache ActiveMQ Legacy OpenWire Module 5.17.0 before 5.17.6 Apache ActiveMQ Legacy OpenWire Module 5.16.0 before 5.16.7 Apache ActiveMQ Legacy OpenWire Module 5.8.0 before 5.15.16 Organizations still running one of the vulnerable software versions should upgrade to version 5.15.16, 5.16.7, 5.17.6 or 5.18.3, which fixes this issue. This vulnerability has been assigned the Common Vulnerabilities and Exposures (CVE) identifier CVE-2023-46604. The overall CVSS 3.1 score is 10 (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:H). Base score is 10 (AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:H), based on the following metrics: Attack vector is network. Attack complexity is low. Privileges required is none. User interaction is none. Impact of this vulnerability on data confidentiality is low. Impact of this vulnerability on data integrity is high. Impact of this vulnerability on data availability is high. Temporal score is 9.4 (E:P/RL:O/RC:C), based on the following metrics: The exploit code maturity level of this vulnerability is proof of concept code. The remediation level of this vulnerability is official fix. The report confidence level of this vulnerability is confirmed. Apache ActiveMQ is a widely used open-source message broker written in Java, known for its multi-protocol compatibility. It offers clients the flexibility of choosing from a variety of programming languages and platforms, with support for JavaScript, C, C++, Python, .Net and others. An attacker connected to OpenWire TCP port 61616 can send an OpenWire packet to unmarshall an ExceptionResponse object instance. By supplying an arbitrary class name as well as an arbitrary string parameter to the BaseDataStreamMarshaller.createThrowable, the attacker will, have access to an arbitrary class to be instantiated with a single command string parameter. At SonicWall Capture Labs Threat Research, we have recreated the PoC using Metasploit framework as demonstrated in Figure 1. Before exploitation can occur, the following conditions must be true: The attacker must have network access. The attacker must send a manipulated OpenWire “command” (used to instantiate an arbitrary class on the classpath with a String parameter). A class must be present on the installation in the classpath which can execute arbitrary code simply by instantiating it with a String parameter. Figure 1 below demonstrates the following steps to exploit this vulnerability: Create and start a vulnerable victim server. Uses a Metasploit module to host the poc.xml file on the attacker’s server. Finally, run the expl",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "ActiveMQ 5.17.3 Release - Apache Software Foundation",
+      "url": "https://activemq.apache.org/components/classic/download/classic-05-17-03",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache ActiveMQ 5.17.3 was released on Dec 4th, 2022. now using Spring 5.x, resolved issues and bug fixes. | Webpage text: This is an older release. To get the current release, please see the download page. Apache ActiveMQ 5.17.3 was released on Dec 4th, 2022. It’s a major milestone for ActiveMQ, now using Spring 5.x, Log4j 2.x, and other major updates and resolved issues and bug fixes. Getting the Binary Distributions apache-activemq-5.17.3-bin.zip Unix/Linux/Cygwin Distribution apache-activemq-5.17.3-bin.tar.gz Verify the Integrity of Downloads It is essential that you verify the integrity of the downloaded files using the ASC signature or SHA checksum. The ASC signatures can be verified using PGP or GPG. Begin by following these steps: Download the .asc signature for the relevant distribution file. $ gpg --verify <file-name>.asc <file-name> Alternatively you can [also] verify the SHA-512 checksum of the file. For example, using the sha512sum command: $ sha512sum -c <file-name>.sha512 Getting the Binaries using Maven 3 To use this release in your maven project, the simplest dependency that you can use in your Maven POM is: <groupId>org.apache.activemq</groupId> <artifactId>activemq-all</artifactId> <version>5.17.3</version> If you need more fine grained control of your dependencies (activemq-all is an uber jar) pick and choose from the various components activemq-client, activemq-broker, activemq-xx-store etc. activemq-parent-5.17.3-source-release.zip For a more detailed view of new features and bug fixes, see the release notes Also see the previous ActiveMQ 5.17.2 Release Apache, ActiveMQ, Apache ActiveMQ, the Apache logo, and the Apache ActiveMQ project logo are trademarks of The Apache Software Foundation. Copyright © 2025, The Apache Software Foundation. Licensed under Apache License 2.0.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:32:08.112587+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Suspected Exploitation of Apache ActiveMQ CVE-2023- ...",
+      "url": "https://www.rapid7.com/blog/post/2023/11/01/etr-suspected-exploitation-of-apache-activemq-cve-2023-46604/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Tom Elkins, John Fenninger, Evan McCann, Matthew Smith, and Micah Young contributed attacker behavior insights to this blog. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "org.apache.activemq:apache-activemq 5.17.3",
+      "url": "https://security.snyk.io/package/maven/org.apache.activemq%3Aapache-activemq/5.17.3",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Affected versions of this package are vulnerable to Deserialization of Untrusted Data via the Jolokia component. An attacker can potentially trigger arbitrary ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:32:08.112587+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2023-46604 (Apache ActiveMQ) Exploited to Infect ...",
+      "url": "https://www.trendmicro.com/en_us/research/23/k/cve-2023-46604-exploited-by-kinsing.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). We uncovered the active exploitation of the Apache ActiveMQ vulnerability CVE-2023-46604 to download and infect Linux systems with the ... | Webpage text: Content has been added to your Folio Exploits & Vulnerabilities CVE-2023-46604 (Apache ActiveMQ) Exploited to Infect Systems With Cryptominers and Rootkits We uncovered the active exploitation of the Apache ActiveMQ vulnerability CVE-2023-46604 to download and infect Linux systems with the Kinsing malware (also known as h2miner) and cryptocurrency miner. We uncovered the active exploitation of the Apache ActiveMQ vulnerability CVE-2023-46604 to download and infect Linux systems with the Kinsing malware (also known as h2miner) and cryptocurrency miner. When exploited, this vulnerability leads to remote code execution (RCE), which Kinsing uses to download and install malware. The vulnerability itself is due to OpenWire commands failing to validate throwable class type, ActiveMQ (written in Java) is an open-source protocol developed by Apache that implements message-oriented middleware (MOM). Its main function is to send messages between different applications. It also includes additional features like STOMP, Jakarta Messaging (JMS), and OpenWire. The Kinsing malware is a critical threat that primarily targets Linux-based systems and can infiltrate servers and spread rapidly across a network. It gains entry by exploiting vulnerabilities in web applications or misconfigured container environments. Recently, the threat actors behind Kinsing have been exploiting high-profile vulnerabilities such as CVE-2023-4911 (Looney Tunables). Once Kinsing infects a system, it deploys a cryptocurrency-mining script that exploits the host's resources to mine cryptocurrencies like Bitcoin, resulting in significant damage to the infrastructure and a negative impact on system performance. Affected ActiveMQ versions The following list details affected Apache ActiveMQ versions that are vulnerable to CVE-2023-46604: Apache ActiveMQ 5.18.0 before 5.18.3 Apache ActiveMQ 5.17.0 before 5.17.6 Apache ActiveMQ 5.16.0 before 5.16.7 Apache ActiveMQ before 5.15.16 Apache ActiveMQ Legacy OpenWire Module 5.18.0 before 5.18.3 Apache ActiveMQ Legacy OpenWire Module 5.17.0 before 5.17.6 Apache ActiveMQ Legacy OpenWire Module 5.16.0 before 5.16.7 Apache ActiveMQ Legacy OpenWire Module 5.8.0 before 5.15.16 Users are recommended to upgrade both Java OpenWire brokers and clients to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3, as any of these fixes the issue. CVE-2023-46604 patch differences Based on AMQ-9370, we are able to check the root cause of the vulnerability, which is an issue pertaining to the validation of throwable class types when OpenWire commands are unmarshalled. OpenWire is a binary protocol that has been specifically designed for working with message-oriented middleware. It serves as the native wire format of ActiveMQ, which is a widely used open-source messaging and integration platform. OpenWire's binary format offers several advantages over other formats, such as its efficient use of bandwidth and its ability to support a wide range of message types. These characteristic Based on the patch difference, we can see that the validateIsThrowable method has been included in the BaseDataStreamMarshall class. Figure 1. The validateIsThrowable method is included in the BaseDataStreamMarshall class. Figure 2. Failing to v",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Threat Response - Critical vulnerability in Apache ActiveMQ",
+      "url": "https://northwave-cybersecurity.com/threat-response-critical-vulnerability-in-apache-activemq",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability allows for remote code execution. We urge all recipients to install updates on vulnerable instances of ActiveMQ as soon as ... | Webpage text: Threat Response - Critical vulnerability in Apache ActiveMQ On 26 October 2023, Apache Foundation issued a patch for a vulnerability in ActiveMQ tracked under CVE-2023-46604 [1]. The vulnerability allows for remote code execution. We urge all recipients to install updates on vulnerable instances of ActiveMQ as soon as possible. Public exploitation code is available for this vulnerability. Northwave observed recent exploitation of this vulnerability leading to ransomware deplo Apache ActiveMQ is a Java-based message broker, which is used to let different components of a software system communicate with each other. In the Apache ActiveMQ software, a remote threat actor with network access to the ActiveMQ service is able to abuse this vulnerability. The Apache ActiveMQ server contains a deserialisation error which can be abused to execute code as the service user of ActiveMQ. The vulnerability allows for remote code execution as the service user of ActiveMQ [2, 3]. All of this can be done remotely and without authentication. From the vulnerable server, the threat actor can obtain access to the rest of the network. The Northwave CERT has observed misuse of this vulnerability leading to ransomware deployment. Based on this, Northwave assesses the impact to be high. We assess the risk of this vulnerability as high, because the code for this exploit is available and exploitation has been observed. The following versions of Apache ActiveMQ are affected [2]: - Apache ActiveMQ 5.18.0 before 5.18.3 - Apache ActiveMQ 5.17.0 before 5.17.6 - Apache ActiveMQ 5.16.0 before 5.16.7 - Apache ActiveMQ before 5.15.16 - Apache ActiveMQ Legacy OpenWire Module 5.18.0 before 5.18.3 - Apache ActiveMQ Legacy OpenWire Module 5.17.0 before 5.17.6 - Apache ActiveMQ Legacy OpenWire Module 5.16.0 before 5.16.7 - Apache ActiveMQ Legacy OpenWire Module 5.8.0 before 5.15.16 Apache recommends users to upgrade to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3, which fixes this issue. We recommend to update Apache ActiveMQ as soon as possible to one of the versions mentioned above. There are hot-patches available for older versions, so an upgrade to a major release is not strictly necessary. Successful exploitation might not be logged. If the server was publicly reachable and vulnerable, we advise to check for signs of compromise and to actively monitor the server. If signs of compromise are detec We will monitor any developments regarding this vulnerability. If new critical information about this threat arises we will reach out to you. You can call us by phone or send us an email if you would like additional information. Do you have an incident right now? Call our Incident Response Team: 00800 1744 0000 Disclaimer applies, see below. [1]: https://www.cve.org/CVERecord?id=CVE-2023-46604 [2]: https://activemq.apache.org/security-advisories.data/CVE-2023-46604-announcement.txt [3]: https://advisories.ncsc.nl/advisory?id=NCSC-2023-0561 Northwave has made every effort to make this information accurate and reliable. However, the information provided is without warranty of any kind and its use is at the sole risk of the user. Northwave does not accept any responsibility or liability for the accuracy, content, completeness, lega",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:32:08.112587+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "vulhub/activemq/CVE-2023-46604/README.md at master",
+      "url": "https://github.com/vulhub/vulhub/blob/master/activemq/CVE-2023-46604/README.md",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache ActiveMQ is an open source messaging middleware developed by the American Pachitea (Apache) Software Foundation that supports Java messaging services, ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T10:27:59.166600+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2026-34197",
+    "CVE-2010-0684",
+    "CVE-2010-1244",
+    "CVE-2010-1587"
+  ],
+  "retrieval_errors": [
+    "Context-only product/version research: CVE results are leads, not proof of an observed attack.",
+    "Webpage read unavailable for digital.nhs.uk: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for cvedb.shodan.io: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>",
+    "Context-only product/version research: CVE results are leads, not proof of an observed attack."
+  ]
+}

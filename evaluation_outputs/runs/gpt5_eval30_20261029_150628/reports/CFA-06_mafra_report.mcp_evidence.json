@@ -1,0 +1,66 @@
+{
+  "status": "Valid",
+  "query": "Apache Solr Log4Shell packet clues: endpoint solr cores",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-29T23:07:19.981828+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-22444: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22444",
+      "snippet": "The \"create core\" API of Apache Solr 8.6 through 9.10.0 lacks sufficient input validation on some API parameters, which can cause Solr to check the existence of and attempt to read file-system paths that should be disallowed by Solr's  \"allowPaths\" security setting https://https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html#the-solr-element .  These read-only accesses can allow users to create cores using unexpected configsets if any are accessible via the filesystem.  On Windows systems configured to allow UNC paths this can additionally cause disclosure of NTLM \"user\" hashes. \n\nSolr deployments are subject to this vulnerability if they meet the following criteria:\n  *  Solr is running in its \"standalone\" mode.\n  *  Solr's \"allowPath\" setting is being used to restrict file access to certain directories.\n  *  Solr's \"create core\" API is exposed and accessible to untrusted users.  This can happen if Solr's  RuleBasedAuthorizationPlugin https://solr.apache.org/guide/solr/latest/deployment-guide/rule-based-authorization-plugin.html  is disabled, or if it is enabled but the \"core-admin-edit\" predefined permission (or an equivalent custom permission) is given to low-trust (i.e. non-admin) user roles.\n\nUsers can mitigate this by enabling Solr's RuleBasedAuthorizationPlugin (if disabled) and configuring a permission-list that prevents untrusted users from creating new Solr cores.  Users should also upgrade to Apache Solr 9.10.1 or greater, which contain fixes for this issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-22444 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:07:19.981828+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Exploiting Apache Solr with log4shell CVE-2021-44228",
+      "url": "https://medium.com/@dentono/solr-flair-de746ff9048b",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Update java and Apache Solr: Upgrade to Solr 8.11.1 or greater (when available), which will include an updated version (>= 2.16.0) of the Log4J ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:07:19.981828+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Solr Log4Shell RCE - Web Application ...",
+      "url": "https://www.invicti.com/web-application-vulnerabilities/apache-solr-log4shell-rce",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache Solr versions using vulnerable Log4j library (CVE-2021-44228, also known as Log4Shell) allow remote code execution through specially crafted input. | Webpage text: Invicti named a Leader in IDC MarketScape: Worldwide DAST 2026 Vendor Assessment. Read now. Web Application Vulnerabilities / Apache Solr Log4Shell RCE Web Application Vulnerabilities Looking for the vulnerability index of Invicti's legacy products? Acunetix Standard & Premium Web Application Vulnerabilities API Broken Object Prop Auth API Improper Inventory Management LLM Insecure Output Handling LLM Sensitive Information Disclosure Sensitive Data Not Over SSL Server Side Template Injection Unauthenticated File Upload Apache Solr Log4Shell RCE - Vulnerability Database Apache Solr Log4Shell RCE Apache Solr versions using vulnerable Log4j library (CVE-2021-44228, also known as Log4Shell) allow remote code execution through specially crafted input. Attackers can exploit this critical vulnerability by injecting malicious JNDI lookup strings that cause the application to execute arbitrary code or exfiltrate sensitive data without requiring authentication. Take the following steps immediately to remediate this vulnerability: 1. Upgrade Apache Solr to version 8.11.1 or later (for 8.x branch) or 7.7.3 or later (for 7.x branch), which include patched Log4j versions 2. If immediate upgrade is not possible, apply one of these temporary mitigations: - Set the JVM option -Dlog4j2.formatMsgNoLookups=true - Remove the JndiLookup class from the Log4j JAR file: zip -q -d log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class 3. Verify the fix by checking Solr and Log4j versions after applying updates 4. Review logs for suspicious activity or exploitation attempts prior to patching 5. Implement network segmentation to limit exposure of Solr instances to untrusted networks Apache projects affected by log4j CVE-2021-44228 Apache OFBiz Log4Shell RCE Ubiquiti Unifi Log4Shell RCE VMware Horizon Log4Shell RCE VMware vCenter Log4Shell RCE ImageMagick remote code execution CVE-2021-44228 CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:A",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:07:19.981828+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Rapid7 Analysis: CVE-2021-44228 (Log4Shell)",
+      "url": "https://www.rapid7.com/blog/post/ra-cve-2021-44228-log4shell-analysis/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache Solr is trivially exploitable by a remote and unauthenticated attacker when in its default configuration. Proof of Concept Exploit. By ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:07:19.981828+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Solr Log4Shell Direct Check (CVE-2021-44228)",
+      "url": "https://www.tenable.com/plugins/nessus/156471",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The version of Apache Solr running on the remote web server is affected by a remote code execution vulnerability in the bundled Apache Log4j ... | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Apache Solr Log4Shell Direct Check (CVE-2021-44228) critical Nessus Plugin ID 156471 SynopsisThe remote web server contains a Java application that is affected by a remote code execution vulnerability. DescriptionThe version of Apache Solr running on the remote web server is affected by a remote code execution vulnerability in the bundled Apache Log4j logging library. Apache Log4j is vulnerable due to insufficient protections on message lookup substitutions when dealing with user controlled input. A remote, unauthenticated attacker can exploit this, via a web request, to execute arbitrary code with the permission l This plugin requires that both the scanner and target machine have internet access. SolutionUpgrade to Apache Solr version 8.11.1 or later. http://www.nessus.org/u?7b651c6e http://www.nessus.org/u?967acbea File Name: apache_solr_log4shell.nbin Supported Sensors: Nessus Vector: CVSS2#AV:N/AC:M/Au:N/C:C/I:C/A:C CVSS Score Source: CVE-2021-44228 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H Temporal Vector: CVSS:3.0/E:H/RL:O/RC:C Vulnerability Information Required KB Items: installed_sw/Apache Solr Exploit Ease: Exploits are available Patch Publication Date: 12/16/2021 Vulnerability Publication Date: 12/10/2021 CISA Known Exploited Vulnerability Due Dates: 12/24/2021 CVE: CVE-2021-44228 IAVA: 0001-A-0650, 2021-A-0573-S",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:07:19.981828+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2026-22444"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

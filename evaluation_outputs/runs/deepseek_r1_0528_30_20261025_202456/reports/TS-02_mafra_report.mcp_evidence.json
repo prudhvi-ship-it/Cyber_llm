@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "web vulnerability packet clues: endpoint etc passwd",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-112946: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-112946",
+      "snippet": "Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-24010: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24010",
+      "snippet": "Vite is a frontend tooling framework for javascript. Vite allowed any websites to send any requests to the development server and read the response due to default CORS settings and lack of validation on the Origin header for WebSocket connections. This vulnerability is fixed in 6.0.9, 5.4.12, and 4.5.6.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-24010 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-24360: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24360",
+      "snippet": "Nuxt is an open-source web development framework for Vue.js. Starting in version 3.8.1 and prior to version 3.15.3, Nuxt allows any websites to send any requests to the development server and read the response due to default CORS settings. Users with the default server.cors option using Vite builder may get the source code stolen by malicious websites. Version 3.15.3 fixes the vulnerability.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-24360 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-30208: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-30208",
+      "snippet": "Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Web Application Vulnerabilities | SQLi, XSS & CSRF",
+      "url": "https://www.rapid7.com/fundamentals/web-application-vulnerabilities/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Web application vulnerabilities are weaknesses or flaws in web apps that can be exploited by attackers to access sensitive data, manipulate systems, or ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Government websites go dark after AI-discovered flaw ...",
+      "url": "https://www.reuters.com/world/asia-pacific/eu-agency-warns-websites-may-need-be-taken-offline-php-prepares-patches-2026-10-21/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Government websites in Europe and elsewhere went offline after the disclosure of ​critical vulnerabilities in a widely used programming ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Vulnerabilities | OWASP Foundation",
+      "url": "https://community.owasp.org/vulnerabilities/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the ... | Webpage text: A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the stakeholders of an application. Stakeholders include the application owner, application users, and other entities that rely on Please do not post any actual vulnerabilities in products, services, or web applications. Those disclosure reports should be posted to bugtraq or full-disclosure mailing lists. Examples of vulnerabilities Lack of input validation on user input Lack of sufficient logging mechanism Not closing the database connection properly For a great overview, check out the OWASP Top Ten Project. You can read about the top vulnerabilities and download a paper that covers them in detail. Many organizations and agencies use the Top Ten as a way of creating awareness about application security. NOTE: Before you add a vulnerability, please search and make sure there isn’t an equivalent one already. You may want to consider creating a redirect if the topic is the same. Every vulnerability article has a Allowing Domains or Accounts to Expire Business logic vulnerability CSV Injection by Timo Goosen, Albinowax Catch NullPointerException Deserialization of untrusted data Directory Restriction Error Expression Language Injection Full Trust CLR Verification issue Exploiting Passing Reference Types by Reference Improper pointer subtraction Information exposure through query strings in URL by Robert Gilbert (amroot) Insecure Deserialization by Vaibhav Malik Insecure Compiler Optimization Insecure Third Party Domain Access Insufficient Numeric Precision by Abdullah Al-Khalaf Insufficient Session ID Length by Jake Karnes Least Privilege Violation OWASP .NET Vulnerability Research Overly Permissive Regular Expression PHP Object Injection by Egidio Romano Password Management Hardcoded Password Password Plaintext Storage Poor Logging Practice by Weilin Zhong Race Conditions by Cindy Ramirez Return Inside Finally Block Session Variable Overloading Unchecked Error Condition Unchecked Return Value Missing Check against Null Unsafe function call from a signal handler Use of hard-coded password Using a broken or risky cryptographic algorithm Vulnerability Scanning Tools XML External Entity (XXE) Processing The Follina Vulnerability - A Critical Threat to Microsoft Office by Tholkappiar The OWASP® Foundation works to improve the security of software through its community-led open source software projects, hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences. Important Community Links Vulnerabilities (You are here) Upcoming OWASP Global Events",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE: Common Vulnerabilities and Exposures",
+      "url": "https://www.cve.org/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Identify, define, and catalog publicly disclosed cybersecurity vulnerabilities. There are currently over 395,000 CVE Records accessible via Download or Keyword ... | Webpage text: Common vulnerabilities and Exposures (CVE)",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:55:19.129359+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2026-112946",
+    "CVE-2025-24010",
+    "CVE-2025-24360",
+    "CVE-2025-30208"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.reuters.com: HTTPError: HTTP Error 401: HTTP Forbidden",
+    "Webpage read unavailable for www.cybersecuritydive.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

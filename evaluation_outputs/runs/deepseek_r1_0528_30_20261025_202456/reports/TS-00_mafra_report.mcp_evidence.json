@@ -1,0 +1,105 @@
+{
+  "status": "Valid",
+  "query": "Erlang 5.2.9 Remote Command Execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2025-32433 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-24719: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-24719",
+      "snippet": "Exposed Erlang Cookie could lead to Remote Command Execution (RCE) attack. Communication between Erlang nodes is done by exchanging a shared secret (aka \"magic cookie\"). There are cases where the magic cookie is included in the content of the logs. An attacker can use the cookie to attach to an Erlang node and run OS level commands on the system running the Erlang node. Affects version: 6.5.1. Fix version: 6.6.0.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2020-24719 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2023-45312: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45312",
+      "snippet": "In the mtproto_proxy (aka MTProto proxy) component through 0.7.2 for Erlang, a low-privileged remote attacker can access an improperly secured default installation without authenticating and achieve remote command execution ability.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2023-45312 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-32433: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-32433",
+      "snippet": "Erlang/OTP is a set of libraries for the Erlang programming language. Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH server may allow an attacker to perform unauthenticated remote code execution (RCE). By exploiting a flaw in SSH protocol message handling, a malicious actor could gain unauthorized access to affected systems and execute arbitrary commands without valid credentials. This issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20. A temporary workaround involves disabling the SSH server or to prevent access via firewall rules.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-32433 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Critical SSH RCE in Erlang/OTP (CVE-2025-32433)",
+      "url": "https://www.sonicwall.com/blog/pre-auth-rce-alert-critical-ssh-flaw-in-erlang-otp-cve-2025-32433-",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). A pre-auth SSH flaw in Erlang/OTP allows remote code execution. Learn how this CVSS 10.0 threat works and how SonicWall protects against it. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The SonicWall Capture Labs threat research team became aware of a pre-authentication vulnerability in Erlang/OTP (Open Telegram Platform) SSH server implementation, assessed its impact, and developed mitigation measures. Erlang/OTP is a known toolkit used to build scalable, fault-tolerant systems such as telecommunications, messaging platforms, IoT infrastructure and financial services. It is used by organizations li Identified as CVE-2025-32433, Erlang/OTP SSH vulnerable versions include OTP 27.3.2 and earlier, OTP 26.2.5.10 and earlier, OTP 25.3.2.19 and earlier, and versions from OTP 17.0 and older. These vulnerable versions allow an attacker to be authenticated, verified and logged in as users because the server fails to properly reject certain types of protocol messages that are sent before the authentication phase of the SS The vulnerability originates from the SSH server's failure to properly enforce authentication during the pre-authentication phase. Erlang/OTP’s built-in SSH server connection protocol messages, specifically SSH_MSG_CHANNEL_OPEN and SSH_MSG_CHANNEL_REQUEST, are the primary causes of this vulnerability. According to RFC 4254, these messages should be considered acceptable only after successful and legitimate authentica Figure 1: SSH Protocol Stack The SSH Connection Protocol operates on top of the SSH transport and user authentication layers. It provides features such as interactive logins, remote command execution and port forwarding. In the vulnerable Erlang/OTP SSH connection, the two relevant messages to initiate a channel connection and authenticate a user, are SSH_MSG_CHANNEL_OPEN and SSH_MSG_CHANNEL_REQUEST, which send requests over an established conne Figure 2: SSH Protocol Message Summary For the exploitation to work, one must find a vulnerable version of Erlang/OTP connected to the network and have SSH access. The exploit flow works as follows: • In the Banner Exchange, the client and server exchange version strings and compatibility parameters as a standard process of the SSH connection protocol. • The attacker conducts the key exchange negotiation by sending a crafted SSH_MSG_KEXINIT. • By manipulating the authentication process, an attacker sends SSH_MSG_CHANNEL_OPEN to initiate a new session channel. Due to a failure to enforce authentication, this becomes the first part",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Unauthenticated Remote Code Execution in Erlang/OTP SSH",
+      "url": "https://github.com/erlang/otp/security/advisories/GHSA-37cp-fgq5-7wc2",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). GitHub is where people build software. More than 225 million people use GitHub to discover, fork, and contribute to over 800 million ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "SSH Release Notes — OTP 29.1.1 (ssh 6.0.6)",
+      "url": "https://www.erlang.org/doc/apps/ssh/notes.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Fixed a vulnerability where the max_channels daemon option was not enforced for session channels without an active subsystem, allowing a remote authenticated ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Search erlang documentation Search erlang documentation Search erlang documentation Fixed Bugs and Malfunctions Fixed a bug where SSH CLI sessions using {shell, {shell, start, []}} did not handle latin1-encoded put_chars messages from the Erlang shell. This caused exception output (e.g. \"** exception error: ...\") to not be displayed on the SSH client, and {unhandled_request, ...} messages to appear on the daemon host. Own Id: OTP-20359 Aux Id: PR-11474 Fixed the following bugs in the SSH application: The SFTP client (ssh_sftp) checked the channel state record against 0 instead of the exit status integer when handling an exit_status message. The success branch was therefore dead code, and every SFTP subsystem exit — including a clean exit with status 0 — was reported to callers as an error. A clean exit is now reported as a normal stop. The SSH_FXP_EXTENDED_REPLY decoder in ssh_xfer bound only a single byte of the reply payload instead of the full binary (the pattern was missing a /binary specifier). This made SFTP extension operations such as statvfs@openssh.com fail with a function_clause crash whenever the payload was not exactly one byte. The TCP forwarding acceptor supervisor used the default permanent restart strategy, causing the acceptor to be restarted unnecessarily when a forwarded socket closed normally. The child now uses a transient restart strategy. The keyboard_interact_fun handling returned the atom nok instead of not_ok on an invalid response, causing a crash during SSH message encoding instead of a clean authentication rejection. The sshclient_channel catch pattern error:{undef, } never matched Erlang's actual error:undef exception, so a missing optional handle_call/3 or handle_cast/2 callback crashed the channel process instead of being ignored. The catch now matches error:undef and uses erlang:function_exported/3 to tell a genuinely missing optional callback (ignored, as before) from an undef raised deeper inside an implemented callback (now re-raised instead of being silently Both ssh_tcpip_forward_client and ssh_tcpip_forward_srv called gen_tcp:close(undefined) in terminate/2 when the forwarding socket was never established (or already closed), producing noisy crash reports on normal forward teardown. terminate/2 now handles the undefined socket. Own Id: OTP-20360 Aux Id: PR-11561 Fixed an SSH port-forwarding acceptor crash triggered by a peer that connects and immediately resets the connection. Transient TCP errors from accept and peername are now handled gracefully instead of terminating the acceptor. Own Id: OTP-20392 Aux Id: PR-11720 When the max_channels limit is reached for a port-forwarding channel (direct-tcpip or forwarded-tcpip), the SSH daemon now refuses the individual channel with SSH_MSG_CHANNEL_OPEN_FAILURE and keeps the connection alive, instead of terminating the whole SSH connection. Port-forwarding channels now behave like session channels, which already survived the limit, and this matches OpenSSH. Applications that relied on the POTENTIAL INCOMPATIBILITY Own Id: OTP-20420 Aux Id: PR-11708 Fixed Bugs and Malfunctions Fixed a vulnerability where the max_channels daemon opti",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Keys to the Kingdom: Erlang/OTP SSH Vulnerability ...",
+      "url": "https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-32433 allows for remote code execution in sshd for certain versions of Erlang programming language's OTP. We reproduced this CVE ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Keys to the Kingdom: Erlang/OTP SSH Vulnerability Analysis and Exploits Observed in the Wild Advanced Threat PreventionCloud-Delivered Security ServicesCortexCortex XDRCortex XpanseCortex XSIAMIndustrial and Operational TechnologyNext-Generation FirewallUnit 42 Incident Response Published:August 11, 2025 CVE-2025-32433 This article presents our observations of exploit attempts targeting CVE-2025-32433. This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the Erlang programming language's Open Telecom Platform (OTP). Erlang/OTP sshd is widely used in critical infrastructure and operational technology (OT) networks.With a CVSS score of 10.0, CVE-2025-32433 enables unauthenticated clients to execute commands by sending SSH connection protocol messages (codes >= 80) to open SSH ports, which should only be processed after successful authentication. Vulnerable versions include Erlang/OTP prior to OTP-27.3.3, OTP-26.2.5.11 and OTP-25.3 A patch is available in Erlang/OTP versions OTP-27.3.3, OTP-26.2.5.11, OTP-25.3.2.20 and later. We have reproduced, validated and analyzed this vulnerability to better understand its impact and provide detection strategies. We observed a significant increase in exploitation activity targeting this vulnerability from May 1-9, 2025, with 70% of our detections originating from firewalls protecting global operational technology (OT) networks. This analysis includes telemetry data showing geographic distribution and trends as well as the industries affected by this vulnerability. Palo Alto Networks customers are better protected from the threats discussed in this article through the following products and services: Next-Generation Firewall with the Advanced Threat Prevention subscription If you think you might have been compromised or have an urgent matter, contact the Unit 42 Incident Response team. Vulnerabilities Discussed CVE-2025-32433 Details of the Vulnerability Erlang is a programming language designed for building concurrent systems where multiple connections are needed simultaneously. Its companion framework, the Open Telecom Platform (OTP), has long been trusted in critical infrastructure from telecommunications networks to financial systems. OT and 5G environments use Erlang/OTP due to its fault-tolerance and scalability for high availability systems with minimal downtime. Due to compliance and safety requirements, OT and 5G administrators tend to use Erlang/OTP's native SSH implementation to remotely manage hosts, which makes CVE-2025-32433 a particular concern in these types of networks. At the heart of Erlang/OTP’s secure communication capabilities lies its native SSH implementation — responsible for encrypted connections, file transfers and most importantly, command execution. A flaw in this implementation would allow an attacker with network access to execute arbitrary code on vulnerable systems without requiring credentials, presenting a direct and severe risk to exposed assets. Analyzing global internet scanning data from Cortex Xpanse in April 2025, we saw vulnerable Erlang/OTP SSH services were widely exposed on",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:37:27.711630+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-32433",
+    "CVE-2020-24719",
+    "CVE-2023-45312"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.caloes.ca.gov: ValueError: Only HTML/plaintext webpages are supported",
+    "Webpage read unavailable for www.keysight.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

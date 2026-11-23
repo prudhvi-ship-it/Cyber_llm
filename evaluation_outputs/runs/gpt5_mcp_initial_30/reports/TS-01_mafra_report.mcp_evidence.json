@@ -1,0 +1,11 @@
+{
+  "status": "Abstain",
+  "query": "SSH",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T04:31:52.697580+00:00",
+  "sources": [],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "Online evidence search skipped because no validated attack or candidate CVE was identified."
+  ]
+}

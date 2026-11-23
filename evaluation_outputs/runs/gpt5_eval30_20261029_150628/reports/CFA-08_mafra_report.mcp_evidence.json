@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "phpMyAdmin local file inclusion remote code execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-0567: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-0567",
+      "snippet": "Multiple PHP remote file inclusion vulnerabilities in phpMyAdmin 2.6.1 allow remote attackers to execute arbitrary PHP code by modifying the (1) theme parameter to phpmyadmin.css.php or (2) cfg[Server][extension] parameter to database_interface.lib.php to reference a URL on a remote web server that contains the code.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-0567 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-3299: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-3299",
+      "snippet": "PHP file inclusion vulnerability in grab_globals.lib.php in phpMyAdmin 2.6.4 and 2.6.4-pl1 allows remote attackers to include local files via the $__redirect parameter, possibly involving the subform array.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-3299 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-12613: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-12613",
+      "snippet": "An issue was discovered in phpMyAdmin 4.8.x before 4.8.2, in which an attacker can include (view and potentially execute) files on the server. The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted pages. An attacker must be authenticated, except in the \"$cfg['AllowArbitraryServer'] = true\" case (where an attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin) and the \"$cfg['ServerDefault'] = 0\" case (which bypasses the login requirement and runs the vulnerable code without any authentication).",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2018-12613 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2001-0478: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2001-0478",
+      "snippet": "Directory traversal vulnerability in phpMyAdmin 2.2.0 and earlier versions allows remote attackers to execute arbitrary code via a .. (dot dot) in an argument to the sql.php script.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2001-0478 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "From Local File Inclusion to Remote Code Execution - Part 1",
+      "url": "https://outpost24.com/blog/from-local-file-inclusion-to-remote-code-execution-part-1/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Learn more about Local File Inclusion - aka LFI - one of the most common web application vulnerabilities.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "phpMyAdmin Authenticated Remote Code Execution",
+      "url": "https://www.rapid7.com/db/modules/exploit/multi/http/phpmyadmin_lfi_rce/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin v4.8.0 and v4.8.1 are vulnerable to local file inclusion, which can be exploited post-authentication to execute PHP code by application. The ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Loading vulnerability database phpMyAdmin Authenticated Remote Code Execution phpMyAdmin v4.8.0 and v4.8.1 are vulnerable to local file inclusion, which can be exploited post-authentication to execute PHP code by application. The module has been tested with phpMyAdmin v4.8.1. To display the available options, load the module within the Metasploit console and run the commands 'show options' or 'show advanced': msf > use exploit/multi/http/phpmyadmin/lfi_rce msf undefined(lfi_rce) > show actions msf undefined(lfi_rce) > set ACTION < action-name > msf undefined(lfi_rce) > show options ...show and set options... msf undefined(lfi_rce) > run Prioritize with Active Threat Intelligence With curated Threat Intelligence, you can see which vulnerabilities truly put you at risk, prioritize what matters most, and act before attackers do. CVE-2018-12613",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "phpMyAdmin 4.8.0/4.8.1 Authenticated Remote Code ...",
+      "url": "https://medium.com/@souleimangeudi/phpmyadmin-4-8-0-4-8-1-authenticated-remote-code-execution-cve-2018-12613-239688d710e4",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin is a popular open-source management tool used to administer MySQL and MariaDB databases. This laboratory contains the ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "PhpMyAdmin Local File Inclusion Vulnerability (PMASA- ...",
+      "url": "https://threatprotect.qualys.com/2018/06/25/local-file-inclusion-vulnerability-pmasa-2018-4/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. A vulnerability has been ... | Webpage text: phpMyAdmin is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. A vulnerability has been discovered where an attacker can include (view and potentially execute) files on the server. CVE-2018-12613 has been assigned to track this vulnerability. The vulnerability affects phpMyAdmin 4.8.0 and 4.8.1. Upon successful exploitation the attacker can leverage a LFI vulnerability to conduct remote code execution on the targeted system. The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for white listed pages. An attacker must be authenticated, except in these situations: $cfg[‘AllowArbitraryServer’] = true: attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin $cfg[‘ServerDefault’] = 0: this bypasses the login and runs the vulnerable code without any authentication The vulnerability exists in “/index.php”, which contains $_REQUEST[‘target’]; If target parameter is not import.php or export.php, last limit will be Core::checkPageValidity($_REQUEST[‘target’]), which is defined in the “\\libraries\\classes\\core.php”. This white list validation can be bypassed using “%253f” (double encoded ?) http://IP-address/phpmyadmin/index.php?target=db_sql.php%253f/../../../../../../windows/win.ini Contents from win.ini file In order to achieve remote code execution, attacker can write WebShell to the database and then include the database file via LFI. Webshell at the field value of data table http://IP-address/phpmyadmin/index.php?a=phpinfo();&target=db_sql.php%253f/../../../../../../xampp/mysql/data/test/hack.frm Execute phpinfo() via corresponding database file Configuring PHP with a restrictive `open_basedir` can greatly restrict an attacker’s ability to view files on the server. Please refer to PMASA-2018-4 for more mitigation/workarounds suggested by vendor. Qualys customers can scan their network with QID:13174 to detect vulnerable targets. Leave a Reply Cancel reply",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:32:01.015049+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2018-12613",
+    "CVE-2005-0567",
+    "CVE-2005-3299",
+    "CVE-2001-0478"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for outpost24.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

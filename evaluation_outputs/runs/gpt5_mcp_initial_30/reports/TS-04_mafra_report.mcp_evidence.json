@@ -1,0 +1,11 @@
+{
+  "status": "Abstain",
+  "query": "Next.js",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T04:39:29.903184+00:00",
+  "sources": [],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "Online evidence search skipped because no validated attack or candidate CVE was identified."
+  ]
+}

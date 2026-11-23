@@ -1,0 +1,6 @@
+Model,Service correct,CVE correct,Attack outcome correct,Cases
+GPT-5,21,14,17,30
+GPT-4o,16,11,13,30
+DeepSeek-R1-0528,22,17,17,30
+Ollama V1,16,6,7,30
+Ollama V3,13,3,10,30

@@ -199,7 +199,10 @@ class MemoryManager:
             self._audit("store", status="error", error=str(exc))
             return False
 
-    def retrieve(self, flow_summary: str, n_results: int = 2) -> str:
+    def retrieve(
+        self, flow_summary: str, n_results: int = 2, *,
+        require_approved_training: bool = False,
+    ) -> str:
         """Return relevant memories while excluding the current case."""
         self.last_retrievals = []
         if self.mode == "disabled":
@@ -215,9 +218,19 @@ class MemoryManager:
                 self._audit("retrieve", status="empty", sources=[])
                 return "No approved past cases found in memory."
 
-            requested = min(max(n_results * 4, n_results), count)
+            requested = min(
+                max(n_results * (8 if require_approved_training else 4), n_results),
+                count,
+            )
+            # Early recall samples both identification and trailing attack evidence;
+            # older report-only retrieval retains its original query text.
+            query_text = (
+                flow_summary[:700] + "\n" + flow_summary[-1300:]
+                if require_approved_training and len(flow_summary) > 2000
+                else flow_summary[:2000]
+            )
             results = self.collection.query(
-                query_texts=[flow_summary[:2000]],
+                query_texts=[query_text],
                 n_results=requested,
                 include=["documents", "metadatas", "distances"],
             )
@@ -231,6 +244,13 @@ class MemoryManager:
                 ids, documents, metadatas, distances
             ):
                 metadata = metadata or {}
+                # Pre-analysis RAG must not retrieve unapproved or evaluation cases.
+                # Leave legacy reporter retrieval unchanged unless explicitly gated.
+                if require_approved_training and not (
+                    metadata.get("approved") is True
+                    and str(metadata.get("split", "")).casefold() == "training"
+                ):
+                    continue
                 numeric_distance = float(distance)
                 if metadata.get("case_id") == self.current_case_id:
                     continue

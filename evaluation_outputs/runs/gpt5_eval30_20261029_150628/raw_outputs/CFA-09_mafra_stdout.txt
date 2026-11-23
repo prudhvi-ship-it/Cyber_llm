@@ -1,0 +1,108 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_7508125edf254673c281
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event9_CVE-2022-46169_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Cacti
+  Attack Type: Direct database tampering of Cacti backend via MySQL
+  Attack Success: Success
+  CVE: Not Found
+  Overall Confidence: High
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-09_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-09_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-09_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Cacti
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0015-F001998-005]: root user keyword observed.
+- PCAP [E-S0015-F002002-006]: admin keyword observed.
+- PCAP [E-S0015-F002002-007]: UPDATE user_auth SET must_change_password='' WHERE username = 'admin'.
+- PCAP [E-S0014-F001765-772]: INSERT INTO user_auth VALUES (1,'admin','21232f297a57a5a743894a0e4a801fc3',0,'Administrator','','on','on','on','on','on','on',2,1,1,1,1,'on',-1,-1,'-1','',0,0,0).
+- PCAP [E-S0014-F001986-850]: INSERT INTO version VALUES ('new_install').
+- ONLINE RESEARCH LEAD [CISA KEV] Cacti Command Injection Vulnerability: Cacti Cacti: Cacti contains a command injection vulnerability that allows an unauthenticated user to execute code. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2022-46169 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-71287: NVD vulnerability record: Cacti's sanitize_sql_column (lib/functions.php) sanitizes user-supplied ORDER BY column names using the regex . Because this allowlist retains letters, digits, underscore, parentheses, and dot (intended to support expressions like COUNT(id) and table.column), a payload such as passes through completely unmodified. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-71287 Supports: Web-cited CVE-2026-71287 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-39893: NVD vulnerability record: Cacti is an open source performance and fault management framework. In versions 1.2.30 and prior, the rfilter request variable was concatenated into a RLIKE SQL clause without sanitization. The endpoint does not require authentication (graph viewing supports guest access via the configured guest user), so the SQLi was reachable pre-auth on installs with guest viewing enabled. This issue was fixed in version 1.2.31. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-39893 Supports: Web-cited CVE-2026-39893 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2006-0146: NVD vulnerability record: The server.php test script in ADOdb for PHP before 4.70, as used in multiple products including (1) Mantis, (2) PostNuke, (3) Moodle, (4) Cacti, (5) Xaraya, (6) PHPOpenChat, (7) MAXdev MD-Pro, and (8) MediaBeez, when the MySQL root password is empty, allows remote attackers to execute arbitrary SQL commands via the sql parameter. Source: https://nvd.nist.gov/vuln/detail/CVE-2006-0146 Supports: NVD lists CVE-2006-0146 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-71287: Cacti SQL Injection Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-71287 is a SQL injection vulnerability in Cacti's ORDER BY sanitization. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-71287 CVE-2026-71287: Cacti SQL Injection Vulnerability CVE-2026-71287 is a SQL injection flaw in Cacti that allows authenticated users to exploit the sanitize_sql_column() function. This post covers technical details, affected versions, impact, and mitigation steps. Published: August 6, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2026-71287 Overview CVE-2026-71287 is a SQL injection vulnerability in Cacti, an open-source network monitoring and graphing platform. The flaw resides in the sanitize_sql_column() function within lib/functions.php, which sanitizes user-supplied ORDER BY column names using an overly permissive regex allowlist. Any authenticated Cacti user, regardless of privilege level, can inject SQL functions such as SLEEP() through the sort_column GE Authenticated attackers with any Cacti account can extract database contents, including credential hashes, through blind SQL injection in ORDER BY clauses that cannot be parameterized. Cacti (open-source network monitoring platform) lib/functions.php — sanitize_sql_column() function Scripts: user_log.php, utilities.php, user_domains.php, user_group_admin.php 2026-08-05 - CVE-2026-71287 published to NVD 2026-08-05 - Last updated in NVD database Technical Details for CVE-2026-71287 Cacti's sanitize_sql_column() function attempts to safely handle user-supplied ORDER BY column names by filtering input through the regex preg_replace('/[^a-zA-Z0-9_().]/', '', $column). The allowlist preserves letters, digits, underscore, parentheses, and dot to support legitimate expressions like COUNT(id) and table.column. This design decision leaves the door open to SQL function calls. A payload such as SLEEP(5) contains only allowlisted characters and passes through the sanitizer unchanged. The sanitized value is then concatenated directly into raw SQL ORDER BY clauses. ORDER BY clauses cannot be parameterized in prepared statements, so the vulnerability cannot be mitigated by binding parameters alone. The root cause is an incomplete character allowlist combined with unsafe string concatenation into SQL. The regex trusts any input composed of alphanumerics, underscores, dots, and parentheses. It does not validate that the resulting string is an actual column name from a known schema. Function invocations and nested SQL expressions therefore survive sanitization intact. An authenticated attacker sends a crafted HTTP GET request with the sort_column parameter set to a time-delay payload such as SLEEP(5) or a conditional expression like IF(SUBSTRING(user_auth.password,1,1)='a',SLEEP(5),0). The injected SQL executes against the Cacti database backend. Boolean and time-based inference techniques allow attackers to extract arbitrary data, including password hashes stored in user_auth, on See the Cacti functions.php source for the affected sanitizer implementation. Detection Methods for CVE-2026-71287 HTTP requests Source: https://www.sentinelone.com/vulnerability-database/cve-2026-71287/
+- ONLINE [Serper web result] cacti/CHANGELOG at develop: UNTRUSTED WEB RESEARCH (not PCAP evidence). Database Audit utility does not check database permissions. You have an error in your SQL syntax due to using table field without backtick. Ability to see ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/Cacti/cacti/blob/develop/CHANGELOG
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-39893 – Pre-Auth SQL Injection – Cacti 1.2.30 ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-39893 is a critical pre-authentication SQL injection vulnerability in Cacti, affecting all versions up to and including 1.2.30. Source: https://www.ionix.io/threat-center/cve-2026-39893/
+- ONLINE RESEARCH LEAD [Serper web result] Blind SQL injection in Cacti (CVE-2023-51448) - vsociety: UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability pertains to a Blind SQL Injection (SQLi) within the SNMP Notification Receivers feature, specifically in the managers.php ... Source: https://www.vicarius.io/vsociety/posts/blind-sql-injection-in-cacti-cve-2023-51448
+
+Verification Summary:
+- Affected service: Cacti.
+- Attack type: Direct database tampering of Cacti backend via MySQL.
+- Attack technique: Cleared must_change_password for Cacti admin in user_auth table using database root account.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Consensus attack outcome: Success.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Cacti Direct database tampering of Cacti backend via MySQL.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-71287
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-39893
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2006-0146
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2026-71287/
+- Evidence-source URL: https://github.com/Cacti/cacti/blob/develop/CHANGELOG
+- Evidence-source URL: https://www.ionix.io/threat-center/cve-2026-39893/
+- Evidence-source URL: https://www.vicarius.io/vsociety/posts/blind-sql-injection-in-cacti-cve-2023-51448
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.ionix.io: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for publications-cnrc.canada.ca: ValueError: Only HTML/plaintext webpages are supported
+- Evidence limitation: Webpage read unavailable for docs.cacti.net: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 7 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Harden MySQL/MariaDB root access: set a strong unique root password, disable remote root login, and restrict root to local socket where feasible.
+- Enforce least privilege: provision a dedicated Cacti database user with only required permissions; deny UPDATE/ALTER on authentication tables (e.g., user_auth) unless strictly necessary.
+- Network segmentation and firewalling: restrict TCP/3306 to only the Cacti application host; deny lateral or cross-container access to the DB from other hosts.
+- Enable and monitor database auditing: log and alert on writes to critical tables (user_auth, version) and on privilege escalations or account changes.
+- Implement transport security and strong authentication for DB connections (TLS with server verification and, if possible, client certificates).
+- Credential hygiene: rotate and vault database credentials; remove defaults after installation and ensure must_change_password flags are enforced operationally.
+- Application-level controls: add monitoring to detect unexpected clearing of must_change_password for admin accounts and require re-verification on such changes.
+- Regular backups and integrity checks: snapshot critical tables and compare for unauthorized modifications; rehearse rapid recovery procedures.
+- Review host/container access controls: lock down shell access to the DB server, enforce MFA for administrative access, and monitor for suspicious admin sessions.
+- Patch and maintain Cacti and dependencies; while no CVE was implicated here, staying current reduces risk of future application-layer compromise vectors.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

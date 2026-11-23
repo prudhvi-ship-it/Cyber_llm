@@ -1,0 +1,104 @@
+{
+  "status": "Valid",
+  "query": "Vite development server Vite Arbitrary File Read Path Traversal via Vite /@fs alias",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00",
+  "sources": [
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-30208: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-30208",
+      "snippet": "Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-30208 for a product matching 'Vite development server'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-24010: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24010",
+      "snippet": "Vite is a frontend tooling framework for javascript. Vite allowed any websites to send any requests to the development server and read the response due to default CORS settings and lack of validation on the Origin header for WebSocket connections. This vulnerability is fixed in 6.0.9, 5.4.12, and 4.5.6.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-24010 for a product matching 'Vite development server'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-24360: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24360",
+      "snippet": "Nuxt is an open-source web development framework for Vue.js. Starting in version 3.8.1 and prior to version 3.15.3, Nuxt allows any websites to send any requests to the development server and read the response due to default CORS settings. Users with the default server.cors option using Vite builder may get the source code stolen by malicious websites. Version 3.15.3 fixes the vulnerability.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-24360 for a product matching 'Vite development server'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...",
+      "url": "https://www.offsec.com/blog/cve-2025-30208/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-30208: Vitejs Vite Information Disclosure Flaw",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2025-30208/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Vite, a widely deployed frontend development tooling provider, contains an arbitrary file read vulnerability in its development server. The ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] CVE-2025-30208: Vitejs Vite Information Disclosure Flaw CVE-2025-30208 is an information disclosure vulnerability in Vitejs Vite that allows attackers to bypass file access restrictions and read arbitrary files. This article covers technical details, affected versions, and patches. Vite, a widely deployed frontend development tooling provider, contains an arbitrary file read vulnerability in its development server. The @fs endpoint denies access to files outside the Vite serving allow list. Appending ?raw?? or ?import&raw?? to a request URL bypasses this restriction and returns arbitrary file contents to the browser. The bypass exists because trailing separators such as ? are stripped in severa Network-accessible Vite dev servers leak the contents of any file readable by the Node.js process, including source code, environment variables, and credentials. Vite versions prior to 6.2.3 on the 6.2.x branch Vite versions prior to 6.1.2, 6.0.12, and 5.4.15 on earlier 6.x and 5.x branches Vite versions prior to 4.5.10 on the 4.x branch",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-30208 - Vite Arbitrary File Read vulnerability",
+      "url": "https://www.broadcom.com/support/security-center/protection-bulletin/cve-2025-30208-vite-arbitrary-file-read-vulnerability",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-30208 is a recently disclosed Arbitrary File Read vulnerability affecting Vite, which is a frontend build and development tool for web ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-30208-Vite Development Server Arbitrary File ...",
+      "url": "https://medium.com/@cyber_dark/cve-2025-30208-vite-development-server-arbitrary-file-read-b43ef2761a7f",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025–30208 is a high-severity vulnerability discovered in the Vite development server that allows an attacker to read arbitrary files ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T04:36:52.103616+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-24010",
+    "CVE-2025-24360",
+    "CVE-2025-30208"
+  ],
+  "retrieval_errors": [
+    "Webpage extraction skipped for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

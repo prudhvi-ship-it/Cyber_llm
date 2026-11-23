@@ -1,0 +1,19 @@
+{
+  "status": "COMPLETE_MAFRA_MCP_SINGLE_SYSTEM",
+  "dataset_complete": true,
+  "clean_run": true,
+  "provider_error_free": true,
+  "provider_error_call_count": 0,
+  "proposed_multi_llm_run": false,
+  "multi_llm_no_memory_ablation": false,
+  "controlled_same_model_run": false,
+  "single_system_evaluation": true,
+  "profile": "fair_same_model",
+  "memory_mode": "disabled",
+  "expected_case_count": 30,
+  "observed_case_count": 30,
+  "missing_case_ids": [],
+  "extra_case_ids": [],
+  "duplicate_row_count": 0,
+  "reasons": []
+}

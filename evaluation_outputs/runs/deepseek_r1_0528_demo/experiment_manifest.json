@@ -1,0 +1,27 @@
+{
+  "profile": "fair_same_model",
+  "provider_gateway": "OpenRouter",
+  "temperature": 0.0,
+  "timeout_seconds": 180.0,
+  "max_provider_retries": 2,
+  "memory_mode": "disabled",
+  "models": {
+    "flow_summariser": "deepseek/deepseek-r1-0528",
+    "fra_reasoner": "deepseek/deepseek-r1-0528",
+    "cve_selector": "deepseek/deepseek-r1-0528",
+    "mafra_analyst": "deepseek/deepseek-r1-0528",
+    "mafra_verifier": "deepseek/deepseek-r1-0528",
+    "mafra_cve_validator": "deepseek/deepseek-r1-0528",
+    "mafra_reporter": "deepseek/deepseek-r1-0528"
+  },
+  "run_id": "deepseek_r1_0528_demo",
+  "evaluation_schema_version": "4.3-mafra-mcp-candidate-and-verified",
+  "active_systems": [
+    "mafra"
+  ],
+  "evaluated_implementation": "MAFRA-MCP Step6A",
+  "shared_flow_summary": false,
+  "investigation_notebook": "disabled",
+  "mcp_url": "http://localhost:8000/mcp",
+  "training_rag_health": null
+}

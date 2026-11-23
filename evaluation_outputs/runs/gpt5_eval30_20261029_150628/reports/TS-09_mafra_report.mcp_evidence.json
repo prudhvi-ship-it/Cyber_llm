@@ -1,0 +1,93 @@
+{
+  "status": "Valid",
+  "query": "Apache Tomcat 9.0.97 insecure deserialization session RCE packet clues: endpoint sessions absholi7ly session",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-24813: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24813",
+      "snippet": "Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.2, from 10.1.0-M1 through 10.1.34, from 9.0.0.M1 through 9.0.98.\nThe following versions were EOL at the time the CVE was created but are \nknown to be affected: 8.5.0 though 8.5.100. Other, older, EOL versions \nmay also be affected.\n\n\nIf all of the following were true, a malicious user was able to view       security sensitive files and/or inject content into those files:\n- writes enabled for the default servlet (disabled by default)\n- support for partial PUT (enabled by default)\n- a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads\n- attacker knowledge of the names of security sensitive files being uploaded\n- the security sensitive files also being uploaded via partial PUT\n\nIf all of the following were true, a malicious user was able to       perform remote code execution:\n- writes enabled for the default servlet (disabled by default)\n- support for partial PUT (enabled by default)\n- application was using Tomcat's file based session persistence with the default storage location\n- application included a library that may be leveraged in a deserialization attack\n\nUsers are recommended to upgrade to version 11.0.3, 10.1.35 or 9.0.99, which fixes the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2025-24813 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-9484: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-9484",
+      "snippet": "When using Apache Tomcat versions 10.0.0-M1 to 10.0.0-M4, 9.0.0.M1 to 9.0.34, 8.5.0 to 8.5.54 and 7.0.0 to 7.0.103 if a) an attacker is able to control the contents and name of a file on the server; and b) the server is configured to use the PersistenceManager with a FileStore; and c) the PersistenceManager is configured with sessionAttributeValueClassNameFilter=\"null\" (the default unless a SecurityManager is used) or a sufficiently lax filter to allow the attacker provided object to be deserialized; and d) the attacker knows the relative file path from the storage location used by FileStore to the file the attacker has control over; then, using a specifically crafted request, the attacker will be able to trigger remote code execution via deserialization of the file under their control. Note that all of conditions a) to d) must be true for the attack to succeed.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2020-9484 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    },
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 9 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-9.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Each vulnerability is given a security impact rating by the Apache Tomcat security team — please note that this rating may vary from platform to platform. We ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Apache Tomcat 9.x vulnerabilities This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the Apache Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw is known to affect, and where a flaw has not been verified list the version with a question mark. Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat provides a workaround are listed at the end of this page. Please note that binary patches are never provided. If you need to apply a source code patch, use the building instructions for the Apache Tomcat version that you are using. For Tomcat 9.0 those are Both files can be found in the webapps/docs subdirectory of a binary distribution. You may also want to review the page in the documentation. If you need help on building or configuring Tomcat or other help on following the instructions to mitigate the known vulnerabilities listed here, please send your questions to the public Tomcat Users mailing list If you have encountered an unlisted security vulnerability or other unexpected behaviour that has security impact, or if the descriptions here are incomplete, please report them privately to the Tomcat Security Team. Thank you. Fixed in Apache Tomcat 9.0.123 Fixed in Apache Tomcat 9.0.122 Fixed in Apache Tomcat 9.0.121 Fixed in Apache Tomcat 9.0.120 Fixed in Apache Tomcat 9.0.119 Fixed in Apache Tomcat 9.0.118 Fixed in Apache Tomcat 9.0.117 Fixed in Apache Tomcat 9.0.116 Fixed in Apache Tomcat 9.0.115 Fixed in Apache Tomcat 9.0.113 Fixed in Apache Tomcat 9.0.110 Fixed in Apache Tomcat 9.0.109 Fixed in Apache Tomcat 9.0.108 Fixed in Apache Tomcat 9.0.107 Fixed in Apache Tomcat 9.0.106 Fixed in Apache Tomcat 9.0.105 Fixed in Apache Tomcat 9.0.104 Fixed in Apache Tomcat 9.0.102 Fixed in Apache Tomcat 9.0.99 Fixed in Apache Tomcat 9.0.98 Fixed in Apache Tomcat 9.0.97 Fixed in Apache Tomcat 9.0.96 Fixed in Apache Tomcat 9.0.90 Fixed in Apache Tomcat 9.0.86 Fixed in Apache Tomcat 9.0.83 Fixed in Apache Tomcat 9.0.81 Fixed in Apache Tomcat 9.0.80 Fixed in Apache Tomcat 9.0.75 Fixed in Apache Tomcat 9.0.74 Fixed in Apache Tomcat 9.0.72 Fixed in Apache Tomcat 9.0.71 Fixed in Apache Tomcat 9.0.69 Fixed in Apache Tomcat 9.0.68 Fixed in Apache Tomcat 9.0.65 Fixed in Apache Tomcat 9.0.63 Fixed in Apache Tomcat 9.0.62 Fixed in Apache Tomcat 9.0.58 Fixed in Apache Tomcat 9.0.54 Fixed in Apache Tomcat 9.0.48 Fixed in Apache Tomcat 9.0.46 Fixed in Apache Tomcat 9.0.45 Fixed in Apache Tomcat 9.0.44 Fixed in Apache Tomcat 9.0.43 Fixed in Apache Tomcat 9.0.40 Fixed in Apache Tomcat 9.0.38 Fixed in Apache Tomcat 9.0.37 Fixed in Apache Tomcat 9.0.36 Fixed in Apache Tomcat 9.0.35 Fixed in Apache Tomcat 9.0.31 Fixed in Apache Tomcat 9.0.30 Fixed in Apache Tomcat 9.0.29 Fixed in Apache Tomcat 9.0.21 Fixed in Apache Tomcat 9.0.20 Fixed in Apache Tomcat 9.0.19 Fixed in Apache Tomcat 9.0.16 Fixed in Apache Tomcat 9.0.12 Fixed in Apache Tomcat 9.0.10 Fixed in Apache Tomcat 9.0.9 Fixed in",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Tomcat Vulnerabilities",
+      "url": "https://www.hhs.gov/sites/default/files/apache-tomcat-vulnerabilities-sector-alert-tlpclear-r.pdf",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Tomcat is one of the most popular and widely-deployed web servers and Java-based application servers in the world, heavily leveraged by the U.S. ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2020-9484: Apache Tomcat RCE Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2020-9484/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-9484 is a remote code execution vulnerability in Apache Tomcat. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-9484 CVE-2020-9484: Apache Tomcat RCE Vulnerability CVE-2020-9484 is a remote code execution flaw in Apache Tomcat that allows attackers to execute arbitrary code via deserialization. This post explains its impact, affected versions, and mitigation steps. Published: March 11, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2020-9484 Overview CVE-2020-9484 is an insecure deserialization vulnerability affecting Apache Tomcat that enables remote code execution when specific configuration conditions are met. The vulnerability exists in the session persistence mechanism when using the PersistenceManager with a FileStore configuration. When using vulnerable Apache Tomcat versions, if an attacker can control the contents and name of a file on the server, and the server is configured to use the PersistenceManager with a FileStore, and the sessionAttributeValueClassNameFilter is set to null (the default unless a SecurityManager is used) or a sufficiently lax filter, the attacker can trigger remote code execution via deserialization of a malicious file This deserialization vulnerability allows attackers to achieve remote code execution on vulnerable Apache Tomcat servers when specific configuration and access conditions are met, potentially leading to complete system compromise. Apache Tomcat 10.0.0-M1 to 10.0.0-M4 Apache Tomcat 9.0.0.M1 to 9.0.34 Apache Tomcat 8.5.0 to 8.5.54 Apache Tomcat 7.0.0 to 7.0.103 Debian Linux 8.0, 9.0, 10.0 Canonical Ubuntu Linux 16.04 LTS and 20.04 LTS Multiple Oracle products including Database, FMW Platform, and Communications suite McAfee ePolicy Orchestrator 5.9.0, 5.9.1, and 5.10.0 2020-05-20 - CVE-2020-9484 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2020-9484 This vulnerability is classified as CWE-502 (Deserialization of Untrusted Data). The attack requires four specific conditions to be satisfied simultaneously: The attacker must be able to control the contents and name of a file on the server The server must be configured to use the PersistenceManager with a FileStore The PersistenceManager must be configured with sessionAttributeValueClassNameFilter=\"null\" or a sufficiently permissive filter The attacker must know the relative file path from the storage location used by FileStore to the controlled file When all conditions are met, an attacker can craft a malicious serialized Java object that, when deserialized by Tomcat during session restoration, executes arbitrary code on the server. The root cause lies in Apache Tomcat's session persistence mechanism. When the PersistenceManager is configured with FileStore, Tomcat deserializes session data from files without adequate validation of the class names being deserialized. The default configuration lacks a sessionAttributeValueClassNameFilter, which would otherwise restrict which classes can be deserialized. This allows an attacker who can",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Tomcat RCE/Info Disclosure Bug Exploited in the ...",
+      "url": "https://www.google.com/goto?url=CAESnAEB6zswFUML6rSHLqJQQJSA0l2yXsTUHXKXiidyfpFDbyUvXkGXUPhTR5mmXMqrdVmm-yD2IqCuwRCZOvzgNaT8uuQuhLp6oiTM1muY0Akp7b1zVbSrkvJXocJk2c50r3yMzFuL2UKBsrkoHqVePGzQEXzLjSCz-J303Ap3VS9J6CrCEuXchVj_FqM_96dOn5mALst_kiHss4Hm2nc",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). On March 10, Apache disclosed CVE-2025-24813, a remote code execution and/or information disclosure vulnerability affecting certain versions (11.0.0-M1 to 11.0.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T06:56:47.564273+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2020-9484",
+    "CVE-2025-24813"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.hhs.gov: ValueError: Only HTML/plaintext webpages are supported",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found"
+  ]
+}

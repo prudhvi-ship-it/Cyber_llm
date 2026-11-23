@@ -1,0 +1,94 @@
+{
+  "status": "Valid",
+  "query": "web Apache Solr version exploit packet clues: endpoint solr cores",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2024-45216: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-45216",
+      "snippet": "Improper Authentication vulnerability in Apache Solr.\n\nSolr instances using the PKIAuthenticationPlugin, which is enabled by default when Solr Authentication is used, are vulnerable to Authentication bypass.\nA fake ending at the end of any Solr API URL path, will allow requests to skip Authentication while maintaining the API contract with the original URL Path.\nThis fake ending looks like an unprotected API path, however it is stripped off internally after authentication but before API routing.\n\n\nThis issue affects Apache Solr: from 5.3.0 before 8.11.4, from 9.0.0 before 9.7.0.\n\nUsers are recommended to upgrade to version 9.7.0, or 8.11.4, which fix the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2024-45216 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-12629: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12629",
+      "snippet": "Remote code execution occurs in Apache Solr before 7.1 with Apache Lucene before 7.1 by exploiting XXE in conjunction with use of a Config API add-listener command to reach the RunExecutableListener class. Elasticsearch, although it uses Lucene, is NOT vulnerable to this. Note that the XML external entity expansion vulnerability occurs in the XML Query Parser which is available, by default, for any query request with parameters deftype=xmlparser and can be exploited to upload malicious data to the /upload request handler or as Blind XXE using ftp wrapper in order to read arbitrary local files from the Solr server. Note also that the second vulnerability relates to remote code execution using the RunExecutableListener available on all affected versions of Solr.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2017-12629 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-22444: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22444",
+      "snippet": "The \"create core\" API of Apache Solr 8.6 through 9.10.0 lacks sufficient input validation on some API parameters, which can cause Solr to check the existence of and attempt to read file-system paths that should be disallowed by Solr's  \"allowPaths\" security setting https://https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html#the-solr-element .  These read-only accesses can allow users to create cores using unexpected configsets if any are accessible via the filesystem.  On Windows systems configured to allow UNC paths this can additionally cause disclosure of NTLM \"user\" hashes. \n\nSolr deployments are subject to this vulnerability if they meet the following criteria:\n  *  Solr is running in its \"standalone\" mode.\n  *  Solr's \"allowPath\" setting is being used to restrict file access to certain directories.\n  *  Solr's \"create core\" API is exposed and accessible to untrusted users.  This can happen if Solr's  RuleBasedAuthorizationPlugin https://solr.apache.org/guide/solr/latest/deployment-guide/rule-based-authorization-plugin.html  is disabled, or if it is enabled but the \"core-admin-edit\" predefined permission (or an equivalent custom permission) is given to low-trust (i.e. non-admin) user roles.\n\nUsers can mitigate this by enabling Solr's RuleBasedAuthorizationPlugin (if disabled) and configuring a permission-list that prevents untrusted users from creating new Solr cores.  Users should also upgrade to Apache Solr 9.10.1 or greater, which contain fixes for this issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-22444 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Solr™ Security - Apache Solr",
+      "url": "https://solr.apache.org/security.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The Solr PMC greatly appreciates responsible disclosure of new security vulnerabilities found in Solr itself or demonstrating exploitation via a dependency. | Webpage text: CVE Status for Dependencies Report a New Vulnerability¶ The Solr PMC greatly appreciates responsible disclosure of new security vulnerabilities found in Solr itself or demonstrating exploitation via a dependency. It is important not to publish a previously unknown exploit, or exploit demonstration code, on public mailing lists or issue trackers before coordinating with the PMC. See the vulnerability reporting procedure for the full reporting rules, the workflow diagram, and what to expect after you report. CVEs in Dependencies Detected by Scanners¶ Every CVE detected by a scanner is by definition already public knowledge. Before contacting the security team about a dependency CVE, please: Check the dependency CVE status page to see if the CVE has already been assessed as not exploitable in Solr. Search the Solr users mailing list archive to see if the CVE has been discussed. If nothing is found, subscribe to the users list DO discuss dependency upgrade needs on the users mailing list DO search Jira for the CVE number before opening a new issue DO open a focused Jira issue with a PR to upgrade a single specific dependency DO look into automating CVE triage with VEX and share your experience DO NOT email the security address with scanner reports — they will not be processed DO NOT paste scan output into Jira or attach reports — link the CVE instead Jira is for discussing specific development modifications. Any Jira that contains only scan report output, or references multiple dependencies at the same time is likely to be ignored or closed. The large number of reports about already-known issues is a serious drag on our volunteer time — please search Jira before opening a new issue. Recent Security Advisories for Apache Solr The five most recent security advisories. JWT Authentication: blockUnknown default allows unauthenticated access contrary to documentation CVE-2026-22022 Unauthorized bypass of certain \"predefined permission\" rules in the RuleBasedAuthorizationPlugin CVE-2026-22444 Insufficient file-access checking in standalone core-creation requests CVE-2025-66516 Apache Solr extraction module vulnerable to XXE attacks via XFA content in PDFs CVE-2024-52012 Apache Solr: Configset upload on Windows allows arbitrary path write-access See full security news history → Full security news history — all past CVE advisories Dependency CVE status and VEX download — non-exploitable CVEs in dependencies Vulnerability reporting procedure — submission rules, workflow, and PMC email templates ASF security resources — Apache-wide security guidance",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Solr 8.2.0 - Remote Code Execution",
+      "url": "https://www.exploit-db.com/exploits/47572",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache Solr 8.2.0 - Remote Code Execution. webapps exploit for Java platform. maintained as an extension of the Exploit Database.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2024-45216: Apache Solr Authentication Bypass ...",
+      "url": "https://www.sangfor.com/farsight-labs-threat-intelligence/cybersecurity/cve-2024-45216-apache-solr-authentication-bypass",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Attackers can forge malicious requests to exploit the PKIAuthenticationPlugin, resulting in authorization bypass and enabling unauthorized invocation.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Solr < 7.1.0 Remote Code Execution",
+      "url": "https://www.tenable.com/plugins/was/98897",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Remote code execution occurs in Apache Solr versions < 7.1.0. This can be exploited to upload malicious data to the /upload request handler or as Blind XXE | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Apache Solr < 7.1.0 Remote Code Execution critical Web App Scanning Plugin ID 98897 SynopsisApache Solr < 7.1.0 Remote Code Execution DescriptionRemote code execution occurs in Apache Solr versions < 7.1.0 with Apache Lucene < 7.1.0 by exploiting XXE in conjunction with use of a Config API add-listener command to reach the RunExecutableListener class. This can be exploited to upload malicious data to the /upload request handler or as Blind XXE using ftp wrapper in order to read arbitrary local files from the Solr server. Note that the scanner has not tested for these issues but has instead relied only on the application's self-reported version number. SolutionUpdate to Apache Solr version 7.1.0 or latest. https://www.exploit-db.com/exploits/43009/ Family: Component Vulnerability Scan Template: api, basic, full, pci, quick, scan Vector: CVSS2#AV:N/AC:L/Au:N/C:P/I:P/A:P CVSS Score Source: CVE-2017-12629 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H CVSS Score Source: CVE-2017-12629 Vulnerability Information CPE: cpe:2.3:a:apache:solr:*:*:*:*:*:*:*:* Exploit Ease: Exploits are available Patch Publication Date: 10/14/2017 Vulnerability Publication Date: 10/11/2017 CVE: CVE-2017-12629 OWASP: 2010-A1, 2013-A1, 2013-A9, 2017-A1, 2017-A4, 2017-A9, 2021-A3, 2021-A5, 2021-A6, 2025-A2, 2025-A6 WASC: Improper Input Handling, XML External Entities CAPEC: 10, 101, 108, 120, 13, 135, 14, 221, 24, 250, 267, 273, 28, 3, 34, 42, 43, 45, 46, 47, 51, 52, 53, 6, 64, 67, 7, 71, 72, 76, 78, 79, 8, 80, 83, 84, 9 DISA STIG: APSC-DV-002550, APSC-DV-002560, APSC-DV-002630 HIPAA: 164.306(a)(1), 164.306(a)(2) NIST: sp800_53-CM-6b, sp800_53-SI-10 OWASP API: 2019-API7, 2019-API8, 2023-API8 OWASP ASVS: 4.0.2-14.2.1, 4.0.2-5.2.5, 4.0.2-5.5.2 PCI-DSS: 3.2-6.2, 3.2-6.5.1",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:05:46.357306+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2024-45216",
+    "CVE-2017-12629",
+    "CVE-2026-22444"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>",
+    "Webpage read unavailable for www.sangfor.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

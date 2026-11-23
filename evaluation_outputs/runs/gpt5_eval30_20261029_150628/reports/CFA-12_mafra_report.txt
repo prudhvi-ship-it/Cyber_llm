@@ -1,0 +1,236 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: MDNS=4, ARP=4, TCP=24
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:56886           <-> 172.18.0.2:4506                 11 860 bytes      13 1059 bytes      24 1919 bytes     5.575503000         0.0565
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000005-001 | client->server] 172.18.0.1:56886 -> 172.18.0.2:4506 (TCP)
+- [E-S0000-F000006-002 | server->client] 172.18.0.2:4506 -> 172.18.0.1:56886 (TCP)
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:56886 -> 172.18.0.2:4506; packets=24; client->server=13, server->client=11; role_hint=other protocol/application candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: SaltStack (Salt) ZeroMQ transport on tcp/4506 (Salt master return channel); version not visible
+
+Relevant Events: 172.18.0.1 (client) connects to 172.18.0.2:4506 and exchanges application data. Traffic pattern and destination port are consistent with a Salt minion-to-master ZeroMQ session. The flow shows an initial handshake followed by cleartext Salt load messages typical of a minion ping/keepalive and authentication preparation (e.g., enc: clear, cmd: ping, and _prep_auth_info), consistent with routine minion authentication/health check. No job execution or command results are visible.
+
+Malicious Activities: None observed against the service in this flow
+
+Attack Success: None
+
+Evidence: 
+- [E-S0000-F000005-001] Client 172.18.0.1 initiates TCP connection to 172.18.0.2:4506 (default Salt master return port)
+- [E-S0000-F000006-002] Server 172.18.0.2 responds; subsequent bidirectional application data consistent with Salt/ZeroMQ session handshake and minion auth prep (no command/job execution observed)
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SaltStack Salt Master",
+    "application": "ZeroMQ transport return channel (tcp/4506)",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000005-001",
+      "E-S0000-F000006-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Only routine Salt minion handshake/authentication-like traffic observed on tcp/4506; no distinctive exploit mechanism or version indicators present."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SaltStack Salt Master",
+    "application": "ZeroMQ transport return channel (tcp/4506)",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000005-001",
+      "E-S0000-F000006-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Only routine Salt minion handshake/authentication-like traffic observed on tcp/4506; no distinctive exploit mechanism or version indicators present."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "No",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "Attack success: Unknown"
+  ],
+  "evidence_check": [
+    "E-S0000-F000005-001",
+    "E-S0000-F000006-002"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: SaltStack Salt Master
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: Unknown
+Verifier Confidence: Medium
+Overall Confidence: Low
+Score: 1/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Abstain
+Query: SaltStack salt master authentication bypass code execution
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-30T00:06:18.113618+00:00
+Candidate CVEs: None
+Sources: 0
+Warnings: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000005-001]: 172.18.0.1:56886 -> 172.18.0.2:4506 (TCP).
+- PCAP [E-S0000-F000006-002]: 172.18.0.2:4506 -> 172.18.0.1:56886 (TCP).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- None
+
+=== SOURCE URLS ===
+- None
+
+Search status: Abstain
+Search query: SaltStack salt master authentication bypass code execution
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- No online source was returned by the MCP search.
+- Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: SaltStack Salt Master
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000005-001]: 172.18.0.1:56886 -> 172.18.0.2:4506 (TCP).
+- PCAP [E-S0000-F000006-002]: 172.18.0.2:4506 -> 172.18.0.1:56886 (TCP).
+
+Verification Summary:
+- Affected service: SaltStack Salt Master.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: No.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Unsupported claim: Attack success: Unknown
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Abstain.
+- MCP investigation query: SaltStack salt master authentication bypass code execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Restrict network access to the Salt Master (e.g., tcp/4506) to only authorized minions and administrative hosts via firewall/ACLs and segmentation.
+- Audit and monitor Salt Master logs and network flows for anomalies on tcp/4506; alert on unexpected source IPs or unusual session patterns.
+- Review and rotate Salt authentication keys/credentials if there is any suspicion of misuse; ensure strong authentication policies for master–minion communications.
+- Apply the latest SaltStack security updates and patches to the master and minions.
+- Implement centralized logging and retention for correlation (SIEM) and consider IDS/IPS coverage for Salt-related traffic.
+- Capture fuller packet payloads in future incidents to enable deeper inspection of Salt protocol messages for anomalies.

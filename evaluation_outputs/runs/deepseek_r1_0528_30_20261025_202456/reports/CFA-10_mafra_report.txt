@@ -1,0 +1,556 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: RESP=67, TCP=51, RESP/JSON=13
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:6379            <-> 172.18.0.7:45572                16 2528 bytes      32 2192 bytes      48 4720 bytes     0.000000000        16.5143
+172.18.0.7:45638           <-> 172.18.0.2:6379                  9 630 bytes      18 8013 bytes      27 8643 bytes     0.882430000        16.0402
+172.18.0.2:6379            <-> 172.18.0.7:45616                 9 594 bytes       9 7671 bytes      18 8265 bytes     0.883338000        16.0398
+172.18.0.2:6379            <-> 172.18.0.6:49268                 9 594 bytes       9 7608 bytes      18 8202 bytes     0.883621000        16.0404
+172.18.0.6:
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000001-001 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45572 (RESP)
+- [E-S0000-F000002-002 | server->client] 172.18.0.7:45572 -> 172.18.0.2:6379 (RESP)
+- [E-S0000-F000003-003 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45572 (TCP)
+- [E-S0001-F000004-001 | client->server] 172.18.0.6:49346 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0001-F000005-003 | server->client] 172.18.0.2:6379 -> 172.18.0.6:49346 (RESP)
+- [E-S0001-F000006-004 | client->server] 172.18.0.6:49346 -> 172.18.0.2:6379 (TCP)
+- [E-S0001-F000004-002 | client->server] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+- [E-S0002-F000007-001 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45654 (RESP)
+- [E-S0002-F000008-003 | server->client] 172.18.0.7:45654 -> 172.18.0.2:6379 (TCP)
+- [E-S0002-F000007-002 | client->server] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+- [E-S0003-F000009-001 | client->server] 172.18.0.7:45638 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0003-F000010-003 | server->client] 172.18.0.2:6379 -> 172.18.0.7:45638 (RESP)
+- [E-S0003-F000011-004 | client->server] 172.18.0.7:45638 -> 172.18.0.2:6379 (TCP)
+- [E-S0003-F000009-002 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000022-005 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000035-006 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000053-007 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4OSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000066-008 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5MSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000081-009 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0003-F000094-010 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0003-F000107-011 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5OCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS40NSwgMC45MywgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0003-F000125-012 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiAxMDEsICJmcmVxIjogMi4wLCAiYWN0aXZlIjogMCwgInByb2Nlc3NlZCI6IDAsICJsb2FkYXZnIjogWzEuNDUsIDAuOTMsIDAuNThdLCAic3dfaWRlbnQiOiAicHktY2VsZXJ5IiwgInN3X3ZlciI6ICI0LjQuMiIsICJzd19zeXMiOiAiTGludXgiLCAidGltZXN0YW1wIjog...[TRUNCATED]
+- [E-S0004-F000012-001 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45616 (RESP)
+- [E-S0004-F000013-003 | server->client] 172.18.0.7:45616 -> 172.18.0.2:6379 (TCP)
+- [E-S0004-F000012-002 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000025-004 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000038-005 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000056-006 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4OSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000069-007 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5MSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000084-008 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0004-F000097-009 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0004-F000110-010 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5OCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS40NSwgMC45MywgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0004-F000128-011 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiAxMDEsICJmcmVxIjogMi4wLCAiYWN0aXZlIjogMCwgInByb2Nlc3NlZCI6IDAsICJsb2FkYXZnIjogWzEuNDUsIDAuOTMsIDAuNThdLCAic3dfaWRlbnQiOiAicHktY2VsZXJ5IiwgInN3X3ZlciI6ICI0LjQuMiIsICJzd19zeXMiOiAiTGludXgiLCAidGltZXN0YW1wIjog...[TRUNCATED]
+- [E-S0005-F000014-001 | client->server] 172.18.0.2:6379 -> 172.18.0.6:49268 (RESP)
+- [E-S0005-F000015-003 | server->client] 172.18.0.6:49268 -> 172.18.0.2:6379 (TCP)
+- [E-S0005-F000014-002 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000027-004 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000040-005 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000058-006 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4OSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000071-007 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5MSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000086-008 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0005-F000099-009 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0005-F000112-010 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5OCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS40NSwgMC45MywgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0005-F000130-011 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiAxMDEsICJmcmVxIjogMi4wLCAiYWN0aXZlIjogMCwgInByb2Nlc3NlZCI6IDAsICJsb2FkYXZnIjogWzEuNDUsIDAuOTMsIDAuNThdLCAic3dfaWRlbnQiOiAicHktY2VsZXJ5IiwgInN3X3ZlciI6ICI0LjQuMiIsICJzd19zeXMiOiAiTGludXgiLCAidGltZXN0YW1wIjog...[TRUNCATED]
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.2:6379 -> 172.18.0.7:45572; packets=48; client->server=32, server->client=16; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.6:49346 -> 172.18.0.2:6379; packets=12; client->server=8, server->client=4; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 2: 172.18.0.2:6379 -> 172.18.0.7:45654; packets=8; client->server=4, server->client=4; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.7:45638 -> 172.18.0.2:6379; packets=27; client->server=18, server->client=9; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 4: 172.18.0.2:6379 -> 172.18.0.7:45616; packets=18; client->server=9, server->client=9; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 5: 172.18.0.2:6379 -> 172.18.0.6:49268; packets=18; client->server=9, server->client=9; role_hint=other protocol/application candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Redis  
+Relevant Events: The client (172.18.0.7) repeatedly sends the invalid Redis command `*-1` to the server (172.18.0.2:6379). The server responds with a fixed multi-bulk reply containing the string "BRPOP", the key "default", three keys formatted as `{default}..<number>`, and the integer "1". This pattern repeats identically 16 times, indicating abnormal Redis command processing.  
+
+Malicious Activities: Suspicious repeated transmission of malformed Redis commands (`*-1`), suggesting a potential fuzzing attempt or exploit probe targeting Redis. The responses contain structured key patterns (`{default}..3/6/9`) consistent with Redis cluster hash tags, but no valid command execution occurs.  
+
+Attack Success: Failed  
+Evidence:  
+- E-S0000-F000001-001: Client sent malformed command `*-1` (5 bytes).  
+- E-S0000-F000002-002: Server replied with 92-byte multi-bulk response containing "BRPOP", "default", `{default}..3`, `{default}..6`, `{default}..9`, and "1".  
+- Identical command-response cycle observed 16 times with no variation or successful command output.
+
+--- Stream 1 [VALID] ---
+Service: Redis (Celery task queue backend)  
+Relevant Events: Client (172.18.0.6) sends repeated PUBLISH commands to Redis server (172.18.0.2:6379) targeting the Celery control channel (`/0.celery.pidbox`). The payloads contain base64-encoded JSON instructions to `enable_events`. Server responds with success (`:1`) to each command.  
+
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0001-F000004-001: Client sends PUBLISH command with JSON payload containing `enable_events` method (RESP/JSON format).  
+- E-S0001-F000004-002: Base64-encoded body decodes to benign Celery control command (`enable_events` with empty arguments).  
+- E-S0001-F000005-003: Server responds with success (`:1`) for each command, indicating normal operation.  
+- Identical command sequence repeated 4 times with no exploit indicators (no shell commands, file access, or privilege escalation attempts).
+
+--- Stream 2 [VALID] ---
+Service: Redis (Celery task queue backend)  
+Relevant Events: The Redis server (172.18.0.2:6379) sends PUB/SUB messages containing Celery control commands to the client (172.18.0.7:45654). The messages are pattern-matched publications (`pmessage`) targeting the Celery control channel (`/0.celery.pidbox`), delivering JSON-encoded instructions to enable Celery worker monitoring events.  
+
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0002-F000007-002: Base64-decoded message body reveals benign `enable_events` Celery control command with empty arguments (no shell commands, file access, or privilege escalation indicators).  
+- Message structure (RESP format) and content (JSON-encoded Celery instructions) align with normal task queue operations.  
+- No command execution, file disclosure, or exploit payloads observed in the flow.
+
+--- Stream 3 [VALID] ---
+Service: Redis (Celery task queue backend)  
+Relevant Events: Client (172.18.0.7) sends periodic Celery worker heartbeat messages via Redis PUBLISH commands to the server (172.18.0.2:6379). Heartbeats contain worker status metrics (loadavg, clock, processed tasks) and are acknowledged by the server with integer replies (`:2`).  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0003-F000009-001: PUBLISH commands target `/0.celeryev/worker.heartbeat` with base64-encoded JSON heartbeats (RESP/JSON format).  
+- E-S0003-F000009-002: Base64-decoded payloads reveal benign worker status (e.g., `"type": "worker-heartbeat"`, `"processed": 0`, `"active": 0`).  
+- E-S0003-F000010-003: Server responds with `:2` (success acknowledgment) for each heartbeat.  
+- No shell commands, file access, privilege escalation, or exploit payloads observed.
+
+--- Stream 4 [VALID] ---
+Service: Redis (Celery task queue backend)  
+Relevant Events: The Redis server (172.18.0.2:6379) is broadcasting Celery worker heartbeat messages via PUB/SUB to the client (172.18.0.7:45616). The messages contain periodic worker status updates (loadavg, processed tasks, system metrics) consistent with normal Celery monitoring operations.  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0004-F000012-002, E-S0004-F000025-004, E-S0004-F000038-005, E-S0004-F000056-006, E-S0004-F000069-007, E-S0004-F000084-008, E-S0004-F000097-009, E-S0004-F000110-010, E-S0004-F000128-011: Base64-decoded message bodies reveal benign Celery worker heartbeats (e.g., `"type": "worker-heartbeat"`, `"active": 0`, `"processed": 0`, `"sw_ident": "py-celery"`). No command execution, file access, or exploit payloads observed.  
+- RESP protocol structure (`*4`, `$8 pmessage`) confirms Redis PUB/SUB pattern delivery to `/0.celeryev/worker.*` channel.  
+- Heartbeat content shows routine system metrics (loadavg, Linux OS) without authentication bypass, privilege escalation, or suspicious commands.
+
+--- Stream 5 [VALID] ---
+Service: Redis (Celery task queue backend)  
+Relevant Events: The Redis server (172.18.0.2:6379) broadcasts periodic Celery worker heartbeat messages via PUB/SUB to the client (172.18.0.6:49268). Heartbeats contain worker status metrics (loadavg, processed tasks, system information) consistent with normal Celery monitoring operations.  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0005-F000014-002, E-S0005-F000027-004, E-S0005-F000040-005, E-S0005-F000058-006, E-S0005-F000071-007, E-S0005-F000086-008, E-S0005-F000099-009, E-S0005-F000112-010, E-S0005-F000130-011: Base64-decoded heartbeat payloads reveal benign Celery status updates (`"type": "worker-heartbeat"`, `"active": 0`, `"processed": 0`, `"sw_ident": "py-celery"`, Linux OS metrics). No command execution, file access, privilege escalation, or exploit payloads observed.  
+- RESP protocol structure (`*4`, `$8 pmessage`) confirms Redis PUB/SUB pattern delivery to `/0.celeryev/worker.*` channel.  
+- Heartbeat intervals (~2 seconds) and content align with normal Celery worker operation.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Celery",
+    "application": "Celery",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Python",
+    "database": "Redis"
+  },
+  "attack": {
+    "type": "Malformed Command Probe",
+    "technique": "Redis Protocol Fuzzing",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000001-001",
+      "E-S0000-F000002-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Malformed Redis command observed, but no distinctive payload matches known Redis/Celery CVEs"
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Redis",
+    "application": "Redis",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Redis"
+  },
+  "attack": {
+    "type": "Malformed Command Probe",
+    "technique": "Redis Protocol Fuzzing",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000001-001",
+      "E-S0000-F000002-002"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Medium",
+    "reason": "Malformed Redis command `*-1` (E-S0000-F000001-001) targets Redis protocol directly. No CVE matches this distinctive negative-argument-count mechanism. External research retrieved Redis CVEs (CVE-2016-8339: buffer overflow in CONFIG SET; CVE-2018-12453: type confusion in XGROUP) but neither involves negative array length. Celery CVEs (e.g., CVE-2021-23727) relate to deserialization and are not applicable to this Redis command fuzzing."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000001-001",
+    "E-S0000-F000002-002"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Redis
+Attack Type: Malformed Command Probe
+Attack Success: Fail
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: High
+Score: 4/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Celery Malformed Command Probe | the and | the and web is The
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T07:23:29.757102+00:00
+Candidate CVEs: CVE-2021-23727, CVE-2011-4356, CVE-2017-14483, CVE-2018-16879, CVE-2022-20821, CVE-2016-8339, CVE-2018-12326, CVE-2018-12453
+Sources: 20
+
+Source 1: NIST NVD
+Title: CVE-2021-23727: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2021-23727
+Summary: This affects the package celery before 5.2.2. It by default trusts the messages and metadata stored in backends (result stores). When reading task metadata from the backend, the data is deserialized. Given that an attacker can gain access to, or somehow manipulate the metadata within a celery backend, they could trigger a stored command injection vulnerability and potentially gain further access to the system.
+Supports: NVD lists CVE-2021-23727 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 2: CISA KEV
+Title: Cisco IOS XR Open Port Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Cisco IOS XR: Cisco IOS XR software health check opens TCP port 6379 by default on activation. An attacker can connect to the Redis instance on the open port and allow access to the Redis instance that is running within the NOSi container. Required action: Apply updates per vendor instructions.
+Supports: CISA KEV identifies CVE-2022-20821 as exploited in the wild.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2011-4356: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2011-4356
+Summary: Celery 2.1 and 2.2 before 2.2.8, 2.3 before 2.3.4, and 2.4 before 2.4.4 changes the effective id but not the real id during processing of the --uid and --gid arguments to celerybeat, celeryd_detach, celeryd-multi, and celeryev, which allows local users to gain privileges via vectors involving crafted code that is executed by the worker process.
+Supports: NVD lists CVE-2011-4356 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2016-8339: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2016-8339
+Summary: A buffer overflow in Redis 3.2.x prior to 3.2.4 causes arbitrary code execution when a crafted command is sent. An out of bounds write vulnerability exists in the handling of the client-output-buffer-limit option during the CONFIG SET command for the Redis data structure store. A crafted CONFIG SET command can lead to an out of bounds write potentially resulting in code execution.
+Supports: NVD lists CVE-2016-8339 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: NIST NVD
+Title: CVE-2017-14483: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2017-14483
+Summary: flower.initd in the Gentoo dev-python/flower package before 0.9.1-r1 for Celery Flower sets PID file ownership to a non-root account, which might allow local users to kill arbitrary processes by leveraging access to this non-root account for PID file modification before a root script executes a "kill `cat /pathname`" command.
+Supports: NVD lists CVE-2017-14483 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 6: NIST NVD
+Title: CVE-2018-12326: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2018-12326
+Summary: Buffer overflow in redis-cli of Redis before 4.0.10 and 5.x before 5.0 RC3 allows an attacker to achieve code execution and escalate to higher privileges via a crafted command line. NOTE: It is unclear whether there are any common situations in which redis-cli is used with, for example, a -h (aka hostname) argument from an untrusted source.
+Supports: NVD lists CVE-2018-12326 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 7: NIST NVD
+Title: CVE-2018-16879: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2018-16879
+Summary: Ansible Tower before version 3.3.3 does not set a secure channel as it is using the default insecure configuration channel settings for messaging celery workers from RabbitMQ. This could lead in data leak of sensitive information such as passwords as well as denial of service attacks by deleting projects or inventory files.
+Supports: NVD lists CVE-2018-16879 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 8: NIST NVD
+Title: CVE-2018-12453: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2018-12453
+Summary: Type confusion in the xgroupCommand function in t_stream.c in redis-server in Redis before 5.0 allows remote attackers to cause denial-of-service via an XGROUP command in which the key is not a stream.
+Supports: NVD lists CVE-2018-12453 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 9: Serper web result
+Title: [K8S] livenessProbe and readinessProbe for celery beat ...
+URL: https://github.com/celery/celery/issues/4079?timeline_page=1
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). How can I do to check if my celery beat or celery. The Celery worker liveness check should only monitor if the worker is ready to accept tasks ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.
+Supports: None
+Contradicts: None
+
+Source 10: Serper web result
+Title: What Is the Web? How the Internet and Web Work Explained
+URL: https://www.youtube.com/watch?v=nuUNgsQGU9g
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The web, or World Wide Web, is a system of interconnected web pages that are accessed through the internet using a web browser.
+Supports: None
+Contradicts: None
+
+Source 11: Serper web result
+Title: {THE AND} Relationship Card Game - The Skin Deep
+URL: https://shop.theskindeep.com/collections/the-and-relationship-card-game?srsltid=AYCX9vIkKp6oW-k35hOCQV-ICDc7mxYTXnBU7_CTMvtVJUCHlggGbOa8
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). {THE AND} card game for nearly every relationship in your life, well as incredible postcards inspired by actual {THE AND} conversations.
+Supports: None
+Contradicts: None
+
+Source 12: Serper web result
+Title: Eli5: What is the difference between 'web' and 'website'?
+URL: https://www.reddit.com/r/explainlikeimfive/comments/17elumc/eli5_what_is_the_difference_between_web_and/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The ' web ' is the entire, world-wide, interconnected group of computers. A ' website ' is a single piece of that web -- a smaller collection ...
+Supports: None
+Contradicts: None
+
+Source 13: Serper web result
+Title: Monitoring and Management Guide - Celery
+URL: https://docs.celeryq.dev/en/stable/userguide/monitoring.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are several tools available to monitor and inspect Celery clusters. This document describes some of these, as well as features related to monitoring, like ... | Webpage text: Celery 5.6.3 documentation » Monitoring and Management Guide This document describes the current stable version of Celery (5.6). Monitoring and Management Guide¶ There are several tools available to monitor and inspect Celery clusters. This document describes some of these, as well as features related to monitoring, like events and broadcast commands. Management Command-line Utilities (inspect/control)¶ celery can also be used to inspect and manage worker nodes (and to some degree tasks). To list all the commands available do: or to get help for a specific command do: $ celery <command> --help shell: Drop into a Python shell. The locals will include the celery variable: this is the current app. Also all known tasks will be automatically added to locals (unless the --without-tasks flag is set). Uses https://pypi.org/project/Ipython/, https://pypi.org/project/bpython/, or regular python in that order if installed. You can force an implementation using status: List active nodes in this cluster result: Show the result of a task $ celery -A proj result -t tasks.add 4e196aa4-0141-4601-8138-7aa33db0f577 Note that you can omit the name of the task as long as the task doesn’t use a custom result backend. purge: Purge messages from all configured task queues. This command will remove all messages from queues configured in the CELERY_QUEUES setting: There’s no undo for this operation, and messages will You can also specify the queues to purge using the -Q option: $ celery -A proj purge -Q celery,foo,bar and exclude queues from being purged using the -X option: $ celery -A proj purge -X celery inspect active: List active tasks $ celery -A proj inspect active These are all the tasks that are currently being executed. inspect scheduled: List scheduled ETA tasks $ celery -A proj inspect scheduled These are tasks reserved by the worker when they have an eta or countdown argument set. inspect reserved: List reserved tasks $ celery -A proj inspect reserved This will list all tasks that have been prefetched by the worker, and is currently waiting to be executed (doesn’t include tasks inspect revoked: List history of revoked tasks $ celery -A proj inspect revoked inspect registered: List registered tasks $ celery -A proj inspect registered inspect stats: Show worker statistics (see Statistics) $ celery -A proj inspect stats inspect query_task: Show information about task(s) by id. Any worker having a task in this set of ids reserved/active will respond with status and information. $ celery -A proj inspect query_task e9f6c8f0-fec9-4ae8-a8c6-cf8c8451d4f8 You can also query for information about multiple tasks: $ celery -A proj inspect query_task id1 id2 ... idN control enable_events: Enable events $ celery -A proj control enable_events control disable_events: Disable events $ celery -A proj control disable_events migrate: Migrate tasks from one broker to another (EXPERIMENTAL). $ celery -A proj migrate redis://localhost amqp://localhost This command will migrate all the tasks on one broker to another. As this command is new and experimental you should be sure to have a backup of the data before proceeding. All inspect and control commands supports a This is the number of seconds to
+Supports: None
+Contradicts: None
+
+Source 14: Serper web result
+Title: What's the Difference Between the Web and the Internet?
+URL: https://askleo.com/whats-the-difference-between-the-web-and-the-internet/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The Web is a subset of the Internet because it is comprised of the computers which host websites. The rest of the internet doesn't host websites ...
+Supports: None
+Contradicts: None
+
+Source 15: Serper web result
+Title: {THE AND} Couples Edition - The Skin Deep
+URL: https://shop.theskindeep.com/products/the-and-couples-edition?srsltid=AYCX9vLBOdpf7WQpAECp__totu7YQcrOJNU9axm5aBiObUnOhmf623Pm
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Introducing the Couples Edition - the intimacy-inspiring card game from The Skin Deep that will transform your relationship. With 199 thought-provoking ...
+Supports: None
+Contradicts: None
+
+Source 16: Serper web result
+Title: What is the difference between the internet and the web?
+URL: https://larus.foundation/post/what-is-the-difference-between-the-internet-and-the-web
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The internet is a global network of interconnected computers, while the web is a collection of websites and pages accessed via the internet. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The internet and the web are often used interchangeably, but they are not the same thing. Understanding their differences is crucial for anyone navigating the digital world. The internet is a global network of interconnected computers, while the web is a collection of websites and pages accessed via the internet. The web relies on the internet for connectivity, but the internet can function without the web through other protocols and applications. The Internet: A global network The evolution of the Internet The Web: A collection of websites The Internet beyond the Web The importance of understanding the difference The future of the Internet and the Web Understanding the Internet and Web The terms "internet" and "web" are commonly utilized, often in a manner that suggests they are synonymous. Nevertheless, these two concepts are separate and fulfill different roles. A significant number of individuals do not recognize the essential differences that exist between them, which may result in misunderstanding. This article seeks to elucidate the distinctions and offer a more profound comprehension of how The Internet: A global network The internet constitutes an extensive global network that links computers and devices around the globe. It represents a sophisticated infrastructure comprised of various smaller networks, such as local area networks (LANs), wide area networks (WANs), and metropolitan area networks (MANs). These networks are connected through a framework of protocols, primarily the Internet Protocol (IP) and the Transmission Control P As stated by Dr. Vint Cerf, recognized as one of the "fathers of the internet" and a Vice President at Google, "The internet is a network of networks. It is a global system of interconnected computer networks that utilize the Internet Protocol suite to connect devices worldwide." This foundational infrastructure facilitates the transfer of data in packet form, which can be directed through various routes to arrive at The internet's development has been a gradual process, evolving from its early days as a research project to the global phenomenon it is today. It is decentralised, meaning there is no single governing body controlling its operations. Instead, various organisations and standards bodies, such as the Internet Engineering Task Force (IETF) and the Internet Corporation for Assigned Names and Numbers (ICANN), help to mana The evolution of the Internet The origins of the internet date back to the 1960s when the US Department of Defense launched the Advanced Research Projects Agency Network (ARPANET). This early network was designed to facilitate communication between researchers and institutions. Over time, it evolved into the modern internet we know today, with the introduction of the World Wide Web in the 1990s playing a significant role in its popularisation. ARPANET was initially developed to allow researchers to share information and resources across different locations. Its success demonstrated the potential of interconnected networks, leading to the development of the TCP/IP protocol suite, which became the foundation of the internet. In the 1980s, the National Science Foundation (N
+Supports: None
+Contradicts: None
+
+Source 17: Serper web result
+Title: Celery HPA - startupProbe failing after tasks are already ...
+URL: https://stackoverflow.com/questions/70095112/celery-hpa-startupprobe-failing-after-tasks-are-already-running
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). celery inspect command might take too long causing the startupProbe to hang and failing. If startupProbe fails too many times it will kill the ...
+Supports: None
+Contradicts: None
+
+Source 18: Serper web result
+Title: {THE AND} Couples Edition - 199 Meaningful ...
+URL: https://www.amazon.com/Couples-Meaningful-Conversation-Connection-Relationships/dp/B0BKQYYQCS
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The trusted couple's game for those who want to connect or reconnect and discover each other, in a raw, authentic, and romantic way. Perfect for meaningful ...
+Supports: None
+Contradicts: None
+
+Source 19: Serper web result
+Title: Celery worker fix liveness check · Issue #148
+URL: https://github.com/maykinmedia/charts/issues/148
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Create celery worker liveness probe that will: Honor long running tasks (will not deem celery to be unhealthy while it is processing tasks) ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.
+Supports: None
+Contradicts: None
+
+Source 20: Serper web result
+Title: {THE AND} Dating Book Bundle - The Skin Deep
+URL: https://shop.theskindeep.com/products/the-and-dating-book-bundle?srsltid=AYCX9vKoPpaKjKwIqXaE_c-808CVZ18ijqBW8hsQLyDWMBwC_R8mmaWL
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Regular price $51.95 Sale price$45.75 ・ 199 unique and meaningful questions and prompts designed for new couples ・ with insights learned from over 1,200 ...
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for quizlet.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000001-001]: 172.18.0.2:6379 -> 172.18.0.7:45572 (RESP).
+- PCAP [E-S0000-F000002-002]: 172.18.0.7:45572 -> 172.18.0.2:6379 (RESP).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2021-23727: NVD vulnerability record: This affects the package celery before 5.2.2. It by default trusts the messages and metadata stored in backends (result stores). When reading task metadata from the backend, the data is deserialized. Given that an attacker can gain access to, or somehow manipulate the metadata within a celery backend, they could trigger a stored command injection vulnerability and potentially gain further access to the system. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-23727 Supports: NVD lists CVE-2021-23727 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [CISA KEV] Cisco IOS XR Open Port Vulnerability: Cisco IOS XR: Cisco IOS XR software health check opens TCP port 6379 by default on activation. An attacker can connect to the Redis instance on the open port and allow access to the Redis instance that is running within the NOSi container. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2022-20821 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2011-4356: NVD vulnerability record: Celery 2.1 and 2.2 before 2.2.8, 2.3 before 2.3.4, and 2.4 before 2.4.4 changes the effective id but not the real id during processing of the --uid and --gid arguments to celerybeat, celeryd_detach, celeryd-multi, and celeryev, which allows local users to gain privileges via vectors involving crafted code that is executed by the worker process. Source: https://nvd.nist.gov/vuln/detail/CVE-2011-4356 Supports: NVD lists CVE-2011-4356 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2016-8339: NVD vulnerability record: A buffer overflow in Redis 3.2.x prior to 3.2.4 causes arbitrary code execution when a crafted command is sent. An out of bounds write vulnerability exists in the handling of the client-output-buffer-limit option during the CONFIG SET command for the Redis data structure store. A crafted CONFIG SET command can lead to an out of bounds write potentially resulting in code execution. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-8339 Supports: NVD lists CVE-2016-8339 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-14483: NVD vulnerability record: flower.initd in the Gentoo dev-python/flower package before 0.9.1-r1 for Celery Flower sets PID file ownership to a non-root account, which might allow local users to kill arbitrary processes by leveraging access to this non-root account for PID file modification before a root script executes a "kill `cat /pathname`" command. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-14483 Supports: NVD lists CVE-2017-14483 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-12326: NVD vulnerability record: Buffer overflow in redis-cli of Redis before 4.0.10 and 5.x before 5.0 RC3 allows an attacker to achieve code execution and escalate to higher privileges via a crafted command line. NOTE: It is unclear whether there are any common situations in which redis-cli is used with, for example, a -h (aka hostname) argument from an untrusted source. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-12326 Supports: NVD lists CVE-2018-12326 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-16879: NVD vulnerability record: Ansible Tower before version 3.3.3 does not set a secure channel as it is using the default insecure configuration channel settings for messaging celery workers from RabbitMQ. This could lead in data leak of sensitive information such as passwords as well as denial of service attacks by deleting projects or inventory files. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-16879 Supports: NVD lists CVE-2018-16879 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-12453: NVD vulnerability record: Type confusion in the xgroupCommand function in t_stream.c in redis-server in Redis before 5.0 allows remote attackers to cause denial-of-service via an XGROUP command in which the key is not a stream. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-12453 Supports: NVD lists CVE-2018-12453 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] [K8S] livenessProbe and readinessProbe for celery beat ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). How can I do to check if my celery beat or celery. The Celery worker liveness check should only monitor if the worker is ready to accept tasks ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/celery/celery/issues/4079?timeline_page=1
+- ONLINE [Serper web result] What Is the Web? How the Internet and Web Work Explained: UNTRUSTED WEB RESEARCH (not PCAP evidence). The web, or World Wide Web, is a system of interconnected web pages that are accessed through the internet using a web browser. Source: https://www.youtube.com/watch?v=nuUNgsQGU9g
+- ONLINE [Serper web result] {THE AND} Relationship Card Game - The Skin Deep: UNTRUSTED WEB RESEARCH (not PCAP evidence). {THE AND} card game for nearly every relationship in your life, well as incredible postcards inspired by actual {THE AND} conversations. Source: https://shop.theskindeep.com/collections/the-and-relationship-card-game?srsltid=AYCX9vIkKp6oW-k35hOCQV-ICDc7mxYTXnBU7_CTMvtVJUCHlggGbOa8
+- ONLINE [Serper web result] Eli5: What is the difference between 'web' and 'website'?: UNTRUSTED WEB RESEARCH (not PCAP evidence). The ' web ' is the entire, world-wide, interconnected group of computers. A ' website ' is a single piece of that web -- a smaller collection ... Source: https://www.reddit.com/r/explainlikeimfive/comments/17elumc/eli5_what_is_the_difference_between_web_and/
+- ONLINE [Serper web result] Monitoring and Management Guide - Celery: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are several tools available to monitor and inspect Celery clusters. This document describes some of these, as well as features related to monitoring, like ... | Webpage text: Celery 5.6.3 documentation » Monitoring and Management Guide This document describes the current stable version of Celery (5.6). Monitoring and Management Guide¶ There are several tools available to monitor and inspect Celery clusters. This document describes some of these, as well as features related to monitoring, like events and broadcast commands. Management Command-line Utilities (inspect/control)¶ celery can also be used to inspect and manage worker nodes (and to some degree tasks). To list all the commands available do: or to get help for a specific command do: $ celery <command> --help shell: Drop into a Python shell. The locals will include the celery variable: this is the current app. Also all known tasks will be automatically added to locals (unless the --without-tasks flag is set). Uses https://pypi.org/project/Ipython/, https://pypi.org/project/bpython/, or regular python in that order if installed. You can force an implementation using status: List active nodes in this cluster result: Show the result of a task $ celery -A proj result -t tasks.add 4e196aa4-0141-4601-8138-7aa33db0f577 Note that you can omit the name of the task as long as the task doesn’t use a custom result backend. purge: Purge messages from all configured task queues. This command will remove all messages from queues configured in the CELERY_QUEUES setting: There’s no undo for this operation, and messages will You can also specify the queues to purge using the -Q option: $ celery -A proj purge -Q celery,foo,bar and exclude queues from being purged using the -X option: $ celery -A proj purge -X celery inspect active: List active tasks $ celery -A proj inspect active These are all the tasks that are currently being executed. inspect scheduled: List scheduled ETA tasks $ celery -A proj inspect scheduled These are tasks reserved by the worker when they have an eta or countdown argument set. inspect reserved: List reserved tasks $ celery -A proj inspect reserved This will list all tasks that have been prefetched by the worker, and is currently waiting to be executed (doesn’t include tasks inspect revoked: List history of revoked tasks $ celery -A proj inspect revoked inspect registered: List registered tasks $ celery -A proj inspect registered inspect stats: Show worker statistics (see Statistics) $ celery -A proj inspect stats inspect query_task: Show information about task(s) by id. Any worker having a task in this set of ids reserved/active will respond with status and information. $ celery -A proj inspect query_task e9f6c8f0-fec9-4ae8-a8c6-cf8c8451d4f8 You can also query for information about multiple tasks: $ celery -A proj inspect query_task id1 id2 ... idN control enable_events: Enable events $ celery -A proj control enable_events control disable_events: Disable events $ celery -A proj control disable_events migrate: Migrate tasks from one broker to another (EXPERIMENTAL). $ celery -A proj migrate redis://localhost amqp://localhost This command will migrate all the tasks on one broker to another. As this command is new and experimental you should be sure to have a backup of the data before proceeding. All inspect and control commands supports a This is the number of seconds to Source: https://docs.celeryq.dev/en/stable/userguide/monitoring.html
+- ONLINE [Serper web result] What's the Difference Between the Web and the Internet?: UNTRUSTED WEB RESEARCH (not PCAP evidence). The Web is a subset of the Internet because it is comprised of the computers which host websites. The rest of the internet doesn't host websites ... Source: https://askleo.com/whats-the-difference-between-the-web-and-the-internet/
+- ONLINE [Serper web result] {THE AND} Couples Edition - The Skin Deep: UNTRUSTED WEB RESEARCH (not PCAP evidence). Introducing the Couples Edition - the intimacy-inspiring card game from The Skin Deep that will transform your relationship. With 199 thought-provoking ... Source: https://shop.theskindeep.com/products/the-and-couples-edition?srsltid=AYCX9vLBOdpf7WQpAECp__totu7YQcrOJNU9axm5aBiObUnOhmf623Pm
+- ONLINE [Serper web result] What is the difference between the internet and the web?: UNTRUSTED WEB RESEARCH (not PCAP evidence). The internet is a global network of interconnected computers, while the web is a collection of websites and pages accessed via the internet. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The internet and the web are often used interchangeably, but they are not the same thing. Understanding their differences is crucial for anyone navigating the digital world. The internet is a global network of interconnected computers, while the web is a collection of websites and pages accessed via the internet. The web relies on the internet for connectivity, but the internet can function without the web through other protocols and applications. The Internet: A global network The evolution of the Internet The Web: A collection of websites The Internet beyond the Web The importance of understanding the difference The future of the Internet and the Web Understanding the Internet and Web The terms "internet" and "web" are commonly utilized, often in a manner that suggests they are synonymous. Nevertheless, these two concepts are separate and fulfill different roles. A significant number of individuals do not recognize the essential differences that exist between them, which may result in misunderstanding. This article seeks to elucidate the distinctions and offer a more profound comprehension of how The Internet: A global network The internet constitutes an extensive global network that links computers and devices around the globe. It represents a sophisticated infrastructure comprised of various smaller networks, such as local area networks (LANs), wide area networks (WANs), and metropolitan area networks (MANs). These networks are connected through a framework of protocols, primarily the Internet Protocol (IP) and the Transmission Control P As stated by Dr. Vint Cerf, recognized as one of the "fathers of the internet" and a Vice President at Google, "The internet is a network of networks. It is a global system of interconnected computer networks that utilize the Internet Protocol suite to connect devices worldwide." This foundational infrastructure facilitates the transfer of data in packet form, which can be directed through various routes to arrive at The internet's development has been a gradual process, evolving from its early days as a research project to the global phenomenon it is today. It is decentralised, meaning there is no single governing body controlling its operations. Instead, various organisations and standards bodies, such as the Internet Engineering Task Force (IETF) and the Internet Corporation for Assigned Names and Numbers (ICANN), help to mana The evolution of the Internet The origins of the internet date back to the 1960s when the US Department of Defense launched the Advanced Research Projects Agency Network (ARPANET). This early network was designed to facilitate communication between researchers and institutions. Over time, it evolved into the modern internet we know today, with the introduction of the World Wide Web in the 1990s playing a significant role in its popularisation. ARPANET was initially developed to allow researchers to share information and resources across different locations. Its success demonstrated the potential of interconnected networks, leading to the development of the TCP/IP protocol suite, which became the foundation of the internet. In the 1980s, the National Science Foundation (N Source: https://larus.foundation/post/what-is-the-difference-between-the-internet-and-the-web
+- ONLINE [Serper web result] Celery HPA - startupProbe failing after tasks are already ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). celery inspect command might take too long causing the startupProbe to hang and failing. If startupProbe fails too many times it will kill the ... Source: https://stackoverflow.com/questions/70095112/celery-hpa-startupprobe-failing-after-tasks-are-already-running
+- ONLINE [Serper web result] {THE AND} Couples Edition - 199 Meaningful ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). The trusted couple's game for those who want to connect or reconnect and discover each other, in a raw, authentic, and romantic way. Perfect for meaningful ... Source: https://www.amazon.com/Couples-Meaningful-Conversation-Connection-Relationships/dp/B0BKQYYQCS
+- ONLINE [Serper web result] Celery worker fix liveness check · Issue #148: UNTRUSTED WEB RESEARCH (not PCAP evidence). Create celery worker liveness probe that will: Honor long running tasks (will not deem celery to be unhealthy while it is processing tasks) ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/maykinmedia/charts/issues/148
+- ONLINE [Serper web result] {THE AND} Dating Book Bundle - The Skin Deep: UNTRUSTED WEB RESEARCH (not PCAP evidence). Regular price $51.95 Sale price$45.75 ・ 199 unique and meaningful questions and prompts designed for new couples ・ with insights learned from over 1,200 ... Source: https://shop.theskindeep.com/products/the-and-dating-book-bundle?srsltid=AYCX9vKoPpaKjKwIqXaE_c-808CVZ18ijqBW8hsQLyDWMBwC_R8mmaWL
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2021-23727
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2011-4356
+- https://nvd.nist.gov/vuln/detail/CVE-2016-8339
+- https://nvd.nist.gov/vuln/detail/CVE-2017-14483
+- https://nvd.nist.gov/vuln/detail/CVE-2018-12326
+- https://nvd.nist.gov/vuln/detail/CVE-2018-16879
+- https://nvd.nist.gov/vuln/detail/CVE-2018-12453
+- https://github.com/celery/celery/issues/4079?timeline_page=1
+- https://www.youtube.com/watch?v=nuUNgsQGU9g
+- https://shop.theskindeep.com/collections/the-and-relationship-card-game?srsltid=AYCX9vIkKp6oW-k35hOCQV-ICDc7mxYTXnBU7_CTMvtVJUCHlggGbOa8
+- https://www.reddit.com/r/explainlikeimfive/comments/17elumc/eli5_what_is_the_difference_between_web_and/
+- https://docs.celeryq.dev/en/stable/userguide/monitoring.html
+- https://askleo.com/whats-the-difference-between-the-web-and-the-internet/
+- https://shop.theskindeep.com/products/the-and-couples-edition?srsltid=AYCX9vLBOdpf7WQpAECp__totu7YQcrOJNU9axm5aBiObUnOhmf623Pm
+- https://larus.foundation/post/what-is-the-difference-between-the-internet-and-the-web
+- https://stackoverflow.com/questions/70095112/celery-hpa-startupprobe-failing-after-tasks-are-already-running
+- https://www.amazon.com/Couples-Meaningful-Conversation-Connection-Relationships/dp/B0BKQYYQCS
+- https://github.com/maykinmedia/charts/issues/148
+- https://shop.theskindeep.com/products/the-and-dating-book-bundle?srsltid=AYCX9vKoPpaKjKwIqXaE_c-808CVZ18ijqBW8hsQLyDWMBwC_R8mmaWL
+
+Search status: Valid
+Search query: Celery Malformed Command Probe | the and | the and web is The
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for quizlet.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- 8 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Redis
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000001-001]: 172.18.0.2:6379 -> 172.18.0.7:45572 (RESP).
+- PCAP [E-S0000-F000002-002]: 172.18.0.7:45572 -> 172.18.0.2:6379 (RESP).
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2021-23727: NVD vulnerability record: This affects the package celery before 5.2.2. It by default trusts the messages and metadata stored in backends (result stores). When reading task metadata from the backend, the data is deserialized. Given that an attacker can gain access to, or somehow manipulate the metadata within a celery backend, they could trigger a stored command injection vulnerability and potentially gain further access to the system. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-23727 Supports: NVD lists CVE-2021-23727 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [CISA KEV] Cisco IOS XR Open Port Vulnerability: Cisco IOS XR: Cisco IOS XR software health check opens TCP port 6379 by default on activation. An attacker can connect to the Redis instance on the open port and allow access to the Redis instance that is running within the NOSi container. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2022-20821 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2011-4356: NVD vulnerability record: Celery 2.1 and 2.2 before 2.2.8, 2.3 before 2.3.4, and 2.4 before 2.4.4 changes the effective id but not the real id during processing of the --uid and --gid arguments to celerybeat, celeryd_detach, celeryd-multi, and celeryev, which allows local users to gain privileges via vectors involving crafted code that is executed by the worker process. Source: https://nvd.nist.gov/vuln/detail/CVE-2011-4356 Supports: NVD lists CVE-2011-4356 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2016-8339: NVD vulnerability record: A buffer overflow in Redis 3.2.x prior to 3.2.4 causes arbitrary code execution when a crafted command is sent. An out of bounds write vulnerability exists in the handling of the client-output-buffer-limit option during the CONFIG SET command for the Redis data structure store. A crafted CONFIG SET command can lead to an out of bounds write potentially resulting in code execution. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-8339 Supports: NVD lists CVE-2016-8339 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-14483: NVD vulnerability record: flower.initd in the Gentoo dev-python/flower package before 0.9.1-r1 for Celery Flower sets PID file ownership to a non-root account, which might allow local users to kill arbitrary processes by leveraging access to this non-root account for PID file modification before a root script executes a "kill `cat /pathname`" command. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-14483 Supports: NVD lists CVE-2017-14483 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-12326: NVD vulnerability record: Buffer overflow in redis-cli of Redis before 4.0.10 and 5.x before 5.0 RC3 allows an attacker to achieve code execution and escalate to higher privileges via a crafted command line. NOTE: It is unclear whether there are any common situations in which redis-cli is used with, for example, a -h (aka hostname) argument from an untrusted source. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-12326 Supports: NVD lists CVE-2018-12326 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-16879: NVD vulnerability record: Ansible Tower before version 3.3.3 does not set a secure channel as it is using the default insecure configuration channel settings for messaging celery workers from RabbitMQ. This could lead in data leak of sensitive information such as passwords as well as denial of service attacks by deleting projects or inventory files. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-16879 Supports: NVD lists CVE-2018-16879 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-12453: NVD vulnerability record: Type confusion in the xgroupCommand function in t_stream.c in redis-server in Redis before 5.0 allows remote attackers to cause denial-of-service via an XGROUP command in which the key is not a stream. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-12453 Supports: NVD lists CVE-2018-12453 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] [K8S] livenessProbe and readinessProbe for celery beat ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). How can I do to check if my celery beat or celery. The Celery worker liveness check should only monitor if the worker is ready to accept tasks ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/celery/celery/issues/4079?timeline_page=1
+- ONLINE [Serper web result] What Is the Web? How the Internet and Web Work Explained: UNTRUSTED WEB RESEARCH (not PCAP evidence). The web, or World Wide Web, is a system of interconnected web pages that are accessed through the internet using a web browser. Source: https://www.youtube.com/watch?v=nuUNgsQGU9g
+- ONLINE [Serper web result] {THE AND} Relationship Card Game - The Skin Deep: UNTRUSTED WEB RESEARCH (not PCAP evidence). {THE AND} card game for nearly every relationship in your life, well as incredible postcards inspired by actual {THE AND} conversations. Source: https://shop.theskindeep.com/collections/the-and-relationship-card-game?srsltid=AYCX9vIkKp6oW-k35hOCQV-ICDc7mxYTXnBU7_CTMvtVJUCHlggGbOa8
+- ONLINE [Serper web result] Eli5: What is the difference between 'web' and 'website'?: UNTRUSTED WEB RESEARCH (not PCAP evidence). The ' web ' is the entire, world-wide, interconnected group of computers. A ' website ' is a single piece of that web -- a smaller collection ... Source: https://www.reddit.com/r/explainlikeimfive/comments/17elumc/eli5_what_is_the_difference_between_web_and/
+- ONLINE [Serper web result] Monitoring and Management Guide - Celery: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are several tools available to monitor and inspect Celery clusters. This document describes some of these, as well as features related to monitoring, like ... | Webpage text: Celery 5.6.3 documentation » Monitoring and Management Guide This document describes the current stable version of Celery (5.6). Monitoring and Management Guide¶ There are several tools available to monitor and inspect Celery clusters. This document describes some of these, as well as features related to monitoring, like events and broadcast commands. Management Command-line Utilities (inspect/control)¶ celery can also be used to inspect and manage worker nodes (and to some degree tasks). To list all the commands available do: or to get help for a specific command do: $ celery <command> --help shell: Drop into a Python shell. The locals will include the celery variable: this is the current app. Also all known tasks will be automatically added to locals (unless the --without-tasks flag is set). Uses https://pypi.org/project/Ipython/, https://pypi.org/project/bpython/, or regular python in that order if installed. You can force an implementation using status: List active nodes in this cluster result: Show the result of a task $ celery -A proj result -t tasks.add 4e196aa4-0141-4601-8138-7aa33db0f577 Note that you can omit the name of the task as long as the task doesn’t use a custom result backend. purge: Purge messages from all configured task queues. This command will remove all messages from queues configured in the CELERY_QUEUES setting: There’s no undo for this operation, and messages will You can also specify the queues to purge using the -Q option: $ celery -A proj purge -Q celery,foo,bar and exclude queues from being purged using the -X option: $ celery -A proj purge -X celery inspect active: List active tasks $ celery -A proj inspect active These are all the tasks that are currently being executed. inspect scheduled: List scheduled ETA tasks $ celery -A proj inspect scheduled These are tasks reserved by the worker when they have an eta or countdown argument set. inspect reserved: List reserved tasks $ celery -A proj inspect reserved This will list all tasks that have been prefetched by the worker, and is currently waiting to be executed (doesn’t include tasks inspect revoked: List history of revoked tasks $ celery -A proj inspect revoked inspect registered: List registered tasks $ celery -A proj inspect registered inspect stats: Show worker statistics (see Statistics) $ celery -A proj inspect stats inspect query_task: Show information about task(s) by id. Any worker having a task in this set of ids reserved/active will respond with status and information. $ celery -A proj inspect query_task e9f6c8f0-fec9-4ae8-a8c6-cf8c8451d4f8 You can also query for information about multiple tasks: $ celery -A proj inspect query_task id1 id2 ... idN control enable_events: Enable events $ celery -A proj control enable_events control disable_events: Disable events $ celery -A proj control disable_events migrate: Migrate tasks from one broker to another (EXPERIMENTAL). $ celery -A proj migrate redis://localhost amqp://localhost This command will migrate all the tasks on one broker to another. As this command is new and experimental you should be sure to have a backup of the data before proceeding. All inspect and control commands supports a This is the number of seconds to Source: https://docs.celeryq.dev/en/stable/userguide/monitoring.html
+- ONLINE [Serper web result] What's the Difference Between the Web and the Internet?: UNTRUSTED WEB RESEARCH (not PCAP evidence). The Web is a subset of the Internet because it is comprised of the computers which host websites. The rest of the internet doesn't host websites ... Source: https://askleo.com/whats-the-difference-between-the-web-and-the-internet/
+- ONLINE [Serper web result] {THE AND} Couples Edition - The Skin Deep: UNTRUSTED WEB RESEARCH (not PCAP evidence). Introducing the Couples Edition - the intimacy-inspiring card game from The Skin Deep that will transform your relationship. With 199 thought-provoking ... Source: https://shop.theskindeep.com/products/the-and-couples-edition?srsltid=AYCX9vLBOdpf7WQpAECp__totu7YQcrOJNU9axm5aBiObUnOhmf623Pm
+- ONLINE [Serper web result] What is the difference between the internet and the web?: UNTRUSTED WEB RESEARCH (not PCAP evidence). The internet is a global network of interconnected computers, while the web is a collection of websites and pages accessed via the internet. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The internet and the web are often used interchangeably, but they are not the same thing. Understanding their differences is crucial for anyone navigating the digital world. The internet is a global network of interconnected computers, while the web is a collection of websites and pages accessed via the internet. The web relies on the internet for connectivity, but the internet can function without the web through other protocols and applications. The Internet: A global network The evolution of the Internet The Web: A collection of websites The Internet beyond the Web The importance of understanding the difference The future of the Internet and the Web Understanding the Internet and Web The terms "internet" and "web" are commonly utilized, often in a manner that suggests they are synonymous. Nevertheless, these two concepts are separate and fulfill different roles. A significant number of individuals do not recognize the essential differences that exist between them, which may result in misunderstanding. This article seeks to elucidate the distinctions and offer a more profound comprehension of how The Internet: A global network The internet constitutes an extensive global network that links computers and devices around the globe. It represents a sophisticated infrastructure comprised of various smaller networks, such as local area networks (LANs), wide area networks (WANs), and metropolitan area networks (MANs). These networks are connected through a framework of protocols, primarily the Internet Protocol (IP) and the Transmission Control P As stated by Dr. Vint Cerf, recognized as one of the "fathers of the internet" and a Vice President at Google, "The internet is a network of networks. It is a global system of interconnected computer networks that utilize the Internet Protocol suite to connect devices worldwide." This foundational infrastructure facilitates the transfer of data in packet form, which can be directed through various routes to arrive at The internet's development has been a gradual process, evolving from its early days as a research project to the global phenomenon it is today. It is decentralised, meaning there is no single governing body controlling its operations. Instead, various organisations and standards bodies, such as the Internet Engineering Task Force (IETF) and the Internet Corporation for Assigned Names and Numbers (ICANN), help to mana The evolution of the Internet The origins of the internet date back to the 1960s when the US Department of Defense launched the Advanced Research Projects Agency Network (ARPANET). This early network was designed to facilitate communication between researchers and institutions. Over time, it evolved into the modern internet we know today, with the introduction of the World Wide Web in the 1990s playing a significant role in its popularisation. ARPANET was initially developed to allow researchers to share information and resources across different locations. Its success demonstrated the potential of interconnected networks, leading to the development of the TCP/IP protocol suite, which became the foundation of the internet. In the 1980s, the National Science Foundation (N Source: https://larus.foundation/post/what-is-the-difference-between-the-internet-and-the-web
+- ONLINE [Serper web result] Celery HPA - startupProbe failing after tasks are already ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). celery inspect command might take too long causing the startupProbe to hang and failing. If startupProbe fails too many times it will kill the ... Source: https://stackoverflow.com/questions/70095112/celery-hpa-startupprobe-failing-after-tasks-are-already-running
+- ONLINE [Serper web result] {THE AND} Couples Edition - 199 Meaningful ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). The trusted couple's game for those who want to connect or reconnect and discover each other, in a raw, authentic, and romantic way. Perfect for meaningful ... Source: https://www.amazon.com/Couples-Meaningful-Conversation-Connection-Relationships/dp/B0BKQYYQCS
+- ONLINE [Serper web result] Celery worker fix liveness check · Issue #148: UNTRUSTED WEB RESEARCH (not PCAP evidence). Create celery worker liveness probe that will: Honor long running tasks (will not deem celery to be unhealthy while it is processing tasks) ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/maykinmedia/charts/issues/148
+- ONLINE [Serper web result] {THE AND} Dating Book Bundle - The Skin Deep: UNTRUSTED WEB RESEARCH (not PCAP evidence). Regular price $51.95 Sale price$45.75 ・ 199 unique and meaningful questions and prompts designed for new couples ・ with insights learned from over 1,200 ... Source: https://shop.theskindeep.com/products/the-and-dating-book-bundle?srsltid=AYCX9vKoPpaKjKwIqXaE_c-808CVZ18ijqBW8hsQLyDWMBwC_R8mmaWL
+
+Verification Summary:
+- Affected service: Redis.
+- Attack type: Malformed Command Probe.
+- Attack technique: Redis Protocol Fuzzing.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Consensus attack outcome: Fail.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Celery Malformed Command Probe | the and | the and web is The.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2021-23727
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2011-4356
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2016-8339
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-14483
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-12326
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-16879
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-12453
+- Evidence-source URL: https://github.com/celery/celery/issues/4079?timeline_page=1
+- Evidence-source URL: https://www.youtube.com/watch?v=nuUNgsQGU9g
+- Evidence-source URL: https://shop.theskindeep.com/collections/the-and-relationship-card-game?srsltid=AYCX9vIkKp6oW-k35hOCQV-ICDc7mxYTXnBU7_CTMvtVJUCHlggGbOa8
+- Evidence-source URL: https://www.reddit.com/r/explainlikeimfive/comments/17elumc/eli5_what_is_the_difference_between_web_and/
+- Evidence-source URL: https://docs.celeryq.dev/en/stable/userguide/monitoring.html
+- Evidence-source URL: https://askleo.com/whats-the-difference-between-the-web-and-the-internet/
+- Evidence-source URL: https://shop.theskindeep.com/products/the-and-couples-edition?srsltid=AYCX9vLBOdpf7WQpAECp__totu7YQcrOJNU9axm5aBiObUnOhmf623Pm
+- Evidence-source URL: https://larus.foundation/post/what-is-the-difference-between-the-internet-and-the-web
+- Evidence-source URL: https://stackoverflow.com/questions/70095112/celery-hpa-startupprobe-failing-after-tasks-are-already-running
+- Evidence-source URL: https://www.amazon.com/Couples-Meaningful-Conversation-Connection-Relationships/dp/B0BKQYYQCS
+- Evidence-source URL: https://github.com/maykinmedia/charts/issues/148
+- Evidence-source URL: https://shop.theskindeep.com/products/the-and-dating-book-bundle?srsltid=AYCX9vKoPpaKjKwIqXaE_c-808CVZ18ijqBW8hsQLyDWMBwC_R8mmaWL
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for quizlet.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 8 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Restrict Redis port (6379) access to authorized clients only
+- Implement protocol-level input validation to reject malformed RESP commands
+- Monitor for unusual command patterns (e.g., negative array lengths)
+- Apply Redis security updates for unrelated CVEs identified in research

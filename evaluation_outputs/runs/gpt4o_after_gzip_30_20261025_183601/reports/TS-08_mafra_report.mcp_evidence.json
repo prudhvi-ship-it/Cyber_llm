@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "endpoint validate code command injection vulnerability packet clues: endpoint validate code",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2003-0825: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2003-0825",
+      "snippet": "The Windows Internet Naming Service (WINS) for Microsoft Windows Server 2003, and possibly Windows NT and Server 2000, does not properly validate the length of certain packets, which allows attackers to cause a denial of service and possibly execute arbitrary code.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2003-0825 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2003-0907: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2003-0907",
+      "snippet": "Help and Support Center in Microsoft Windows XP SP1 does not properly validate HCP URLs, which allows remote attackers to execute arbitrary code via quotation marks in an hcp:// URL, which are not quoted when constructing the argument list to HelpCtr.exe.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2003-0907 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2004-0118: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2004-0118",
+      "snippet": "The component for the Virtual DOS Machine (VDM) subsystem in Windows NT 4.0 and Windows 2000 does not properly validate system structures, which allows local users to access protected kernel memory and execute arbitrary code.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2004-0118 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2004-0199: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2004-0199",
+      "snippet": "Help and Support Center in Microsoft Windows XP and Windows Server 2003 SP1 does not properly validate HCP URLs, which allows remote attackers to execute arbitrary code, as demonstrated using certain hcp:// URLs that access the DVD Upgrade capability (dvdupgrd.htm).",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2004-0199 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "What Is Command Injection? | Examples, Methods & ...",
+      "url": "https://www.imperva.com/learn/application-security/command-injection/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Here are three examples of how an application vulnerability can lead to command injection attacks. These examples are based on code provided by OWASP. Example 1 ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Remote File Inclusion (RFI) XXE (XML External Entity) SSTI (Server-Side Template Injection) Cross Site Scripting (XSS) Attacks Reflected Cross Site Scripting (XSS) Attacks Cross Site Request Forgery (CSRF) Attack Server-Side Request Forgery (SSRF) Website Defacement Attack Man in the Middle (MITM) Attack What is Command Injection? Command injection is a cyber attack that involves executing arbitrary commands on a host operating system (OS). Typically, the threat actor injects the commands by exploiting an application vulnerability, such as insufficient input validation. How command injection works – arbitrary commands For example, a threat actor can use insecure transmissions of user data, such as cookies and forms, to inject a command into the system shell on a web server. The attacker can then leverage the privileges of the vulnerable application to compromise the server. Command injection takes various forms, including direct execution of shell commands, injecting malicious files into a server’s runtime environment, and exploiting vulnerabilities in configuration files, such as XML external entities (XXE). Code Injection vs. Command Injection Code injection is a generic term for any type of attack that involves an injection of code interpreted/executed by an application. This type of attack takes advantage of mishandling of untrusted data inputs. It is made possible by a lack of proper input/output data validation. A key limitation of code injection attacks is that they are confined to the application or system they target. If an attacker can inject PHP code into an application and execute it, malicious code will be limited by PHP functionality and permissions granted to PHP on the host machine. Command injection typically involves executing commands in a system shell or other parts of the environment. The attacker extends the default functionality of a vulnerable application, causing it to pass commands to the system shell, without needing to inject malicious code. In many cases, command injection gives the attacker greater control over the target system. Command Injection Vulnerability Examples Here are three examples of how an application vulnerability can lead to command injection attacks. These examples are based on code provided by OWASP. Example 1: File Name as Command Argument Here is an example of a program that allows remote users to view the contents of a file, without being able to modify or delete it. The program runs with root privileges: int main(char* argc, char** argv) { char cmd[CMD_MAX] = \"/usr/bin/cat \"; Although the program is supposedly innocuous—it only enables read-only access to files—it enables a command injection attack. If the attacker passes, instead of a file name, a string like: The call to system() will fail to execute, and then the operating system will perform recursive deletion of the root disk partition. Example 2: Manipulating APPHOME Environment Variable The following code snippet determines the installation directory of a certain application using the $APPHOME environment variable and runs a script in that directory. char* home=getenv(\"APPHOME\"); char* cmd=(char*)mallo",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Secure by Design Alert: Eliminating OS Command Injection ...",
+      "url": "https://www.cisa.gov/resources-tools/resources/secure-design-alert-eliminating-os-command-injection-vulnerabilities",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Software manufacturers can eliminate them at the source by taking a secure by design approach. Despite this fact, OS command injection ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Command injection exploited",
+      "url": "https://docs.datadoghq.com/security/default_rules/def-000-blm/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Command injection attacks are possible when an application passes unsafe user parameters to a system shell. In this attack, the attacker-supplied operating ... | Webpage text: ���H�lC� ��\u0011Bf؛@v ��m<�-�m%r�G��\u0011����/�,\u001bH�;g��fM��Q]]U]]U��[ ���\u0002:i��\u0002\u0012d8�%\u0011��Nf1f*c�F�\u0019�\u00107\u0005p�\u0016̒\u0004\u0013�d8�\u0011%Y�V��h\u0016sU_CNp<��\u0004�\u0011� ���\u0017t�t\"K\u0002h\u001b\u0012\u0004�0L�Ǔ\u0019�( $\u0011n6Zh�� ��W�\u0018歀&؛D���\u000e��I\bgC\u001apj��\u0014Կ���-�;�\u0019��v0��\u0000\u0006(��9��_����!+�� ���\u0005՟��^���36vP2�M0��M\u0001���_.0�\u0011\u001918 �B���贷�`�����)��{#̏c,k���D�34��-(n��v D�{A�\u0011Ǻ�c+�m\u0017D �Qj�\u0013�6�B\"�\u0001�C�)&��8�C'rS׹�HHoAH\u0003�\u0007�іqģ�\u001bS�\u0005%��AK}4m` ;�B����7�7_5���*w�{�\u000f�?�\u001b@�P \u0017�\u001bL�/�}av�voPb�e�!KxB\\�@�\u0006m1�N�=N�\u0003{=�v����5�ZkkN=�\"\u0002!A\u0010�A\u001b @�\u0014 �pFC�E�ᄿ�C�`'\u0002��ZL@\u0001'`�r���ۛ�W�l�p�n�\u0015���\u0005m0�p��5��H�\u0010µ����E\u0017��H0�\u001a\u0011/\"\u0011w�W;[͏��hn�ڲ�\\\u0012����Z;u�\u0014C��R1ǞD̮`f\u0003��\u0015+��Z\u0013��\u0004%_1� \u0004���`{��\u000ej\u000f��agkw����p{\u0013\u0005��h��\u0007\u001b����p�jggkw���js�����Ϋ�&\u000e6^mo�\u000e����N��۝��͝�ݭ���� |�i\u000f�Q\u0010n\u0006�v��/̊\b�#1=A���Vg�������y\u0014 G����7�\u0013N>l �\"w�]�&�_�N�7��[�j�\u001a��\u0019u~�y��˷���d�\u001b����| ^�[����t^ m$g�O�\u0011��\u0015$�1�D��@D(���\u0019{���$�\u000e\u0012z�pҌ�5�٤��z\u0014�\u0010\u000fq�\"\",�f��(�\u0001g�F���v_\u0005/\u0007Ý� �j�����/7�W/w�Pg�1ĝp���f{g\u0007m�nm��`�U���ho\u000f���N� B���\u0007�\u001b���psg\u001b�m��\u0011nt�헛�p\u0003�l��B�\u001b�����U;��m\u000f^�\u000e�Ͱ�ӧG����?�����^ �?��D���_�����t�i�O�ς��7�v����O3 �o�Mď�Ӌ_���W�d��`�o�����K�����{8��QDI����������p\u0007 �0|�r��a�1������ݍ�V�5����\u000e\u0007���^m����6� �l��l�pwkc{�U\u001b\u000f�wv;/q�=�����\u0018\u0004������F=�w�� ���7���������'� ;ǳ����x�sq�\u001b�����Ʒ� ��z��Lg�/���`����S _�?���g��y�柿}Ln���WO\u001bL�h����\u0006���( 1��\u0011����'��Tf5�pȂ\u0004c2�R\u0016 ��\u0001���n���o����N�7\u0011�\u0006Q,,P\u0005-��\u00040�b�\u0013֜`2��F! ��v���NP2�H�ө�촧w��i\u0014Ǭ\u0019P�QDp��\u0014�8\"�)mCS7�Fc�w�-<)�[\u000e͏\u0011��@��y F�����1 7�\u0014\u0005�'�6AS]��\u0018\u0007�&s�������G�\u0010:#��H��j�[ӻ��'8��3AwME�����Ν�5�4��T\u0005K�>\u0005%0��e���^0c�N�oh\u0010ck�\u0001�r7V�n��}�2wke���\u0005 \u0015|��.�PK�e {zٍg��|Fٗ�(����u�򖏌y@c���h���\u0001 ��\u0012:#aS�\u000e���&!N����b4�B� ���Og4\u0013\u0014F3濜�u+\u0003u\u0018�.��\u0011iF ��ӻn0K\u0018M�)�d��\u0012޼�2�e���oP\u0012!d6�I\u0014�qD\"2\u0012�L\u0015`�7�w\u0004����ٙ�u�( \u0005J�\u001a��\"����b\u001b9kNCzK��\u0005kt`Y\u0005X�\"v�\u0018 �ZT_��բ6W\u00104�7r��u��Ta:�o)�\u0005[�`[����wSDB r�[��/��\u0005����J֒nq9U�bP�<�W�6�9D�(�� \u0012 q��h:�\\�\b�v�F���8�-6E�\u0013��\u000fd�knF��²+��$�\u0003��σ* ��%�J`@�l�)f�\u000f^vPg;�k)�Ȅ.�\u0019�\u0016�I\u0014p\u001b8� \u0013�ߒ� ��ߟ� f\u0000C\u0007\u0003���B�*�|�\u0010�?<8m�{_ ���\u000e#�[�(� 0 q\u0012�Q+3�DC�0�y_��`w^�\\c\u001b�aD��������� g1���\u0006�3,�|\u0000{�Y\u0014�GU� #���2��!���\u0018s�ß���ƊBh/�|��O]��\u0006$�\\g�8u\u0001o@��b���f�V�ǉ�\u0012��� �`�\u0010�/Đq��,�G��h�Q/b\u0017czK\\\u0005��\u001b��.�4u�}N��0�\u0013\u0005�d�=���I0��!K�kG2�[��:o�̚�{S�,��i�b����Tזf��J\u0016a\u0017�J��,k�P[&�{���g�%j����\u0015�ȼ(�\u0010Jj}�S6�l����k\u0005���h���\u0003�X�o۩��Rkg\u001aY��r'��\u0014\\]��|�-���i@��,����07��VI���!������l��\u0010`� ����l��^�f�2�jd:�d����(�i�,�\u0006\u0004~�\u0013ʬ�������O�B�_�I�\u0003\".� \u0004��)C�V�ꐵ50Y`�0(�ݙ\u0000�\u0015\u0018Ug�hjA %�R������zH-ꑈ�\u000e��X�\u000e�f<\u0011�dhU\u0005C\u001b����VE�l�VxYK��!�;��\u0018��TiKȵB#\u0016'\u0016�{�4\"�V��V��H����Џ�� \u0015\u0001T~Y`��4I�@��/��N��\u0005#i.\u0011\u001a�뉴nXKP�5\u0005�-iF�i��+A�\u0011� ���ao\u0013:����\u0019U\u0003�h���\u0014?Kb�a�\u0004��(A\u0013\u00068��FI�L. \u0002�0E��\u0005쓐y\u0011 �Y�����u��X \u0012��%=�ϣ�m\u0012q��}I�FzԀ^B\u000fVO\u000f�&b,\u001a\u0011g�\u0002M\u0004\u0001���I�v�\u0002��\u0015\u0011�R��!�R� ���]�ф;. ��[��SGa��T\u001a�c���� v \u0002�\u0018����C�\u000f����H�M�Ǽ#�w\u0014G�� N\u00134�\u0017�\u0016!\u0017�\u0001��\u00140PD�r���)����=��/ �'��_����\b������nj���\u0006(�8�A h��!Q�;���>���\"P\u0017�x \u0016Sz���N\u001bv�\u0015!cw^���J}��&~\u0003 �f��Y�+i���P�!�1�V\u0019���ѐ;n?5��V#�\u0016Y帊�e^�j�Qm�y\\�\u0014���S�*�ϋ�3OH6\u0019E��2Qܴ^b2r��\u0018-i��b�W�\u0002)\u001b���aG�\u0012�\u0018%�\u0016����v. �k\u000e\u0016��\u0004�V�G�\u000e��KU|8�8?�t����������/ �?��>ys������!����rz�����������o�?dYui\u0017g��:�>:�8�IB!���֟=���n��\u001b�u����E �An�9�������~��\u0017��bV-;\u0002˺���ɚ~(�r��<�}����� 7�\\��T�\u0003��#�^��ZpBd\u0006O�l�\u0018%8l�1���\u001b\u0015u{��ĿI�j@C� ��\u0001�\u00057W��F�5(Ei}�\u0014M��M��J�\u0019�1:�b�Wͻua�9\u001b���h�\u00130�B,~�4�(\u0019F#��\u001aY__c\u000f\u000f\u000e9�\u000e\u0001XLJ������\\�;l!խ\u0004\u0011ʍ�Q��Q���F\u000ez}� D\u000e\u0007X�`���s)<'!s}$�{�X��\u0007 �~��G\u0018a\u0017�\u0017�sbѡ��<\u0001�\u0004��}�y( ��*#����5&�+��3�P\u0019�\u0015���E\"��z�\u0010v��i�݇\u0010���5���\u0011I���e#��M� �9?��>;?o\u0014k!E:��P:�\u0005�w�R f4��jd�m\b��BTMR\"�.�,",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OS Command Injection: Examples & Prevention",
+      "url": "https://www.fastly.com/blog/back-to-basics-os-command-injection",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Understand OS command injection attacks with examples, common risks, and practical steps to prevent this web application vulnerability. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Scale AI systems, protect your content from bots, and run your edge with natural language — all on one programmable platform. DeliverReal-time experiences at global scale SecureProtect apps and APIs from AI-scale threats DeployRun code milliseconds from your users ObserveReal-time visibility, from origin to edge Professional ServicesExpert help to migrate or optimize your delivery service Managed CDNFastly's managed cloud CDN deployed inside your own network Managed Security24/7 expert-managed WAF, bot, and DDoS threat protection Live EntertainmentReal-time monitoring & support for high-traffic events Deliver fast, personalized experiences globally with Fastly CDN Get everything you need from a modern CDN — from effortless scale and built-in security to programmable control and full visibility. Fastly industry solutions Discover how Fastly helps your industry innovate, improve performance, and deliver secure online experiences that keep customers engaged. Resiliency & Availability High-performance streaming media Fastly powers the world's leading media brands with an open edge cloud platform built to deliver flawless live and on-demand entertainment at any scale, to any screen, anywhere. See why enterprises are switching from Cloudflare to Fastly with 24% faster load times, 33% better TTFB, and stronger app security. A new architecture for the modern internet Explore Fastly's global network — 622 Tbps of capacity, fewer, more powerful POPs, and sub-millisecond TTFB at the 99th percentile. Originally published in July 2023. Updated September 2025. OS Command Injection is a web application vulnerability that can lead to arbitrary command execution on the underlying operating system. Attackers exploit command injection vulnerabilities by supplying malicious input to operating system commands executed by an application. Successful exploitation can allow attackers to retrieve sensitive data, escalate privileges, and move laterally within a network. Strong input validation is the preferred defense against command injection vulnerabilities. Avoiding operating system command execution entirely is the most effective mitigation. What is OS Command Injection? OS Command Injection is a web application vulnerability that allows attackers to execute arbitrary commands on the underlying operating system. Because successful exploitation can lead to full command execution on a target system, command injection vulnerabilities are often considered among the most severe web application vulnerabilities. For a concise definition, see Fastly's Learning Center entry on OS Command Injection. This blog goes deeper: below, we'll walk through real-world CVE case studies, the mechanics of an exploitation, and what these attacks look like when observed by a WAF in production traffic. This is a common pattern in web applications that perform operating system command execution on behalf of users, and it can become dangerous when user input is passed directly to shell commands. Consider a web application meant to monitor internal systems and provide alerts when one of the systems goes offline. In this scenario, the application may want to test network reachability to the",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T02:15:49.039443+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2003-0825",
+    "CVE-2003-0907",
+    "CVE-2004-0118",
+    "CVE-2004-0199"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.cisa.gov: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

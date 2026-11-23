@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "etcd 3.4.0 lease grant security vulnerability packet clues: endpoint lease grant",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2023-32082: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-32082",
+      "snippet": "etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.26 and 3.5.9, the LeaseTimeToLive API allows access to key names (not value) associated to a lease when `Keys` parameter is true, even a user doesn't have read permission to the keys. The impact is limited to a cluster which enables auth (RBAC). Versions 3.4.26 and 3.5.9 fix this issue. There are no known workarounds.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2023-32082 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-58063: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58063",
+      "snippet": "CoreDNS is a DNS server that chains plugins. Starting in version 1.2.0 and prior to version 1.12.4, the CoreDNS etcd plugin contains a TTL confusion vulnerability where lease IDs are incorrectly used as TTL values, enabling DNS cache pinning attacks. This effectively creates a DoS condition for DNS resolution of affected services. The `TTL()` function in `plugin/etcd/etcd.go` incorrectly casts etcd lease IDs (64-bit integers) to uint32 and uses them as TTL values. Large lease IDs become very large TTLs when cast to uint32. This enables cache pinning attacks. Version 1.12.4 contains a fix for the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-58063 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-33413: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33413",
+      "snippet": "etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.42, 3.5.28, and 3.6.9, unauthorized users may bypass authentication or authorization checks and call certain etcd functions in clusters that expose the gRPC API to untrusted or partially trusted clients. In unpatched etcd clusters with etcd auth enabled, unauthorized users are able to call MemberList and learn cluster topology, including member IDs and advertised endpoints; call Alarm, which can be abused for operational disruption or denial of service; use Lease APIs, interfering with TTL-based keys and lease ownership; and/or trigger compaction, permanently removing historical revisions and disrupting watch, audit, and recovery workflows. Kubernetes does not rely on etcd’s built-in authentication and authorization. Instead, the API server handles authentication and authorization itself, so typical Kubernetes deployments are not affected. Versions 3.4.42, 3.5.28, and 3.6.9 contain a patch. If upgrading is not immediately possible, reduce exposure by treating the affected RPCs as unauthenticated in practice. Restrict network access to etcd server ports so only trusted components can connect and/or require strong client identity at the transport layer, such as mTLS with tightly scoped client certificate distribution.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-33413 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-44283: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-44283",
+      "snippet": "etcd is a distributed key-value store for the data of a distributed system. Prior to 3.4.44, 3.5.30, and 3.6.11, a vulnerability in etcd allows read access via PrevKv, or lease attachment in Put requests within transaction operations, to bypass RBAC authorization checks. An authenticated user without sufficient read or lease-related permissions may be able to access unauthorized data or attach leases by invoking transaction operations with these features enabled. This vulnerability is fixed in 3.4.44, 3.5.30, and 3.6.11.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-44283 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Etcd Patch Releases: v3.7.1, v3.6.14, and v3.5.33",
+      "url": "https://etcd.io/blog/2026/july-23-patch-release/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This patch release fixes a vulnerability where a network attacker could open, but not complete, an indefinite number of TLS client connections. | Webpage text: Create documentation issue Etcd Patch Releases: v3.7.1, v3.6.14, and v3.5.33 SIG-etcd has released patch updates across all three supported release branches. These releases fix two security vulnerabilities, several minor security issues, and address several reliability issues in the server, client library, and TLS stack. Users on v3.5, v3.6, and v3.7 should update at the next scheduled maintenance window. Official container images are available from gcr.io. Security Fix: watch responses leaked across RBAC key boundaries All three releases fix a vulnerability where a user granted read permission on a single key could receive watch event notifications for every key starting from that key, exposing data beyond their authorized scope. This vulnerability does not affect etcd as a part of the Kubernetes Control Plane. It only affects etcd clusters with Auth enabled in untrusted or partially trusted environments. Users depending on etcd Auth in this way should update their clusters immediately. Other etcd users can update at the next regularly scheduled maintenance period. More information on the vulnerability, including workarounds, may be found in its vulnerability report This vulnerability was reported by members of the etcd community. Our SIG is deeply thankful to: Anthropic and Adam Korczynski If you find a vulnerability in etcd, please report it through the form on GitHub. Security Fix: tlsListener.acceptLoop spawns unbounded handshake goroutines with no deadline This patch release fixes a vulnerability where a network attacker could open, but not complete, an indefinite number of TLS client connections. This would eventually exhaust etcd server resources, causing lack of availability. This security vulnerability affects the Kubernetes control plane. More information on the vulnerability, including workarounds, may be found in its vulnerability report This vulnerability was found, and patched, by members of the VMware by Broadcom team. We are grateful to this team for helping keep etcd secure. Security and reliability fixes shared across all three releases Beyond the two reported security fixes, all three releases include a set of fixes for both security and reliability of etcd: Unbounded read on peer lease handler: the HTTP handler for peer lease requests could perform an unbounded io.ReadAll, allowing a malicious or misbehaving peer to cause excessive memory use. This has been fixed by capping the read. Transaction cost accounting: the costTxnReq function was not accounting for nested RequestTxn operations, which could cause request cost estimates to be inaccurate. HTTP server timeouts: a ReadHeaderTimeout is now set on the client-facing HTTP server, protecting against slow-header attacks that could hold connections open indefinitely. Client leaseCache data race: a concurrent map iteration over leaseCache.entries in clientv3 was not properly synchronized, which could cause a panic or incorrect behavior under concurrent lease operations. TLS handshake timeout: the TLS listener in client/pkg/v3 now sets a tlsHandshakeTimeout, preventing stalled TLS handshakes from holding connections open indefinitely. v3.7.1 and v3.6.14 additionally fix a snapshotLimitByte configuration issue where",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "March 20 Security Release Patches Auth Vulnerabilities",
+      "url": "https://etcd.io/blog/2026/mar20-patch-release/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). These patch releases fix several vulnerabilities which allow unauthorized users to bypass authentication or authorization controls that are ... | Webpage text: Create documentation issue March 20 Security Release Patches Auth Vulnerabilities By SIG-etcd Security Team | SIG-etcd released updates 3.6.9, 3.5.28, and 3.4.42 today. These patch releases fix several vulnerabilities which allow unauthorized users to bypass authentication or authorization controls that are part of etcd Auth using the gRPC API. These vulnerabilities do not affect etcd as a part of the Kubernetes Control Plane. They only affect etcd clusters in other contexts, specifically ones with Auth enabled where it is required for access control in untrusted or partially trusted networks or with untrused users. Users depending on etcd Auth in this way should update their clusters immediately. Other etcd users can update at the next regularly scheduled maintenance period. EOL Notice: etcd 3.4 is scheduled to be EOL in May 2026. If you are still using version 3.4, please start planning your upgrade now. More information on the vulnerabilities: CVE-2026-33413: Authorization bypasses in multiple APIs CVE-2026-33343: Nested etcd transactions bypass RBAC authorization checks Both issues have been rated Moderate.with CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N. All of these vulnerabilies were reported by members of the etcd community. Our SIG is deeply thankful to: Isaac David from bugbunny.ai Asim Viladi Oglu Manizada Alex Schapiro & Ahmed Allam from Strix security (strix.ai) If you find a vulnerability in etcd, please report it through the form on GitHub. Last modified August 20, 2026: Update old blog posts to link to the security vulnerability reporting form. (#1215) (8245979)",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CHANGELOG-3.4.md - etcd-io/etcd",
+      "url": "https://github.com/etcd-io/etcd/blob/main/CHANGELOG/CHANGELOG-3.4.md",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Grant lease with negative ID can possibly cause db out of sync. Removed to adhere to best security practices, Leases with too large TTL values exceeding math. ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Etcd CVEs and Security Vulnerabilities - OpenCVE",
+      "url": "https://app.opencve.io/cve/?vendor=etcd",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Etcd v3.5.4 allows remote attackers to cause a denial of service via function PageWriter.write in pagewriter.go. NOTE: the vendor's position is that this is not ... | Webpage text: RCE (Remote Code Execution) Search Results (13 CVEs found) CVE-2026-73499 etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.5.33, 3.6.14, and 3.7.1, a user granted READ permission on a single exact key can use the Watch gRPC API with clientv3.WithFromKey() to receive watch events for every key lexicographically greater than or equal to the permitted key. In server/etcdserver/api/v3rpc/watch.go, the open-ended RangeEnd sentinel is rewritten befo CVE-2026-73500 etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.5.33, 3.6.14, and 3.7.1, a network attacker who can reach an etcd TLS listener can open many TCP connections and never send a ClientHello. In client/pkg/transport/listener_tls.go, each connection handled by tlsListener.acceptLoop spawns a goroutine that blocks indefinitely inside tls.Conn.Handshake() and remains tracked in CVE-2026-59818 etcd is a distributed key-value store for the data of a distributed system. Prior to 3.5.32 and 3.6.13, when etcd is configured with --listen-client-http-urls to split HTTP and gRPC client endpoints onto separate listeners, the --client-crl-file Certificate Revocation List is not enforced on the gRPC listener, allowing a client with a revoked certificate to authenticate successfully over gRPC. This issue is fixed in CVE-2026-44283 etcd is a distributed key-value store for the data of a distributed system. Prior to 3.4.44, 3.5.30, and 3.6.11, a vulnerability in etcd allows read access via PrevKv, or lease attachment in Put requests within transaction operations, to bypass RBAC authorization checks. An authenticated user without sufficient read or lease-related permissions may be able to access unauthorized data or attach leases by invoking tran CVE-2026-33343 etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.42, 3.5.28, and 3.6.9, an authenticated user with RBAC restricted permissions on key ranges can use nested transactions to bypass all key-level authorization. This allows any authenticated user with direct access to etcd to effectively ignore all key range restrictions, accessing the entire etcd data store. Kubernetes do CVE-2026-33413 etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.42, 3.5.28, and 3.6.9, unauthorized users may bypass authentication or authorization checks and call certain etcd functions in clusters that expose the gRPC API to untrusted or partially trusted clients. In unpatched etcd clusters with etcd auth enabled, unauthorized users are able to call MemberList and learn cluster to CVE-2021-28235 Authentication vulnerability found in Etcd-io v.3.4.10 allows remote attackers to escalate privileges via the debug function. CVE-2023-32082 etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.26 and 3.5.9, the LeaseTimeToLive API allows access to key names (not value) associated to a lease when `Keys` parameter is true, even a user doesn't have read permission to the keys. The impact is limited to a cluster which enables auth (RBAC). Versions 3.4.26 and 3.5.9 fix this issue. The",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T09:18:01.296664+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2023-32082",
+    "CVE-2025-58063",
+    "CVE-2026-33413",
+    "CVE-2026-44283"
+  ],
+  "retrieval_errors": []
+}

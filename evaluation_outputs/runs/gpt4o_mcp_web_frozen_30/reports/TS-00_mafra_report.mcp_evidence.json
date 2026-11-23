@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "SSH OpenSSH 8.9 Command Execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2025-32433 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-0168: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-0168",
+      "snippet": "The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-9001: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-9001",
+      "snippet": "Aruba ClearPass 6.6.3 and later includes a feature called \"SSH Lockout\", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with \"root\" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2019-16864: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-16864",
+      "snippet": "CompleteFTPService.exe in the server in EnterpriseDT CompleteFTP before 12.1.4 allows Remote Code Execution by leveraging a Windows user account that has SSH access. The exec command is always run as SYSTEM.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2019-16864 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OpenSSH: Release Notes",
+      "url": "https://www.openssh.org/releasenotes.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). OpenSSH is a 100% complete SSH protocol 2.0 implementation and includes sftp client and server support. Once again, we would like to thank the OpenSSH community ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] OpenSSH 10.6/10.6p1 (2026-10-06) OpenSSH 10.6 was released on 2026-10-06. It is available from the mirrors listed at https://www.openssh.com/. OpenSSH is a 100% complete SSH protocol 2.0 implementation and Recently the OpenSSH team have received a large number of security ** these bugs too. Given this, the OpenSSH team will, for now, be Once again, we would like to thank the OpenSSH community for their",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OpenSSH: Security",
+      "url": "https://www.openssh.org/security.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). OpenSSH 4.9 and newer do not execute ~/.ssh/rc for sessions whose command has been overridden with a sshd_config(5) ForceCommand directive. This was a ... | Webpage excerpt: OpenSSH is developed with the same rigorous security process that the OpenSSH, please contact the private developers list <openssh@openssh.com>. sshd(8) in OpenSSH versions 7.4 to 9.9 (inclusive). A logic error in sshd(8) caused the DisableForwarding option X11 forwarding is disabled by default in sshd(8) and agent forwarding is not requested by default by ssh(1). ssh(1) in OpenSSH versions 6.8p1 to 9.9p1 (inclusive).",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "sshd: OpenSSH server process | SSH Academy",
+      "url": "https://www.ssh.com/academy/ssh/sshd",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). sshd is the OpenSSH server process. It listens to incoming connections using the SSH protocol and acts as the server for the protocol. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] sshd – SSH server process",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OpenSSH",
+      "url": "https://www.openssh.org/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). OpenSSH is the premier connectivity tool for remote login with the SSH protocol. ... Key management with ssh-add, ssh-keysign, ssh-keyscan, and ssh-keygen. | Webpage excerpt: OpenSSH 10.6 released October 6, 2026. OpenSSH is the premier connectivity tool for remote login with the SSH protocol. In addition, OpenSSH provides a large suite of secure tunneling capabilities, The OpenSSH suite consists of the following tools: OpenSSH is developed by a few developers of the OpenSSH is incorporated into many commercial products, but very few of those companies assist OpenSSH with funding.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:08.137888+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-32433",
+    "CVE-2010-0168",
+    "CVE-2017-9001",
+    "CVE-2019-16864"
+  ],
+  "retrieval_errors": []
+}

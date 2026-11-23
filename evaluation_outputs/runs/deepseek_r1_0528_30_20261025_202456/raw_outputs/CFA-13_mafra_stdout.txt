@@ -1,0 +1,103 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_46b2f15091d36612144b
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event13_CVE-2020-11651_sucess_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: SaltStack
+  Attack Type: Remote Command Execution
+  Attack Success: Unknown
+  CVE: CVE-2020-11651
+  Overall Confidence: Low
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-13_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-13_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-13_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: SaltStack
+Associated CVE candidate (Analyst): CVE-2020-11651
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000019-003]: root user keyword observed.
+- PCAP [E-S0000-F000019-004]: LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=.
+- PCAP [E-S0000-F000020-005]: cmd.exe.
+- ONLINE [CISA KEV] SaltStack Salt Authentication Bypass Vulnerability: SaltStack Salt: SaltStack Salt contains an authentication bypass vulnerability in the salt-master process ClearFuncs due to improperly validating method calls. The vulnerability allows a remote user to access some methods without authentication, which can be used to retrieve user tokens from the salt master and/or run commands on salt minions. Salt users who follow fundamental internet security guidelines and best practices are not affected by this vulnerability. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2020-11651 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-16846: NVD vulnerability record: An issue was discovered in SaltStack Salt through 3002. Sending crafted web requests to the Salt API, with the SSH client enabled, can result in shell injection. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-16846 Supports: Web-cited CVE-2020-16846 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2020-11651: NVD vulnerability record: An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-11651 Supports: NVD lists CVE-2020-11651 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-5200: NVD vulnerability record: Salt-api in SaltStack Salt before 2015.8.13, 2016.3.x before 2016.3.5, and 2016.11.x before 2016.11.2 allows arbitrary command execution on a salt-master via Salt's ssh_client. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-5200 Supports: NVD lists CVE-2017-5200 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Remote Execution - Salt Project: UNTRUSTED WEB RESEARCH (not PCAP evidence). Running pre-defined or arbitrary commands on remote hosts, also known as remote execution, is the core function of Salt. The following links explore modules and ... | Webpage text: Contributing to Salt: A Guide for Contributors Salt Project maintenance policies Remote execution tutorial Running Commands on Salt Minions Writing Execution Modules Utility Modules - Code Reuse in Custom Modules Distributed Tracing (OpenTelemetry) Running pre-defined or arbitrary commands on remote hosts, also known as remote execution, is the core function of Salt. The following links explore modules and returners, which are two key elements of remote execution. Salt execution modules are called by the remote execution system to perform a wide variety of tasks. These modules provide functionality such as installing packages, restarting a service, running a remote command, transferring files, Full list of execution modules Contains: a list of core modules that ship with Salt. Writing execution modules Contains: a guide on how to write Salt modules. Remote execution tutorial Order your minions around Running Commands on Salt Minions Defining the Target Minions Finding available minion functions Compound Command Execution Writing Execution Modules Modules Are Easy to Write! Creating a Zip Archive Module Cross Calling Execution Modules Calling Execution Modules on the Salt Master Preloaded Execution Module Data Returning Error Information from __virtual__ Overriding Virtual Module Providers Adding Documentation to Salt Modules Add Execution Module Metadata Objects Loaded Into the Salt Minion Objects NOT Loaded into the Salt Minion Useful Decorators for Modules Returners Are Easy To Write! Using Custom Returner Modules External Job Cache Support salt.returners.highstate_return salt.returners.local_cache salt.returners.multi_returner salt.returners.postgres_local_cache salt.returners.rawfile_json salt.returners.salt_cache salt.returners.syslog_return Source: https://docs.saltproject.io/en/3008/topics/execution/index.html
+- ONLINE [Serper web result] Running Commands on Salt Minions: UNTRUSTED WEB RESEARCH (not PCAP evidence). The functions are executed on the minion in the order they are defined on the command line, and then the data from all of the commands are returned in a ... | Webpage text: Contributing to Salt: A Guide for Contributors Salt Project maintenance policies Remote execution tutorial Running Commands on Salt Minions Writing Execution Modules Utility Modules - Code Reuse in Custom Modules Distributed Tracing (OpenTelemetry) Running Commands on Salt Minions# Salt can be controlled by a command line client by the root user on the Salt master. The Salt command line client uses the Salt client API to communicate with the Salt master server. The Salt client is straightforward and simple Using the Salt client commands can be easily sent to the minions. Each of these commands accepts an explicit --config option to point to either the master or minion configuration file. If this option is not provided and the default configuration file does not exist then Salt falls back to use the environment variables SALT_MASTER_CONFIG and SALT_MINION_CONFIG. The Salt command needs a few components to send information to the Salt minions. The target minions need to be defined, the function to call and any arguments the function requires. Defining the Target Minions# The first argument passed to salt, defines the target minions, the target minions are accessed via their hostname. The default target type is a bash Salt can also define the target minions with regular expressions: salt -E '.*' cmd.run 'ls -l | grep foo' Or to explicitly list hosts, salt can take a list: salt -L foo.bar.baz,quo.qux cmd.run 'ps aux | grep foo' The function to call on the specified target is placed after the target Functions may also accept arguments, space-delimited: salt '*' cmd.exec_code python 'import sys; print sys.version' Optional, keyword arguments are also supported: salt '*' pip.install salt timeout=5 upgrade=True They are always in the form of kwarg=argument. Arguments are formatted as YAML: salt '*' cmd.run 'echo "Hello: $FIRST_NAME"' env='{FIRST_NAME: "Joe"}' Note: dictionaries must have curly braces around them (like the env keyword argument above). This was changed in 0.15.1: in the above example, the first argument used to be parsed as the dictionary {'echo "Hello': '$FIRST_NAME"'}. This was generally not the expected If you want to test what parameters are actually passed to a module, use the salt '*' test.arg_repr 'echo "Hello: $FIRST_NAME"' env='{FIRST_NAME: "Joe"}' Finding available minion functions# The Salt functions are self documenting, all of the function documentation can be retried from the minions via the sys.doc() function: Compound Command Execution# If a series of commands needs to be sent to a single target specification then the commands can be sent in a single publish. This can make gathering groups of information faster, and lowers the stress on the network for repeated Compound command execution works by sending a list of functions and arguments instead of sending a single function and argument. The functions are executed on the minion in the order they are defined on the command line, and then the data from all of the commands are returned in a dictionary. This means that the set of commands are called in a predictable way, and the returned data can Executing compound commands if done by passing a comma delimited list of functions, followed by a comma d Source: https://docs.saltproject.io/en/3008/topics/execution/remote_execution.html
+- ONLINE [Serper web result] Remote execution tutorial - Salt Project: UNTRUSTED WEB RESEARCH (not PCAP evidence). Remote execution tutorial# ... Before continuing make sure you have a working Salt installation by following the instructions in the Salt install guide. Stuck? | Webpage text: Contributing to Salt: A Guide for Contributors Salt Project maintenance policies Storing Static Data in the Pillar What is YAML and How To Use It Frequently Asked Questions Utility Modules - Code Reuse in Custom Modules Distributed Tracing (OpenTelemetry) Remote execution tutorial# Before continuing make sure you have a working Salt installation by following the instructions in the The Salt Project community can help offer advice and help troubleshoot technical issues as you're learning about Salt. One of the best places to talk to the community is on the Salt Project Discord Community. Order your minions around# Now that you have a master and at least one minion communicating with each other you can perform commands on the minion via the salt command. Salt calls are comprised of three main components: salt '<target>' <function> [arguments] The target component allows you to filter which minions should run the following function. The default filter is a glob on the minion id. For example: salt '*.example.org' test.version Targets can be based on minion system information using the Grains system: salt -G 'os:Ubuntu' test.version Targets can be filtered by regular expression: salt -E 'virtmach[0-9]' test.version Targets can be explicitly specified in a list: salt -L 'foo,bar,baz,quo' test.version Or Multiple target types can be combined in one command: salt -C 'G@os:Ubuntu and webser* or E@database.*' test.version A function is some functionality provided by a module. Salt ships with a large collection of available functions. List all available functions on your Show all currently available minions: Run an arbitrary shell command: salt '*' cmd.run 'uname -a' Space-delimited arguments to the function: salt '*' cmd.exec_code python 'import sys; print(sys.version)' Optional, keyword arguments are also supported: salt '*' pip.install salt timeout=5 upgrade=True They are always in the form of kwarg=argument. Source: https://docs.saltproject.io/en/3008/topics/tutorials/modules.html
+- ONLINE [Serper web result] Remote Execution Management with Salt | SCALE 10x: UNTRUSTED WEB RESEARCH (not PCAP evidence). Salt also introduces more granular controls to the realm of remote execution, allowing for commands to be executed in parallel and for systems to be targeted ... | Webpage text: Subscribe to our newsletters Remote Execution Management with Salt Simplicity: Versatility between massive scale deployments and smaller systems may seem daunting, but Salt is very simple to set up and maintain, regardless of the size of the project. The architecture of Salt is designed to work with any number of servers, from a handful of local network systems to international deployments across disparate datacenters. The topology is a simple server/client model with the needed fun Parallel execution: The core function of Salt is to enable remote commands to be called in parallel rather than in serial, to use a secure and encrypted protocol, the smallest and fastest network payloads possible, and with a simple programmer interface. Salt also introduces more granular controls to the realm of remote execution, allowing for commands to be executed in parallel and for systems to be targeted based o Building on proven technology: Salt takes advantage of a number of technologies and techniques. The networking layer is built with the excellent ZeroMQ networking library, so Salt itself contains a viable, and transparent, AMQ broker inside the daemon. Salt uses public keys for authentication with the master daemon, then uses faster AES encryption for payload communication, this means that authentication and encrypti Python client interface: In order to allow for simple expansion, Salt execution routines can be written as plain Python modules and the data collected from Salt executions can be sent back to the master server, or to any arbitrary program. Salt can be called from a simple Python API, or from the command line, so that Salt can be used to execute one-off commands as well as operate as an integral part of a larger appli Fast, flexible, scalable: The result is a system that can execute commands across groups of varying size, from very few to very many servers at considerably high speed. A system that is very fast, easy to set up and amazingly malleable, able to suit the needs of any number of servers working within the same system. Salt’s unique architecture brings together the best of the remote execution world, amplifies its capabi Open: Salt is developed under the Apache 2.0 licence, and can be used for open and proprietary projects. Please submit your expansions back to the Salt project so that we can all benefit together as Salt grows. So, please feel free to sprinkle some of this around your systems and let the deliciousness come forth. Source: https://www.socallinuxexpo.org/scale10x/presentations/remote-execution-management-salt.html
+
+Verification Summary:
+- Affected service: SaltStack.
+- Attack type: Remote Command Execution.
+- Attack technique: Authentication Bypass.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: Low.
+- Consensus score: 2/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2020-11651; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: Attack success: Success claim lacks response evidence for command execution request (E-S0000-F000020-005)
+- Unsupported claim: CVE association: Method 'cmd.exec_code' in evidence doesn't match CVE-2020-11651's known vulnerable ClearFuncs methods (e.g., cmd.async/cmd.sync)
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: Attack result is a forced low-confidence Analyst prediction; Verifier/Consensus did not establish it.
+- MCP evidence search status: Valid.
+- MCP investigation query: SaltStack Remote Command Execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-16846
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-11651
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-5200
+- Evidence-source URL: https://docs.saltproject.io/en/3008/topics/execution/index.html
+- Evidence-source URL: https://docs.saltproject.io/en/3008/topics/execution/remote_execution.html
+- Evidence-source URL: https://docs.saltproject.io/en/3008/topics/tutorials/modules.html
+- Evidence-source URL: https://www.socallinuxexpo.org/scale10x/presentations/remote-execution-management-salt.html
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for blog.devops.dev: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 2 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply SaltStack updates per vendor security advisories
+- Restrict network access to Salt master ports (4505/4506)
+- Implement certificate-based authentication for minion connections
+- Monitor for unauthorized ClearFuncs method invocations
+- Validate all master-minion communication using strict cryptographic controls
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

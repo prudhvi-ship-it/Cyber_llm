@@ -1,0 +1,104 @@
+{
+  "status": "Valid",
+  "query": "Erlang Command Execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2025-32433 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-24719: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-24719",
+      "snippet": "Exposed Erlang Cookie could lead to Remote Command Execution (RCE) attack. Communication between Erlang nodes is done by exchanging a shared secret (aka \"magic cookie\"). There are cases where the magic cookie is included in the content of the logs. An attacker can use the cookie to attach to an Erlang node and run OS level commands on the system running the Erlang node. Affects version: 6.5.1. Fix version: 6.6.0.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2020-24719 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2023-45312: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45312",
+      "snippet": "In the mtproto_proxy (aka MTProto proxy) component through 0.7.2 for Erlang, a low-privileged remote attacker can access an improperly secured default installation without authenticating and achieve remote command execution ability.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2023-45312 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-32433: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-32433",
+      "snippet": "Erlang/OTP is a set of libraries for the Erlang programming language. Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH server may allow an attacker to perform unauthenticated remote code execution (RCE). By exploiting a flaw in SSH protocol message handling, a malicious actor could gain unauthorized access to affected systems and execute arbitrary commands without valid credentials. This issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20. A temporary workaround involves disabling the SSH server or to prevent access via firewall rules.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-32433 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OS command and code execution in Erlang and Elixir ...",
+      "url": "https://vuln.be/post/os-command-and-code-execution-in-erlang-and-elixir/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The erl_eval module functions allow you to execute Erlang code. You have to use expressions with functions mentioned above to execute code in OS ... | Webpage excerpt: os command injection | code execution | erlang | elixir OS command and code execution in Erlang and Elixir applications Sometimes, as a developer you need to execute commands in the OS. How can you achieve that in Erlang and Elixir, and how can you do it securely? The response will be a string from stdout or stderr. There is no separation between commands and arguments. open_port of erlang module Command = \"ls > ls.results\", Port = open_port({spawn, Command}, PortSettings).",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "How to execute system command in Erlang and get results ...",
+      "url": "https://stackoverflow.com/questions/27028486/how-to-execute-system-command-in-erlang-and-get-results-using-oscmd-1",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). How to execute system command in Erlang and get results using os:cmd/1? This is implementation os:cmd/1 function. I'd recommend you to use ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Getting Started with Erlang",
+      "url": "https://erlang.org/documentation/doc-5.3/doc/getting_started/getting_started.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Erlang programs are executed when you instruct the Erlang Runtime System (ERTS) to execute your code. They do not run as binary programs, which can be executed ... | Webpage excerpt: 1 Getting Started with Erlang Erlang/OTP and is intended for readers who are running Erlang/OTP for the first time. about how the language Erlang works. The first chapter of the book Concurrent Programming in ERLANG, [Concurrent Programming in ERLANG ], compile and run Erlang programs work with the Erlang shell, this is the most central",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "GitHub - saleyn/erlexec: Execute and control OS processes ...",
+      "url": "https://github.com/saleyn/erlexec",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This project implements an Erlang application with a C++ port program that gives light-weight Erlang processes fine-grain control over execution of OS processes ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:45:44.729262+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-32433",
+    "CVE-2020-24719",
+    "CVE-2023-45312"
+  ],
+  "retrieval_errors": [
+    "Webpage extraction skipped for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

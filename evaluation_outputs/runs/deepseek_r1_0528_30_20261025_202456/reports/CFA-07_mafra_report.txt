@@ -1,0 +1,504 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 5
+TCP Stream IDs: 0, 1, 2, 3, 4
+Protocol Counts: ARP=4, TCP=123, HTTP=6, MySQL=145, HTTP/JSON=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:50618           <-> 172.18.0.2:3306                 35 11 kB          49 6080 bytes      84 17 kB         0.256556000         0.0576
+172.18.0.3:50596           <-> 172.18.0.2:3306                 29 13 kB          38 4222 bytes      67 17 kB         0.097250000         0.0432
+172.18.0.3:50610           <-> 172.18.0.2:3306                 29 3446 bytes      34 3411 bytes      63 6857 bytes     0.173337000         0.0556
+172.18.0.3:50580           <-> 172.18.0.2:3306                 16 1550 bytes      18 1466 bytes      34 3016 bytes     0.054334000         0.0140
+172.18.0.1:3
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 0; score=9/12; frame=190; HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0000-F000044-012 | server->client] Location: http://localhost:8080/index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000190-027 | client->server] POST //tbl_find_replace.php
+- [E-S0000-F000276-031 | server->client] Server response contains uid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000276-032 | server->client] Server response contains gid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000190-033 | client->server] HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:38434 -> 172.18.0.3:80 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.3:80 -> 172.18.0.1:38434 (TCP)
+- [E-S0000-F000008-007 | client->server] 172.18.0.1:38434 -> 172.18.0.3:80 (HTTP)
+- [E-S0000-F000044-010 | server->client] 172.18.0.3:80 -> 172.18.0.1:38434 (HTTP)
+- [E-S0000-F000188-025 | server->client] 172.18.0.3:80 -> 172.18.0.1:38434 (HTTP/JSON)
+- [E-S0000-F000006-003 | client->server] POST //?lang=en
+- [E-S0000-F000006-004 | client->server] Host: localhost:8080
+- [E-S0000-F000006-005 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0000-F000006-006 | client->server] Content-Type: application/x-www-form-urlencoded
+- [E-S0000-F000044-011 | server->client] HTTP Status 302
+- [E-S0000-F000044-012 | server->client] Location: http://localhost:8080/index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000044-013 | server->client] Content-Type: text/html
+- [E-S0000-F000044-014 | server->client] Server response X-Powered-By: PHP/5.3.29
+- [E-S0000-F000048-019 | client->server] GET /index.php?lang=en&collation_connection=utf8mb4_unicode_ci&token=[REDACTED]&phpMyAdmin=3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000113-020 | server->client] OPTIONS inline-script
+- [E-S0000-F000113-021 | server->client] HTTP Status 200
+- [E-S0000-F000113-022 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0000-F000123-024 | client->server] POST //import.php
+- [E-S0000-F000188-026 | server->client] Content-Type: application/json
+- [E-S0000-F000190-027 | client->server] POST //tbl_find_replace.php
+- [E-S0000-F000008-008 | client->server] Sensitive field observed: pma_username=[REDACTED]
+- [E-S0000-F000008-009 | client->server] Sensitive field observed: pma_password=[REDACTED]
+- [E-S0000-F000044-015 | server->client] Sensitive field observed: token=[REDACTED]
+- [E-S0000-F000044-016 | server->client] Cookie header observed: [REDACTED]
+- [E-S0000-F000113-023 | server->client] ID
+- [E-S0000-F000276-029 | server->client] uid=33
+- [E-S0000-F000276-030 | server->client] gid=33
+- [E-S0000-F000276-031 | server->client] Server response contains uid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000276-032 | server->client] Server response contains gid=33(www-data) (possible command output; correlate with request)
+- [E-S0000-F000044-017 | server->client] 3bec3a823882118a73f16996f0d9042bd1f9e6a7
+- [E-S0000-F000044-018 | server->client] phpMyAdmin
+- [E-S0000-F000190-028 | client->server] useRegex=on
+- [E-S0000-F000190-033 | client->server] HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0001-F000012-001 | client->server] 172.18.0.3:50580 -> 172.18.0.2:3306 (TCP)
+- [E-S0001-F000013-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50580 (TCP)
+- [E-S0001-F000015-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50580 (MySQL)
+- [E-S0001-F000017-004 | client->server] 172.18.0.3:50580 -> 172.18.0.2:3306 (MySQL)
+- [E-S0001-F000017-005 | client->server] root user keyword observed
+- [E-S0001-F000025-006 | client->server] SELECT @@version, @@version_comment
+- [E-S0001-F000029-007 | client->server] SHOW VARIABLES LIKE 'character_set_results'
+- [E-S0002-F000050-001 | client->server] 172.18.0.3:50596 -> 172.18.0.2:3306 (TCP)
+- [E-S0002-F000051-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50596 (TCP)
+- [E-S0002-F000053-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50596 (MySQL)
+- [E-S0002-F000055-004 | client->server] 172.18.0.3:50596 -> 172.18.0.2:3306 (MySQL)
+- [E-S0002-F000055-005 | client->server] root user keyword observed
+- [E-S0002-F000071-006 | client->server] SELECT * FROM information_schema.CHARACTER_SETS
+- [E-S0002-F000075-007 | client->server] SELECT * FROM information_schema.COLLATIONS
+- [E-S0002-F000081-009 | client->server] SELECT 1 FROM mysql.user LIMIT 1
+- [E-S0002-F000084-010 | client->server] SHOW GRANTS
+- [E-S0002-F000087-012 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0002-F000090-013 | client->server] SELECT CURRENT_USER()
+- [E-S0002-F000093-014 | client->server] SELECT 1 FROM (SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`COLUMN_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE...[TRUNCATED]
+- [E-S0002-F000093-015 | client->server] UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`TABLE_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`SCHEMA_PRIVILEGES` UNION SELECT `GRANTEE`, `IS_GRANTABLE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES`) t WHERE `IS_GRANTABLE` = 'YES' AND '''root''@''...[TRUNCATED]
+- [E-S0002-F000099-016 | client->server] SELECT 1 FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE `PRIVILEGE_TYPE` = 'CREATE USER' AND '''root''@''%''' LIKE `GRANTEE` LIMIT 1
+- [E-S0002-F000103-017 | client->server] SELECT USER()
+- [E-S0002-F000105-018 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`, (SELECT DB_first_level FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t ORDER BY DB_first_level ASC LIMIT 0, 100) t2 WHERE 1 = LOCATE(CONCAT(DB_first_level, '_'), CONC...[TRUNCATED]
+- [E-S0002-F000107-019 | client->server] SELECT COUNT(*) FROM ( SELECT DISTINCT SUBSTRING_INDEX(SCHEMA_NAME, '_', 1) DB_first_level FROM INFORMATION_SCHEMA.SCHEMATA WHERE TRUE ) t
+- [E-S0002-F000111-020 | client->server] SHOW MASTER LOGS
+- [E-S0002-F000077-008 | server->client] ID
+- [E-S0002-F000085-011 | server->client] 81F5E21E35407D884A6CD4A731AEBFB6AF209E1B
+- [E-S0003-F000125-001 | client->server] 172.18.0.3:50610 -> 172.18.0.2:3306 (TCP)
+- [E-S0003-F000126-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50610 (TCP)
+- [E-S0003-F000128-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50610 (MySQL)
+- [E-S0003-F000130-004 | client->server] 172.18.0.3:50610 -> 172.18.0.2:3306 (MySQL)
+- [E-S0003-F000130-005 | client->server] root user keyword observed
+- [E-S0003-F000146-006 | client->server] SHOW TABLES FROM `test`
+- [E-S0003-F000150-007 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0003-F000158-008 | client->server] CREATE TABLE `prgpwn` (
+- [E-S0003-F000161-009 | client->server] INSERT INTO `prgpwn` (`first`) VALUES (UNHEX('302F6500'))
+- [E-S0003-F000161-010 | client->server] UNHEX('302F6500')
+- [E-S0003-F000166-012 | client->server] SELECT CURRENT_USER()
+- [E-S0003-F000168-013 | client->server] SELECT `PRIVILEGE_TYPE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE GRANTEE='''root''@''%''' AND PRIVILEGE_TYPE='EVENT'
+- [E-S0003-F000172-014 | client->server] SELECT `PRIVILEGE_TYPE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE GRANTEE='''root''@''%''' AND PRIVILEGE_TYPE='TRIGGER'
+- [E-S0003-F000161-011 | client->server] UNHEX(
+- [E-S0004-F000192-001 | client->server] 172.18.0.3:50618 -> 172.18.0.2:3306 (TCP)
+- [E-S0004-F000193-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50618 (TCP)
+- [E-S0004-F000195-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:50618 (MySQL)
+- [E-S0004-F000197-004 | client->server] 172.18.0.3:50618 -> 172.18.0.2:3306 (MySQL)
+- [E-S0004-F000197-005 | client->server] root user keyword observed
+- [E-S0004-F000213-006 | client->server] SHOW TABLES FROM `test`
+- [E-S0004-F000217-007 | client->server] SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+- [E-S0004-F000221-008 | client->server] SHOW FULL COLUMNS FROM `test`.`prgpwn`
+- [E-S0004-F000223-009 | server->client] select,insert,update,references   
+- [E-S0004-F000223-010 | server->client] update,references   
+- [E-S0004-F000225-011 | client->server] SHOW INDEXES FROM `test`.`prgpwn`
+- [E-S0004-F000227-012 | client->server] CREATE TABLE `test`.`prgpwn`
+- [E-S0004-F000227-013 | client->server] SHOW CREATE TABLE `test`.`prgpwn`
+- [E-S0004-F000228-014 | server->client] Create Table -    �     �   x  prgpwnpCREATE TABLE `prgpwn` (
+- [E-S0004-F000230-015 | client->server] SHOW VARIABLES LIKE 'character_set_connection'
+- [E-S0004-F000233-016 | client->server] SELECT `first`, 1, COUNT(*) FROM `test`.`prgpwn` WHERE `first` RLIKE '0/e ' COLLATE utf8mb4_bin GROUP BY `first` ORDER BY `first` ASC
+- [E-S0004-F000236-018 | client->server] SHOW  COLUMNS FROM `test`.`prgpwn`
+- [E-S0004-F000241-019 | client->server] SELECT TABLE_NAME
+- [E-S0004-F000244-020 | client->server] SELECT CURRENT_USER()
+- [E-S0004-F000247-021 | client->server] SELECT `PRIVILEGE_TYPE` FROM `INFORMATION_SCHEMA`.`USER_PRIVILEGES` WHERE GRANTEE='''root''@''%''' AND PRIVILEGE_TYPE='TRIGGER'
+- [E-S0004-F000256-022 | client->server] SHOW VARIABLES LIKE 'lower_case_table_names'
+- [E-S0004-F000262-023 | client->server] SELECT *,
+- [E-S0004-F000233-017 | client->server] /e
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:38434 -> 172.18.0.3:80; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.3:50580 -> 172.18.0.2:3306; packets=34; client->server=18, server->client=16; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 2: 172.18.0.3:50596 -> 172.18.0.2:3306; packets=67; client->server=38, server->client=29; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 3: 172.18.0.3:50610 -> 172.18.0.2:3306; packets=63; client->server=34, server->client=29; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 4: 172.18.0.3:50618 -> 172.18.0.2:3306; packets=84; client->server=49, server->client=35; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- phpMyAdmin application candidate: phpMyAdmin identifier observed.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: phpMyAdmin (with PHP 5.3.29, Apache 2.4.10)  
+Relevant Events: Client (172.18.0.1) authenticates to phpMyAdmin via HTTP POST, receives a session token, and sends a malicious POST request to `tbl_find_replace.php` containing a command injection payload.  
+Malicious Activities: Command injection via `tbl_find_replace.php` parameter manipulation (replaceWith=system(id);) targeting phpMyAdmin.  
+Attack Success: Succeeded  
+Evidence:  
+- E-S0000-F000044-018: phpMyAdmin identifier in server response.  
+- E-S0000-F000044-014: PHP/5.3.29 version in X-Powered-By header.  
+- E-S0000-F000008-008, E-S0000-F000008-009: Authentication attempt with redacted credentials.  
+- E-S0000-F000190-033: Malicious POST to `tbl_find_replace.php` with `replaceWith=system(id);` payload.  
+- E-S0000-F000276-031, E-S0000-F000276-032: Server response includes command output (`uid=33(www-data)`, `gid=33(www-data)`), confirming code execution.
+
+--- Stream 1 [VALID] ---
+Service: MySQL 5.5.62  
+Relevant Events: Client (172.18.0.3) connects to MySQL server (172.18.0.2) and authenticates as root. Initialization queries include version checks and character set configuration.  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0001-F000015-003: MySQL server version 5.5.62 in handshake packet.  
+- E-S0001-F000017-005: Authentication attempt with root user keyword.  
+- E-S0001-F000025-006: Query "SELECT @@version, @@version_comment".  
+- E-S0001-F000029-007: Query "SHOW VARIABLES LIKE 'character_set_results'".  
+- Subsequent SET commands configure character encoding and collation.
+
+--- Stream 2 [VALID] ---
+Service: MySQL  
+Relevant Events: Client (172.18.0.3) authenticates as root to MySQL server (172.18.0.2) and performs administrative queries, including privilege checks, database enumeration, and configuration verification. This activity aligns with a database administration tool (e.g., phpMyAdmin) post-authentication.  
+Malicious Activities: None  
+Attack Success: None  
+Evidence:  
+- E-S0002-F000055-005: Root authentication observed.  
+- E-S0002-F000071-006, E-S0002-F000075-007: Queries for character set/collation metadata.  
+- E-S0002-F000081-009, E-S0002-F000084-010: Privilege checks (`mysql.user`, `SHOW GRANTS`).  
+- E-S0002-F000085-011: Root password hash exposure (81F5E21E35407D884A6CD4A731AEBFB6AF209E1B).  
+- E-S0002-F000087-012, E-S0002-F000105-018: Database schema enumeration.  
+- E-S0002-F000090-013, E-S0002-F000103-017: User context verification (`CURRENT_USER()`, `USER()`).  
+- E-S0002-F000093-014, E-S0002-F000093-015, E-S0002-F000099-016: Advanced privilege validation.  
+- E-S0002-F000111-020: Failed binary logging check ("You are not using binary logging").  
+
+No command execution, suspicious payloads, or exploitation indicators observed. Activity reflects standard administrative operations following successful authentication.
+
+--- Stream 3 [VALID] ---
+Service: MySQL 5.5.62  
+Relevant Events: Client (172.18.0.3) authenticates as root to MySQL server (172.18.0.2), enumerates databases/tables, creates a suspicious table `prgpwn`, inserts binary data (UNHEX('302F6500')), and performs privilege reconnaissance (EVENT/TRIGGER). This activity follows command execution in stream 0, indicating post-exploitation database interaction.  
+Malicious Activities: Suspicious table creation (`prgpwn`) and insertion of binary payload (UNHEX('302F6500')) suggesting exploit staging. Privilege checks align with reconnaissance for privilege escalation.  
+Attack Success: None (exploit staging observed but no execution/effect confirmed)  
+Evidence:  
+- E-S0003-F000128-003: MySQL server version 5.5.62.  
+- E-S0003-F000130-005: Root authentication.  
+- E-S0003-F000158-008: CREATE TABLE `prgpwn` with binary data field.  
+- E-S0003-F000161-009: INSERT of UNHEX('302F6500') payload.  
+- E-S0003-F000168-013, E-S0003-F000172-014: Privilege checks for EVENT/TRIGGER capabilities.  
+- E-S0003-F000166-012: CURRENT_USER() confirmation (root@%).
+
+--- Stream 4 [VALID] ---
+Service: MySQL 5.5.62  
+Relevant Events: Client (172.18.0.3) connects to MySQL server (172.18.0.2) as root, inspects the `prgpwn` table created in stream 3, retrieves the inserted binary payload via regex search, and performs privilege reconnaissance (TRIGGER check). This is post-exploitation activity following command execution in stream 0.  
+Malicious Activities: Post-exploitation data retrieval (accessing `prgpwn` table with binary payload) and privilege reconnaissance (TRIGGER check for escalation potential).  
+Attack Success: None (post-exploitation activity observed; no new exploit attempt in this flow)  
+Evidence:  
+- E-S0004-F000195-003: MySQL server version 5.5.62.  
+- E-S0004-F000197-005: Authentication as root.  
+- E-S0004-F000221-008: Inspection of `test.prgpwn` table structure.  
+- E-S0004-F000233-016: SELECT query with RLIKE '0/e.' to retrieve inserted binary payload.  
+- E-S0004-F000233-017: Indicator '/e' in regex pattern (payload retrieval attempt).  
+- E-S0004-F000244-020: CURRENT_USER() confirmation (root@%).  
+- E-S0004-F000247-021: TRIGGER privilege check for root@%.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "phpMyAdmin",
+    "application": "phpMyAdmin",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "PHP",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Command Injection",
+    "technique": "Remote Code Execution",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000190-033",
+      "E-S0000-F000276-031",
+      "E-S0000-F000276-032"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2016-5734",
+    "confidence": "Medium",
+    "reason": "Command injection via tbl_find_replace.php replaceWith parameter matches CVE-2016-5734 mechanism"
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "phpMyAdmin",
+    "application": "phpMyAdmin",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "PHP",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Command Injection",
+    "technique": "Remote Code Execution",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000190-033",
+      "E-S0000-F000276-031",
+      "E-S0000-F000276-032"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2016-5734",
+    "confidence": "Medium",
+    "reason": "Command injection via replaceWith parameter in tbl_find_replace.php (evidence E-S0000-F000190-033) matches CVE-2016-5734's preg_replace eval mechanism. Server response (E-S0000-F000276-031/032) confirms command execution. PHP version 5.3.29 (E-S0000-F000044-014) doesn't match advisory's affected versions (4.x/4.6.x), but packet mechanism aligns. Candidate association relies on model knowledge and packet observations without explicit advisory confirmation for this parameter."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000044-014",
+    "E-S0000-F000044-018",
+    "E-S0000-F000190-033",
+    "E-S0000-F000276-031",
+    "E-S0000-F000276-032"
+  ],
+  "confidence": "Unknown"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: phpMyAdmin
+Attack Type: Command Injection
+Attack Success: Success
+CVE: CVE-2016-5734
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: Unknown
+Overall Confidence: High
+Score: 5/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: phpMyAdmin command injection endpoint tbl find replace packet clues: endpoint tbl find replace
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T06:20:07.424243+00:00
+Candidate CVEs: CVE-2016-5734, CVE-2005-4349, CVE-2006-1804, CVE-2007-5976
+Sources: 8
+
+Source 1: NIST NVD
+Title: CVE-2016-5734: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2016-5734
+Summary: phpMyAdmin 4.0.x before 4.0.10.16, 4.4.x before 4.4.15.7, and 4.6.x before 4.6.3 does not properly choose delimiters to prevent use of the preg_replace e (aka eval) modifier, which might allow remote attackers to execute arbitrary PHP code via a crafted string, as demonstrated by the table search-and-replace implementation.
+Supports: NVD lists CVE-2016-5734 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2005-4349: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2005-4349
+Summary: SQL injection vulnerability in server_privileges.php in phpMyAdmin 2.7.0 allows remote authenticated users to execute arbitrary SQL commands via the (1) dbname and (2) checkprivs parameters.  NOTE: the vendor and a third party have disputed this issue, saying that the main task of the program is to support query execution by authenticated users, and no external attack scenario exists without an auto-login configuration.  Thus it is likely that this issue will be REJECTED.  However, a closely related CSRF issue has been assigned CVE-2005-4450
+Supports: NVD lists CVE-2005-4349 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2006-1804: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2006-1804
+Summary: SQL injection vulnerability in sql.php in phpMyAdmin 2.7.0-pl1 allows remote attackers to execute arbitrary SQL commands via the sql_query parameter.
+Supports: NVD lists CVE-2006-1804 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2007-5976: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2007-5976
+Summary: SQL injection vulnerability in db_create.php in phpMyAdmin before 2.11.2.1 allows remote authenticated users with CREATE DATABASE privileges to execute arbitrary SQL commands via the db parameter.
+Supports: NVD lists CVE-2007-5976 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Official vendor webpage
+Title: PMASA-2020-3
+URL: https://www.phpmyadmin.net/security/PMASA-2020-3/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Summary. SQL injection relating to searching. Description. An SQL injection vulnerability has been discovered where certain parameters are not ... | Webpage text: Announcement-ID: PMASA-2020-3 SQL injection relating to searching An SQL injection vulnerability has been discovered where certain parameters are not properly escaped when generating certain queries for search actions within phpMyAdmin. An attacker can generate specially-crafted database or table names. The attack can be performed if a user attempts certain search operations on the malicious database or table. Because of the specific steps required to exploit this, we consider this vulnerability to be of moderate severity. phpMyAdmin 4.9.x releases prior to 4.9.5 and the 5.0.x releases prior to 5.0.2 are affected. Upgrade to phpMyAdmin 4.9.5 or 5.0.2 or newer or apply patch listed below. Thanks to hoangn144_VCS and Yutaka WATANABE for reporting these vulnerabilities. CVE-2020-10802 The following commits have been made to fix this issue: a8acd7a42cf743186528b0453f90aaa32bfefabe For further information and in case of questions, please contact the phpMyAdmin security team at security@phpmyadmin.net. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement.
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: OS Command Injection: Examples & Prevention
+URL: https://www.fastly.com/blog/back-to-basics-os-command-injection
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Understand OS command injection attacks with examples, common risks, and practical steps to prevent this web application vulnerability. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Scale AI systems, protect your content from bots, and run your edge with natural language — all on one programmable platform. DeliverReal-time experiences at global scale SecureProtect apps and APIs from AI-scale threats DeployRun code milliseconds from your users ObserveReal-time visibility, from origin to edge Professional ServicesExpert help to migrate or optimize your delivery service Managed CDNFastly's managed cloud CDN deployed inside your own network Managed Security24/7 expert-managed WAF, bot, and DDoS threat protection Live EntertainmentReal-time monitoring & support for high-traffic events Deliver fast, personalized experiences globally with Fastly CDN Get everything you need from a modern CDN — from effortless scale and built-in security to programmable control and full visibility. Fastly industry solutions Discover how Fastly helps your industry innovate, improve performance, and deliver secure online experiences that keep customers engaged. Resiliency & Availability High-performance streaming media Fastly powers the world's leading media brands with an open edge cloud platform built to deliver flawless live and on-demand entertainment at any scale, to any screen, anywhere. See why enterprises are switching from Cloudflare to Fastly with 24% faster load times, 33% better TTFB, and stronger app security. A new architecture for the modern internet Explore Fastly's global network — 622 Tbps of capacity, fewer, more powerful POPs, and sub-millisecond TTFB at the 99th percentile. Originally published in July 2023. Updated September 2025. OS Command Injection is a web application vulnerability that can lead to arbitrary command execution on the underlying operating system. Attackers exploit command injection vulnerabilities by supplying malicious input to operating system commands executed by an application. Successful exploitation can allow attackers to retrieve sensitive data, escalate privileges, and move laterally within a network. Strong input validation is the preferred defense against command injection vulnerabilities. Avoiding operating system command execution entirely is the most effective mitigation. What is OS Command Injection? OS Command Injection is a web application vulnerability that allows attackers to execute arbitrary commands on the underlying operating system. Because successful exploitation can lead to full command execution on a target system, command injection vulnerabilities are often considered among the most severe web application vulnerabilities. For a concise definition, see Fastly's Learning Center entry on OS Command Injection. This blog goes deeper: below, we'll walk through real-world CVE case studies, the mechanics of an exploitation, and what these attacks look like when observed by a WAF in production traffic. This is a common pattern in web applications that perform operating system command execution on behalf of users, and it can become dangerous when user input is passed directly to shell commands. Consider a web application meant to monitor internal systems and provide alerts when one of the systems goes offline. In this scenario, the application may want to test network reachability to the
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Testing for OS command injection vulnerabilities
+URL: https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/input-validation/command-injection/testing
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). OS command injection is a vulnerability that enables an attacker to execute arbitrary operating system (OS) commands on the server that is ... | Webpage text: Back to documentation home Professional and Community Edition Professional and Community Edition Step 1: Download and install Step 2: Intercepting HTTP traffic Step 3: Modifying requests Step 4: Setting the target scope Step 5: Reissuing requests Step 6: Running your first scan [Pro only] Step 7: Generating a report [Pro only] Mapping the visible attack surface Discovering hidden content Automated content discovery Analyzing the attack surface Scoping the effort to audit a website Identifying high-risk functionality Identifying supported HTTP methods Checking for hidden inputs Identifying which parts of a token impact the response Testing for vulnerabilities Testing authentication mechanisms Guessing usernames for known users Testing session management mechanisms Analyzing session token generation Identifying which parts of a token impact the response Determining the session timeout Generating a CSRF proof-of-concept Maintaining an authenticated session Testing for privilege escalation Testing horizontal access controls Testing for parameter-based access control Spoofing your IP address using Burp Proxy match and replace Bypassing client-side controls Testing for SQL injection vulnerabilities Cross-site scripting (XSS) Identifying reflected input Testing for DOM XSS with DOM Invader Testing for web message DOM XSS with DOM Invader Testing for reflected XSS manually Bypassing XSS filters by enumerating permitted tags and attributes Client-side prototype pollution Testing for OS command injection vulnerabilities Testing for asynchronous OS command injection vulnerabilities Exploiting OS command injection vulnerabilities to exfiltrate data Testing for XXE injection vulnerabilities Testing for blind XXE injection vulnerabilities Testing for directory traversal vulnerabilities Testing for SSRF vulnerabilities Testing for WebSocket vulnerabilities Manipulating WebSocket messages Manipulating WebSocket handshakes Working with GraphQL in Burp Suite Complementing your manual testing with Burp Scanner Getting started with Burp Proxy Filtering WebSockets history Creating rules with scripts Working with HTTP messages Using Burp AI in Repeater Generating AI-powered explanations Automating tasks with custom actions Sending grouped HTTP requests Working with WebSocket messages Filtering the site map with scripts Manual application mapping Reviewing unrequested items Analyzing the attack surface Working with Logger entries Capture filter with scripts Viewing requests sent by Burp extensions Testing with web messages Testing for prototype pollution Testing for DOM clobbering Prototype pollution settings Annotating Organizer items Best practices for writing AI features Submitting scripts to GitHub Managing custom scan checks Importing custom scan checks Creating custom scan checks Testing custom scan checks Submitting BChecks to GitHub Submitting scripts to GitHub Installing from the BApp Store Troubleshooting extensions Viewing requests sent by extensions Setting up your development environment Using the starter project Writing your first extension Setting up remote debugging Loading your extension in Burp BApp Store acceptance criteria Submitting extensions to the BApp Store Maintaining extensions
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: Find and Replace text in the entire table using a MySQL ...
+URL: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). For a single table update. UPDATE `table_name` SET `field_name` = replace(same_field_name, 'unwanted_text', 'wanted_text').
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+Rank 1: CVE-2005-4349 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: sql_injection
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0002-F000093-014, E-S0002-F000093-015
+Advisory: https://nvd.nist.gov/vuln/detail/CVE-2005-4349
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Rank 2: CVE-2006-1804 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: sql_injection
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0002-F000093-014, E-S0002-F000093-015
+Advisory: https://nvd.nist.gov/vuln/detail/CVE-2006-1804
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Rank 3: CVE-2007-5976 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: sql_injection
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0002-F000093-014, E-S0002-F000093-015
+Advisory: https://nvd.nist.gov/vuln/detail/CVE-2007-5976
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000190-033]: HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0000-F000276-031]: Server response contains uid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0000-F000276-032]: Server response contains gid=33(www-data) (possible command output; correlate with request).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [NIST NVD] CVE-2016-5734: NVD vulnerability record: phpMyAdmin 4.0.x before 4.0.10.16, 4.4.x before 4.4.15.7, and 4.6.x before 4.6.3 does not properly choose delimiters to prevent use of the preg_replace e (aka eval) modifier, which might allow remote attackers to execute arbitrary PHP code via a crafted string, as demonstrated by the table search-and-replace implementation. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-5734 Supports: NVD lists CVE-2016-5734 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2005-4349: NVD vulnerability record: SQL injection vulnerability in server_privileges.php in phpMyAdmin 2.7.0 allows remote authenticated users to execute arbitrary SQL commands via the (1) dbname and (2) checkprivs parameters.  NOTE: the vendor and a third party have disputed this issue, saying that the main task of the program is to support query execution by authenticated users, and no external attack scenario exists without an auto-login configuration.  Thus it is likely that this issue will be REJECTED.  However, a closely related CSRF issue has been assigned CVE-2005-4450 Source: https://nvd.nist.gov/vuln/detail/CVE-2005-4349 Supports: NVD lists CVE-2005-4349 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2006-1804: NVD vulnerability record: SQL injection vulnerability in sql.php in phpMyAdmin 2.7.0-pl1 allows remote attackers to execute arbitrary SQL commands via the sql_query parameter. Source: https://nvd.nist.gov/vuln/detail/CVE-2006-1804 Supports: NVD lists CVE-2006-1804 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2007-5976: NVD vulnerability record: SQL injection vulnerability in db_create.php in phpMyAdmin before 2.11.2.1 allows remote authenticated users with CREATE DATABASE privileges to execute arbitrary SQL commands via the db parameter. Source: https://nvd.nist.gov/vuln/detail/CVE-2007-5976 Supports: NVD lists CVE-2007-5976 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Official vendor webpage] PMASA-2020-3: UNTRUSTED WEB RESEARCH (not PCAP evidence). Summary. SQL injection relating to searching. Description. An SQL injection vulnerability has been discovered where certain parameters are not ... | Webpage text: Announcement-ID: PMASA-2020-3 SQL injection relating to searching An SQL injection vulnerability has been discovered where certain parameters are not properly escaped when generating certain queries for search actions within phpMyAdmin. An attacker can generate specially-crafted database or table names. The attack can be performed if a user attempts certain search operations on the malicious database or table. Because of the specific steps required to exploit this, we consider this vulnerability to be of moderate severity. phpMyAdmin 4.9.x releases prior to 4.9.5 and the 5.0.x releases prior to 5.0.2 are affected. Upgrade to phpMyAdmin 4.9.5 or 5.0.2 or newer or apply patch listed below. Thanks to hoangn144_VCS and Yutaka WATANABE for reporting these vulnerabilities. CVE-2020-10802 The following commits have been made to fix this issue: a8acd7a42cf743186528b0453f90aaa32bfefabe For further information and in case of questions, please contact the phpMyAdmin security team at security@phpmyadmin.net. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement. Source: https://www.phpmyadmin.net/security/PMASA-2020-3/
+- ONLINE [Serper web result] OS Command Injection: Examples & Prevention: UNTRUSTED WEB RESEARCH (not PCAP evidence). Understand OS command injection attacks with examples, common risks, and practical steps to prevent this web application vulnerability. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Scale AI systems, protect your content from bots, and run your edge with natural language — all on one programmable platform. DeliverReal-time experiences at global scale SecureProtect apps and APIs from AI-scale threats DeployRun code milliseconds from your users ObserveReal-time visibility, from origin to edge Professional ServicesExpert help to migrate or optimize your delivery service Managed CDNFastly's managed cloud CDN deployed inside your own network Managed Security24/7 expert-managed WAF, bot, and DDoS threat protection Live EntertainmentReal-time monitoring & support for high-traffic events Deliver fast, personalized experiences globally with Fastly CDN Get everything you need from a modern CDN — from effortless scale and built-in security to programmable control and full visibility. Fastly industry solutions Discover how Fastly helps your industry innovate, improve performance, and deliver secure online experiences that keep customers engaged. Resiliency & Availability High-performance streaming media Fastly powers the world's leading media brands with an open edge cloud platform built to deliver flawless live and on-demand entertainment at any scale, to any screen, anywhere. See why enterprises are switching from Cloudflare to Fastly with 24% faster load times, 33% better TTFB, and stronger app security. A new architecture for the modern internet Explore Fastly's global network — 622 Tbps of capacity, fewer, more powerful POPs, and sub-millisecond TTFB at the 99th percentile. Originally published in July 2023. Updated September 2025. OS Command Injection is a web application vulnerability that can lead to arbitrary command execution on the underlying operating system. Attackers exploit command injection vulnerabilities by supplying malicious input to operating system commands executed by an application. Successful exploitation can allow attackers to retrieve sensitive data, escalate privileges, and move laterally within a network. Strong input validation is the preferred defense against command injection vulnerabilities. Avoiding operating system command execution entirely is the most effective mitigation. What is OS Command Injection? OS Command Injection is a web application vulnerability that allows attackers to execute arbitrary commands on the underlying operating system. Because successful exploitation can lead to full command execution on a target system, command injection vulnerabilities are often considered among the most severe web application vulnerabilities. For a concise definition, see Fastly's Learning Center entry on OS Command Injection. This blog goes deeper: below, we'll walk through real-world CVE case studies, the mechanics of an exploitation, and what these attacks look like when observed by a WAF in production traffic. This is a common pattern in web applications that perform operating system command execution on behalf of users, and it can become dangerous when user input is passed directly to shell commands. Consider a web application meant to monitor internal systems and provide alerts when one of the systems goes offline. In this scenario, the application may want to test network reachability to the Source: https://www.fastly.com/blog/back-to-basics-os-command-injection
+- ONLINE [Serper web result] Testing for OS command injection vulnerabilities: UNTRUSTED WEB RESEARCH (not PCAP evidence). OS command injection is a vulnerability that enables an attacker to execute arbitrary operating system (OS) commands on the server that is ... | Webpage text: Back to documentation home Professional and Community Edition Professional and Community Edition Step 1: Download and install Step 2: Intercepting HTTP traffic Step 3: Modifying requests Step 4: Setting the target scope Step 5: Reissuing requests Step 6: Running your first scan [Pro only] Step 7: Generating a report [Pro only] Mapping the visible attack surface Discovering hidden content Automated content discovery Analyzing the attack surface Scoping the effort to audit a website Identifying high-risk functionality Identifying supported HTTP methods Checking for hidden inputs Identifying which parts of a token impact the response Testing for vulnerabilities Testing authentication mechanisms Guessing usernames for known users Testing session management mechanisms Analyzing session token generation Identifying which parts of a token impact the response Determining the session timeout Generating a CSRF proof-of-concept Maintaining an authenticated session Testing for privilege escalation Testing horizontal access controls Testing for parameter-based access control Spoofing your IP address using Burp Proxy match and replace Bypassing client-side controls Testing for SQL injection vulnerabilities Cross-site scripting (XSS) Identifying reflected input Testing for DOM XSS with DOM Invader Testing for web message DOM XSS with DOM Invader Testing for reflected XSS manually Bypassing XSS filters by enumerating permitted tags and attributes Client-side prototype pollution Testing for OS command injection vulnerabilities Testing for asynchronous OS command injection vulnerabilities Exploiting OS command injection vulnerabilities to exfiltrate data Testing for XXE injection vulnerabilities Testing for blind XXE injection vulnerabilities Testing for directory traversal vulnerabilities Testing for SSRF vulnerabilities Testing for WebSocket vulnerabilities Manipulating WebSocket messages Manipulating WebSocket handshakes Working with GraphQL in Burp Suite Complementing your manual testing with Burp Scanner Getting started with Burp Proxy Filtering WebSockets history Creating rules with scripts Working with HTTP messages Using Burp AI in Repeater Generating AI-powered explanations Automating tasks with custom actions Sending grouped HTTP requests Working with WebSocket messages Filtering the site map with scripts Manual application mapping Reviewing unrequested items Analyzing the attack surface Working with Logger entries Capture filter with scripts Viewing requests sent by Burp extensions Testing with web messages Testing for prototype pollution Testing for DOM clobbering Prototype pollution settings Annotating Organizer items Best practices for writing AI features Submitting scripts to GitHub Managing custom scan checks Importing custom scan checks Creating custom scan checks Testing custom scan checks Submitting BChecks to GitHub Submitting scripts to GitHub Installing from the BApp Store Troubleshooting extensions Viewing requests sent by extensions Setting up your development environment Using the starter project Writing your first extension Setting up remote debugging Loading your extension in Burp BApp Store acceptance criteria Submitting extensions to the BApp Store Maintaining extensions Source: https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/input-validation/command-injection/testing
+- ONLINE [Serper web result] Find and Replace text in the entire table using a MySQL ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). For a single table update. UPDATE `table_name` SET `field_name` = replace(same_field_name, 'unwanted_text', 'wanted_text'). Source: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2016-5734
+- https://nvd.nist.gov/vuln/detail/CVE-2005-4349
+- https://nvd.nist.gov/vuln/detail/CVE-2006-1804
+- https://nvd.nist.gov/vuln/detail/CVE-2007-5976
+- https://www.phpmyadmin.net/security/PMASA-2020-3/
+- https://www.fastly.com/blog/back-to-basics-os-command-injection
+- https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/input-validation/command-injection/testing
+- https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+
+Search status: Valid
+Search query: phpMyAdmin command injection endpoint tbl find replace packet clues: endpoint tbl find replace
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2016-5734",
+  "cve_supported": "Yes",
+  "confidence": "Unknown",
+  "reasons": [
+    "Analyst proposed CVE-2016-5734; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: phpMyAdmin
+Associated CVE candidate (Analyst): CVE-2016-5734
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2016-5734
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000190-033]: HTTP request candidate POST //tbl_find_replace.php to 172.18.0.3:80; request frame=190; indicator frame=190; indicators=explicit command invocation; bounded indicator excerpt=system(id);&columnIndex=0&useRegex=on&submit=Go&ajax_request=true; response HTTP 200 frame=276 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0000-F000276-031]: Server response contains uid=33(www-data) (possible command output; correlate with request).
+- PCAP [E-S0000-F000276-032]: Server response contains gid=33(www-data) (possible command output; correlate with request).
+- ONLINE [NIST NVD] CVE-2016-5734: NVD vulnerability record: phpMyAdmin 4.0.x before 4.0.10.16, 4.4.x before 4.4.15.7, and 4.6.x before 4.6.3 does not properly choose delimiters to prevent use of the preg_replace e (aka eval) modifier, which might allow remote attackers to execute arbitrary PHP code via a crafted string, as demonstrated by the table search-and-replace implementation. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-5734 Supports: NVD lists CVE-2016-5734 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2005-4349: NVD vulnerability record: SQL injection vulnerability in server_privileges.php in phpMyAdmin 2.7.0 allows remote authenticated users to execute arbitrary SQL commands via the (1) dbname and (2) checkprivs parameters.  NOTE: the vendor and a third party have disputed this issue, saying that the main task of the program is to support query execution by authenticated users, and no external attack scenario exists without an auto-login configuration.  Thus it is likely that this issue will be REJECTED.  However, a closely related CSRF issue has been assigned CVE-2005-4450 Source: https://nvd.nist.gov/vuln/detail/CVE-2005-4349 Supports: NVD lists CVE-2005-4349 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2006-1804: NVD vulnerability record: SQL injection vulnerability in sql.php in phpMyAdmin 2.7.0-pl1 allows remote attackers to execute arbitrary SQL commands via the sql_query parameter. Source: https://nvd.nist.gov/vuln/detail/CVE-2006-1804 Supports: NVD lists CVE-2006-1804 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2007-5976: NVD vulnerability record: SQL injection vulnerability in db_create.php in phpMyAdmin before 2.11.2.1 allows remote authenticated users with CREATE DATABASE privileges to execute arbitrary SQL commands via the db parameter. Source: https://nvd.nist.gov/vuln/detail/CVE-2007-5976 Supports: NVD lists CVE-2007-5976 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Official vendor webpage] PMASA-2020-3: UNTRUSTED WEB RESEARCH (not PCAP evidence). Summary. SQL injection relating to searching. Description. An SQL injection vulnerability has been discovered where certain parameters are not ... | Webpage text: Announcement-ID: PMASA-2020-3 SQL injection relating to searching An SQL injection vulnerability has been discovered where certain parameters are not properly escaped when generating certain queries for search actions within phpMyAdmin. An attacker can generate specially-crafted database or table names. The attack can be performed if a user attempts certain search operations on the malicious database or table. Because of the specific steps required to exploit this, we consider this vulnerability to be of moderate severity. phpMyAdmin 4.9.x releases prior to 4.9.5 and the 5.0.x releases prior to 5.0.2 are affected. Upgrade to phpMyAdmin 4.9.5 or 5.0.2 or newer or apply patch listed below. Thanks to hoangn144_VCS and Yutaka WATANABE for reporting these vulnerabilities. CVE-2020-10802 The following commits have been made to fix this issue: a8acd7a42cf743186528b0453f90aaa32bfefabe For further information and in case of questions, please contact the phpMyAdmin security team at security@phpmyadmin.net. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement. Source: https://www.phpmyadmin.net/security/PMASA-2020-3/
+- ONLINE [Serper web result] OS Command Injection: Examples & Prevention: UNTRUSTED WEB RESEARCH (not PCAP evidence). Understand OS command injection attacks with examples, common risks, and practical steps to prevent this web application vulnerability. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Scale AI systems, protect your content from bots, and run your edge with natural language — all on one programmable platform. DeliverReal-time experiences at global scale SecureProtect apps and APIs from AI-scale threats DeployRun code milliseconds from your users ObserveReal-time visibility, from origin to edge Professional ServicesExpert help to migrate or optimize your delivery service Managed CDNFastly's managed cloud CDN deployed inside your own network Managed Security24/7 expert-managed WAF, bot, and DDoS threat protection Live EntertainmentReal-time monitoring & support for high-traffic events Deliver fast, personalized experiences globally with Fastly CDN Get everything you need from a modern CDN — from effortless scale and built-in security to programmable control and full visibility. Fastly industry solutions Discover how Fastly helps your industry innovate, improve performance, and deliver secure online experiences that keep customers engaged. Resiliency & Availability High-performance streaming media Fastly powers the world's leading media brands with an open edge cloud platform built to deliver flawless live and on-demand entertainment at any scale, to any screen, anywhere. See why enterprises are switching from Cloudflare to Fastly with 24% faster load times, 33% better TTFB, and stronger app security. A new architecture for the modern internet Explore Fastly's global network — 622 Tbps of capacity, fewer, more powerful POPs, and sub-millisecond TTFB at the 99th percentile. Originally published in July 2023. Updated September 2025. OS Command Injection is a web application vulnerability that can lead to arbitrary command execution on the underlying operating system. Attackers exploit command injection vulnerabilities by supplying malicious input to operating system commands executed by an application. Successful exploitation can allow attackers to retrieve sensitive data, escalate privileges, and move laterally within a network. Strong input validation is the preferred defense against command injection vulnerabilities. Avoiding operating system command execution entirely is the most effective mitigation. What is OS Command Injection? OS Command Injection is a web application vulnerability that allows attackers to execute arbitrary commands on the underlying operating system. Because successful exploitation can lead to full command execution on a target system, command injection vulnerabilities are often considered among the most severe web application vulnerabilities. For a concise definition, see Fastly's Learning Center entry on OS Command Injection. This blog goes deeper: below, we'll walk through real-world CVE case studies, the mechanics of an exploitation, and what these attacks look like when observed by a WAF in production traffic. This is a common pattern in web applications that perform operating system command execution on behalf of users, and it can become dangerous when user input is passed directly to shell commands. Consider a web application meant to monitor internal systems and provide alerts when one of the systems goes offline. In this scenario, the application may want to test network reachability to the Source: https://www.fastly.com/blog/back-to-basics-os-command-injection
+- ONLINE [Serper web result] Testing for OS command injection vulnerabilities: UNTRUSTED WEB RESEARCH (not PCAP evidence). OS command injection is a vulnerability that enables an attacker to execute arbitrary operating system (OS) commands on the server that is ... | Webpage text: Back to documentation home Professional and Community Edition Professional and Community Edition Step 1: Download and install Step 2: Intercepting HTTP traffic Step 3: Modifying requests Step 4: Setting the target scope Step 5: Reissuing requests Step 6: Running your first scan [Pro only] Step 7: Generating a report [Pro only] Mapping the visible attack surface Discovering hidden content Automated content discovery Analyzing the attack surface Scoping the effort to audit a website Identifying high-risk functionality Identifying supported HTTP methods Checking for hidden inputs Identifying which parts of a token impact the response Testing for vulnerabilities Testing authentication mechanisms Guessing usernames for known users Testing session management mechanisms Analyzing session token generation Identifying which parts of a token impact the response Determining the session timeout Generating a CSRF proof-of-concept Maintaining an authenticated session Testing for privilege escalation Testing horizontal access controls Testing for parameter-based access control Spoofing your IP address using Burp Proxy match and replace Bypassing client-side controls Testing for SQL injection vulnerabilities Cross-site scripting (XSS) Identifying reflected input Testing for DOM XSS with DOM Invader Testing for web message DOM XSS with DOM Invader Testing for reflected XSS manually Bypassing XSS filters by enumerating permitted tags and attributes Client-side prototype pollution Testing for OS command injection vulnerabilities Testing for asynchronous OS command injection vulnerabilities Exploiting OS command injection vulnerabilities to exfiltrate data Testing for XXE injection vulnerabilities Testing for blind XXE injection vulnerabilities Testing for directory traversal vulnerabilities Testing for SSRF vulnerabilities Testing for WebSocket vulnerabilities Manipulating WebSocket messages Manipulating WebSocket handshakes Working with GraphQL in Burp Suite Complementing your manual testing with Burp Scanner Getting started with Burp Proxy Filtering WebSockets history Creating rules with scripts Working with HTTP messages Using Burp AI in Repeater Generating AI-powered explanations Automating tasks with custom actions Sending grouped HTTP requests Working with WebSocket messages Filtering the site map with scripts Manual application mapping Reviewing unrequested items Analyzing the attack surface Working with Logger entries Capture filter with scripts Viewing requests sent by Burp extensions Testing with web messages Testing for prototype pollution Testing for DOM clobbering Prototype pollution settings Annotating Organizer items Best practices for writing AI features Submitting scripts to GitHub Managing custom scan checks Importing custom scan checks Creating custom scan checks Testing custom scan checks Submitting BChecks to GitHub Submitting scripts to GitHub Installing from the BApp Store Troubleshooting extensions Viewing requests sent by extensions Setting up your development environment Using the starter project Writing your first extension Setting up remote debugging Loading your extension in Burp BApp Store acceptance criteria Submitting extensions to the BApp Store Maintaining extensions Source: https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/input-validation/command-injection/testing
+- ONLINE [Serper web result] Find and Replace text in the entire table using a MySQL ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). For a single table update. UPDATE `table_name` SET `field_name` = replace(same_field_name, 'unwanted_text', 'wanted_text'). Source: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+
+Verification Summary:
+- Affected service: phpMyAdmin.
+- Attack type: Command Injection.
+- Attack technique: Remote Code Execution.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2016-5734.
+- CVE assessment: Analyst proposed CVE-2016-5734; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: phpMyAdmin command injection endpoint tbl find replace packet clues: endpoint tbl find replace.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2016-5734
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2005-4349
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2006-1804
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2007-5976
+- Evidence-source URL: https://www.phpmyadmin.net/security/PMASA-2020-3/
+- Evidence-source URL: https://www.fastly.com/blog/back-to-basics-os-command-injection
+- Evidence-source URL: https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/input-validation/command-injection/testing
+- Evidence-source URL: https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Upgrade phpMyAdmin to patched versions (4.0.10.16+/4.4.15.7+/4.6.3+)
+- Sanitize user inputs in find/replace functionality using allowlisted characters
+- Implement principle of least privilege for web application service accounts

@@ -1,0 +1,102 @@
+{
+  "status": "Valid",
+  "query": "Jenkins 2.441 Path Traversal",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Jenkins Command Line Interface (CLI) Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Jenkins Jenkins Command Line Interface (CLI): Jenkins Command Line Interface (CLI) contains a path traversal vulnerability that allows attackers limited read access to certain files, which can lead to code execution. Required action: Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2024-23897 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-1000175: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-1000175",
+      "snippet": "A path traversal vulnerability exists in Jenkins HTML Publisher Plugin 1.15 and older in HtmlPublisherTarget.java that allows attackers able to configure the HTML Publisher build step to override arbitrary files on the Jenkins master.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2018-1000175 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-1000194: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-1000194",
+      "snippet": "A path traversal vulnerability exists in Jenkins 2.120 and older, LTS 2.107.2 and older in FilePath.java, SoloFilePathFilter.java that allows malicious agents to read and write arbitrary files on the Jenkins master, bypassing the agent-to-master security subsystem protection.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2018-1000194 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins Security Advisory 2026-08-05",
+      "url": "https://www.jenkins.io/security/advisory/2026-08-05/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Path traversal vulnerability in file parameters. Jenkins 2.575 and earlier, LTS 2.568.1 and earlier improperly identifies file paths attempting ... | Webpage excerpt: Jenkins Security Advisory 2026-08-05 This advisory announces vulnerabilities in the following Jenkins deliverables: Jenkins uses the Remoting library (typically agent.jar or remoting.jar) for communication between the controller and agents via serialized Java objects. To protect against deserialization vulnerabilities, Jenkins enforces the JEP-200 class filter during deserialization of objects received over a Remoting channel on the controller. In Remoting 3384.v60d89463d9e0 and earlier, except 3355.3357.v931d3c992987, included in Jenkins 2.575 and earlier, LTS 2.568.1 and earlier, the JEP-200 class filter is not applied to classes resolved via a fallback path in the Remoting deserialization implementation. This allows agent processes, code running on agents, and attackers with Agent/Connect permission to bypass the JEP-200 deserialization filter for classes on the Jenkins core classpath, which could be leveraged to execute code on the Jenkins controller. This is limited to classes on the Jenkins core classpath (i.e., bundled with Jenkins or part of the Java platform) that are not on the pre-JEP-200 deserialization denylist.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins Security Advisory 2026-09-02",
+      "url": "https://www.jenkins.io/security/advisory/2026-09-02/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This allows attackers with Item/Configure permission to execute arbitrary code on the Jenkins controller. Performance Plugin 1017. | Webpage excerpt: Jenkins Security Advisory 2026-09-02 This advisory announces vulnerabilities in the following Jenkins deliverables: Jenkins uses serialization and deserialization to load and save configuration and build data (using XStream). To protect from common deserialization vulnerabilities, Jenkins uses a custom deserialization filter that only allows deserialization of types defined in Jenkins core or plugins, or explicitly allowed types (JEP-200). Jenkins uses the Stapler web framework for HTTP request handling. Since 2018, Jenkins limits request routing to only types defined in Jenkins core or plugins, and can only access fields and methods that have (return) types, parameters, or annotations related to HTTP request handling. In Jenkins 2.579 and earlier, LTS 2.568.2 and earlier, serialized objects of types marked as storing their configuration in independent top-level configuration files can appear as nested field values in user-submitted config.xml documents and subsequently handle HTTP requests via Stapler.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins Security Advisory 2026-04-29",
+      "url": "https://www.jenkins.io/security/advisory/2026-04-29/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This allows attackers able to provide credentials to a job to write files to arbitrary locations on the node filesystem. | Webpage excerpt: Jenkins Security Advisory 2026-04-29 This advisory announces vulnerabilities in the following Jenkins deliverables: Missing permission check in Script Security Plugin allows enumerating pending and approved classpaths This allows attackers with Overall/Read permission to enumerate pending and approved Script Security classpaths. Script Security Plugin 1402.v94c9ce464861 requires Overall/Administer permission to enumerate pending and approved Script Security classpaths. This vulnerability has been reported through the Jenkins Bug Bounty Program sponsored by the European Commission. Path traversal vulnerability in Credentials Binding Plugin",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins Security Advisory 2026-06-24",
+      "url": "https://www.jenkins.io/security/advisory/2026-06-24/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Path traversal vulnerability in External Workspace Manager ・ path segments when validating ・ on the Jenkins controller. As of publication of ... | Webpage excerpt: Jenkins Security Advisory 2026-06-24 This advisory announces vulnerabilities in the following Jenkins deliverables: This allows attackers able to provide sandboxed scripts to invoke constructors of arbitrary types without those invocations being checked by the sandbox, bypassing the sandbox protection. This can be used to execute arbitrary code on the Jenkins controller. Script Security Plugin 1402.v94c9ce464861 and earlier does not reject Groovy AST transformation annotations such as @CompileStatic and @TypeChecked that carry an extensions member, which causes Groovy to load and execute a script from the classpath at compile time, before the sandbox is applied. This may allow attackers able to define and run sandboxed scripts to execute code outside the sandbox, in the rare case that a suitable Groovy script is present on the classpath of the component that evaluates the script. The Jenkins security team has been unable to identify any Groovy source files in Jenkins core or plugins that would allow attackers to execute dangerous code. While the severity of this issue is declared as High due to the potential impact, successful exploitation is considered very unlikely. This vulnerability has been reported through the Jenkins Bug Bounty Program sponsored by the European Commission.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:25:59.754412+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2024-23897",
+    "CVE-2018-1000175",
+    "CVE-2018-1000194"
+  ],
+  "retrieval_errors": []
+}

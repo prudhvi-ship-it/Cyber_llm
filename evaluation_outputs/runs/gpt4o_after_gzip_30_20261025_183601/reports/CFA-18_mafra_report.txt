@@ -1,0 +1,1900 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 46
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45
+Protocol Counts: RESP=3397, TCP=2789, RESP/JSON=16, PGSQL=882, ARP=2, HTTP=2, RESP/JSON/JSON=46
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.4:39806           <-> 172.18.0.2:6379                359 51 kB         598 110 kB        957 161 kB       75.214029000         0.9452
+172.18.0.2:6379            <-> 172.18.0.4:38214               224 151 kB        149 88 kB         373 240 kB        1.259386000        47.5121
+172.18.0.4:54298           <-> 172.18.0.2:6379                125 60 kB         176 367 kB        301 428 kB        0.412520000        48.3526
+172.18.0.4:33192           <-> 172.18.0.3:5432                108 173 kB        136 28 kB         244 201 kB       29.719987000        10.9396
+172.18.0.4:39714    
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000001-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:40062 (RESP)
+- [E-S0000-F000002-002 | server->client] 172.18.0.4:40062 -> 172.18.0.2:6379 (RESP)
+- [E-S0000-F000003-003 | client->server] 172.18.0.2:6379 -> 172.18.0.4:40062 (TCP)
+- [E-S0000-F000964-004 | server->client] 172.18.0.4:40062 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0000-F000971-005 | server->client] 172.18.0.4:40062 -> 172.18.0.2:6379 (TCP)
+- [E-S0000-F001135-007 | server->client] GET $136
+- [E-S0000-F001130-006 | server->client] b7e6f80f33dcfe34c0063ecebbf493886ddf9e733ae1eb38bf5b3cb14e46fc10
+- [E-S0001-F000007-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38060 (RESP)
+- [E-S0001-F000008-002 | server->client] 172.18.0.4:38060 -> 172.18.0.2:6379 (TCP)
+- [E-S0001-F000017-003 | server->client] 172.18.0.4:38060 -> 172.18.0.2:6379 (RESP)
+- [E-S0001-F000018-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38060 (TCP)
+- [E-S0002-F000009-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38084 (RESP)
+- [E-S0002-F000010-002 | server->client] 172.18.0.4:38084 -> 172.18.0.2:6379 (TCP)
+- [E-S0002-F000011-003 | server->client] 172.18.0.4:38084 -> 172.18.0.2:6379 (RESP)
+- [E-S0002-F000012-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38084 (TCP)
+- [E-S0003-F000023-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38118 (RESP)
+- [E-S0003-F000024-002 | server->client] 172.18.0.4:38118 -> 172.18.0.2:6379 (TCP)
+- [E-S0003-F000030-003 | server->client] 172.18.0.4:38118 -> 172.18.0.2:6379 (RESP)
+- [E-S0003-F000031-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38118 (TCP)
+- [E-S0004-F000025-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38148 (RESP)
+- [E-S0004-F000027-002 | server->client] 172.18.0.4:38148 -> 172.18.0.2:6379 (TCP)
+- [E-S0004-F000036-003 | server->client] 172.18.0.4:38148 -> 172.18.0.2:6379 (RESP)
+- [E-S0004-F000037-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38148 (TCP)
+- [E-S0005-F000026-001 | client->server] 172.18.0.4:54298 -> 172.18.0.2:6379 (TCP)
+- [E-S0005-F000028-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:54298 (TCP)
+- [E-S0005-F000042-003 | client->server] 172.18.0.4:54298 -> 172.18.0.2:6379 (RESP)
+- [E-S0005-F000044-004 | server->client] 172.18.0.2:6379 -> 172.18.0.4:54298 (RESP)
+- [E-S0005-F000082-005 | client->server] 172.18.0.4:54298 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0005-F001180-006 | client->server] b7e6f80f33dcfe34c0063ecebbf493886ddf9e733ae1eb38bf5b3cb14e46fc10
+- [E-S0006-F000090-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38154 (RESP)
+- [E-S0006-F000091-002 | server->client] 172.18.0.4:38154 -> 172.18.0.2:6379 (TCP)
+- [E-S0006-F000095-003 | server->client] 172.18.0.4:38154 -> 172.18.0.2:6379 (RESP)
+- [E-S0006-F000096-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38154 (TCP)
+- [E-S0007-F000092-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38172 (RESP)
+- [E-S0007-F000107-002 | server->client] 172.18.0.4:38172 -> 172.18.0.2:6379 (TCP)
+- [E-S0007-F000108-003 | server->client] 172.18.0.4:38172 -> 172.18.0.2:6379 (RESP)
+- [E-S0007-F000109-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38172 (TCP)
+- [E-S0008-F000093-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38044 (RESP)
+- [E-S0008-F000094-002 | server->client] 172.18.0.4:38044 -> 172.18.0.2:6379 (TCP)
+- [E-S0008-F000101-003 | server->client] 172.18.0.4:38044 -> 172.18.0.2:6379 (RESP)
+- [E-S0008-F000102-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38044 (TCP)
+- [E-S0009-F000114-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:40068 (RESP)
+- [E-S0009-F000115-002 | server->client] 172.18.0.4:40068 -> 172.18.0.2:6379 (TCP)
+- [E-S0009-F000116-003 | server->client] 172.18.0.4:40068 -> 172.18.0.2:6379 (RESP)
+- [E-S0009-F000117-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:40068 (TCP)
+- [E-S0010-F000132-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38226 (RESP)
+- [E-S0010-F000133-002 | server->client] 172.18.0.4:38226 -> 172.18.0.2:6379 (TCP)
+- [E-S0010-F000134-003 | server->client] 172.18.0.4:38226 -> 172.18.0.2:6379 (RESP)
+- [E-S0010-F000135-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38226 (TCP)
+- [E-S0011-F000140-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38098 (RESP)
+- [E-S0011-F000141-002 | server->client] 172.18.0.4:38098 -> 172.18.0.2:6379 (TCP)
+- [E-S0011-F000142-003 | server->client] 172.18.0.4:38098 -> 172.18.0.2:6379 (RESP)
+- [E-S0011-F000143-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38098 (TCP)
+- [E-S0012-F000148-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38104 (RESP)
+- [E-S0012-F000149-002 | server->client] 172.18.0.4:38104 -> 172.18.0.2:6379 (TCP)
+- [E-S0012-F000152-003 | server->client] 172.18.0.4:38104 -> 172.18.0.2:6379 (RESP)
+- [E-S0012-F000153-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38104 (TCP)
+- [E-S0013-F000150-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38134 (RESP)
+- [E-S0013-F000151-002 | server->client] 172.18.0.4:38134 -> 172.18.0.2:6379 (TCP)
+- [E-S0013-F000158-003 | server->client] 172.18.0.4:38134 -> 172.18.0.2:6379 (RESP)
+- [E-S0013-F000159-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38134 (TCP)
+- [E-S0014-F000164-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38164 (RESP)
+- [E-S0014-F000165-002 | server->client] 172.18.0.4:38164 -> 172.18.0.2:6379 (TCP)
+- [E-S0014-F000166-003 | server->client] 172.18.0.4:38164 -> 172.18.0.2:6379 (RESP)
+- [E-S0014-F000168-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38164 (TCP)
+- [E-S0015-F000174-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38190 (RESP)
+- [E-S0015-F000175-002 | server->client] 172.18.0.4:38190 -> 172.18.0.2:6379 (TCP)
+- [E-S0015-F000178-003 | server->client] 172.18.0.4:38190 -> 172.18.0.2:6379 (RESP)
+- [E-S0015-F000179-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38190 (TCP)
+- [E-S0016-F000176-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38214 (RESP)
+- [E-S0016-F000177-002 | server->client] 172.18.0.4:38214 -> 172.18.0.2:6379 (TCP)
+- [E-S0016-F000184-003 | server->client] 172.18.0.4:38214 -> 172.18.0.2:6379 (RESP)
+- [E-S0016-F000185-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38214 (TCP)
+- [E-S0016-F001157-005 | server->client] 172.18.0.4:38214 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0017-F000198-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38224 (RESP)
+- [E-S0017-F000199-002 | server->client] 172.18.0.4:38224 -> 172.18.0.2:6379 (TCP)
+- [E-S0017-F000206-003 | server->client] 172.18.0.4:38224 -> 172.18.0.2:6379 (RESP)
+- [E-S0017-F000207-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38224 (TCP)
+- [E-S0018-F000200-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38238 (RESP)
+- [E-S0018-F000201-002 | server->client] 172.18.0.4:38238 -> 172.18.0.2:6379 (TCP)
+- [E-S0018-F000218-003 | server->client] 172.18.0.4:38238 -> 172.18.0.2:6379 (RESP)
+- [E-S0018-F000219-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38238 (TCP)
+- [E-S0019-F000202-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38178 (RESP)
+- [E-S0019-F000203-002 | server->client] 172.18.0.4:38178 -> 172.18.0.2:6379 (TCP)
+- [E-S0019-F000212-003 | server->client] 172.18.0.4:38178 -> 172.18.0.2:6379 (RESP)
+- [E-S0019-F000213-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38178 (TCP)
+- [E-S0020-F000204-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38188 (RESP)
+- [E-S0020-F000205-002 | server->client] 172.18.0.4:38188 -> 172.18.0.2:6379 (TCP)
+- [E-S0020-F000224-003 | server->client] 172.18.0.4:38188 -> 172.18.0.2:6379 (RESP)
+- [E-S0020-F000225-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38188 (TCP)
+- [E-S0021-F000230-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38074 (RESP)
+- [E-S0021-F000231-002 | server->client] 172.18.0.4:38074 -> 172.18.0.2:6379 (TCP)
+- [E-S0021-F000234-003 | server->client] 172.18.0.4:38074 -> 172.18.0.2:6379 (RESP)
+- [E-S0021-F000235-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38074 (TCP)
+- [E-S0022-F000232-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38174 (RESP)
+- [E-S0022-F000233-002 | server->client] 172.18.0.4:38174 -> 172.18.0.2:6379 (TCP)
+- [E-S0022-F000240-003 | server->client] 172.18.0.4:38174 -> 172.18.0.2:6379 (RESP)
+- [E-S0022-F000241-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38174 (TCP)
+- [E-S0023-F000246-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38158 (RESP)
+- [E-S0023-F000247-002 | server->client] 172.18.0.4:38158 -> 172.18.0.2:6379 (TCP)
+- [E-S0023-F000248-003 | server->client] 172.18.0.4:38158 -> 172.18.0.2:6379 (RESP)
+- [E-S0023-F000249-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38158 (TCP)
+- [E-S0024-F000254-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38202 (RESP)
+- [E-S0024-F000255-002 | server->client] 172.18.0.4:38202 -> 172.18.0.2:6379 (TCP)
+- [E-S0024-F000256-003 | server->client] 172.18.0.4:38202 -> 172.18.0.2:6379 (RESP)
+- [E-S0024-F000257-004 | client->server] 172.18.0.2:6379 -> 172.18.0.4:38202 (TCP)
+- [E-S0025-F000262-001 | client->server] 172.18.0.2:6379 -> 172.18.0.4:54290 (RESP)
+- [E-S0025-F000263-002 | server->client] 172.18.0.4:54290 -> 172.18.0.2:6379 (RESP)
+- [E-S0025-F000264-003 | client->server] 172.18.0.2:6379 -> 172.18.0.4:54290 (TCP)
+- [E-S0025-F005175-004 | server->client] 172.18.0.4:54290 -> 172.18.0.2:6379 (TCP)
+- [E-S0026-F000689-001 | client->server] 172.18.0.4:54804 -> 172.18.0.3:5432 (TCP)
+- [E-S0026-F000690-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:54804 (TCP)
+- [E-S0026-F000692-003 | client->server] 172.18.0.4:54804 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0026-F000694-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:54804 (PGSQL)
+- [E-S0026-F000724-005 | client->server] root user keyword observed
+- [E-S0026-F000737-006 | client->server] SELECT t.oid, t.typname
+- [E-S0026-F000745-007 | server->client] SELECT 9 Z   I
+- [E-S0026-F000746-008 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0026-F000794-009 | server->client] SELECT 687 Z   I
+- [E-S0026-F000797-010 | client->server] SHOW TIME ZONE 
+- [E-S0026-F000800-011 | client->server] SELECT 1 
+- [E-S0026-F000802-012 | server->client] SELECT 1 Z   I
+- [E-S0026-F000807-013 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0026-F000815-014 | server->client] SELECT 6 Z   I
+- [E-S0026-F000824-016 | client->server] SELECT "feature_gates".* FROM "feature_gates" WHERE "feature_gates"."feature_key" = $1   S   
+- [E-S0026-F000835-017 | server->client] SELECT 0 Z   I
+- [E-S0026-F000815-015 | server->client] id
+- [E-S0027-F000803-001 | client->server] 172.18.0.4:55198 -> 172.18.0.2:6379 (RESP)
+- [E-S0027-F000804-003 | server->client] 172.18.0.2:6379 -> 172.18.0.4:55198 (RESP)
+- [E-S0027-F000805-004 | client->server] 172.18.0.4:55198 -> 172.18.0.2:6379 (TCP)
+- [E-S0027-F005290-008 | server->client] 172.18.0.2:6379 -> 172.18.0.4:55198 (TCP)
+- [E-S0027-F000803-002 | client->server] GET $55
+- [E-S0027-F000848-005 | client->server] GET $52
+- [E-S0027-F000868-006 | client->server] GET $32
+- [E-S0027-F000870-007 | client->server] GET $49
+- [E-S0028-F000905-001 | client->server] 172.18.0.4:54310 -> 172.18.0.2:6379 (TCP)
+- [E-S0028-F000907-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:54310 (TCP)
+- [E-S0028-F000913-003 | client->server] 172.18.0.4:54310 -> 172.18.0.2:6379 (RESP)
+- [E-S0028-F000915-004 | server->client] 172.18.0.2:6379 -> 172.18.0.4:54310 (RESP)
+- [E-S0028-F000959-007 | client->server] 172.18.0.4:54310 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0028-F000936-006 | client->server] GET $146
+- [E-S0028-F000932-005 | client->server] 7f90e3d92b5bd1e9921cefb3145dbfe3a3c2eabb62ac4fc78d18a05725a8c2bb
+- [E-S0029-F000952-001 | client->server] 172.18.0.4:50584 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0029-F000953-003 | server->client] 172.18.0.3:5432 -> 172.18.0.4:50584 (TCP)
+- [E-S0029-F000954-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:50584 (PGSQL)
+- [E-S0029-F000966-006 | client->server] 172.18.0.4:50584 -> 172.18.0.3:5432 (TCP)
+- [E-S0029-F000952-002 | client->server] SELECT 1 
+- [E-S0029-F000954-005 | server->client] SELECT 1 Z   I
+- [E-S0030-F000973-001 | client->server] 172.18.0.4:38244 -> 172.18.0.2:6379 (RESP)
+- [E-S0030-F000974-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:38244 (TCP)
+- [E-S0030-F000975-003 | server->client] 172.18.0.2:6379 -> 172.18.0.4:38244 (RESP)
+- [E-S0030-F000976-004 | client->server] 172.18.0.4:38244 -> 172.18.0.2:6379 (TCP)
+- [E-S0031-F000977-001 | client->server] 172.18.0.4:50582 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0031-F000978-003 | server->client] 172.18.0.3:5432 -> 172.18.0.4:50582 (TCP)
+- [E-S0031-F000979-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:50582 (PGSQL)
+- [E-S0031-F000980-006 | client->server] 172.18.0.4:50582 -> 172.18.0.3:5432 (TCP)
+- [E-S0031-F000977-002 | client->server] SELECT 1 
+- [E-S0031-F000979-005 | server->client] SELECT 1 Z   I
+- [E-S0031-F000987-007 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0031-F000988-008 | server->client] SELECT 6 Z   I
+- [E-S0031-F000990-010 | client->server] SELECT "feature_gates".* FROM "feature_gates" WHERE "feature_gates"."feature_key" = $1   S   
+- [E-S0031-F000998-011 | server->client] SELECT 0 Z   I
+- [E-S0031-F001208-012 | server->client] SELECT 7 Z   I
+- [E-S0031-F001234-013 | client->server] SELECT 1 AS one FROM "user_statuses" WHERE "user_statuses"."clear_status_at" <= '2025-06-09 06:44:32.511274' LIMIT $1      B            1   D   P E   	     S   
+- [E-S0031-F000988-009 | server->client] id
+- [E-S0032-F000984-001 | client->server] 172.18.0.4:55202 -> 172.18.0.2:6379 (RESP)
+- [E-S0032-F000985-003 | server->client] 172.18.0.2:6379 -> 172.18.0.4:55202 (RESP)
+- [E-S0032-F000986-004 | client->server] 172.18.0.4:55202 -> 172.18.0.2:6379 (TCP)
+- [E-S0032-F005287-005 | server->client] 172.18.0.2:6379 -> 172.18.0.4:55202 (TCP)
+- [E-S0032-F000984-002 | client->server] GET $58
+- [E-S0033-F002514-001 | client->server] 172.18.0.4:39926 -> 172.18.0.3:5432 (TCP)
+- [E-S0033-F002515-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39926 (TCP)
+- [E-S0033-F002517-003 | client->server] 172.18.0.4:39926 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0033-F002519-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39926 (PGSQL)
+- [E-S0033-F002595-005 | client->server] SELECT t.oid, t.typname
+- [E-S0033-F002596-006 | server->client] SELECT 9 Z   I
+- [E-S0033-F002598-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0033-F002636-008 | server->client] SELECT 687 Z   I
+- [E-S0033-F002638-009 | client->server] SHOW TIME ZONE 
+- [E-S0033-F002641-010 | client->server] SELECT 1 
+- [E-S0033-F002643-011 | server->client] SELECT 1 Z   I
+- [E-S0033-F002644-012 | client->server] SELECT VERSION() 
+- [E-S0033-F002714-013 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0033-F002725-014 | server->client] SELECT 477 Z   I
+- [E-S0034-F002735-001 | client->server] 172.18.0.4:48656 -> 172.18.0.2:6379 (TCP)
+- [E-S0034-F002736-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:48656 (TCP)
+- [E-S0034-F002738-003 | client->server] 172.18.0.4:48656 -> 172.18.0.2:6379 (RESP)
+- [E-S0034-F002740-005 | server->client] 172.18.0.2:6379 -> 172.18.0.4:48656 (RESP)
+- [E-S0034-F002738-004 | client->server] GET $50
+- [E-S0034-F002742-006 | client->server] GET $51
+- [E-S0034-F002746-007 | client->server] GET $49
+- [E-S0034-F002750-008 | client->server] GET $57
+- [E-S0034-F002753-009 | client->server] GET $56
+- [E-S0034-F002756-010 | client->server] GET $58
+- [E-S0035-F002842-001 | client->server] 172.18.0.4:39940 -> 172.18.0.3:5432 (TCP)
+- [E-S0035-F002843-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39940 (TCP)
+- [E-S0035-F002845-003 | client->server] 172.18.0.4:39940 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0035-F002847-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39940 (PGSQL)
+- [E-S0035-F002984-017 | server->client] admin keyword observed
+- [E-S0035-F002873-005 | client->server] SELECT t.oid, t.typname
+- [E-S0035-F002874-006 | server->client] SELECT 9 Z   I
+- [E-S0035-F002875-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0035-F002900-008 | server->client] SELECT 687 Z   I
+- [E-S0035-F002902-009 | client->server] SHOW TIME ZONE 
+- [E-S0035-F002904-010 | client->server] SELECT 1 
+- [E-S0035-F002905-011 | server->client] SELECT 1 Z   I
+- [E-S0035-F002908-012 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0035-F002915-013 | server->client] SELECT 477 Z   I
+- [E-S0035-F002962-014 | client->server] SELECT indrelid, indkey, generate_subscripts(indkey, 1) idx
+- [E-S0035-F002975-015 | client->server] SELECT "application_settings".* FROM "application_settings" ORDER BY "application_settings"."id" DESC LIMIT $1   S   
+- [E-S0035-F003010-056 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0035-F003072-057 | server->client] SELECT 292 Z   I
+- [E-S0035-F003313-058 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'schema_migrations' AND c.relkind IN ('r','p') 
+- [E-S0035-F003326-059 | client->server] SELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC   B            D   P E   	     S   
+- [E-S0035-F003357-060 | server->client] SELECT 1887 Z   I
+- [E-S0035-F002975-016 | client->server] id
+- [E-S0035-F002984-018 | server->client] 0IweabpgNYaMpCwNc7n3UpLVriOpnQEHAy8K9fs9ln+MY+P8M
+- [E-S0035-F002984-019 | server->client] IRhQSaTWrXaovLrPk6pd11xPTxLJY5eZ1SnqBs3gBUzxTgsSGgxc/pKOWDih
+- [E-S0035-F002984-020 | server->client] Qb3S3rCH4WCeZVp650epcFNOnkY9XTmUB8YluS/GsarthJgBiJBoAra16u5W
+- [E-S0035-F002984-021 | server->client] w5QnW+MtKAjQnS7MFUlsr9ni/uxbyi/u9b2bBA6wpK1N9rbpbGvuhDrY8uo7
+- [E-S0035-F002984-022 | server->client] +wC4TJ764QWJem5QfOaHw9YIDqItFM4GNZAYuTR1h4NhoK8uz6cArWwowtUZ
+- [E-S0035-F002984-023 | server->client] 9h2pydox0YvdhZ83BHBRiHiNxXyzpTocMv0ima3uo62rJuPWZmSuM8OVEasf
+- [E-S0035-F002984-024 | server->client] ZPE7nCCutY8zrYWc2A/aLaB8bTbY53e7KDUHwUBl0sT9GJ6/Ibp+mhQYxGBr
+- [E-S0035-F002984-025 | server->client] lbdSEklRIcyJludZvOtZXECCi4CcLZquv5jAmmHF6O5Cm3aflGgqlLblZfk0
+- [E-S0035-F002984-026 | server->client] 7F87Xe3CpCdVonQJaqBR3sHIJJrtCEx+KloKVhHWEGbtmCpIA/pZMOXmeUUO
+- [E-S0035-F002984-027 | server->client] CLTO55fQqHy5gdB/odH2xvhvRUYv7azZyllCwhU9R3SBI2dJ1B0kewgykumz
+- [E-S0035-F002984-028 | server->client] wkXdjF8Ac94xWI84VEywXu4nrq1/0GgcUHuUvNWUkAl4gmiyUZmlwOB/LcjO
+- [E-S0035-F002984-029 | server->client] 7UDKebwKXvjAyzTzJL5Wegz26J21jmeub571cK/81p/bAZvflpFAw6XWoWBy
+- [E-S0035-F002984-030 | server->client] FqQq+8k2kG/Opad4GcVVgrBxZQzPKCZkaQhxQG0KTjoHXIdTs6ImO//ZGDr/
+- [E-S0035-F002984-031 | server->client] WdQMABN7U4fnzIOKUCNszPfp1Bjs+AlJbidUc8lKFa1R/PCOkAW+qPkLvKII
+- [E-S0035-F002984-032 | server->client] QoMe2pygQYGDHZhrFFkQ0DQ94LFbvAbnFHcviawaJDT9WIUlt9uPlmALok6d
+- [E-S0035-F002984-033 | server->client] 1+EaNeuZv3Kea/VVTVPbMJedQ0nK5LS0YXwNp+Os1ycDnOAwBh6osWLAvn/A
+- [E-S0035-F002984-034 | server->client] jG4URwaVk3OfjU4Y+a3dMuP9wqjabmLEk6oKEJeUh8ZyhdxBvYoaBYTfGhrX
+- [E-S0035-F002984-035 | server->client] ILN+bjjGVjzMSrjFtu0OllhUdrLSsWsUuHWb74aT6LiLzBgUnLWjVaCfoEKP
+- [E-S0035-F002984-036 | server->client] qrrfAViz0g7SWSMiLdkZhop64+xSGFqqqUTIgTE9ffctZGDe+JE22T
+- [E-S0035-F002986-037 | server->client] 3scDea1ZBGgAmx6Dk0NUwdGkpB7OyP7hxz6oY9YNFau9Ka2vi8CAlD4zXhDc
+- [E-S0035-F002986-038 | server->client] m+8ZIPd5uNnkR0OfZQXHiya5ZBmDamsPBLQJmaBaM5HOtW9cfJrRCNe47F8Y
+- [E-S0035-F002986-039 | server->client] 41Tum5dH7BmcZRRVwEPqtbbW7L0wlv87/tGGQWeNJgp/UW/LFLGKalu+CQz4
+- [E-S0035-F002986-040 | server->client] 1iIyy+wV0Pe3CMzD3J4MKW5sWEPpK+BjLs0WfbV/dLkVLshuG8gMOED0awAQ
+- [E-S0035-F002986-041 | server->client] Qf/Fx9mD/3rX7VI/lTYlMNfYrq5Va+aRvzdj3P5b5Dfou8yRHD/E1J54TB1p
+- [E-S0035-F002986-042 | server->client] aO7DAVv/KtkvIxEe3ORswR15sGc8YS5cdm3g65k7RCSBYHM8f3vcUT9SR3uw
+- [E-S0035-F002986-043 | server->client] NBJBIvaFo4NGyCNuBpThHCoTqkfigV7F1Ak3/jBKfjL1NJ3M8P67Nw9oXEB1
+- [E-S0035-F002986-044 | server->client] eWT6Z1Uyf86xQCiAzrnAkE9QfjvvXqSD+2BA+SeflrRLLPdW9UGrfCZ9tqGG
+- [E-S0035-F002986-045 | server->client] 2iULGNH6bynRVyvBvMlWkmIBJWWnuPYY0HQyZ8+OJRyi9LOKuRi2PY1p4N//
+- [E-S0035-F002986-046 | server->client] OsKcn2dsT/aptvX5cgCNhgMoT3v+bMI2e9Mq9v8OTFrrENzlV2w9G5t4L/QN
+- [E-S0035-F002986-047 | server->client] MiUQFf82ge9ZWvrOGPHiu2fTzIty7pK6r7MOtyCTc3Vk7o1LCofJskF7TWI4
+- [E-S0035-F002986-048 | server->client] y6K+OtHEhZp4hwdxr4Y73LPJzhHUPgeVObmAFugu1R4/UUDaYodjQ8Ngi4N6
+- [E-S0035-F002986-049 | server->client] Wv9PNV02LvkSHNCJTmZc/hKBUtt5RbFkd7zlqpv0lW+x9cJi5/ssV3AriWdt
+- [E-S0035-F002986-050 | server->client] P3Y+laIWHXEFpr8Iy+6HqP/IAZ4aONN6WrJTl0ugXZgO5rfgwIrVSMH3gee5
+- [E-S0035-F002986-051 | server->client] hDJNja7LrPovjMZSHlnIeuAFtELekvxiB5YKF3MJr9Xp3UMyZo/gN5lrHdWS
+- [E-S0035-F002986-052 | server->client] q2Duv73PV1uDlGJTiFrBK2M0ieToRUtRni/SMQJ1JeC0ltH+2bEKPOclX0WR
+- [E-S0035-F002986-053 | server->client] /OdELPcT2uVs+VEKqmePtExnyrQDrC7o+uOuqnUTIks0wxfhCaeESLuJKK0A
+- [E-S0035-F002986-054 | server->client] /joHJ6z3/noXC0hY7B6rLONymM27yFkeZkQWAyjDJ9oktsCrBJbkQGt3JdhU
+- [E-S0035-F002986-055 | server->client] NbhgmYERxIhkLJhEDG7+LBzpN1XFGPPvNVRUMfKVsZs5VtyIJ7kfuqsAphkX
+- [E-S0036-F003414-001 | client->server] 172.18.0.4:33192 -> 172.18.0.3:5432 (TCP)
+- [E-S0036-F003415-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:33192 (TCP)
+- [E-S0036-F003417-003 | client->server] 172.18.0.4:33192 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0036-F003419-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:33192 (PGSQL)
+- [E-S0036-F003488-015 | server->client] admin keyword observed
+- [E-S0036-F003453-005 | client->server] SELECT t.oid, t.typname
+- [E-S0036-F003454-006 | server->client] SELECT 9 Z   I
+- [E-S0036-F003455-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0036-F003471-008 | server->client] SELECT 687 Z   I
+- [E-S0036-F003473-009 | client->server] SHOW TIME ZONE 
+- [E-S0036-F003475-010 | client->server] SELECT 1 
+- [E-S0036-F003476-011 | server->client] SELECT 1 Z   I
+- [E-S0036-F003481-012 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0036-F003484-013 | server->client] SELECT 477 Z   I
+- [E-S0036-F003486-014 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0036-F003488-016 | server->client] SELECT 82 Z   I
+- [E-S0036-F003592-018 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'schema_migrations' AND c.relkind IN ('r','p') 
+- [E-S0036-F003613-019 | client->server] SELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC   B            D   P E   	     S   
+- [E-S0036-F003648-020 | server->client] SELECT 1887 Z   I
+- [E-S0036-F003651-021 | server->client] SELECT 2 Z   I
+- [E-S0036-F003652-022 | client->server] SELECT "shards"."name" FROM "shards"   B            D   P E   	     S   
+- [E-S0036-F003700-023 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'audit_events' AND c.relkind IN ('r','p') 
+- [E-S0036-F003704-024 | server->client] SELECT 6 Z   I
+- [E-S0036-F003706-025 | client->server] SELECT "postgres_partitions".* FROM "postgres_partitions" WHERE (parent_identifier = concat(current_schema(), '.', 'audit_events')) ORDER BY "postgres_partitions"."name" ASC   B            D   P E   	     S   
+- [E-S0036-F003725-026 | server->client] SELECT 8 Z   I
+- [E-S0036-F003737-027 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'web_hook_logs_part_0c5294f417' AND c.relkind IN ('r','p') 
+- [E-S0036-F003744-028 | client->server] SELECT "postgres_partitions".* FROM "postgres_partitions" WHERE (parent_identifier = concat(current_schema(), '.', 'web_hook_logs_part_0c5294f417')) ORDER BY "postgres_partitions"."name" ASC   B            D   P E   	     S   
+- [E-S0036-F003784-029 | server->client] SELECT 7 Z   I
+- [E-S0036-F003799-030 | server->client] SELECT 13 Z   I
+- [E-S0036-F003811-031 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'commit_statuses' AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0036-F003812-032 | server->client] SELECT 0 Z   I
+- [E-S0036-F003819-033 | server->client] SELECT 10 Z   I
+- [E-S0036-F003953-034 | server->client] SELECT 16 Z   I
+- [E-S0036-F004018-035 | server->client] SELECT 34 Z   I
+- [E-S0036-F004021-036 | server->client] SELECT 14 Z   I
+- [E-S0036-F004038-037 | server->client] SELECT 41 Z   I
+- [E-S0036-F004050-038 | server->client] SELECT 19 Z   I
+- [E-S0036-F004275-039 | server->client] SELECT 12 Z   I
+- [E-S0036-F004299-040 | server->client] SELECT 11 Z   I
+- [E-S0036-F004361-041 | server->client] SELECT 17 Z   I
+- [E-S0036-F003488-017 | server->client] id
+- [E-S0037-F005294-001 | client->server] 172.18.0.1:59216 -> 172.18.0.4:80 (TCP)
+- [E-S0037-F005295-002 | server->client] 172.18.0.4:80 -> 172.18.0.1:59216 (TCP)
+- [E-S0037-F005297-003 | client->server] 172.18.0.1:59216 -> 172.18.0.4:80 (HTTP)
+- [E-S0037-F005299-007 | server->client] 172.18.0.4:80 -> 172.18.0.1:59216 (HTTP)
+- [E-S0037-F005297-004 | client->server] GET /users/sign_in
+- [E-S0037-F005297-005 | client->server] Host: 127.17.0.1:8080
+- [E-S0037-F005297-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0037-F005299-008 | server->client] HTTP Status 502
+- [E-S0037-F005299-009 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0037-F005299-010 | server->client] PHN2ZyB3aWR0aD0iMjEwIiBoZWlnaHQ9IjIxMCIgdmlld0JveD0iMCAwIDIxMCAyMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTEwNS4wNjE0IDIwMy42NTVsMzguNjQtMTE4LjkyMWgtNzcuMjhsMzguNjQgMTE4LjkyMXoiIGZpbGw9IiNlMjQzMjkiLz4KICA8cGF0aCBkPSJNMTA1LjA2MTQgMjAzLjY1NDhsLTM4LjY0LTExOC45MjFoLTU0LjE1M2w5...[TRUNCATED]
+- [E-S0038-F005304-001 | client->server] 172.18.0.4:49306 -> 172.18.0.3:5432 (TCP)
+- [E-S0038-F005305-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:49306 (TCP)
+- [E-S0038-F005307-003 | client->server] 172.18.0.4:49306 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0038-F005309-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:49306 (PGSQL)
+- [E-S0038-F005624-020 | server->client] admin keyword observed
+- [E-S0038-F005334-005 | client->server] SELECT t.oid, t.typname
+- [E-S0038-F005335-006 | server->client] SELECT 9 Z   I
+- [E-S0038-F005337-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0038-F005351-008 | server->client] SELECT 687 Z   I
+- [E-S0038-F005353-009 | client->server] SHOW TIME ZONE 
+- [E-S0038-F005355-010 | client->server] SELECT 1 
+- [E-S0038-F005356-011 | server->client] SELECT 1 Z   I
+- [E-S0038-F005357-012 | client->server] SELECT VERSION() 
+- [E-S0038-F005381-013 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0038-F005393-014 | server->client] SELECT 477 Z   I
+- [E-S0038-F005406-015 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0038-F005415-016 | server->client] SELECT 6 Z   I
+- [E-S0038-F005426-018 | client->server] SELECT "feature_gates".* FROM "feature_gates" WHERE "feature_gates"."feature_key" = $1   S   
+- [E-S0038-F005429-019 | server->client] SELECT 0 Z   I
+- [E-S0038-F005630-021 | server->client] SELECT 292 Z   I
+- [E-S0038-F005650-022 | client->server] SELECT indrelid, indkey, generate_subscripts(indkey, 1) idx
+- [E-S0038-F005653-023 | client->server] SELECT "application_settings".* FROM "application_settings" ORDER BY "application_settings"."id" DESC LIMIT $1   S   
+- [E-S0038-F005415-017 | server->client] id
+- [E-S0038-F005661-024 | server->client] 0IweabpgNYaMpCwNc7n3UpLVriOpnQEHAy8K9fs9ln+MY+P8M
+- [E-S0038-F005661-025 | server->client] IRhQSaTWrXaovLrPk6pd11xPTxLJY5eZ1SnqBs3gBUzxTgsSGgxc/pKOWDih
+- [E-S0038-F005661-026 | server->client] Qb3S3rCH4WCeZVp650epcFNOnkY9XTmUB8YluS/GsarthJgBiJBoAra16u5W
+- [E-S0038-F005663-027 | server->client] Ulsr9ni/uxbyi/u9b2bBA6wpK1N9rbpbGvuhDrY8uo7
+- [E-S0038-F005663-028 | server->client] +wC4TJ764QWJem5QfOaHw9YIDqItFM4GNZAYuTR1h4NhoK8uz6cArWwowtUZ
+- [E-S0038-F005663-029 | server->client] 9h2pydox0YvdhZ83BHBRiHiNxXyzpTocMv0ima3uo62rJuPWZmSuM8OVEasf
+- [E-S0038-F005663-030 | server->client] ZPE7nCCutY8zrYWc2A/aLaB8bTbY53e7KDUHwUBl0sT9GJ6/Ibp+mhQYxGBr
+- [E-S0038-F005663-031 | server->client] lbdSEklRIcyJludZvOtZXECCi4CcLZquv5jAmmHF6O5Cm3aflGgqlLblZfk0
+- [E-S0038-F005663-032 | server->client] 7F87Xe3CpCdVonQJaqBR3sHIJJrtCEx+KloKVhHWEGbtmCpIA/pZMOXmeUUO
+- [E-S0038-F005663-033 | server->client] CLTO55fQqHy5gdB/odH2xvhvRUYv7azZyllCwhU9R3SBI2dJ1B0kewgykumz
+- [E-S0038-F005663-034 | server->client] wkXdjF8Ac94xWI84VEywXu4nrq1/0GgcUHuUvNWUkAl4gmiyUZmlwOB/LcjO
+- [E-S0038-F005663-035 | server->client] 7UDKebwKXvjAyzTzJL5Wegz26J21jmeub571cK/81p/bAZvflpFAw6XWoWBy
+- [E-S0038-F005663-036 | server->client] FqQq+8k2kG/Opad4GcVVgrBxZQzPKCZkaQhxQG0KTjoHXIdTs6ImO//ZGDr/
+- [E-S0038-F005663-037 | server->client] WdQMABN7U4fnzIOKUCNszPfp1Bjs+AlJbidUc8lKFa1R/PCOkAW+qPkLvKII
+- [E-S0038-F005663-038 | server->client] QoMe2pygQYGDHZhrFFkQ0DQ94LFbvAbnFHcviawaJDT9WIUlt9uPlmALok6d
+- [E-S0038-F005663-039 | server->client] 1+EaNeuZv3Kea/VVTVPbMJedQ0nK5LS0YXwNp+Os1ycDnOAwBh6osWLAvn/A
+- [E-S0038-F005663-040 | server->client] jG4URwaVk3OfjU4Y+a3dMuP9wqjabmLEk6oKEJeUh8ZyhdxBvYoaBYTfGhrX
+- [E-S0038-F005663-041 | server->client] ILN+bjjGVjzMSrjFtu0OllhUdrLSsWsUuHWb74aT6LiLzBgUnLWjVaCfoEKP
+- [E-S0038-F005663-042 | server->client] qrrfAViz0g7SWSMiLdkZhop64+xSGFqqqUTIgTE9ffctZGDe+JE22T
+- [E-S0038-F005665-043 | server->client] 3scDea1ZBGgAmx6Dk0NUwdGkpB7OyP7hxz6oY9YNFau9Ka2vi8CAlD4zXhDc
+- [E-S0038-F005665-044 | server->client] m+8ZIPd5uNnkR0OfZQXHiya5ZBmDamsPBLQJmaBaM5HOtW9cfJrRCNe47F8Y
+- [E-S0038-F005665-045 | server->client] 41Tum5dH7BmcZRRVwEPqtbbW7L0wlv87/tGGQWeNJgp/UW/LFLGKalu+CQz4
+- [E-S0038-F005665-046 | server->client] 1iIyy+wV0Pe3CMzD3J4MKW5sWEPpK+BjLs0WfbV/dLkVLshuG8gMOED0awAQ
+- [E-S0038-F005665-047 | server->client] Qf/Fx9mD/3rX7VI/lTYlMNfYrq5Va+aRvzdj3P5b5Dfou8yRHD/E1J54TB1p
+- [E-S0038-F005665-048 | server->client] aO7DAVv/KtkvIxEe3ORswR15sGc8YS5cdm3g65k7RCSBYHM8f3vcUT9SR3uw
+- [E-S0038-F005665-049 | server->client] NBJBIvaFo4NGyCNuBpThHCoTqkfigV7F1Ak3/jBKfjL1NJ3M8P67Nw9oXEB1
+- [E-S0038-F005665-050 | server->client] eWT6Z1Uyf86xQCiAzrnAkE9QfjvvXqSD+2BA+SeflrRLLPdW9UGrfCZ9tqGG
+- [E-S0038-F005665-051 | server->client] 2iULGNH6bynRVyvBvMlWkmIBJWWnuPYY0HQyZ8+OJRyi9LOKuRi2PY1p4N//
+- [E-S0038-F005665-052 | server->client] OsKcn2dsT/aptvX5cgCNhgMoT3v+bMI2e9Mq9v8OTFrrENzlV2w9G5t4L/QN
+- [E-S0038-F005665-053 | server->client] MiUQFf82ge9ZWvrOGPHiu2fTzIty7pK6r7MOtyCTc3Vk7o1LCofJskF7TWI4
+- [E-S0038-F005665-054 | server->client] y6K+OtHEhZp4hwdxr4Y73LPJzhHUPgeVObmAFugu1R4/UUDaYodjQ8Ngi4N6
+- [E-S0038-F005665-055 | server->client] Wv9PNV02LvkSHNCJTmZc/hKBUtt5RbFkd7zlqpv0lW+x9cJi5/ssV3AriWdt
+- [E-S0038-F005665-056 | server->client] P3Y+laIWHXEFpr8Iy+6HqP/IAZ4aONN6WrJTl0ugXZgO5rfgwIrVSMH3gee5
+- [E-S0038-F005665-057 | server->client] hDJNja7LrPovjMZSHlnIeuAFtELekvxiB5YKF3MJr9Xp3UMyZo/gN5lrHdWS
+- [E-S0038-F005665-058 | server->client] q2Duv73PV1uDlGJTiFrBK2M0ieToRUtRni/SMQJ1JeC0ltH+2bEKPOclX0WR
+- [E-S0038-F005665-059 | server->client] /OdELPcT2uVs+VEKqmePtExnyrQDrC7o+uOuqnUTIks0wxfhCaeESLuJKK0A
+- [E-S0038-F005665-060 | server->client] /joHJ6z3/noXC0hY7B6rLONymM27yFkeZkQWAyjDJ9oktsCrBJbkQGt3JdhU
+- [E-S0038-F005665-061 | server->client] NbhgmYERxIhkLJhEDG7+LBzpN1XFGPPvNVRUMfKVsZs5VtyIJ7kfuqsAphkX
+- [E-S0039-F005360-001 | client->server] 172.18.0.4:39700 -> 172.18.0.3:5432 (TCP)
+- [E-S0039-F005361-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39700 (TCP)
+- [E-S0039-F005363-003 | client->server] 172.18.0.4:39700 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0039-F005365-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39700 (PGSQL)
+- [E-S0039-F005639-017 | server->client] admin keyword observed
+- [E-S0039-F005414-005 | client->server] SELECT t.oid, t.typname
+- [E-S0039-F005419-006 | server->client] SELECT 9 Z   I
+- [E-S0039-F005422-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0039-F005463-008 | server->client] SELECT 687 Z   I
+- [E-S0039-F005480-009 | client->server] SHOW TIME ZONE 
+- [E-S0039-F005484-010 | client->server] SELECT 1 
+- [E-S0039-F005485-011 | server->client] SELECT 1 Z   I
+- [E-S0039-F005487-012 | client->server] SELECT VERSION() 
+- [E-S0039-F005499-013 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0039-F005510-014 | server->client] SELECT 477 Z   I
+- [E-S0039-F005632-015 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0039-F005645-018 | server->client] SELECT 292 Z   I
+- [E-S0039-F005667-019 | client->server] SELECT indrelid, indkey, generate_subscripts(indkey, 1) idx
+- [E-S0039-F005672-020 | client->server] SELECT "application_settings".* FROM "application_settings" ORDER BY "application_settings"."id" DESC LIMIT $1   S   
+- [E-S0039-F005633-016 | server->client] id
+- [E-S0039-F005679-021 | server->client] 0IweabpgNYaMpCwNc7n3UpLVriOpnQEHAy8K9fs9ln+MY+P8M
+- [E-S0039-F005679-022 | server->client] IRhQSaTWrXaovLrPk6pd11xPTxLJY5eZ1SnqBs3gBUzxTgsSGgxc/pKOWDih
+- [E-S0039-F005679-023 | server->client] Qb3S3rCH4WCeZVp650epcFNOnkY9XTmUB8YluS/GsarthJgBiJBoAra16u5W
+- [E-S0039-F005679-024 | server->client] w5QnW+MtKAjQnS7MFUlsr9ni/uxbyi/u9b2bBA6wpK1N9rbpbGvuhDrY8uo7
+- [E-S0039-F005679-025 | server->client] +wC4TJ764QWJem5QfOaHw9YIDqItFM4GNZAYuTR1h4NhoK8uz6cArWwowtUZ
+- [E-S0039-F005679-026 | server->client] 9h2pydox0YvdhZ83BHBRiHiNxXyzpTocMv0ima3uo62rJuPWZmSuM8OVEasf
+- [E-S0039-F005679-027 | server->client] ZPE7nCCutY8zrYWc2A/aLaB8bTbY53e7KDUHwUBl0sT9GJ6/Ibp+mhQYxGBr
+- [E-S0039-F005679-028 | server->client] lbdSEklRIcyJludZvOtZXECCi4CcLZquv5jAmmHF6O5Cm3aflGgqlLblZfk0
+- [E-S0039-F005679-029 | server->client] 7F87Xe3CpCdVonQJaqBR3sHIJJrtCEx+KloKVhHWEGbtmCpIA/pZMOXmeUUO
+- [E-S0039-F005679-030 | server->client] CLTO55fQqHy5gdB/odH2xvhvRUYv7azZyllCwhU9R3SBI2dJ1B0kewgykumz
+- [E-S0039-F005679-031 | server->client] wkXdjF8Ac94xWI84VEywXu4nrq1/0GgcUHuUvNWUkAl4gmiyUZmlwOB/LcjO
+- [E-S0039-F005679-032 | server->client] 7UDKebwKXvjAyzTzJL5Wegz26J21jmeub571cK/81p/bAZvflpFAw6XWoWBy
+- [E-S0039-F005679-033 | server->client] FqQq+8k2kG/Opad4GcVVgrBxZQzPKCZkaQhxQG0KTjoHXIdTs6ImO//ZGDr/
+- [E-S0039-F005679-034 | server->client] WdQMABN7U4fnzIOKUCNszPfp1Bjs+AlJbidUc8lKFa1R/PCOkAW+qPkLvKII
+- [E-S0039-F005679-035 | server->client] QoMe2pygQYGDHZhrFFkQ0DQ94LFbvAbnFHcviawaJDT9WIUlt9uPlmALok6d
+- [E-S0039-F005679-036 | server->client] 1+EaNeuZv3Kea/VVTVPbMJedQ0nK5LS0YXwNp+Os1ycDnOAwBh6osWLAvn/A
+- [E-S0039-F005679-037 | server->client] jG4URwaVk3OfjU4Y+a3dMuP9wqjabmLEk6oKEJeUh8ZyhdxBvYoaBYTfGhrX
+- [E-S0039-F005679-038 | server->client] ILN+bjjGVjzMSrjFtu0OllhUdrLSsWsUuHWb74aT6LiLzBgUnLWjVaCfoEKP
+- [E-S0039-F005679-039 | server->client] qrrfAViz0g7SWSMiLdkZhop64+xSGFqqqUTIgTE9ffctZGDe+JE22T
+- [E-S0039-F005681-040 | server->client] 3scDea1ZBGgAmx6Dk0NUwdGkpB7OyP7hxz6oY9YNFau9Ka2vi8CAlD4zXhDc
+- [E-S0039-F005681-041 | server->client] m+8ZIPd5uNnkR0OfZQXHiya5ZBmDamsPBLQJmaBaM5HOtW9cfJrRCNe47F8Y
+- [E-S0039-F005681-042 | server->client] 41Tum5dH7BmcZRRVwEPqtbbW7L0wlv87/tGGQWeNJgp/UW/LFLGKalu+CQz4
+- [E-S0039-F005681-043 | server->client] 1iIyy+wV0Pe3CMzD3J4MKW5sWEPpK+BjLs0WfbV/dLkVLshuG8gMOED0awAQ
+- [E-S0039-F005681-044 | server->client] Qf/Fx9mD/3rX7VI/lTYlMNfYrq5Va+aRvzdj3P5b5Dfou8yRHD/E1J54TB1p
+- [E-S0039-F005681-045 | server->client] aO7DAVv/KtkvIxEe3ORswR15sGc8YS5cdm3g65k7RCSBYHM8f3vcUT9SR3uw
+- [E-S0039-F005681-046 | server->client] NBJBIvaFo4NGyCNuBpThHCoTqkfigV7F1Ak3/jBKfjL1NJ3M8P67Nw9oXEB1
+- [E-S0039-F005681-047 | server->client] eWT6Z1Uyf86xQCiAzrnAkE9QfjvvXqSD+2BA+SeflrRLLPdW9UGrfCZ9tqGG
+- [E-S0039-F005681-048 | server->client] 2iULGNH6bynRVyvBvMlWkmIBJWWnuPYY0HQyZ8+OJRyi9LOKuRi2PY1p4N//
+- [E-S0039-F005681-049 | server->client] OsKcn2dsT/aptvX5cgCNhgMoT3v+bMI2e9Mq9v8OTFrrENzlV2w9G5t4L/QN
+- [E-S0039-F005681-050 | server->client] MiUQFf82ge9ZWvrOGPHiu2fTzIty7pK6r7MOtyCTc3Vk7o1LCofJskF7TWI4
+- [E-S0039-F005681-051 | server->client] y6K+OtHEhZp4hwdxr4Y73LPJzhHUPgeVObmAFugu1R4/UUDaYodjQ8Ngi4N6
+- [E-S0039-F005681-052 | server->client] Wv9PNV02LvkSHNCJTmZc/hKBUtt5RbFkd7zlqpv0lW+x9cJi5/ssV3AriWdt
+- [E-S0039-F005681-053 | server->client] P3Y+laIWHXEFpr8Iy+6HqP/IAZ4aONN6WrJTl0ugXZgO5rfgwIrVSMH3gee5
+- [E-S0039-F005681-054 | server->client] hDJNja7LrPovjMZSHlnIeuAFtELekvxiB5YKF3MJr9Xp3UMyZo/gN5lrHdWS
+- [E-S0039-F005681-055 | server->client] q2Duv73PV1uDlGJTiFrBK2M0ieToRUtRni/SMQJ1JeC0ltH+2bEKPOclX0WR
+- [E-S0039-F005681-056 | server->client] /OdELPcT2uVs+VEKqmePtExnyrQDrC7o+uOuqnUTIks0wxfhCaeESLuJKK0A
+- [E-S0039-F005681-057 | server->client] /joHJ6z3/noXC0hY7B6rLONymM27yFkeZkQWAyjDJ9oktsCrBJbkQGt3JdhU
+- [E-S0039-F005681-058 | server->client] NbhgmYERxIhkLJhEDG7+LBzpN1XFGPPvNVRUMfKVsZs5VtyIJ7kfuqsAphkX
+- [E-S0040-F005395-001 | client->server] 172.18.0.4:39780 -> 172.18.0.2:6379 (TCP)
+- [E-S0040-F005396-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39780 (TCP)
+- [E-S0040-F005398-003 | client->server] 172.18.0.4:39780 -> 172.18.0.2:6379 (RESP)
+- [E-S0040-F005400-005 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39780 (RESP)
+- [E-S0040-F005398-004 | client->server] GET $50
+- [E-S0040-F005447-006 | client->server] GET $51
+- [E-S0040-F005461-007 | client->server] GET $49
+- [E-S0040-F005472-008 | client->server] GET $57
+- [E-S0040-F005478-009 | client->server] GET $56
+- [E-S0040-F005490-010 | client->server] GET $58
+- [E-S0040-F006140-011 | client->server] GET $32
+- [E-S0041-F005512-001 | client->server] 172.18.0.4:39794 -> 172.18.0.2:6379 (TCP)
+- [E-S0041-F005513-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39794 (TCP)
+- [E-S0041-F005515-003 | client->server] 172.18.0.4:39794 -> 172.18.0.2:6379 (RESP)
+- [E-S0041-F005517-005 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39794 (RESP)
+- [E-S0041-F005515-004 | client->server] GET $50
+- [E-S0041-F005519-006 | client->server] GET $51
+- [E-S0041-F005523-007 | client->server] GET $49
+- [E-S0041-F005527-008 | client->server] GET $57
+- [E-S0041-F005530-009 | client->server] GET $56
+- [E-S0041-F005532-010 | client->server] GET $58
+- [E-S0042-F005693-001 | client->server] 172.18.0.4:39708 -> 172.18.0.3:5432 (TCP)
+- [E-S0042-F005694-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39708 (TCP)
+- [E-S0042-F005696-003 | client->server] 172.18.0.4:39708 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0042-F005698-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39708 (PGSQL)
+- [E-S0042-F005752-015 | server->client] admin keyword observed
+- [E-S0042-F005720-005 | client->server] SELECT t.oid, t.typname
+- [E-S0042-F005721-006 | server->client] SELECT 9 Z   I
+- [E-S0042-F005722-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0042-F005736-008 | server->client] SELECT 687 Z   I
+- [E-S0042-F005738-009 | client->server] SHOW TIME ZONE 
+- [E-S0042-F005740-010 | client->server] SELECT 1 
+- [E-S0042-F005741-011 | server->client] SELECT 1 Z   I
+- [E-S0042-F005746-012 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0042-F005749-013 | server->client] SELECT 477 Z   I
+- [E-S0042-F005751-014 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0042-F005752-016 | server->client] SELECT 82 Z   I
+- [E-S0042-F005834-018 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'schema_migrations' AND c.relkind IN ('r','p') 
+- [E-S0042-F005840-019 | client->server] SELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC   B            D   P E   	     S   
+- [E-S0042-F005867-020 | server->client] SELECT 1887 Z   I
+- [E-S0042-F005870-021 | server->client] SELECT 2 Z   I
+- [E-S0042-F005871-022 | client->server] SELECT "shards"."name" FROM "shards"   B            D   P E   	     S   
+- [E-S0042-F005916-023 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'audit_events' AND c.relkind IN ('r','p') 
+- [E-S0042-F005920-024 | server->client] SELECT 6 Z   I
+- [E-S0042-F005922-025 | client->server] SELECT "postgres_partitions".* FROM "postgres_partitions" WHERE (parent_identifier = concat(current_schema(), '.', 'audit_events')) ORDER BY "postgres_partitions"."name" ASC   B            D   P E   	     S   
+- [E-S0042-F005923-026 | server->client] SELECT 8 Z   I
+- [E-S0042-F005928-027 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'web_hook_logs_part_0c5294f417' AND c.relkind IN ('r','p') 
+- [E-S0042-F005930-028 | client->server] SELECT "postgres_partitions".* FROM "postgres_partitions" WHERE (parent_identifier = concat(current_schema(), '.', 'web_hook_logs_part_0c5294f417')) ORDER BY "postgres_partitions"."name" ASC   B            D   P E   	     S   
+- [E-S0042-F005959-029 | server->client] SELECT 7 Z   I
+- [E-S0042-F005974-030 | server->client] SELECT 13 Z   I
+- [E-S0042-F005991-031 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'commit_statuses' AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0042-F005992-032 | server->client] SELECT 0 Z   I
+- [E-S0042-F006004-033 | server->client] SELECT 10 Z   I
+- [E-S0042-F006010-034 | server->client] SELECT 16 Z   I
+- [E-S0042-F006013-035 | server->client] SELECT 34 Z   I
+- [E-S0042-F006019-036 | server->client] SELECT 14 Z   I
+- [E-S0042-F006027-037 | server->client] SELECT 41 Z   I
+- [E-S0042-F006036-038 | server->client] SELECT 19 Z   I
+- [E-S0042-F006051-039 | server->client] SELECT 12 Z   I
+- [E-S0042-F006072-040 | server->client] SELECT 11 Z   I
+- [E-S0042-F006091-041 | server->client] SELECT 17 Z   I
+- [E-S0042-F006144-042 | server->client] SELECT 4 Z   I
+- [E-S0042-F006146-043 | client->server] SELECT "features".* FROM "features"   B            D   P E   	     S   
+- [E-S0042-F007124-044 | server->client] SELECT 29 Z   I
+- [E-S0042-F005752-017 | server->client] id
+- [E-S0043-F005764-001 | client->server] 172.18.0.4:39714 -> 172.18.0.3:5432 (TCP)
+- [E-S0043-F005765-002 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39714 (TCP)
+- [E-S0043-F005767-003 | client->server] 172.18.0.4:39714 -> 172.18.0.3:5432 (PGSQL)
+- [E-S0043-F005769-004 | server->client] 172.18.0.3:5432 -> 172.18.0.4:39714 (PGSQL)
+- [E-S0043-F005828-015 | server->client] admin keyword observed
+- [E-S0043-F005794-005 | client->server] SELECT t.oid, t.typname
+- [E-S0043-F005796-006 | server->client] SELECT 9 Z   I
+- [E-S0043-F005797-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0043-F005811-008 | server->client] SELECT 687 Z   I
+- [E-S0043-F005813-009 | client->server] SHOW TIME ZONE 
+- [E-S0043-F005815-010 | client->server] SELECT 1 
+- [E-S0043-F005816-011 | server->client] SELECT 1 Z   I
+- [E-S0043-F005821-012 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0043-F005824-013 | server->client] SELECT 477 Z   I
+- [E-S0043-F005826-014 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0043-F005828-016 | server->client] SELECT 82 Z   I
+- [E-S0043-F005874-018 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'schema_migrations' AND c.relkind IN ('r','p') 
+- [E-S0043-F005882-019 | client->server] SELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC   B            D   P E   	     S   
+- [E-S0043-F005909-020 | server->client] SELECT 1887 Z   I
+- [E-S0043-F005912-021 | server->client] SELECT 2 Z   I
+- [E-S0043-F005913-022 | client->server] SELECT "shards"."name" FROM "shards"   B            D   P E   	     S   
+- [E-S0043-F005934-023 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'audit_events' AND c.relkind IN ('r','p') 
+- [E-S0043-F005940-024 | server->client] SELECT 6 Z   I
+- [E-S0043-F005942-025 | client->server] SELECT "postgres_partitions".* FROM "postgres_partitions" WHERE (parent_identifier = concat(current_schema(), '.', 'audit_events')) ORDER BY "postgres_partitions"."name" ASC   B            D   P E   	     S   
+- [E-S0043-F005943-026 | server->client] SELECT 8 Z   I
+- [E-S0043-F005948-027 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'web_hook_logs_part_0c5294f417' AND c.relkind IN ('r','p') 
+- [E-S0043-F005950-028 | client->server] SELECT "postgres_partitions".* FROM "postgres_partitions" WHERE (parent_identifier = concat(current_schema(), '.', 'web_hook_logs_part_0c5294f417')) ORDER BY "postgres_partitions"."name" ASC   B            D   P E   	     S   
+- [E-S0043-F005966-029 | server->client] SELECT 7 Z   I
+- [E-S0043-F005983-030 | server->client] SELECT 13 Z   I
+- [E-S0043-F005988-031 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relname = 'commit_statuses' AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0043-F005989-032 | server->client] SELECT 0 Z   I
+- [E-S0043-F005998-033 | server->client] SELECT 10 Z   I
+- [E-S0043-F006007-034 | server->client] SELECT 16 Z   I
+- [E-S0043-F006016-035 | server->client] SELECT 34 Z   I
+- [E-S0043-F006022-036 | server->client] SELECT 14 Z   I
+- [E-S0043-F006030-037 | server->client] SELECT 41 Z   I
+- [E-S0043-F006042-038 | server->client] SELECT 19 Z   I
+- [E-S0043-F006088-039 | server->client] SELECT 12 Z   I
+- [E-S0043-F006104-040 | server->client] SELECT 11 Z   I
+- [E-S0043-F006120-041 | server->client] SELECT 17 Z   I
+- [E-S0043-F007121-042 | server->client] SELECT 29 Z   I
+- [E-S0043-F007127-043 | server->client] SELECT 21 Z   I
+- [E-S0043-F005828-017 | server->client] id
+- [E-S0044-F006152-001 | client->server] 172.18.0.4:39804 -> 172.18.0.2:6379 (TCP)
+- [E-S0044-F006153-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39804 (TCP)
+- [E-S0044-F006155-003 | client->server] 172.18.0.4:39804 -> 172.18.0.2:6379 (RESP)
+- [E-S0044-F006157-004 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39804 (RESP)
+- [E-S0045-F006163-001 | client->server] 172.18.0.4:39806 -> 172.18.0.2:6379 (TCP)
+- [E-S0045-F006164-002 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39806 (TCP)
+- [E-S0045-F006166-003 | client->server] 172.18.0.4:39806 -> 172.18.0.2:6379 (RESP)
+- [E-S0045-F006168-004 | server->client] 172.18.0.2:6379 -> 172.18.0.4:39806 (RESP)
+- [E-S0045-F006282-005 | client->server] 172.18.0.4:39806 -> 172.18.0.2:6379 (RESP/JSON/JSON)
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.2:6379 -> 172.18.0.4:40062; packets=217; client->server=82, server->client=135; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.2:6379 -> 172.18.0.4:38060; packets=192; client->server=99, server->client=93; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 2: 172.18.0.2:6379 -> 172.18.0.4:38084; packets=154; client->server=82, server->client=72; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.2:6379 -> 172.18.0.4:38118; packets=154; client->server=81, server->client=73; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 4: 172.18.0.2:6379 -> 172.18.0.4:38148; packets=161; client->server=85, server->client=76; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 5: 172.18.0.4:54298 -> 172.18.0.2:6379; packets=301; client->server=176, server->client=125; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 6: 172.18.0.2:6379 -> 172.18.0.4:38154; packets=154; client->server=79, server->client=75; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 7: 172.18.0.2:6379 -> 172.18.0.4:38172; packets=167; client->server=86, server->client=81; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 8: 172.18.0.2:6379 -> 172.18.0.4:38044; packets=153; client->server=77, server->client=76; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 9: 172.18.0.2:6379 -> 172.18.0.4:40068; packets=214; client->server=112, server->client=102; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 10: 172.18.0.2:6379 -> 172.18.0.4:38226; packets=138; client->server=74, server->client=64; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 11: 172.18.0.2:6379 -> 172.18.0.4:38098; packets=144; client->server=75, server->client=69; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 12: 172.18.0.2:6379 -> 172.18.0.4:38104; packets=139; client->server=74, server->client=65; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 13: 172.18.0.2:6379 -> 172.18.0.4:38134; packets=162; client->server=84, server->client=78; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 14: 172.18.0.2:6379 -> 172.18.0.4:38164; packets=140; client->server=78, server->client=62; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 15: 172.18.0.2:6379 -> 172.18.0.4:38190; packets=150; client->server=77, server->client=73; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 16: 172.18.0.2:6379 -> 172.18.0.4:38214; packets=373; client->server=149, server->client=224; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 17: 172.18.0.2:6379 -> 172.18.0.4:38224; packets=138; client->server=74, server->client=64; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 18: 172.18.0.2:6379 -> 172.18.0.4:38238; packets=153; client->server=83, server->client=70; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 19: 172.18.0.2:6379 -> 172.18.0.4:38178; packets=173; client->server=88, server->client=85; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 20: 172.18.0.2:6379 -> 172.18.0.4:38188; packets=144; client->server=75, server->client=69; role_hint=other protocol/application candidate (
+...[MIDDLE OF REDACTED FLOW OMITTED]...
+; verify from payload)
+- TCP stream 25: 172.18.0.2:6379 -> 172.18.0.4:54290; packets=141; client->server=79, server->client=62; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 26: 172.18.0.4:54804 -> 172.18.0.3:5432; packets=101; client->server=51, server->client=50; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 27: 172.18.0.4:55198 -> 172.18.0.2:6379; packets=23; client->server=14, server->client=9; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 28: 172.18.0.4:54310 -> 172.18.0.2:6379; packets=155; client->server=85, server->client=70; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 29: 172.18.0.4:50584 -> 172.18.0.3:5432; packets=10; client->server=6, server->client=4; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 30: 172.18.0.4:38244 -> 172.18.0.2:6379; packets=10; client->server=6, server->client=4; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 31: 172.18.0.4:50582 -> 172.18.0.3:5432; packets=26; client->server=17, server->client=9; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 32: 172.18.0.4:55202 -> 172.18.0.2:6379; packets=9; client->server=6, server->client=3; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 33: 172.18.0.4:39926 -> 172.18.0.3:5432; packets=119; client->server=58, server->client=61; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 34: 172.18.0.4:48656 -> 172.18.0.2:6379; packets=36; client->server=22, server->client=14; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 35: 172.18.0.4:39940 -> 172.18.0.3:5432; packets=135; client->server=64, server->client=71; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 36: 172.18.0.4:33192 -> 172.18.0.3:5432; packets=244; client->server=136, server->client=108; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 37: 172.18.0.1:59216 -> 172.18.0.4:80; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 38: 172.18.0.4:49306 -> 172.18.0.3:5432; packets=177; client->server=100, server->client=77; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 39: 172.18.0.4:39700 -> 172.18.0.3:5432; packets=160; client->server=83, server->client=77; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 40: 172.18.0.4:39780 -> 172.18.0.2:6379; packets=42; client->server=24, server->client=18; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 41: 172.18.0.4:39794 -> 172.18.0.2:6379; packets=23; client->server=12, server->client=11; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 42: 172.18.0.4:39708 -> 172.18.0.3:5432; packets=227; client->server=132, server->client=95; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 43: 172.18.0.4:39714 -> 172.18.0.3:5432; packets=234; client->server=131, server->client=103; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 44: 172.18.0.4:39804 -> 172.18.0.2:6379; packets=11; client->server=6, server->client=5; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 45: 172.18.0.4:39806 -> 172.18.0.2:6379; packets=957; client->server=598, server->client=359; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:40062. The client is interacting with the Redis server using various Redis commands such as `brpop`, `rpop`, and `exec`, which are typical for queue management and transaction execution.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0000-F000001-001] 172.18.0.2:6379 -> 172.18.0.4:40062 (RESP): Initial communication from client to server.
+- [E-S0000-F000002-002] 172.18.0.4:40062 -> 172.18.0.2:6379 (RESP): Server response to client.
+- [E-S0000-F000964-004] 172.18.0.4:40062 -> 172.18.0.2:6379 (RESP/JSON): JSON response from server to client.
+- [E-S0000-F001130-006] b7e6f80f33dcfe34c0063ecebbf493886ddf9e733ae1eb38bf5b3cb14e46fc10: Indicator of normal Redis operation.
+- [E-S0000-F001135-007] GET $136: Part of the Redis command sequence.
+
+--- Stream 1 [VALID] ---
+Service: Redis
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38060. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+Malicious Activities: None
+Attack Success: None
+Evidence:
+- [E-S0001-F000007-001] 172.18.0.2:6379 -> 172.18.0.4:38060 (RESP): Initial communication from client to server.
+- [E-S0001-F000008-002] 172.18.0.4:38060 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0001-F000017-003] 172.18.0.4:38060 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0001-F000018-004] 172.18.0.2:6379 -> 172.18.0.4:38060 (TCP): Client acknowledgment.
+
+--- Stream 2 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38084. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0002-F000009-001 | client->server | epoch=1749451464.168036] 172.18.0.2:6379 -> 172.18.0.4:38084 (RESP): Initial communication from client to server.
+- [E-S0002-F000010-002 | server->client | epoch=1749451464.168212] 172.18.0.4:38084 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0002-F000011-003 | server->client | epoch=1749451464.172532] 172.18.0.4:38084 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0002-F000012-004 | client->server | epoch=1749451464.173008] 172.18.0.2:6379 -> 172.18.0.4:38084 (TCP): Client acknowledgment.
+
+--- Stream 3 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38118. The client is interacting with the Redis server using various Redis commands such as `brpop`, `srem`, and `del`, which are typical for queue management and set operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0003-F000023-001 | client->server | epoch=1749451464.271037] 172.18.0.2:6379 -> 172.18.0.4:38118 (RESP): Initial communication from client to server.
+- [E-S0003-F000024-002 | server->client | epoch=1749451464.271556] 172.18.0.4:38118 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0003-F000030-003 | server->client | epoch=1749451464.278746] 172.18.0.4:38118 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0003-F000031-004 | client->server | epoch=1749451464.279203] 172.18.0.2:6379 -> 172.18.0.4:38118 (TCP): Client acknowledgment.
+
+--- Stream 4 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38148. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0004-F000025-001 | client->server | epoch=1749451464.271910] 172.18.0.2:6379 -> 172.18.0.4:38148 (RESP): Initial communication from client to server.
+- [E-S0004-F000027-002 | server->client | epoch=1749451464.272192] 172.18.0.4:38148 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0004-F000036-003 | server->client | epoch=1749451464.299276] 172.18.0.4:38148 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0004-F000037-004 | client->server | epoch=1749451464.299581] 172.18.0.2:6379 -> 172.18.0.4:38148 (TCP): Client acknowledgment.
+
+--- Stream 5 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:54298. The client is interacting with the Redis server using various Redis commands such as `setname`, `incrby`, and `expire`, which are typical for managing job queues and statistics. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0005-F000026-001 | client->server | epoch=1749451464.271570] 172.18.0.4:54298 -> 172.18.0.2:6379 (TCP): Initial communication from client to server.
+- [E-S0005-F000028-002 | server->client | epoch=1749451464.272268] 172.18.0.2:6379 -> 172.18.0.4:54298 (TCP): Server response to client.
+- [E-S0005-F000042-003 | client->server | epoch=1749451464.311833] 172.18.0.4:54298 -> 172.18.0.2:6379 (RESP): Client command to server.
+- [E-S0005-F000044-004 | server->client | epoch=1749451464.319029] 172.18.0.2:6379 -> 172.18.0.4:54298 (RESP): Server response to client.
+- [E-S0005-F001180-006 | client->server | epoch=1749451472.505224] b7e6f80f33dcfe34c0063ecebbf493886ddf9e733ae1eb38bf5b3cb14e46fc10: Indicator of Redis command execution.
+
+--- Stream 6 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38154. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0006-F000090-001 | client->server | epoch=1749451464.380630] 172.18.0.2:6379 -> 172.18.0.4:38154 (RESP): Initial communication from client to server.
+- [E-S0006-F000091-002 | server->client | epoch=1749451464.381172] 172.18.0.4:38154 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0006-F000095-003 | server->client | epoch=1749451464.392219] 172.18.0.4:38154 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0006-F000096-004 | client->server | epoch=1749451464.393188] 172.18.0.2:6379 -> 172.18.0.4:38154 (TCP): Client acknowledgment.
+
+--- Stream 7 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38172. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0007-F000092-001 | client->server | epoch=1749451464.387541] 172.18.0.2:6379 -> 172.18.0.4:38172 (RESP): Initial communication from client to server.
+- [E-S0007-F000107-002 | server->client | epoch=1749451464.430220] 172.18.0.4:38172 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0007-F000108-003 | server->client | epoch=1749451464.433103] 172.18.0.4:38172 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0007-F000109-004 | client->server | epoch=1749451464.434475] 172.18.0.2:6379 -> 172.18.0.4:38172 (TCP): Client acknowledgment.
+
+--- Stream 8 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38044. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0008-F000093-001 | client->server | epoch=1749451464.387787] 172.18.0.2:6379 -> 172.18.0.4:38044 (RESP): Initial communication from client to server.
+- [E-S0008-F000094-002 | server->client | epoch=1749451464.388099] 172.18.0.4:38044 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0008-F000101-003 | server->client | epoch=1749451464.402719] 172.18.0.4:38044 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0008-F000102-004 | client->server | epoch=1749451464.403114] 172.18.0.2:6379 -> 172.18.0.4:38044 (TCP): Client acknowledgment.
+
+--- Stream 9 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:40068. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0009-F000114-001 | client->server | epoch=1749451464.484438] 172.18.0.2:6379 -> 172.18.0.4:40068 (RESP): Initial communication from client to server.
+- [E-S0009-F000115-002 | server->client | epoch=1749451464.484788] 172.18.0.4:40068 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0009-F000116-003 | server->client | epoch=1749451464.491124] 172.18.0.4:40068 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0009-F000117-004 | client->server | epoch=1749451464.492343] 172.18.0.2:6379 -> 172.18.0.4:40068 (TCP): Client acknowledgment.
+
+--- Stream 10 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38226. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0010-F000132-001 | client->server | epoch=1749451464.587502] 172.18.0.2:6379 -> 172.18.0.4:38226 (RESP): Initial communication from client to server.
+- [E-S0010-F000133-002 | server->client | epoch=1749451464.587691] 172.18.0.4:38226 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0010-F000134-003 | server->client | epoch=1749451464.591947] 172.18.0.4:38226 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0010-F000135-004 | client->server | epoch=1749451464.592162] 172.18.0.2:6379 -> 172.18.0.4:38226 (TCP): Client acknowledgment.
+
+--- Stream 11 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38098. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0011-F000140-001 | client->server | epoch=1749451464.691009] 172.18.0.2:6379 -> 172.18.0.4:38098 (RESP): Initial communication from client to server.
+- [E-S0011-F000141-002 | server->client | epoch=1749451464.691733] 172.18.0.4:38098 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0011-F000142-003 | server->client | epoch=1749451464.699873] 172.18.0.4:38098 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0011-F000143-004 | client->server | epoch=1749451464.700428] 172.18.0.2:6379 -> 172.18.0.4:38098 (TCP): Client acknowledgment.
+
+--- Stream 12 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38104. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0012-F000148-001 | client->server | epoch=1749451464.912112] 172.18.0.2:6379 -> 172.18.0.4:38104 (RESP): Initial communication from client to server.
+- [E-S0012-F000149-002 | server->client | epoch=1749451464.913260] 172.18.0.4:38104 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0012-F000152-003 | server->client | epoch=1749451464.975478] 172.18.0.4:38104 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0012-F000153-004 | client->server | epoch=1749451464.976028] 172.18.0.2:6379 -> 172.18.0.4:38104 (TCP): Client acknowledgment.
+
+--- Stream 13 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38134. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0013-F000150-001 | client->server | epoch=1749451464.922673] 172.18.0.2:6379 -> 172.18.0.4:38134 (RESP): Initial communication from client to server.
+- [E-S0013-F000151-002 | server->client | epoch=1749451464.923297] 172.18.0.4:38134 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0013-F000158-003 | server->client | epoch=1749451464.984806] 172.18.0.4:38134 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0013-F000159-004 | client->server | epoch=1749451464.985242] 172.18.0.2:6379 -> 172.18.0.4:38134 (TCP): Client acknowledgment.
+
+--- Stream 14 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38164. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0014-F000164-001 | client->server | epoch=1749451465.014849] 172.18.0.2:6379 -> 172.18.0.4:38164 (RESP): Initial communication from client to server.
+- [E-S0014-F000165-002 | server->client | epoch=1749451465.015298] 172.18.0.4:38164 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0014-F000166-003 | server->client | epoch=1749451465.024014] 172.18.0.4:38164 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0014-F000168-004 | client->server | epoch=1749451465.028431] 172.18.0.2:6379 -> 172.18.0.4:38164 (TCP): Client acknowledgment.
+
+--- Stream 15 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38190. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0015-F000174-001 | client->server | epoch=1749451465.116468] 172.18.0.2:6379 -> 172.18.0.4:38190 (RESP): Initial communication from client to server.
+- [E-S0015-F000175-002 | server->client | epoch=1749451465.117026] 172.18.0.4:38190 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0015-F000178-003 | server->client | epoch=1749451465.123033] 172.18.0.4:38190 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0015-F000179-004 | client->server | epoch=1749451465.123262] 172.18.0.2:6379 -> 172.18.0.4:38190 (TCP): Client acknowledgment.
+
+--- Stream 16 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38214. The client is interacting with the Redis server using various Redis commands such as `brpop`, `rpop`, and `exec`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0016-F000176-001 | client->server | epoch=1749451465.118436] 172.18.0.2:6379 -> 172.18.0.4:38214 (RESP): Initial communication from client to server.
+- [E-S0016-F000177-002 | server->client | epoch=1749451465.118844] 172.18.0.4:38214 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0016-F000184-003 | server->client | epoch=1749451465.156650] 172.18.0.4:38214 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0016-F000185-004 | client->server | epoch=1749451465.156919] 172.18.0.2:6379 -> 172.18.0.4:38214 (TCP): Client acknowledgment.
+- [E-S0016-F001157-005 | server->client | epoch=1749451472.431964] 172.18.0.4:38214 -> 172.18.0.2:6379 (RESP/JSON): Server response with JSON data.
+
+--- Stream 17 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38224. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0017-F000198-001 | client->server | epoch=1749451465.220265] 172.18.0.2:6379 -> 172.18.0.4:38224 (RESP): Initial communication from client to server.
+- [E-S0017-F000199-002 | server->client | epoch=1749451465.220741] 172.18.0.4:38224 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0017-F000206-003 | server->client | epoch=1749451465.226136] 172.18.0.4:38224 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0017-F000207-004 | client->server | epoch=1749451465.226501] 172.18.0.2:6379 -> 172.18.0.4:38224 (TCP): Client acknowledgment.
+
+--- Stream 18 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38238. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0018-F000200-001 | client->server | epoch=1749451465.221082] 172.18.0.2:6379 -> 172.18.0.4:38238 (RESP): Initial communication from client to server.
+- [E-S0018-F000201-002 | server->client | epoch=1749451465.222560] 172.18.0.4:38238 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0018-F000218-003 | server->client | epoch=1749451465.251593] 172.18.0.4:38238 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0018-F000219-004 | client->server | epoch=1749451465.252095] 172.18.0.2:6379 -> 172.18.0.4:38238 (TCP): Client acknowledgment.
+
+--- Stream 19 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38178. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0019-F000202-001 | client->server | epoch=1749451465.222888] 172.18.0.2:6379 -> 172.18.0.4:38178 (RESP): Initial communication from client to server.
+- [E-S0019-F000203-002 | server->client | epoch=1749451465.223282] 172.18.0.4:38178 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0019-F000212-003 | server->client | epoch=1749451465.235796] 172.18.0.4:38178 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0019-F000213-004 | client->server | epoch=1749451465.236076] 172.18.0.2:6379 -> 172.18.0.4:38178 (TCP): Client acknowledgment.
+
+--- Stream 20 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38188. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0020-F000204-001 | client->server | epoch=1749451465.223614] 172.18.0.2:6379 -> 172.18.0.4:38188 (RESP): Initial communication from client to server.
+- [E-S0020-F000205-002 | server->client | epoch=1749451465.223952] 172.18.0.4:38188 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0020-F000224-003 | server->client | epoch=1749451465.268366] 172.18.0.4:38188 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0020-F000225-004 | client->server | epoch=1749451465.268853] 172.18.0.2:6379 -> 172.18.0.4:38188 (TCP): Client acknowledgment.
+
+--- Stream 21 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38074. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0021-F000230-001 | client->server | epoch=1749451465.328045] 172.18.0.2:6379 -> 172.18.0.4:38074 (RESP): Initial communication from client to server.
+- [E-S0021-F000231-002 | server->client | epoch=1749451465.328416] 172.18.0.4:38074 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0021-F000234-003 | server->client | epoch=1749451465.343017] 172.18.0.4:38074 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0021-F000235-004 | client->server | epoch=1749451465.343685] 172.18.0.2:6379 -> 172.18.0.4:38074 (TCP): Client acknowledgment.
+
+--- Stream 22 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38174. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0022-F000232-001 | client->server | epoch=1749451465.328716] 172.18.0.2:6379 -> 172.18.0.4:38174 (RESP): Initial communication from client to server.
+- [E-S0022-F000233-002 | server->client | epoch=1749451465.329084] 172.18.0.4:38174 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0022-F000240-003 | server->client | epoch=1749451465.361080] 172.18.0.4:38174 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0022-F000241-004 | client->server | epoch=1749451465.362229] 172.18.0.2:6379 -> 172.18.0.4:38174 (TCP): Client acknowledgment.
+
+--- Stream 23 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38158. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0023-F000246-001 | client->server | epoch=1749451465.432106] 172.18.0.2:6379 -> 172.18.0.4:38158 (RESP): Initial communication from client to server.
+- [E-S0023-F000247-002 | server->client | epoch=1749451465.432605] 172.18.0.4:38158 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0023-F000248-003 | server->client | epoch=1749451465.438305] 172.18.0.4:38158 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0023-F000249-004 | client->server | epoch=1749451465.438940] 172.18.0.2:6379 -> 172.18.0.4:38158 (TCP): Client acknowledgment.
+
+--- Stream 24 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:38202. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0024-F000254-001 | client->server | epoch=1749451465.744604] 172.18.0.2:6379 -> 172.18.0.4:38202 (RESP): Initial communication from client to server.
+- [E-S0024-F000255-002 | server->client | epoch=1749451465.746113] 172.18.0.4:38202 -> 172.18.0.2:6379 (TCP): Server response to client.
+- [E-S0024-F000256-003 | server->client | epoch=1749451465.750868] 172.18.0.4:38202 -> 172.18.0.2:6379 (RESP): Server response with queue data.
+- [E-S0024-F000257-004 | client->server | epoch=1749451465.751304] 172.18.0.2:6379 -> 172.18.0.4:38202 (TCP): Client acknowledgment.
+
+--- Stream 25 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.2:6379 and a client at 172.18.0.4:54290. The client is interacting with the Redis server using various Redis commands such as `brpop`, which are typical for queue management operations. The queues appear to be related to GitLab tasks, indicating that the Redis server is being used as a backend for GitLab job queue management.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0025-F000262-001 | client->server | epoch=1749451466.052650] 172.18.0.2:6379 -> 172.18.0.4:54290 (RESP): Initial communication from client to server.
+- [E-S0025-F000263-002 | server->client | epoch=1749451466.078949] 172.18.0.4:54290 -> 172.18.0.2:6379 (RESP): Server response to client.
+- [E-S0025-F000264-003 | client->server | epoch=1749451466.079262] 172.18.0.2:6379 -> 172.18.0.4:54290 (TCP): Client acknowledgment.
+- [E-S0025-F005175-004 | server->client | epoch=1749451511.662871] 172.18.0.4:54290 -> 172.18.0.2:6379 (TCP): Server response to client.
+
+--- Stream 26 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing various SQL commands, including `SELECT` statements and a `SHOW TIME ZONE` command. The presence of the `root` user keyword suggests an attempt to authenticate or interact with the database using elevated privileges.
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence:
+- [E-S0026-F000724-005 | client->server | epoch=1749451470.004449] root user keyword observed
+- [E-S0026-F000737-006 | client->server | epoch=1749451470.069201] SELECT t.oid, t.typname
+- [E-S0026-F000746-008 | client->server | epoch=1749451470.093016] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0026-F000797-010 | client->server | epoch=1749451470.231112] SHOW TIME ZONE
+- [E-S0026-F000815-014 | server->client | epoch=1749451470.295847] SELECT 6
+- [E-S0026-F000824-016 | client->server | epoch=1749451470.386733] SELECT "feature_gates".* FROM "feature_gates" WHERE "feature_gates"."feature_key" = $1
+
+The flow shows typical database interaction without evidence of successful exploitation or unauthorized data access.
+
+--- Stream 27 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is interacting with the Redis server using various Redis commands. This interaction is typical for backend data-plane operations, suggesting that the Redis server is being used as a backend service.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0027-F000803-001 | client->server | epoch=1749451470.259933] 172.18.0.4:55198 -> 172.18.0.2:6379 (RESP): Initial communication from client to server.
+- [E-S0027-F000804-003 | server->client | epoch=1749451470.264530] 172.18.0.2:6379 -> 172.18.0.4:55198 (RESP): Server response to client.
+- [E-S0027-F000805-004 | client->server | epoch=1749451470.264794] 172.18.0.4:55198 -> 172.18.0.2:6379 (TCP): Client acknowledgment.
+- [E-S0027-F005290-008 | server->client | epoch=1749451514.240865] 172.18.0.2:6379 -> 172.18.0.4:55198 (TCP): Server response to client.
+
+--- Stream 28 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is interacting with the Redis server using various Redis commands such as `setname`, `zadd`, and `multi`. These commands are typical for managing data and queues, indicating that the Redis server is being used as a backend service, likely for job queue management related to GitLab tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0028-F000905-001 | client->server | epoch=1749451470.712078] 172.18.0.4:54310 -> 172.18.0.2:6379 (TCP): Initial communication from client to server.
+- [E-S0028-F000907-002 | server->client | epoch=1749451470.712390] 172.18.0.2:6379 -> 172.18.0.4:54310 (TCP): Server response to client.
+- [E-S0028-F000913-003 | client->server | epoch=1749451470.748334] 172.18.0.4:54310 -> 172.18.0.2:6379 (RESP): Client sends Redis command.
+- [E-S0028-F000915-004 | server->client | epoch=1749451470.751980] 172.18.0.2:6379 -> 172.18.0.4:54310 (RESP): Server response to Redis command.
+- [E-S0028-F000959-007 | client->server | epoch=1749451470.946425] 172.18.0.4:54310 -> 172.18.0.2:6379 (RESP/JSON): Client sends additional Redis command.
+
+--- Stream 29 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including a simple `SELECT 1` statement. This indicates a basic interaction with the database, possibly for connectivity testing or basic querying.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0029-F000952-001 | client->server | epoch=1749451470.921239] 172.18.0.4:50584 -> 172.18.0.3:5432 (PGSQL): Client sends a `SELECT 1` command.
+- [E-S0029-F000954-004 | server->client | epoch=1749451470.923980] 172.18.0.3:5432 -> 172.18.0.4:50584 (PGSQL): Server responds to the `SELECT 1` command.
+
+--- Stream 30 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is interacting with the Redis server using the RESP protocol, which is typical for Redis operations. This suggests that the Redis server is being used as a backend service for data storage or caching.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0030-F000973-001 | client->server | epoch=1749451471.075492] Initial communication from client to server using RESP protocol.
+- [E-S0030-F000974-002 | server->client | epoch=1749451471.075998] Server response to client.
+- [E-S0030-F000975-003 | server->client | epoch=1749451471.077210] Additional server response to client.
+- [E-S0030-F000976-004 | client->server | epoch=1749451471.078857] Client acknowledgment.
+
+--- Stream 31 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including a simple `SELECT 1` statement and other queries related to database tables such as "feature_gates" and "user_statuses". This indicates typical database interaction, possibly for connectivity testing or basic querying.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0031-F000977-001 | client->server | epoch=1749451471.190054] 172.18.0.4:50582 -> 172.18.0.3:5432 (PGSQL): Client sends a `SELECT 1` command.
+- [E-S0031-F000979-004 | server->client | epoch=1749451471.195791] 172.18.0.3:5432 -> 172.18.0.4:50582 (PGSQL): Server responds to the `SELECT 1` command.
+- [E-S0031-F000987-007 | client->server | epoch=1749451471.308773] Client sends a query to retrieve attribute names and types.
+- [E-S0031-F000990-010 | client->server | epoch=1749451471.426453] Client queries "feature_gates" table.
+- [E-S0031-F001234-013 | client->server | epoch=1749451472.633235] Client queries "user_statuses" table with a condition on "clear_status_at".
+
+--- Stream 32 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is interacting with the Redis server using the RESP protocol, which is typical for Redis operations. This suggests that the Redis server is being used as a backend service for data storage or caching.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0032-F000984-001 | client->server | epoch=1749451471.299939] 172.18.0.4:55202 -> 172.18.0.2:6379 (RESP): Initial communication from client to server using RESP protocol.
+- [E-S0032-F000985-003 | server->client | epoch=1749451471.300629] 172.18.0.2:6379 -> 172.18.0.4:55202 (RESP): Server response to client.
+- [E-S0032-F000986-004 | client->server | epoch=1749451471.301129] 172.18.0.4:55202 -> 172.18.0.2:6379 (TCP): Client sends additional data.
+- [E-S0032-F005287-005 | server->client | epoch=1749451512.660258] 172.18.0.2:6379 -> 172.18.0.4:55202 (TCP): Server response to client.
+
+--- Stream 33 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0033-F002595-005 | client->server | epoch=1749451487.212626] Client sends a `SELECT t.oid, t.typname` command.
+- [E-S0033-F002596-006 | server->client | epoch=1749451487.239338] Server responds to the `SELECT` command.
+- [E-S0033-F002598-007 | client->server | epoch=1749451487.240917] Client sends a more detailed `SELECT` command involving type information.
+- [E-S0033-F002636-008 | server->client | epoch=1749451487.308602] Server responds with data.
+- [E-S0033-F002638-009 | client->server | epoch=1749451487.318491] Client sends a `SHOW TIME ZONE` command.
+- [E-S0033-F002641-010 | client->server | epoch=1749451487.320170] Client sends a `SELECT 1` command.
+- [E-S0033-F002643-011 | server->client | epoch=1749451487.322578] Server responds to the `SELECT 1` command.
+- [E-S0033-F002644-012 | client->server | epoch=1749451487.323331] Client sends a `SELECT VERSION()` command.
+- [E-S0033-F002714-013 | client->server | epoch=1749451487.852630] Client queries for table names in the current schema.
+
+--- Stream 34 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is interacting with the Redis server using the RESP protocol, which is typical for Redis operations. This suggests that the Redis server is being used as a backend service for data storage or caching.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0034-F002735-001 | client->server | epoch=1749451487.914571] 172.18.0.4:48656 -> 172.18.0.2:6379 (TCP): Initial communication from client to server.
+- [E-S0034-F002736-002 | server->client | epoch=1749451487.914936] 172.18.0.2:6379 -> 172.18.0.4:48656 (TCP): Server acknowledgment.
+- [E-S0034-F002738-003 | client->server | epoch=1749451487.918408] 172.18.0.4:48656 -> 172.18.0.2:6379 (RESP): Client sends data using RESP protocol.
+- [E-S0034-F002740-005 | server->client | epoch=1749451487.919806] 172.18.0.2:6379 -> 172.18.0.4:48656 (RESP): Server response to client.
+
+--- Stream 35 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0035-F002842-001 | client->server | epoch=1749451489.054077] Initial TCP communication from client to server.
+- [E-S0035-F002873-005 | client->server | epoch=1749451489.116720] Client sends a `SELECT t.oid, t.typname` command.
+- [E-S0035-F002874-006 | server->client | epoch=1749451489.128459] Server responds to the `SELECT` command.
+- [E-S0035-F002902-009 | client->server | epoch=1749451489.206056] Client sends a `SHOW TIME ZONE` command.
+- [E-S0035-F002905-011 | server->client | epoch=1749451489.210880] Server responds to the `SELECT 1` command.
+- [E-S0035-F002975-015 | client->server | epoch=1749451489.571344] Client queries "application_settings" table.
+- [E-S0035-F003313-058 | client->server | epoch=1749451492.711407] Client queries for table names in the current schema.
+
+--- Stream 36 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0036-F003414-001 | client->server | epoch=1749451493.579037] Initial TCP communication from client to server.
+- [E-S0036-F003453-005 | client->server | epoch=1749451493.644121] Client sends a `SELECT t.oid, t.typname` command.
+- [E-S0036-F003454-006 | server->client | epoch=1749451493.652843] Server responds to the `SELECT` command.
+- [E-S0036-F003455-007 | client->server | epoch=1749451493.656963] Client sends a more detailed `SELECT` command involving type information.
+- [E-S0036-F003471-008 | server->client | epoch=1749451493.716583] Server responds with data.
+- [E-S0036-F003473-009 | client->server | epoch=1749451493.738684] Client sends a `SHOW TIME ZONE` command.
+- [E-S0036-F003475-010 | client->server | epoch=1749451493.742243] Client sends a `SELECT 1` command.
+- [E-S0036-F003476-011 | server->client | epoch=1749451493.743491] Server responds to the `SELECT 1` command.
+- [E-S0036-F003481-012 | client->server | epoch=1749451493.755140] Client queries for table names in the current schema.
+- [E-S0036-F003488-015 | server->client | epoch=1749451493.831786] Admin keyword observed, indicating possible authentication or privilege context.
+
+--- Stream 37 [VALID] ---
+Service: Web Application (unknown version)
+
+Relevant Events: The flow involves a client at 172.18.0.1 attempting to access a web application hosted on 172.18.0.4 via HTTP on port 80. The client sends a GET request to the path `/users/sign_in`, indicating an attempt to access a login page. The server responds with an HTTP 502 status code, which typically indicates a bad gateway error, suggesting that the server was unable to fulfill the request, possibly due to a misconfiguration or an issue with a backend service.
+
+Malicious Activities: None observed in this flow. The HTTP 502 response suggests a server-side issue rather than a successful attack.
+
+Attack Success: Failed
+
+Evidence:
+- [E-S0037-F005297-004 | client->server | epoch=1749451529.316684] GET /users/sign_in: Client attempts to access the login page.
+- [E-S0037-F005299-008 | server->client | epoch=1749451529.356482] HTTP Status 502: Server responds with a bad gateway error, indicating a failure to process the request.
+
+--- Stream 38 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0038-F005304-001 | client->server | epoch=1749451531.202502] Initial TCP communication from client to server.
+- [E-S0038-F005334-005 | client->server | epoch=1749451531.347313] Client sends a `SELECT t.oid, t.typname` command.
+- [E-S0038-F005335-006 | server->client | epoch=1749451531.351012] Server responds to the `SELECT` command.
+- [E-S0038-F005353-009 | client->server | epoch=1749451531.392351] Client sends a `SHOW TIME ZONE` command.
+- [E-S0038-F005356-011 | server->client | epoch=1749451531.398351] Server responds to the `SELECT 1` command.
+- [E-S0038-F005381-013 | client->server | epoch=1749451531.615464] Client queries for table names in the current schema.
+- [E-S0038-F005624-020 | server->client | epoch=1749451532.531033] Admin keyword observed, indicating possible authentication or privilege context.
+
+--- Stream 39 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0039-F005360-001 | client->server | epoch=1749451531.560838] Initial TCP communication from client to server.
+- [E-S0039-F005414-005 | client->server | epoch=1749451531.734649] Client sends a `SELECT t.oid, t.typname` command.
+- [E-S0039-F005419-006 | server->client | epoch=1749451531.747138] Server responds to the `SELECT` command.
+- [E-S0039-F005480-009 | client->server | epoch=1749451531.882948] Client sends a `SHOW TIME ZONE` command.
+- [E-S0039-F005485-011 | server->client | epoch=1749451531.892121] Server responds to the `SELECT 1` command.
+- [E-S0039-F005487-012 | client->server | epoch=1749451531.896591] Client sends a `SELECT VERSION()` command.
+- [E-S0039-F005499-013 | client->server | epoch=1749451531.979063] Client queries for table names in the current schema.
+- [E-S0039-F005510-014 | server->client | epoch=1749451531.995776] Server responds with data.
+- [E-S0039-F005639-017 | server->client | epoch=1749451532.828280] Admin keyword observed, indicating possible authentication or privilege context.
+
+--- Stream 40 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is sending commands to the Redis server, which is responding with acknowledgments. This indicates typical interaction with a Redis database, likely involving data retrieval or manipulation.
+
+Malicious Activities: None observed in this flow. The interactions appear to be standard Redis commands without any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0040-F005395-001 | client->server | epoch=1749451531.659064] 172.18.0.4:39780 -> 172.18.0.2:6379 (TCP)
+- [E-S0040-F005396-002 | server->client | epoch=1749451531.659519] 172.18.0.2:6379 -> 172.18.0.4:39780 (TCP)
+- [E-S0040-F005398-003 | client->server | epoch=1749451531.661122] 172.18.0.4:39780 -> 172.18.0.2:6379 (RESP)
+- [E-S0040-F005400-005 | server->client | epoch=1749451531.664540] 172.18.0.2:6379 -> 172.18.0.4:39780 (RESP)
+
+--- Stream 41 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is sending commands to the Redis server, which is responding with acknowledgments. This indicates typical interaction with a Redis database, likely involving data retrieval or manipulation.
+
+Malicious Activities: None observed in this flow. The interactions appear to be standard Redis commands without any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0041-F005512-001 | client->server | epoch=1749451532.032334] 172.18.0.4:39794 -> 172.18.0.2:6379 (TCP)
+- [E-S0041-F005513-002 | server->client | epoch=1749451532.032615] 172.18.0.2:6379 -> 172.18.0.4:39794 (TCP)
+- [E-S0041-F005515-003 | client->server | epoch=1749451532.035760] 172.18.0.4:39794 -> 172.18.0.2:6379 (RESP)
+- [E-S0041-F005517-005 | server->client | epoch=1749451532.037021] 172.18.0.2:6379 -> 172.18.0.4:39794 (RESP)
+
+--- Stream 42 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None observed in this flow. The interactions appear to be standard SQL commands without any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0042-F005693-001 | client->server | epoch=1749451533.972294] Initial TCP communication from client to server.
+- [E-S0042-F005720-005 | client->server | epoch=1749451534.012927] Client sends a `SELECT t.oid, t.typname` command.
+- [E-S0042-F005722-007 | client->server | epoch=1749451534.022747] Client sends a `SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype` command.
+- [E-S0042-F005746-012 | client->server | epoch=1749451534.079791] Client sends a `SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f')` command.
+- [E-S0042-F005752-015 | server->client | epoch=1749451534.118557] Admin keyword observed, indicating possible authentication or privilege context.
+
+--- Stream 43 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a PostgreSQL server at 172.18.0.3 on port 5432. The client is executing SQL commands, including `SELECT` statements to retrieve information about database tables and types. This indicates typical database interaction, possibly for querying schema information or basic data retrieval.
+
+Malicious Activities: None observed in this flow. The interactions appear to be standard SQL commands without any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0043-F005764-001 | client->server | epoch=1749451534.558141] Initial TCP communication from client to server.
+- [E-S0043-F005794-005 | client->server | epoch=1749451534.611844] SELECT t.oid, t.typname
+- [E-S0043-F005821-012 | client->server | epoch=1749451534.699459] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f')
+- [E-S0043-F005828-015 | server->client | epoch=1749451534.784202] Admin keyword observed, indicating possible authentication or privilege context.
+
+--- Stream 44 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is sending commands to the Redis server, which is responding with acknowledgments. This indicates typical interaction with a Redis database, likely involving data retrieval or manipulation.
+
+Malicious Activities: None observed in this flow. The interactions appear to be standard Redis commands without any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0044-F006152-001 | client->server | epoch=1749451539.068028] 172.18.0.4:39804 -> 172.18.0.2:6379 (TCP)
+- [E-S0044-F006153-002 | server->client | epoch=1749451539.068184] 172.18.0.2:6379 -> 172.18.0.4:39804 (TCP)
+- [E-S0044-F006155-003 | client->server | epoch=1749451539.069121] 172.18.0.4:39804 -> 172.18.0.2:6379 (RESP)
+- [E-S0044-F006157-004 | server->client | epoch=1749451539.070599] 172.18.0.2:6379 -> 172.18.0.4:39804 (RESP)
+
+--- Stream 45 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4 and a Redis server at 172.18.0.2 on port 6379. The client is sending commands to the Redis server, which is responding with acknowledgments. This indicates typical interaction with a Redis database, likely involving data retrieval or manipulation. Commands such as `setname` and `sadd` are observed, which are standard Redis operations.
+
+Malicious Activities: None observed in this flow. The interactions appear to be standard Redis commands without any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0045-F006163-001 | client->server | epoch=1749451539.073079] Initial TCP communication from client to server.
+- [E-S0045-F006166-003 | client->server | epoch=1749451539.075107] Client sends a `RESP` command.
+- [E-S0045-F006168-004 | server->client | epoch=1749451539.075537] Server responds with `RESP`.
+- [E-S0045-F006282-005 | client->server | epoch=1749451539.140864] Client sends a `RESP/JSON/JSON` command.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Redis",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No evidence of a specific CVE or attack mechanism observed in the packet data."
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Redis",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No evidence of a specific CVE or attack mechanism observed in the packet data."
+  },
+  "confidence": "Unknown"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "No",
+  "success_supported": "No",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "attack.type",
+    "attack.technique",
+    "attack.success"
+  ],
+  "evidence_check": [
+    "E-S0000-F000001-001",
+    "E-S0000-F000002-002",
+    "E-S0000-F000964-004",
+    "E-S0000-F001130-006",
+    "E-S0000-F001135-007",
+    "E-S0001-F000007-001",
+    "E-S0001-F000008-002",
+    "E-S0001-F000017-003",
+    "E-S0001-F000018-004",
+    "E-S0002-F000009-001",
+    "E-S0002-F000010-002",
+    "E-S0002-F000011-003",
+    "E-S0002-F000012-004",
+    "E-S0003-F000023-001",
+    "E-S0003-F000024-002",
+    "E-S0003-F000030-003",
+    "E-S0003-F000031-004",
+    "E-S0004-F000025-001",
+    "E-S0004-F000027-002",
+    "E-S0004-F000036-003",
+    "E-S0004-F000037-004",
+    "E-S0005-F000026-001",
+    "E-S0005-F000028-002",
+    "E-S0005-F000042-003",
+    "E-S0005-F000044-004",
+    "E-S0005-F001180-006",
+    "E-S0006-F000090-001",
+    "E-S0006-F000091-002",
+    "E-S0006-F000095-003",
+    "E-S0006-F000096-004",
+    "E-S0007-F000092-001",
+    "E-S0007-F000107-002",
+    "E-S0007-F000108-003",
+    "E-S0007-F000109-004",
+    "E-S0008-F000093-001",
+    "E-S0008-F000094-002",
+    "E-S0008-F000101-003",
+    "E-S0008-F000102-004",
+    "E-S0009-F000114-001",
+    "E-S0009-F000115-002",
+    "E-S0009-F000116-003",
+    "E-S0009-F000117-004",
+    "E-S0010-F000132-001",
+    "E-S0010-F000133-002",
+    "E-S0010-F000134-003",
+    "E-S0010-F000135-004",
+    "E-S0011-F000140-001",
+    "E-S0011-F000141-002",
+    "E-S0011-F000142-003",
+    "E-S0011-F000143-004",
+    "E-S0012-F000148-001",
+    "E-S0012-F000149-002",
+    "E-S0012-F000152-003",
+    "E-S0012-F000153-004",
+    "E-S0013-F000150-001",
+    "E-S0013-F000151-002",
+    "E-S0013-F000158-003",
+    "E-S0013-F000159-004",
+    "E-S0014-F000164-001",
+    "E-S0014-F000165-002",
+    "E-S0014-F000166-003",
+    "E-S0014-F000168-004",
+    "E-S0015-F000174-001",
+    "E-S0015-F000175-002",
+    "E-S0015-F000178-003",
+    "E-S0015-F000179-004",
+    "E-S0016-F000176-001",
+    "E-S0016-F000177-002",
+    "E-S0016-F000184-003",
+    "E-S0016-F000185-004",
+    "E-S0016-F001157-005",
+    "E-S0017-F000198-001",
+    "E-S0017-F000199-002",
+    "E-S0017-F000206-003",
+    "E-S0017-F000207-004",
+    "E-S0018-F000200-001",
+    "E-S0018-F000201-002",
+    "E-S0018-F000218-003",
+    "E-S0018-F000219-004",
+    "E-S0019-F000202-001",
+    "E-S0019-F000203-002",
+    "E-S0019-F000212-003",
+    "E-S0019-F000213-004",
+    "E-S0020-F000204-001",
+    "E-S0020-F000205-002",
+    "E-S0020-F000224-003",
+    "E-S0020-F000225-004",
+    "E-S0021-F000230-001",
+    "E-S0021-F000231-002",
+    "E-S0021-F000234-003",
+    "E-S0021-F000235-004",
+    "E-S0022-F000232-001",
+    "E-S0022-F000233-002",
+    "E-S0022-F000240-003",
+    "E-S0022-F000241-004",
+    "E-S0023-F000246-001",
+    "E-S0023-F000247-002",
+    "E-S0023-F000248-003",
+    "E-S0023-F000249-004",
+    "E-S0024-F000254-001",
+    "E-S0024-F000255-002",
+    "E-S0024-F000256-003",
+    "E-S0024-F000257-004",
+    "E-S0025-F000262-001",
+    "E-S0025-F000263-002",
+    "E-S0025-F000264-003",
+    "E-S0025-F005175-004",
+    "E-S0026-F000689-001",
+    "E-S0026-F000690-002",
+    "E-S0026-F000692-003",
+    "E-S0026-F000694-004",
+    "E-S0026-F000724-005",
+    "E-S0026-F000737-006",
+    "E-S0026-F000745-007",
+    "E-S0026-F000746-008",
+    "E-S0026-F000797-010",
+    "E-S0026-F000800-011",
+    "E-S0026-F000807-013",
+    "E-S0026-F000815-014",
+    "E-S0026-F000824-016",
+    "E-S0026-F000835-017",
+    "E-S0027-F000803-001",
+    "E-S0027-F000804-003",
+    "E-S0027-F000805-004",
+    "E-S0027-F005290-008",
+    "E-S0028-F000905-001",
+    "E-S0028-F000907-002",
+    "E-S0028-F000913-003",
+    "E-S0028-F000915-004",
+    "E-S0028-F000959-007",
+    "E-S0029-F000952-001",
+    "E-S0029-F000953-003",
+    "E-S0029-F000954-004",
+    "E-S0029-F000966-006",
+    "E-S0030-F000973-001",
+    "E-S0030-F000974-002",
+    "E-S0030-F000975-003",
+    "E-S0030-F000976-004",
+    "E-S0031-F000977-001",
+    "E-S0031-F000978-003",
+    "E-S0031-F000979-004",
+    "E-S0031-F000980-006",
+    "E-S0031-F000987-007",
+    "E-S0031-F000988-008",
+    "E-S0031-F000990-010",
+    "E-S0031-F000998-011",
+    "E-S0031-F001208-012",
+    "E-S0031-F001234-013",
+    "E-S0032-F000984-001",
+    "E-S0032-F000985-003",
+    "E-S0032-F000986-004",
+    "E-S0032-F005287-005",
+    "E-S0033-F002514-001",
+    "E-S0033-F002515-002",
+    "E-S0033-F002517-003",
+    "E-S0033-F002519-004",
+    "E-S0033-F002595-005",
+    "E-S0033-F002596-006",
+    "E-S0033-F002598-007",
+    "E-S0033-F002636-008",
+    "E-S0033-F002638-009",
+    "E-S0033-F002641-010",
+    "E-S0033-F002643-011",
+    "E-S0033-F002644-012",
+    "E-S0034-F002735-001",
+    "E-S0034-F002736-002",
+    "E-S0034-F002738-003",
+    "E-S0034-F002740-005",
+    "E-S0035-F002842-001",
+    "E-S0035-F002843-002",
+    "E-S0035-F002845-003",
+    "E-S0035-F002847-004",
+    "E-S0035-F002873-005",
+    "E-S0035-F002874-006",
+    "E-S0035-F002875-007",
+    "E-S0035-F002900-008",
+    "E-S0035-F002902-009",
+    "E-S0035-F002904-010",
+    "E-S0035-F002905-011",
+    "E-S0035-F002908-012",
+    "E-S0035-F002915-013",
+    "E-S0035-F002962-014",
+    "E-S0035-F002975-015",
+    "E-S0035-F003010-056",
+    "E-S0035-F003072-057",
+    "E-S0035-F003313-058",
+    "E-S0035-F003326-059",
+    "E-S0036-F003414-001",
+    "E-S0036-F003415-002",
+    "E-S0036-F003417-003",
+    "E-S0036-F003419-004",
+    "E-S0036-F003453-005",
+    "E-S0036-F003454-006",
+    "E-S0036-F003455-007",
+    "E-S0036-F003471-008",
+    "E-S0036-F003473-009",
+    "E-S0036-F003475-010",
+    "E-S0036-F003476-011",
+    "E-S0036-F003481-012",
+    "E-S0036-F003484-013",
+    "E-S0036-F003486-014",
+    "E-S0036-F003488-015",
+    "E-S0036-F003592-018",
+    "E-S0036-F003613-019",
+    "E-S0036-F003648-020",
+    "E-S0036-F003651-021",
+    "E-S0036-F003652-022",
+    "E-S0036-F003700-023",
+    "E-S0036-F003704-024",
+    "E-S0036-F003725-026",
+    "E-S0036-F003737-027",
+    "E-S0036-F003744-028",
+    "E-S0036-F003784-029",
+    "E-S0036-F003799-030",
+    "E-S0036-F003811-031",
+    "E-S0036-F003812-032",
+    "E-S0036-F003819-033",
+    "E-S0036-F003953-034",
+    "E-S0036-F004018-035",
+    "E-S0036-F004021-036",
+    "E-S0036-F004038-037",
+    "E-S0036-F004050-038",
+    "E-S0036-F004275-039",
+    "E-S0036-F004299-040",
+    "E-S0036-F004361-041",
+    "E-S0037-F005294-001",
+    "E-S0037-F005295-002",
+    "E-S0037-F005297-003",
+    "E-S0037-F005299-007",
+    "E-S0037-F005297-004",
+    "E-S0037-F005297-005",
+    "E-S0037-F005297-006",
+    "E-S0037-F005299-008",
+    "E-S0037-F005299-009",
+    "E-S0037-F005299-010",
+    "E-S0038-F005304-001",
+    "E-S0038-F005305-002",
+    "E-S0038-F005307-003",
+    "E-S0038-F005309-004",
+    "E-S0038-F005334-005",
+    "E-S0038-F005335-006",
+    "E-S0038-F005337-007",
+    "E-S0038-F005351-008",
+    "E-S0038-F005353-009",
+    "E-S0038-F005355-010",
+    "E-S0038-F005356-011",
+    "E-S0038-F005357-012",
+    "E-S0038-F005381-013",
+    "E-S0038-F005393-014",
+    "E-S0038-F005406-015",
+    "E-S0038-F005415-016",
+    "E-S0038-F005426-018",
+    "E-S0038-F005429-019",
+    "E-S0038-F005630-021",
+    "E-S0038-F005650-022",
+    "E-S0038-F005661-024",
+    "E-S0038-F005665-043",
+    "E-S0039-F005360-001",
+    "E-S0039-F005361-002",
+    "E-S0039-F005363-003",
+    "E-S0039-F005365-004",
+    "E-S0039-F005414-005",
+    "E-S0039-F005419-006",
+    "E-S0039-F005422-007",
+    "E-S0039-F005463-008",
+    "E-S0039-F005480-009",
+    "E-S0039-F005484-010",
+    "E-S0039-F005485-011",
+    "E-S0039-F005487-012",
+    "E-S0039-F005499-013",
+    "E-S0039-F005510-014",
+    "E-S0039-F005632-015",
+    "E-S0039-F005645-018",
+    "E-S0039-F005667-019",
+    "E-S0039-F005672-020",
+    "E-S0039-F005679-021",
+    "E-S0039-F005681-040",
+    "E-S0040-F005395-001",
+    "E-S0040-F005396-002",
+    "E-S0040-F005398-003",
+    "E-S0040-F005400-005",
+    "E-S0040-F005398-004",
+    "E-S0040-F005447-006",
+    "E-S0040-F005461-007",
+    "E-S0040-F005472-008",
+    "E-S0040-F005478-009",
+    "E-S0040-F005490-010",
+    "E-S0040-F006140-011",
+    "E-S0041-F005512-001",
+    "E-S0041-F005513-002",
+    "E-S0041-F005515-003",
+    "E-S0041-F005517-005",
+    "E-S0041-F005515-004",
+    "E-S0041-F005519-006",
+    "E-S0041-F005523-007",
+    "E-S0041-F005527-008",
+    "E-S0041-F005530-009",
+    "E-S0041-F005532-010",
+    "E-S0042-F005693-001",
+    "E-S0042-F005694-002",
+    "E-S0042-F005696-003",
+    "E-S0042-F005698-004",
+    "E-S0042-F005720-005",
+    "E-S0042-F005721-006",
+    "E-S0042-F005722-007",
+    "E-S0042-F005736-008",
+    "E-S0042-F005738-009",
+    "E-S0042-F005740-010",
+    "E-S0042-F005741-011",
+    "E-S0042-F005746-012",
+    "E-S0042-F005749-013",
+    "E-S0042-F005751-014",
+    "E-S0042-F005752-015",
+    "E-S0042-F005752-016",
+    "E-S0042-F005834-018",
+    "E-S0042-F005840-019",
+    "E-S0042-F005867-020",
+    "E-S0042-F005870-021",
+    "E-S0042-F005871-022",
+    "E-S0042-F005916-023",
+    "E-S0042-F005920-024",
+    "E-S0042-F005922-025",
+    "E-S0042-F005923-026",
+    "E-S0042-F005928-027",
+    "E-S0042-F005930-028",
+    "E-S0042-F005959-029",
+    "E-S0042-F005974-030",
+    "E-S0042-F005991-031",
+    "E-S0042-F005992-032",
+    "E-S0042-F006004-033",
+    "E-S0042-F006010-034",
+    "E-S0042-F006013-035",
+    "E-S0042-F006019-036",
+    "E-S0042-F006027-037",
+    "E-S0042-F006036-038",
+    "E-S0042-F006051-039",
+    "E-S0042-F006072-040",
+    "E-S0042-F006091-041",
+    "E-S0042-F006144-042",
+    "E-S0042-F006146-043",
+    "E-S0042-F007124-044",
+    "E-S0043-F005764-001",
+    "E-S0043-F005765-002",
+    "E-S0043-F005767-003",
+    "E-S0043-F005769-004",
+    "E-S0043-F005794-005",
+    "E-S0043-F005796-006",
+    "E-S0043-F005797-007",
+    "E-S0043-F005811-008",
+    "E-S0043-F005813-009",
+    "E-S0043-F005815-010",
+    "E-S0043-F005816-011",
+    "E-S0043-F005821-012",
+    "E-S0043-F005824-013",
+    "E-S0043-F005826-014",
+    "E-S0043-F005828-015",
+    "E-S0043-F005828-016",
+    "E-S0043-F005874-018",
+    "E-S0043-F005882-019",
+    "E-S0043-F005909-020",
+    "E-S0043-F005912-021",
+    "E-S0043-F005913-022",
+    "E-S0043-F005934-023",
+    "E-S0043-F005940-024",
+    "E-S0043-F005942-025",
+    "E-S0043-F005943-026",
+    "E-S0043-F005948-027",
+    "E-S0043-F005950-028",
+    "E-S0043-F005966-029",
+    "E-S0043-F005983-030",
+    "E-S0043-F005988-031",
+    "E-S0043-F005989-032",
+    "E-S0043-F005998-033",
+    "E-S0043-F006007-034",
+    "E-S0043-F006016-035",
+    "E-S0043-F006022-036",
+    "E-S0043-F006030-037",
+    "E-S0043-F006042-038",
+    "E-S0043-F006088-039",
+    "E-S0043-F006104-040",
+    "E-S0043-F006120-041",
+    "E-S0043-F007121-042",
+    "E-S0043-F007127-043",
+    "E-S0044-F006152-001",
+    "E-S0044-F006153-002",
+    "E-S0044-F006155-003",
+    "E-S0044-F006157-004",
+    "E-S0045-F006163-001",
+    "E-S0045-F006164-002",
+    "E-S0045-F006166-003",
+    "E-S0045-F006168-004",
+    "E-S0045-F006282-005"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Redis
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: Unknown
+Verifier Confidence: High
+Overall Confidence: Low
+Score: 1/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Abstain
+Query: Redis exploit code execution
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T02:04:54.215548+00:00
+Candidate CVEs: None
+Sources: 0
+Warnings: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- None
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- None
+
+=== SOURCE URLS ===
+- None
+
+Search status: Abstain
+Search query: Redis exploit code execution
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- No online source was returned by the MCP search.
+- Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Redis
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- None
+
+Verification Summary:
+- Affected service: Redis.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: No.
+- Attack success supported by Verifier: No.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Unsupported claim: attack.type
+- Unsupported claim: attack.technique
+- Unsupported claim: attack.success
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Abstain.
+- MCP investigation query: Redis exploit code execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Regularly update Redis to the latest version to mitigate potential vulnerabilities.
+- Implement network segmentation to limit access to Redis instances.
+- Use strong authentication mechanisms to secure Redis access.

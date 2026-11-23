@@ -1,0 +1,616 @@
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 38
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37
+Protocol Counts: RESP=4860, TCP=3180, RESP/JSON=24, HTTP=4, PGSQL=111
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.4:45680           <-> 172.18.0.3:6379                263 239 kB        493 211 kB        756 450 kB       22.930176000        66.0242
+172.18.0.4:45778           <-> 172.18.0.3:6379                116 85 kB         231 104 kB        347 190 kB        2.311395000        30.4147
+172.18.0.3:6379            <-> 172.18.0.4:45828               145 802 kB        178 11 kB         323 814 kB        2.070263000        88.1786
+172.18.0.3:6379            <-> 172.18.0.4:45732               151 827 kB        163 24 kB         314 851 kB        0.000000000        91.2808
+172.18.0.3:6379     
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 26; score=11/12; frame=2452; HTTP request candidate POST /uploads/user to 172.18.0.4:80; request frame=2452; indicator frame=2452; indicators=shell command expression, multipart upload, uploaded file signature differs from image filename; bounded indicator excerpt=qx{touch /tmp/success}; response HTTP 422 frame=2560 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: Redis key-value store (RESP protocol) on 172.18.0.3:6379; version not visible
+
+Relevant Events:
+- [E-S0000-F000001-001] RESP protocol traffic observed between 172.18.0.3:6379 and 172.18.0.4:45732, indicating Redis service usage
+- [E-S0000-F005491-005] Server-to-client RESP/JSON payload observed, consistent with application data exchange over Redis
+- [E-S0000-F005507-007] Heuristic “HTTP GET $136” artifact seen in this flow, but the flow is Redis/RESP rather than HTTP
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, BRPOP, queue, E-S0000-F000001-001, E-S0000-F005491-005, E-S0000-F005507-007, E-S0000-F005504-006
+
+--- Stream 1 [VALID] ---
+Service: Redis (RESP on port 6379); application context: GitLab Resque queues (version not visible)
+Relevant Events:
+- [E-S0001-F000008-001] RESP traffic observed on Redis port 6379 (client request to server)
+- [E-S0001-F000009-002] Server-to-client RESP payload (~7.1 KB) consistent with queue/job data response
+- [E-S0001-F005527-004] Server-to-client RESP/JSON payload indicating application job data exchanged
+- [E-S0001-F005537-005] Server returned a 64-hex-character value (identifier-like data)
+- [E-S0001-F005555-006] Connection closed from server side (TCP)
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None observed. Traffic appears consistent with normal GitLab Resque queue polling and job delivery over Redis; no authentication (AUTH) or administrative Redis commands seen.
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, port 6379, GitLab, Resque, BRPOP, E-S0001-F000008-001, E-S0001-F000009-002, E-S0001-F005527-004, E-S0001-F005537-005, E-S0001-F005555-006
+
+--- Stream 2 [VALID] ---
+Service: Redis (RESP protocol) on TCP/6379; application context appears to be GitLab job queues (version not visible)
+Relevant Events:
+- [E-S0002-F000014-001] Redis RESP traffic observed on TCP/6379 between 172.18.0.4:45742 and 172.18.0.3:6379
+- [E-S0002-F000015-002] Large RESP bulk replies consistent with Redis list/queue operations; no AUTH/login exchange visible
+- [E-S0002-F001879-004] Continued server-to-client data transfer; no errors or exploit-like responses observed
+
+Exploit Indicators:
+- [E-S0002-F000015-002] None (no eval/system/CONFIG/MODULE/SLAVEOF/EVAL/SCRIPT or shell/reverse-shell patterns seen)
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, 172.18.0.3:6379, 172.18.0.4:45742, E-S0002-F000014-001, E-S0002-F000015-002, E-S0002-F001879-004
+
+--- Stream 3 [VALID] ---
+Service: Redis key-value store (RESP over TCP/6379), used by GitLab Resque queues (version not visible)
+Relevant Events:
+- [E-S0003-F000020-001] RESP traffic on TCP port 6379 between 172.18.0.4:45686 and 172.18.0.3:6379, identifying Redis service usage
+- [E-S0003-F000022-003] Large RESP multi-bulk payload (~7240 bytes), consistent with a Redis BRPOP over many resque:gitlab:queue:* keys (GitLab background job queues)
+- [E-S0003-F000021-002] TCP acknowledgment with no payload; no evidence of AUTH/login or error responses in this flow segment
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, GitLab, 6379, E-S0003-F000020-001, E-S0003-F000022-003, E-S0003-F000021-002
+
+--- Stream 4 [VALID] ---
+Service: Redis (RESP protocol); application context: GitLab job queues (resque:gitlab:*); version not visible
+Relevant Events:
+- [E-S0004-F000028-001] RESP command sent over TCP/6379 indicating Redis client activity
+- [E-S0004-F000032-002] Large RESP response (~7240 bytes) from peer consistent with Redis multi-bulk replies during BRPOP polling
+- [E-S0004-F001923-004] Ongoing TCP activity without teardown, consistent with a blocking Redis BRPOP connection
+Exploit Indicators:
+- None
+Malicious Activities: None observed; traffic shows BRPOP against many resque:gitlab:queue:* keys (GitLab background job queues). No AUTH, CONFIG SET, SLAVEOF, EVAL, MODULE LOAD, file write, or other exploit-related commands seen.
+Attack Success: Failed
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, E-S0004-F000028-001, E-S0004-F000032-002, E-S0004-F001923-004
+
+--- Stream 5 [VALID] ---
+Service: Redis (RESP protocol) backing GitLab Resque queues (version not visible)
+Relevant Events:
+- [E-S0005-F000029-001] RESP application traffic observed between 172.18.0.3:6379 and 172.18.0.4:45756 (Redis service).
+- [E-S0005-F000048-002] Large RESP responses consistent with Redis list operations; flow content shows BRPOP over many resque:gitlab:queue:* keys (GitLab Resque worker polling).
+- [E-S0005-F000050-003] TCP segment exchange with no additional application commands; no errors or auth prompts observed.
+
+Exploit Indicators:
+- [E-S0005-F000048-002] None (no AUTH/CONFIG/EVAL/SLAVEOF/MODULE LOAD/ACL or similar exploit keywords observed)
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, GitLab, E-S0005-F000029-001, E-S0005-F000048-002, E-S0005-F000050-003, E-S0005-F005669-004
+
+--- Stream 6 [VALID] ---
+Service: Redis (RESP protocol; version not visible)
+
+Relevant Events:
+- [E-S0006-F000030-001] Redis RESP traffic observed from 172.18.0.3:6379 to 172.18.0.4:45698 (start of exchange)
+- [E-S0006-F000040-002] Server->client RESP reply with large payload (~7240 bytes); untrusted flow shows a BRPOP request listing many resque:gitlab:queue:* keys consistent with GitLab Resque worker queues
+- [E-S0006-F000045-003] Client->server TCP segment with no payload after the response (connection keep-alive/ACK)
+
+Exploit Indicators:
+- [E-S0006-F000040-002] None
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, BRPOP, Resque, GitLab, E-S0006-F000030-001, E-S0006-F000040-002, E-S0006-F000045-003
+
+--- Stream 7 [VALID] ---
+Service: Redis key-value store (RESP on TCP/6379); GitLab Resque worker queues observed (version not visible)
+Relevant Events:
+- [E-S0007-F000031-001] RESP traffic on TCP/6379 between 172.18.0.3 and 172.18.0.4, indicating Redis communication
+- [E-S0007-F000038-002] Large RESP payload sent (7240 bytes), consistent with Redis list/queue operations
+- [E-S0007-F000239-002] Repeated large RESP server-to-client payloads, ongoing Redis queue activity
+Exploit Indicators:
+- None
+Malicious Activities: None observed; no authentication/login activity or exploit keywords (e.g., AUTH, EVAL, CONFIG, MODULE, SLAVEOF) detected in the deterministic evidence
+Attack Success: Failed
+Evidence Keywords: Redis, RESP, TCP/6379, BRPOP, resque, GitLab, E-S0007-F000031-001, E-S0007-F000038-002, E-S0007-F000239-002
+
+--- Stream 8 [VALID] ---
+Service: Redis (RESP protocol); application traffic appears to be GitLab job queues (resque:gitlab:queue:*); version not visible
+Relevant Events:
+- [E-S0008-F000053-001] Initial RESP segment observed in the Redis flow (start of command exchange)
+- [E-S0008-F000054-002] Large RESP payload (~7240 bytes) consistent with a BRPOP over many GitLab Resque queues (e.g., resque:gitlab:queue:...), with null-array timeouts also visible in the untrusted flow (*-1)
+- [E-S0008-F000055-003] TCP segment with no payload following the Redis exchange (flow control/ACK)
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, GitLab, null array *-1, E-S0008-F000053-001, E-S0008-F000054-002, E-S0008-F000055-003
+
+--- Stream 9 [VALID] ---
+Service: Redis (RESP protocol) used by GitLab/Resque worker queues; version not visible
+Relevant Events:
+- [E-S0009-F000060-001] 5-byte RESP request sent on Redis port 6379 (beginning of a Redis command)
+- [E-S0009-F000061-002] 7240-byte RESP message exchanged; untrusted flow shows a BRPOP with many resque:gitlab:queue:* keys (GitLab background job queues)
+- [E-S0009-F000712-004] TCP control with no payload (connection kept open; consistent with blocking BRPOP behavior)
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, 6379, BRPOP, resque:gitlab:queue, GitLab, E-S0009-F000060-001, E-S0009-F000061-002, E-S0009-F000712-004
+
+--- Stream 10 [VALID] ---
+Service: Redis (RESP protocol on TCP/6379); version not visible
+
+Relevant Events:
+- E-S0010-F000067-001 RESP application data observed between 172.18.0.3:6379 and 172.18.0.4:56800 (Redis traffic)
+- E-S0010-F000070-002 Continued RESP payload exchange on the same flow
+- E-S0010-F000071-003 TCP keepalive/ACK with no payload on the Redis flow
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, 6379, BRPOP, resque, GitLab, E-S0010-F000067-001, E-S0010-F000070-002, E-S0010-F000071-003, E-S0010-F000269-004
+
+--- Stream 11 [VALID] ---
+Service: Redis (RESP protocol on port 6379), backing GitLab background job queues; version not visible
+
+Relevant Events:
+- [E-S0011-F000068-001] RESP traffic present between 172.18.0.3:6379 and 172.18.0.4:45770 (client/server exchange begins with small request)
+- [E-S0011-F000081-002] Large RESP payload (7240 bytes) on this flow, consistent with a multi-argument Redis operation typical of BRPOP across many GitLab “resque:gitlab:queue:*” keys
+- [E-S0011-F000082-003] Follow-up TCP segment from client with no payload (ACK), indicating continued long-poll/idle pattern after the large RESP transfer
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None. No AUTH/login attempts observed; no suspicious Redis commands (e.g., CONFIG, SLAVEOF, MODULE LOAD, EVAL, FLUSHALL) or code/command execution indicators.
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, BRPOP, GitLab, resque queues, 6379, E-S0011-F000068-001, E-S0011-F000081-002, E-S0011-F000082-003, E-S0011-F000719-004
+
+--- Stream 12 [VALID] ---
+Service: Redis (RESP protocol on port 6379; version not visible)
+Relevant Events:
+- [E-S0012-F000069-001] RESP application traffic observed between 172.18.0.3:6379 and 172.18.0.4:45790, indicating Redis usage
+- [E-S0012-F000076-002] Large RESP payload (~7240 bytes) from server side, consistent with multi-bulk data typical of Redis queue operations
+- [E-S0012-F000078-003] TCP keep-alive/ACK with no payload continuing the Redis session
+- [E-S0012-F000268-004] TCP keep-alive/ACK with no payload from server side
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, BRPOP, Resque, GitLab, E-S0012-F000069-001, E-S0012-F000076-002, E-S0012-F000078-003, E-S0012-F000268-004
+
+--- Stream 13 [VALID] ---
+Service: Redis (RESP protocol) on TCP 6379; application context appears to be GitLab job queues (version not visible)
+
+Relevant Events:
+- [E-S0013-F000087-001] RESP traffic observed on TCP 6379 between 172.18.0.4:56796 and 172.18.0.3:6379
+- [E-S0013-F000089-002] Large RESP payload (~7 KB) exchanged, consistent with Redis multi-bulk data
+- [E-S0013-F001491-004] Connection persists with further RESP exchanges; no separate authentication records present
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, 6379, GitLab, resque queues, BRPOP, E-S0013-F000087-001, E-S0013-F000089-002, E-S0013-F000091-003, E-S0013-F001491-004
+
+--- Stream 14 [VALID] ---
+Service: Redis (RESP protocol on port 6379) — version not visible
+Relevant Events:
+- [E-S0014-F000088-001] RESP traffic observed between 172.18.0.3:6379 and 172.18.0.4:45798 (small 5-byte request begins the exchange)
+- [E-S0014-F000094-002] Large RESP payload returned (7240 bytes), consistent with Redis array/bulk-string reply
+- [E-S0014-F000095-003] TCP packet with no payload, indicating continued session/acknowledgment
+- [E-S0014-F001310-004] TCP packet with no payload later in the flow, connection still active
+
+Exploit Indicators:
+- [E-S0014-F000094-002] None
+
+Malicious Activities: None observed (traffic appears to be normal Redis job-queue polling; no AUTH/CONFIG/EVAL or other exploit-like commands visible)
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, port 6379, BRPOP, resque, GitLab, E-S0014-F000088-001, E-S0014-F000094-002, E-S0014-F000095-003, E-S0014-F001310-004
+
+--- Stream 15 [VALID] ---
+Service: Redis (RESP protocol); GitLab Resque queues visible; version not visible
+Relevant Events:
+- [E-S0015-F000100-001] Client connects to Redis on 172.18.0.3:6379 and initiates a RESP request (observed BRPOP with many resque:gitlab:queue keys in untrusted payload)
+- [E-S0015-F000101-002] Redis server responds with large RESP payloads consistent with queue/job data
+- [E-S0015-F000103-003] Client sends TCP ACK (no additional payload); long-polling/BRPOP pattern continues
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, GitLab, 6379, E-S0015-F000100-001, E-S0015-F000101-002, E-S0015-F000103-003
+
+--- Stream 16 [VALID] ---
+Service: Redis key-value store (RESP protocol) on port 6379 (version not visible)
+
+Relevant Events:
+- [E-S0016-F000106-001] RESP traffic observed between 172.18.0.3:6379 and 172.18.0.4:45736 indicating Redis protocol use
+- [E-S0016-F000107-002] Large RESP server->client payloads (~7240 bytes) consistent with Redis multi-bulk replies
+- [E-S0016-F000108-003] Client->server TCP continuation with no additional payload; persistent connection behavior typical of Redis clients
+
+Exploit Indicators:
+- [E-S0016-F000106-001] None (no dangerous Redis commands like AUTH/CONFIG/SLAVEOF/EVAL observed in available evidence)
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, port 6379, BRPOP, resque queues, GitLab, E-S0016-F000106-001, E-S0016-F000107-002, E-S0016-F000108-003, E-S0016-F001334-004
+
+--- Stream 17 [VALID] ---
+Service: Redis key-value store (RESP protocol) on port 6379 (version not visible)
+Relevant Events:
+- E-S0017-F000113-001 RESP traffic observed between 172.18.0.3:6379 and 172.18.0.4:35562, indicating Redis service on port 6379
+- E-S0017-F000114-002 Large RESP response from peer (7240 bytes), consistent with multi-bulk/bulk Redis data exchange
+- E-S0017-F000116-003 TCP packet client->server with no payload, consistent with ongoing connection/ack during blocking or streaming exchange
+- E-S0017-F002129-004 TCP packet server->client with no payload, ongoing session maintenance
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, port 6379, BRPOP, resque, GitLab queues, E-S0017-F000113-001, E-S0017-F000114-002, E-S0017-F000116-003, E-S0017-F002129-004
+
+--- Stream 18 [VALID] ---
+Service: Redis (RESP protocol), GitLab Resque queues (version not visible)
+Relevant Events:
+- E-S0018-F000119-001 RESP traffic on TCP/6379 observed between 172.18.0.3 and 172.18.0.4 (Redis connection)
+- E-S0018-F000120-002 Application-level behavior consistent with Redis BRPOP across many GitLab Resque queues (e.g., resque:gitlab:queue:...) observed in stream
+- E-S0018-F000122-003 Ongoing TCP keep-alive/ACKs with no payload, indicating a maintained connection; no AUTH command seen in this flow
+
+Exploit Indicators:
+- E-S0018-F000120-002 None
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, BRPOP, Resque, GitLab, queues, E-S0018-F000119-001, E-S0018-F000120-002, E-S0018-F000122-003
+
+--- Stream 19 [VALID] ---
+Service: Redis key-value store (RESP protocol) on 172.18.0.3:6379; application context appears to be GitLab Resque queues (no version visible)
+
+Relevant Events:
+- [E-S0019-F000125-001] Client sends a small RESP message to Redis at 172.18.0.3:6379
+- [E-S0019-F000127-002] Server replies with a large RESP payload (~7240 bytes), consistent with Redis array/list data
+- [E-S0019-F000128-003] Client->server TCP segment with no payload (ACK/keepalive); flow continues with additional server RESP traffic later [E-S0019-F002190-004]
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None observed. No authentication activity (no AUTH), no Redis administrative or dangerous commands (e.g., CONFIG, SLAVEOF/REPLICAOF, EVAL/EVALSHA, MODULE LOAD, FLUSHALL) visible; untrusted flow content shows routine BRPOP on resque:gitlab:queue:* (normal GitLab worker behavior).
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, port 6379, GitLab Resque, BRPOP, E-S0019-F000125-001, E-S0019-F000127-002, E-S0019-F000128-003, E-S0019-F002190-004
+
+--- Stream 20 [VALID] ---
+Service: Redis key-value store (RESP protocol) — version not visible
+Relevant Events:
+- [E-S0020-F000126-001] RESP traffic observed between 172.18.0.3:6379 and 172.18.0.4:45746 starting the flow
+- [E-S0020-F000133-002] Large RESP payload sent in the flow, indicating active request/response exchange
+- [E-S0020-F000135-003] TCP segment (no payload) as part of the ongoing Redis session
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, BRPOP, queue, resque, gitlab, E-S0020-F000126-001, E-S0020-F000133-002, E-S0020-F000135-003, E-S0020-F002182-004
+
+--- Stream 21 [VALID] ---
+Service: Redis (RESP protocol) on TCP/6379 (version not visible)
+
+Relevant Events:
+- [E-S0021-F000138-001] Client sends a small RESP request (~5 bytes) to Redis service on 6379
+- [E-S0021-F000139-002] Server replies with a large RESP payload (~7240 bytes), consistent with a multi-bulk array response (e.g., key/queue listings)
+- [E-S0021-F000140-003] Client acknowledges server response (TCP ACK, no payload)
+- [E-S0021-F002191-004] Subsequent TCP control from server to client (no payload), connection remains established
+
+Exploit Indicators:
+- [E-S0021-F000139-002] Normal Redis job-queue polling behavior (e.g., BRPOP-style interaction) observed; no exploit keywords like eval, config set, module load, slaveof, system detected in visible RESP traffic
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, BRPOP, job queue, 6379, E-S0021-F000138-001, E-S0021-F000139-002, E-S0021-F000140-003, E-S0021-F002191-004
+
+--- Stream 22 [VALID] ---
+Service: Redis (RESP protocol) used by GitLab/Resque (version not visible)
+Relevant Events:
+- [E-S0022-F000145-001] RESP protocol traffic over TCP/6379 observed between 172.18.0.3:6379 and 172.18.0.4:45828, indicating a Redis service
+- [E-S0022-F000147-002] Large RESP response (7240 bytes) from Redis; untrusted flow content shows a BRPOP command referencing many GitLab Resque queues (e.g., resque:gitlab:queue:email_receiver)
+- [E-S0022-F003334-004] TCP connection teardown from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, BRPOP, resque, gitlab, queue, TCP/6379, E-S0022-F000145-001, E-S0022-F000147-002, E-S0022-F003334-004
+
+--- Stream 23 [VALID] ---
+Service: Redis key-value store (RESP protocol) on 172.18.0.3:6379; application context visible: GitLab background queues (resque:gitlab:queue:...), version not visible
+Relevant Events:
+- E-S0023-F000146-001 RESP traffic observed between 172.18.0.3:6379 and 172.18.0.4:45694 (Redis service identified)
+- E-S0023-F000153-002 Large RESP payload from server to client (7240 bytes), consistent with queue-related activity
+- E-S0023-F000154-003 TCP packet client->server following initial exchange (ongoing session)
+Exploit Indicators:
+- None
+Malicious Activities: None observed; no login/authentication activity visible in this flow (no AUTH seen); traffic consistent with benign Redis queue operations (e.g., BRPOP against multiple GitLab Resque queues)
+Attack Success: Failed
+Evidence Keywords: Redis, RESP, 6379, GitLab, resque queues, BRPOP, E-S0023-F000146-001, E-S0023-F000153-002
+
+--- Stream 24 [VALID] ---
+Service: Redis (RESP protocol) used by GitLab/Resque job queues (version not visible)
+Relevant Events:
+- E-S0024-F000159-001 Redis RESP request observed from client to server (BRPOP across many resque:gitlab:queue keys; no prior AUTH observed)
+- E-S0024-F000160-002 Redis server RESP reply to the BRPOP request (no error replies seen)
+- E-S0024-F005482-004 Ongoing TCP activity on the same Redis session; no anomalous payloads noted
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, BRPOP, resque:gitlab:queue, GitLab, E-S0024-F000159-001, E-S0024-F000160-002, E-S0024-F005482-004
+
+--- Stream 25 [VALID] ---
+Service: Redis key-value store on 172.18.0.3:6379 (version not visible)
+Relevant Events:
+- [E-S0025-F000173-001] Client 172.18.0.4 sends RESP commands to Redis (MULTI with INCRBY/EXPIRE/DEL on resque:gitlab:* stats and workers keys; no AUTH observed).
+- [E-S0025-F000180-003] Server returns RESP acknowledgments (+OK/+QUEUED and integer array results following EXEC).
+- [E-S0025-F000198-005] Client transmits large RESP/JSON payloads (HMSET “info” with GitLab/Resque worker metadata and queue lists under resque:gitlab:<worker-id>).
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Failed
+Evidence Keywords: Redis, RESP, port 6379, MULTI, INCRBY, EXPIRE, DEL, EXEC, SADD, EXISTS, HMSET, JSON, GitLab, Resque, E-S0025-F000173-001, E-S0025-F000180-003, E-S0025-F000198-005
+
+--- Stream 26 [VALID] ---
+Service: GitLab Community Edition (behind nginx); version not visible
+Relevant Events:
+- [E-S0026-F001764-004] Client requests GET /users/sign_in
+- [E-S0026-F001764-006] User-Agent indicates automation: python-requests/2.22.0
+- [E-S0026-F002420-007] Server responds 200 OK to sign-in page request
+- [E-S0026-F002420-008] Cookie header observed (session-related, redacted)
+- [E-S0026-F002444-017] “admin” keyword observed in response content
+- [E-S0026-F002452-029] Client attempts POST /uploads/user (file upload to user uploads endpoint)
+- [E-S0026-F002560-030] Server responds 422 Unprocessable Entity to the upload
+
+Exploit Indicators:
+- [E-S0026-F002452-031] Upload request contains shell command expression in payload: qx{touch /tmp/success}; indicators note multipart upload and mismatched file signature vs. image filename (classic malicious image/metadata pattern)
+- [E-S0026-F002452-029] Targeting /uploads/user endpoint consistent with attempts to trigger server-side image/metadata processing
+
+Malicious Activities: Attempted remote code execution via malicious file upload to /uploads/user using a payload containing qx{touch /tmp/success} intended to execute a shell command during server-side processing. No credentials submitted; only the sign-in page was fetched. No database activity or path traversal observed; “SQL” items are CSS (“select:none”) not queries.
+
+Attack Success: Unknown
+
+Evidence Keywords: GitLab, sign-in, python-requests/2.22.0, Cookie, admin, POST /uploads/user, qx{touch /tmp/success}, multipart upload, HTTP 422, E-S0026-F001764-004, E-S0026-F001764-006, E-S0026-F002420-007, E-S0026-F002420-008, E-S0026-F002444-017, E-S0026-F002452-029, E-S0026-F002452-031, E-S0026-F002560-030
+
+--- Stream 27 [VALID] ---
+Service: PostgreSQL database (port 5432); client activity consistent with a GitLab application (tables: users, application_settings, identities, appearances)
+Relevant Events:
+- [E-S0027-F001814-001] TCP connection 172.18.0.4:44812 -> 172.18.0.2:5432 (PostgreSQL)
+- [E-S0027-F001888-009] SHOW TIME ZONE
+- [E-S0027-F001912-014] SELECT "users".* WHERE "users"."admin" = $1 ORDER BY "users"."id" DESC LIMIT $2
+- [E-S0027-F001912-013] "admin" keyword observed (client->server)
+- [E-S0027-F001929-016] "root" user keyword observed (server->client)
+- [E-S0027-F001950-017] SELECT "application_settings".* ORDER BY "application_settings"."id" DESC LIMIT $1
+- [E-S0027-F002018-058] SELECT ... FROM "identities" WHERE provider LIKE 'ldap%' AND extern_uid IS NOT NULL LIMIT $2
+- [E-S0027-F002256-063] SELECT "appearances".* ORDER BY "appearances"."id" ASC LIMIT $1
+- [E-S0027-F001912-015] "id" token observed (client->server); context aligns with ORDER BY "users"."id"
+- [E-S0027-F001966-037] Large opaque/base64-like data returned in query response (server->client; indicative of binary/text blobs)
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: PostgreSQL (E-S0027-F001814-001), SHOW TIME ZONE (E-S0027-F001888-009), users admin query (E-S0027-F001912-014), admin keyword (E-S0027-F001912-013), root keyword (E-S0027-F001929-016), application_settings (E-S0027-F001950-017), identities ldap (E-S0027-F002018-058), appearances (E-S0027-F002256-063), id token/column (E-S0027-F001912-015), base64-like response data (E-S0027-F001966-037)
+
+--- Stream 28 [VALID] ---
+Service: Redis key-value store on TCP/6379 (application data indicates GitLab; GitLab 13.10.1 and Rails 6.0.3.4 visible in key names)
+Relevant Events:
+- E-S0028-F002040-003 Client issues Redis GET for key cache:gitlab:flipper/v1/feature/user_mode_in_session
+- E-S0028-F002042-005 Server responds with serialized data (ActiveSupport::Cache::Entry) to the above GET
+- E-S0028-F002060-006 Client issues Redis GET for key cache:gitlab:flipper/v1/feature/webauthn
+- E-S0028-F002235-007 Client issues Redis GET for key cache:gitlab:Appearance:13.10.1:6.0.3.4 (reveals app version metadata)
+- E-S0028-F002400-008 Client issues Redis GET for key cache:gitlab:broadcast_message_current_banner_json
+- E-S0028-F002405-009 Client issues Redis GET for key cache:gitlab:broadcast_message_current_notification_json
+Exploit Indicators:
+- E-S0028-F002040-003 Redis GET without any prior AUTH observed (possible unauthenticated access)
+- E-S0028-F002042-005 Response contains serialized Ruby object marker ActiveSupport::Cache::Entry (application data disclosure)
+- E-S0028-F002235-007 Key name exposes application versions (GitLab 13.10.1; Rails 6.0.3.4)
+Malicious Activities: Unauthenticated Redis data harvesting of GitLab cache keys and values (data disclosure)
+Attack Success: Succeeded
+Evidence Keywords: Redis, RESP, TCP/6379, GET, GitLab, ActiveSupport::Cache::Entry, flipper, cache keys, E-S0028-F002040-003, E-S0028-F002042-005, E-S0028-F002060-006, E-S0028-F002235-007, E-S0028-F002400-008, E-S0028-F002405-009
+
+--- Stream 29 [VALID] ---
+Service: Redis key-value store (port 6379); version not visible
+Relevant Events:
+- E-S0029-F002045-001 TCP connection from 172.18.0.4:45084 to 172.18.0.3:6379 (Redis)
+- E-S0029-F002049-003 Client issues Redis command(s) in RESP; includes INCR on a session/lookup key
+- E-S0029-F002057-004 Server returns RESP integer replies consistent with INCR/EXPIRE sequence (increment result and expire-set flag)
+Exploit Indicators:
+- None
+Malicious Activities: None observed (session/lookup counter increment and expiration set)
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, INCR, EXPIRE, session:lookup:ip:gitlab2:172.18.0.1, 86400, E-S0029-F002045-001, E-S0029-F002049-003, E-S0029-F002057-004
+
+--- Stream 30 [VALID] ---
+Service: Redis (port 6379; version not visible)
+
+Relevant Events:
+- [E-S0030-F002218-001] Client communicates with Redis on 172.18.0.3:6379 using RESP (key enumeration and lookups observed in flow, including GitLab Resque-related keys)
+- [E-S0030-F002722-005] Client sends a 3 KB RESP/JSON payload to Redis (structured value interaction with GitLab-related data)
+- [E-S0030-F005461-007] Payload includes a “GET $146” sequence (heuristically flagged as HTTP GET, but consistent with a Redis GET command format)
+- [E-S0030-F005459-006] 64-hex string observed in client payload (likely used as a Redis key or identifier)
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None observed (read-only Redis key enumeration and information retrieval; no AUTH, CONFIG, SLAVEOF/REPLICAOF, MODULE LOAD, EVAL, or command-execution patterns detected)
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, GET, SSCAN, HGET, resque:gitlab, JSON, 6379, E-S0030-F002218-001, E-S0030-F002722-005, E-S0030-F005461-007, E-S0030-F005459-006
+
+--- Stream 31 [VALID] ---
+Service: Redis key-value store on 6379 (used by GitLab session storage), version not visible
+
+Relevant Events:
+- [E-S0031-F002416-003] Client issues Redis SETEX: key session:gitlab:2::<hash [E-S0031-F002416-004]>, TTL 7200, value includes _csrf_token [E-S0031-F002416-005]
+- [E-S0031-F002418-006] Server responds +OK to the SETEX command
+- [E-S0031-F002413-001] TCP connection established from 172.18.0.4:41320 to Redis at 172.18.0.3:6379
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: Redis, RESP, SETEX, GitLab session, _csrf_token, 6379/tcp, E-S0031-F002416-003, E-S0031-F002418-006, E-S0031-F002416-004, E-S0031-F002416-005
+
+--- Stream 32 [VALID] ---
+Service: Redis key-value store on port 6379 (version not visible); GitLab session store activity observed
+Relevant Events:
+- [E-S0032-F002462-001] Client 172.18.0.4 issues a Redis GET to 172.18.0.3:6379 (RESP protocol)
+- [E-S0032-F002462-003] Target key requested: session:gitlab:2::c1c00a68562cc1983828b1f35b7542df2a26c908656b83ae7da12d5a13eff3a7
+- [E-S0032-F002464-005] Server returns serialized session data containing “_csrf_token”
+- [E-S0032-F002464-006] Returned CSRF token value: 1VhXmVztvmvnbIhiUrD5Hp4qsH1NPpxNYgZy+HmmM//g=
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, 6379, GET, session:gitlab, _csrf_token, base64 token, E-S0032-F002462-001, E-S0032-F002462-003, E-S0032-F002464-005, E-S0032-F002464-006
+
+--- Stream 33 [VALID] ---
+Service: PostgreSQL (version not visible)
+
+Relevant Events:
+- [E-S0033-F002466-001] Client 172.18.0.4:35846 connects to 172.18.0.2:5432 (PGSQL)
+- [E-S0033-F002466-002] Client issues SQL query: SELECT 1
+- [E-S0033-F002467-004] Server returns result for SELECT 1 (successful response)
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: PostgreSQL, PGSQL, SELECT 1, E-S0033-F002466-002, E-S0033-F002467-004
+
+--- Stream 34 [VALID] ---
+Service: Redis key-value store (TCP/6379), version not visible
+Relevant Events:
+- [E-S0034-F005498-001] Client issues Redis command EXISTS for key namespace consistent with Sidekiq cancellation (sidekiq:cancel:...), with no preceding AUTH observed
+- [E-S0034-F005499-002] Server responds with integer 0 (key does not exist)
+- [E-S0034-F005500-003] Client sends TCP packet with no payload (connection persists/ack)
+Exploit Indicators:
+- [E-S0034-F005498-001] None
+- [E-S0034-F005499-002] None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: Redis, RESP, EXISTS, sidekiq:cancel, integer reply :0, E-S0034-F005498-001, E-S0034-F005499-002, E-S0034-F005500-003
+
+--- Stream 35 [VALID] ---
+Service: PostgreSQL (PGSQL) on 5432, version not visible
+
+Relevant Events:
+- [E-S0035-F005511-001] Client 172.18.0.4 connects to PostgreSQL service at 172.18.0.2:5432
+- [E-S0035-F005511-002] Client issues SQL query: SELECT 1
+- [E-S0035-F005513-004] Server responds with CommandComplete "SELECT 1" and ReadyForQuery ('Z' ... 'I'), indicating the query executed successfully
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: PostgreSQL, PGSQL, SELECT 1, CommandComplete, ReadyForQuery, E-S0035-F005511-001, E-S0035-F005511-002, E-S0035-F005513-004
+
+--- Stream 36 [VALID] ---
+Service: Redis key-value store (RESP protocol); application data shows Ruby on Rails ActiveSupport cache entries for Flipper feature flags (GitLab). Version not visible.
+
+Relevant Events:
+- E-S0036-F005528-001 Client 172.18.0.4 connects to 172.18.0.3:6379 (Redis RESP)
+- E-S0036-F005528-002 RESP GET for key "cache:gitlab:flipper/v1/feature/user_mode_in_session"
+- E-S0036-F005530-003 Server responds with $203 bytes containing "ActiveSupport::Cache::Entry" serialized data
+- E-S0036-F005556-005 RESP GET for key "cache:gitlab:flipper/v1/feature/merge_request_refs_cleanup"
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: Redis, RESP, GET, cache:gitlab:flipper, ActiveSupport::Cache::Entry, GitLab, Flipper, E-S0036-F005528-001, E-S0036-F005528-002, E-S0036-F005530-003, E-S0036-F005556-005
+
+--- Stream 37 [VALID] ---
+Service: PostgreSQL 12.22 (client application: GitLab Sidekiq 5.2.9)
+Relevant Events:
+- E-S0037-F005619-005 Client queries pg_type for core types (type discovery/init)
+- E-S0037-F005622-007 Client performs extended pg_type/pg_range introspection (type metadata discovery)
+- E-S0037-F005638-009 SHOW TIME ZONE (session/env check)
+- E-S0037-F005640-010 SELECT 1 (connection liveness check)
+- E-S0037-F005641-011 Server returns result for SELECT 1
+- E-S0037-F005645-012 Application query: SELECT 1 AS one FROM "user_statuses" WHERE "clear_status_at" <= <timestamp> LIMIT $1
+- E-S0037-F005646-013 Server indicates 0 rows for the user_statuses cleanup query
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Failed
+
+Evidence Keywords: PostgreSQL 12.22, GitLab Sidekiq 5.2.9, md5 authentication, pg_type E-S0037-F005619-005,E-S0037-F005622-007, SHOW TIME ZONE E-S0037-F005638-009, SELECT 1 E-S0037-F005640-010,E-S0037-F005641-011, user_statuses E-S0037-F005645-012,E-S0037-F005646-013

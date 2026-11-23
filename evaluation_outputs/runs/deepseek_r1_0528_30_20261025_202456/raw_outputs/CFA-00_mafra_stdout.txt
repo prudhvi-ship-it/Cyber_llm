@@ -1,0 +1,100 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_b945d2ecfa0225d5678a
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event0_CVE-2022-24706_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: CouchDB
+  Attack Type: Remote Code Execution
+  Attack Success: Success
+  CVE: CVE-2022-24706
+  Overall Confidence: High
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-00_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-00_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-00_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: CouchDB
+Associated CVE candidate (Analyst): CVE-2022-24706
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2022-24706
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0001-F000025-012]: Erlang client authentication digest matches the publicly documented CouchDB default cookie (legacy challenge-response).
+- PCAP [E-S0001-F000027-013]: Erlang server authentication acknowledgement digest matches the same publicly documented CouchDB default cookie.
+- PCAP [E-S0001-F000029-009]: Erlang RPC request: os:cmd('id') from 172.18.0.1:58612 to 172.18.0.2:9100, paired with server response frame 31 in the same TCP stream.
+- PCAP [E-S0001-F000031-010]: Server response contains Erlang rex command output 'uid=0(root) gid=0(root)', paired with client os:cmd('id') request frame 29 in the same TCP stream.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-12636: NVD vulnerability record: CouchDB administrative users can configure the database server via HTTP(S). Some of the configuration options include paths for operating system-level binaries that are subsequently launched by CouchDB. This allows an admin user in Apache CouchDB before 1.7.0 and 2.x before 2.1.1 to execute arbitrary shell commands as the CouchDB user, including downloading and executing scripts from the public internet. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-12636 Supports: Web-cited CVE-2017-12636 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-12635: NVD vulnerability record: Due to differences in the Erlang-based JSON parser and JavaScript-based JSON parser, it is possible in Apache CouchDB before 1.7.0 and 2.x before 2.1.1 to submit _users documents with duplicate keys for 'roles' used for access control within the database, including the special case '_admin' role, that denotes administrative users. In combination with CVE-2017-12636 (Remote Code Execution), this can be used to give non-admin users access to arbitrary shell commands on the server as the database system user. The JSON parser differences result in behaviour that if two 'roles' keys are available in the JSON, the second one will be used for authorising the document write, but the first 'roles' key is used for subsequent authorization for the newly created user. By design, users can not assign themselves roles. The vulnerability allows non-admin users to give themselves admin privileges. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-12635 Supports: NVD lists CVE-2017-12635 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-11769: NVD vulnerability record: CouchDB administrative users before 2.2.0 can configure the database server via HTTP(S). Due to insufficient validation of administrator-supplied configuration settings via the HTTP API, it is possible for a CouchDB administrator user to escalate their privileges to that of the operating system's user under which CouchDB runs, by bypassing the blacklist of configuration settings that are not allowed to be modified via the HTTP API. This privilege escalation effectively allows a CouchDB admin user to gain arbitrary remote code execution, bypassing CVE-2017-12636 and CVE-2018-8007. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-11769 Supports: NVD lists CVE-2018-11769 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-8007: NVD vulnerability record: Apache CouchDB administrative users can configure the database server via HTTP(S). Due to insufficient validation of administrator-supplied configuration settings via the HTTP API, it is possible for a CouchDB administrator user to escalate their privileges to that of the operating system's user that CouchDB runs under, by bypassing the blacklist of configuration settings that are not allowed to be modified via the HTTP API. This privilege escalation effectively allows an existing CouchDB admin user to gain arbitrary remote code execution, bypassing already disclosed CVE-2017-12636. Mitigation: All users should upgrade to CouchDB releases 1.7.2 or 2.1.2. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-8007 Supports: NVD lists CVE-2018-8007 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] 2.9. CVE-2017-12636: Apache CouchDB Remote Code ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). CouchDB administrative users can configure the database server via HTTP(S). Some of the configuration options include paths for operating system ... | Webpage text: 2. Security Issues / CVEs 2.9. CVE-2017-12636: Apache CouchDB Remote Code Execution 2.9. CVE-2017-12636: Apache CouchDB Remote Code Execution All Versions of Apache CouchDB The Apache Software Foundation CouchDB administrative users can configure the database server via HTTP(S). Some of the configuration options include paths for operating system-level binaries that are subsequently launched by CouchDB. This allows a CouchDB admin user to execute arbitrary shell commands as the CouchDB user, including downloading and executing scripts from the public internet. All users should upgrade to CouchDB 1.7.1 or Upgrades from previous 1.x and 2.x versions in the same series should be Users on earlier versions, or users upgrading from 1.x to 2.x should consult This issue was discovered by Joan Touzet of the CouchDB Security team during the investigation of CVE-2017-12635. Source: https://docs.couchdb.org/en/stable/cve/2017-12636.html
+- ONLINE [Serper web result] Apache CouchDB < 2.1.0 - Remote Code Execution: UNTRUSTED WEB RESEARCH (not PCAP evidence). Remote Code Execution - Author: Cody Zacharias Type: webapps Exploit: / Platform: Linux Date: 2018-06-20 Vulnerable Source: https://www.exploit-db.com/exploits/44913
+- ONLINE [Serper web result] Remote Code Execution in CouchDB: UNTRUSTED WEB RESEARCH (not PCAP evidence). There was a vulnerability in CouchDB caused by a discrepancy between the database's native JSON parser and the Javascript JSON parser used ... | Webpage text: tl;dr There was a vulnerability in CouchDB caused by a discrepancy between the database’s native JSON parser and the Javascript JSON parser used during document validation. Because CouchDB databases are meant to be exposed directly to the internet, this enabled privilege escalation, and ultimately remote code execution, on a large number of installations. If it had been exploited, this bug could have allowed for the Last time, I wrote about a deserialization bug leading to code execution on rubygems.org, a repository of dependencies for ruby programs. The ability to inject malware into upstream project dependencies is a scary attack vector, and one from which I doubt most organizations are adequately protected. With this in mind, I started searching for bugs in registry.npmjs.org, the server responsible for distributing npm packages. According to their homepage, the npm registry serves more than 3 billion (!) package downloads per week. The npm registry uses CouchDB, which I hadn’t heard of before this project. The basic idea is that it’s a “NoSQL” database that makes data replication very easy. It’s sort of like a big key-value store for JSON blobs (“documents”), with features for data validation, querying, and user authentication, making it closer to a full-fledged database. CouchDB is written in Erlang, but allows users to specify document valida CouchDB manages user accounts through a special database called _users. When you create or modify a user in a CouchDB database (usually by doing a PUT to /_users/org.couchdb.user:your_username), the server checks your proposed change with a Javascript validate_doc_update function to ensure that you’re not, for example, attempting to make yourself an administrator. The problem is that there is a discrepancy between the Javascript JSON parser (used in validation scripts) and the one used internally by CouchDB, called jiffy. Check out how each one deals with duplicate keys on an object like {"foo":"bar", "foo":"baz"}: > jiffy:decode("{\"foo\":\"bar\", \"foo\":\"baz\"}"). {[{<<"foo">>,<<"bar">>},{<<"foo">>,<<"baz">>}]} > JSON.parse("{\"foo\":\"bar\", \"foo\": \"baz\"}") For a given key, the Erlang parser will store both values, but the Javascript parser will only store the last one. Unfortunately, the getter function for CouchDB’s internal representation of the data will only return the first value: % Within couch_util:get_value lists:keysearch(Key, 1, List). And so, we can bypass all of the relevant input validation and create an admin user thusly: curl -X PUT 'http://localhost:5984/_users/org.couchdb.user:oops' In Erlang land, we’ll see ourselves as having the _admin role, while in Javascript land we appear to have no special permissions. Fortunately for the attacker, almost all of the important logic concerning authentication and authorization, aside from the input validation script, occurs the Erlang part of CouchDB. Now that we have an administrator account, we have complete control of the database. Getting a shell from here is usually easy since CouchDB lets you define custom query_server languages through the admin interface, a feature which is basically just a wrapper around execv. One funny feature of this exploit is that it’s sligh Source: https://justi.cz/security/2017/11/14/couchdb-rce-npm.html
+- ONLINE [Serper web result] CVE-2022-24706: Apache CouchDB Auth Bypass ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-24706 is an authentication bypass vulnerability in Apache CouchDB. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-24706 CVE-2022-24706: Apache CouchDB Auth Bypass Vulnerability CVE-2022-24706 is an authentication bypass flaw in Apache CouchDB that allows attackers to gain admin privileges on improperly secured installations. This article covers technical details, affected versions, and mitigation. Published: February 18, 2026 CVE-2022-24706 Overview CVE-2022-24706 is a critical authentication bypass vulnerability affecting Apache CouchDB versions prior to 3.2.2. The vulnerability allows remote attackers to access an improperly secured default installation without authentication and gain administrative privileges. This flaw stems from insecure default configuration settings that, when exploited, can lead to complete system compromise through remote code execution Apache CouchDB is a popular open-source NoSQL document-oriented database that uses JSON for documents and JavaScript for MapReduce indexes. The vulnerability is particularly dangerous because it affects default installations that have not been hardened according to Apache's security recommendations, and many deployments may be exposed on the network without proper firewall protection. This vulnerability is listed in CISA's Known Exploited Vulnerabilities (KEV) catalog, indicating active exploitation in the wild. Attackers can gain full administrative access to CouchDB instances and execute arbitrary code on the underlying system. Apache CouchDB versions prior to 3.2.2 Apache CouchDB default installations without proper security hardening CouchDB deployments exposed without firewall protection April 26, 2022 - CVE-2022-24706 published to NVD October 28, 2025 - Last updated in NVD database Technical Details for CVE-2022-24706 This vulnerability exploits insecure default configuration in Apache CouchDB installations, specifically related to the Erlang distribution protocol used for cluster communication. CouchDB is built on Erlang/OTP, which uses a cookie-based authentication mechanism for inter-node communication. In default configurations, this Erlang cookie can be predictable or easily guessable, allowing attackers to establish unauthor Once an attacker successfully authenticates to the Erlang distribution port (typically port 4369 for EPMD and dynamically assigned ports for node communication), they can execute arbitrary Erlang code on the target system. This effectively grants full administrative privileges to the CouchDB instance and enables remote code execution on the underlying operating system. The vulnerability is classified under CWE-1188 (Initialization with Hard-Coded Network Resource Configuration Default), reflecting the core issue of insecure default settings that expose the system to attack. The root cause of CVE-2022-24706 lies in CouchDB's default configuration that does not adequately secure the Erlang distribution mechanism used for clustering. By default, CouchDB installations may use a predictable Erlang cookie value, and the Erlang Port Mapper Daemon (EPMD) may be accessible from the network. When these conditions are present, attackers can connect Source: https://www.sentinelone.com/vulnerability-database/cve-2022-24706/
+
+Verification Summary:
+- Affected service: CouchDB.
+- Attack type: Remote Code Execution.
+- Attack technique: Unauthenticated Erlang RPC via default cookie.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2022-24706.
+- CVE assessment: Analyst proposed CVE-2022-24706; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: CouchDB Remote Code Execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-12636
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-12635
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-11769
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-8007
+- Evidence-source URL: https://docs.couchdb.org/en/stable/cve/2017-12636.html
+- Evidence-source URL: https://www.exploit-db.com/exploits/44913
+- Evidence-source URL: https://justi.cz/security/2017/11/14/couchdb-rce-npm.html
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2022-24706/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Upgrade CouchDB to version 3.2.2 or later
+- Replace default Erlang cookie with strong secret value
+- Restrict network access to Erlang distribution ports (4369/tcp, 9100/tcp)
+- Implement network segmentation for database services
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

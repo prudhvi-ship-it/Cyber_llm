@@ -1,0 +1,88 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_c42fe6de15331f5c6447
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\TestSet_event0_CVE-2025-32433_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: SSH
+  Attack Type: Unknown
+  Attack Success: Unknown
+  CVE: Not Found
+  Overall Confidence: Low
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\TS-00_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\TS-00_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\TS-00_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: SSH
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000003-001]: 172.18.0.1:49424 -> 172.18.0.2:2222 (TCP).
+- PCAP [E-S0000-F000006-003]: 172.18.0.1:49424 -> 172.18.0.2:2222 (SSH).
+- PCAP [E-S0000-F000008-004]: 172.18.0.2:2222 -> 172.18.0.1:49424 (SSHv2).
+- PCAP [E-S0000-F000008-005]: Erlang.
+- PCAP [E-S0000-F000012-006]: 172.18.0.1:49424 -> 172.18.0.2:2222 (SSHv2).
+
+Verification Summary:
+- Affected service: SSH.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Abstain.
+- MCP investigation query: SSH.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Restrict SSH exposure: limit access to trusted IP ranges via firewall/ACLs and avoid internet-wide exposure of port 2222.
+- Enforce strong authentication: prefer key-based auth, disable password authentication and direct root login; enable MFA where supported.
+- Harden the Erlang-based SSH daemon and underlying OS: keep Erlang/OTP and SSH components up to date with security patches.
+- Enable rate limiting and intrusion prevention (e.g., fail2ban) for repeated failed SSH attempts and anomalous connection patterns.
+- Implement centralized logging and monitoring for SSH events; alert on unusual login times, sources, and new key additions.
+- Validate that the nonstandard SSH port (2222) is documented, intended, and monitored; consider port knocking or single-packet authorization if appropriate.
+- Deploy network IDS/IPS rules for SSH anomaly detection; baseline normal SSH volumes and investigate deviations.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

@@ -12,12 +12,14 @@ from contracts import (
     FinalReport,
     NOT_FOUND,
     UNKNOWN,
+    VerificationResult,
     VerifierOutput,
 )
+from binary_benchmark_policy import BinaryBenchmarkAssessment
 
 
 _EVIDENCE_PATTERN = re.compile(
-    r"\[(E-[A-Za-z0-9-]+)\]\s*(.+)"
+    r"\[(E-[A-Za-z0-9-]+)(?:\s*\|\s*[^\]]+)?\]\s*(.+)"
 )
 
 
@@ -59,8 +61,8 @@ def _build_readable_evidence(
             )
         else:
             evidence_items.append(
-                f"PCAP [{evidence_id}]: Evidence cited by the "
-                "validated Analyst and Verifier."
+                f"PCAP [{evidence_id}]: Description unavailable in flow "
+                "summary; verify this reference against the original capture."
             )
 
     return evidence_items
@@ -135,8 +137,9 @@ def enforce_mafra_report(
     validated_cve: CVEValidationOutput,
     consensus: ConsensusDecision | None = None,
     flow_summary: str = "",
+    binary_assessment: BinaryBenchmarkAssessment | None = None,
 ) -> FinalReport:
-    """Preserve all validated MAFRA decisions and report details."""
+    """Preserve raw decisions; show optional forced-choice predictions separately."""
 
     report.affected_service = (
         analyst_output.service.primary
@@ -146,20 +149,51 @@ def enforce_mafra_report(
 
     report.identified_cve = validated_cve.validated_cve
 
-    report.attack = (
-        analyst_output.attack.success
-        if verifier_output.success_supported == Decision.YES.value
-        else AttackOutcome.ABSTAIN.value
-    )
+    # Report context only. Verifier/Consensus/CVE validation stay unchanged.
+    report._show_mafra_cve_context = True
+    report._show_mafra_attack_uncertainty = True
+    report._associated_cve_candidate = analyst_output.cve.candidate
+    report._verifier_cve_support = verifier_output.cve_supported
 
+    if consensus is not None:
+        # Keep Consensus's three-way decision. Unknown is not a failed attack.
+        report.attack = consensus.attack_success
+    else:
+        report.attack = (
+            analyst_output.attack.success
+            if (
+                verifier_output.verification_result == VerificationResult.SUPPORTED.value
+                and verifier_output.success_supported == Decision.YES.value
+            )
+            else AttackOutcome.ABSTAIN.value
+        )
+
+    if binary_assessment is not None:
+        report._binary_benchmark = True
+        report._binary_mechanism_match = binary_assessment.cve_mechanism_match
+        report._binary_exact_applicability = binary_assessment.exact_applicability_established
+        report._binary_attack_confidence = binary_assessment.attack_prediction_confidence
+        report._binary_attack_verified = binary_assessment.attack_prediction_verified
+        # The raw Consensus remains unchanged. The visible binary attack label
+        # is a benchmark prediction and is explicitly qualified when unverified.
+        report.attack = binary_assessment.attack_prediction
+
+    # Only *verified* success can establish vulnerability; a forced binary
+    # prediction is not proof.
     verified_success = (
-        verifier_output.success_supported == Decision.YES.value
-        and analyst_output.attack.success == AttackOutcome.SUCCESS.value
+        (consensus.attack_success == AttackOutcome.SUCCESS.value)
+        if consensus is not None else
+        (report.attack == AttackOutcome.SUCCESS.value)
     )
 
     # Preserve the distinction between CVE identification and vulnerability.
+    # A failed or unobserved attempt is not proof that the service is safe.
+    # The model may have output No; deterministically replace that unsupported
+    # conclusion without altering the verified attack-outcome decision.
     if report.identified_cve != NOT_FOUND or verified_success:
         report.is_service_vulnerable = Decision.YES.value
+    else:
+        report.is_service_vulnerable = Decision.ABSTAIN.value
 
     # Replace bare evidence IDs with readable evidence descriptions.
     readable_evidence = _build_readable_evidence(
@@ -172,8 +206,8 @@ def enforce_mafra_report(
     elif analyst_output.attack.evidence:
         report.evidence = [
             (
-                f"PCAP [{evidence_id}]: Evidence cited by the "
-                "validated Analyst and Verifier."
+                f"PCAP [{evidence_id}]: Description unavailable in flow "
+                "summary; verify this reference against the original capture."
             )
             for evidence_id in analyst_output.attack.evidence
         ]
@@ -208,6 +242,7 @@ def enforce_mafra_report(
             [
                 f"Consensus confidence: {consensus.overall_confidence}.",
                 f"Consensus score: {consensus.score}/{consensus.max_score}.",
+                f"Consensus attack outcome: {consensus.attack_success}.",
             ]
         )
 
@@ -229,6 +264,14 @@ def enforce_mafra_report(
             f"Unsupported claim: {unsupported_claim}"
         )
 
+    if binary_assessment is not None:
+        verification_summary.extend([
+            f"Binary associated-CVE mechanism match: {binary_assessment.cve_mechanism_match}.",
+            f"Exact CVE applicability established: {binary_assessment.exact_applicability_established}.",
+            f"Binary attack prediction: {binary_assessment.attack_prediction} ({binary_assessment.attack_prediction_confidence} confidence).",
+            f"Attack prediction supported by prior Consensus: {'Yes' if binary_assessment.attack_prediction_verified else 'No'}.",
+            *[f"Binary decision limitation: {note}" for note in binary_assessment.notes],
+        ])
     report.verification_summary = verification_summary
 
     # Prevent an empty recommendation section.

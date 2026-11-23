@@ -1,0 +1,351 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=4, TCP=23, MDNS=2
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.19.0.1:34736           <-> 172.19.0.2:4506                 10 973 bytes      13 1385 bytes      23 2358 bytes     0.000543000         0.0774
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.19.0.1:34736 -> 172.19.0.2:4506 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.19.0.2:4506 -> 172.19.0.1:34736 (TCP)
+- [E-S0000-F000019-003 | server->client] root user keyword observed
+- [E-S0000-F000020-005 | client->server] cmd.exe
+- [E-S0000-F000019-004 | server->client] LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.19.0.1:34736 -> 172.19.0.2:4506; packets=23; client->server=13, server->client=10; role_hint=other protocol/application candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: SaltStack master (ZeroMQ over TCP 4506; version not visible)
+
+Relevant Events: 172.19.0.1 connected to 172.19.0.2:4506 and initiated a ZeroMQ session consistent with Salt master traffic. The client first probed and then attempted to prepare authentication as root; the server replied with a UserAuthenticationError referencing the root user and an auth blob. Immediately after, the client sent a cleartext runner request invoking salt.cmd to call cmd.exec_code with python3 code that executes a subprocess to touch /tmp/POC on the master. The server then emitted a salt/run event tag with a JID, indicating the runner job was accepted/scheduled.
+
+Malicious Activities: Unauthenticated remote code execution attempt against SaltStack master using the cleartext “runner” path (salt.cmd -> cmd.exec_code with python3, running subprocess to create /tmp/POC). Initial root authentication failed, but the attacker bypassed auth by submitting a cleartext runner request. This aligns with known Salt master unauthenticated runner/wheel exposure.
+
+Attack Success: Succeeded
+
+Evidence: 
+- [E-S0000-F000003-001] 172.19.0.1 -> 172.19.0.2:4506 connection to the Salt master service port
+- [E-S0000-F000019-003] Server-side “root” user keyword observed during auth handling (UserAuthenticationError)
+- [E-S0000-F000019-004] Token-like blob returned with the auth error (likely associated with the failed root auth exchange)
+- [E-S0000-F000020-005] Command module indicator (“cmd”) present in client payload, consistent with salt.cmd/cmd.exec_code usage
+- [E-S0000-F000004-002] Server responses consistent with job handling; stream payload shows a salt/run JID event tag acknowledging the runner job (job accepted/scheduled)
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SaltStack master",
+    "application": "Salt (SaltStack) Master",
+    "framework": "ZeroMQ",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Authentication Bypass; Remote Code Execution",
+    "technique": "Unauthenticated runner invocation on Salt master (salt.cmd -> cmd.exec_code) over ZeroMQ port 4506",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000003-001",
+      "E-S0000-F000019-003",
+      "E-S0000-F000019-004",
+      "E-S0000-F000020-005",
+      "E-S0000-F000004-002"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2020-11651",
+    "confidence": "High",
+    "reason": "Traffic to Salt master on TCP/4506 shows unauthenticated access to runner/wheel functionality; client issues a runner request (salt.cmd/cmd.exec_code) without valid auth and server acknowledges a run JID. This matches the Salt master ClearFuncs/PublishClient authentication bypass enabling unauthenticated runner/wheel execution."
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SaltStack master",
+    "application": "Salt (SaltStack) Master",
+    "framework": "ZeroMQ",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Authentication Bypass; Remote Code Execution",
+    "technique": "Unauthenticated runner invocation on Salt master (salt.cmd -> cmd.exec_code) over ZeroMQ port 4506",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000003-001",
+      "E-S0000-F000019-003",
+      "E-S0000-F000019-004",
+      "E-S0000-F000020-005",
+      "E-S0000-F000004-002"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2020-11651",
+    "confidence": "High",
+    "reason": "PCAP shows ZeroMQ traffic to Salt master on TCP/4506. After a failed root auth reference [E-S0000-F000019-003] and token-like blob [E-S0000-F000019-004], the client sends a cleartext runner request using the cmd module [E-S0000-F000020-005], and the server acknowledges a salt/run JID (job accepted/scheduled) [E-S0000-F000004-002]. This matches Salt master ClearFuncs authentication bypass that allows unauthenticated access to runner/wheel methods (CVE-2020-11651). Traffic is to the master transport, not salt-api/netapi (distinguishing it from CVE-2020-16846 or CVE-2020-25592). Association supported by packet mechanism and aligns with public advisories; success is inferred from the observed JID acceptance in the PCAP."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Unknown",
+  "success_supported": "Unknown",
+  "cve_supported": "No",
+  "unsupported_claims": [
+    "Specific runner invocation details (salt.cmd -> cmd.exec_code) are not directly evidenced in the deterministic packet items",
+    "Server acknowledgment of a salt/run JID (job accepted/scheduled) is not deterministically tied to the malicious request by a specific response frame",
+    "Execution details of python3 subprocess creating /tmp/POC are not visible in the provided packet evidence"
+  ],
+  "evidence_check": [
+    "E-S0000-F000003-001",
+    "E-S0000-F000019-003",
+    "E-S0000-F000019-004",
+    "E-S0000-F000020-005",
+    "E-S0000-F000004-002"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: SaltStack master
+Attack Type: Authentication Bypass; Remote Code Execution
+Attack Success: Unknown
+CVE: CVE-2020-11651
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: No
+Verifier Confidence: Medium
+Overall Confidence: Low
+Score: 1/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: SaltStack master authentication bypass remote code execution
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-30T00:09:06.373328+00:00
+Candidate CVEs: CVE-2020-11651, CVE-2013-6617, CVE-2017-12791
+Sources: 8
+
+Source 1: CISA KEV
+Title: SaltStack Salt Authentication Bypass Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: SaltStack Salt: SaltStack Salt contains an authentication bypass vulnerability in the salt-master process ClearFuncs due to improperly validating method calls. The vulnerability allows a remote user to access some methods without authentication, which can be used to retrieve user tokens from the salt master and/or run commands on salt minions. Salt users who follow fundamental internet security guidelines and best practices are not affected by this vulnerability. Required action: Apply updates per vendor instructions.
+Supports: CISA KEV identifies CVE-2020-11651 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2020-11651: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2020-11651
+Summary: An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions.
+Supports: NVD lists CVE-2020-11651 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2013-6617: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2013-6617
+Summary: The salt master in Salt (aka SaltStack) 0.11.0 through 0.17.0 does not properly drop group privileges, which makes it easier for remote attackers to gain privileges.
+Supports: NVD lists CVE-2013-6617 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2017-12791: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2017-12791
+Summary: Directory traversal vulnerability in minion id validation in SaltStack Salt before 2016.11.7 and 2017.7.x before 2017.7.1 allows remote minions with incorrect credentials to authenticate to a master via a crafted minion ID.
+Supports: NVD lists CVE-2017-12791 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: CVE-2020-16846: SaltStack Salt RCE Vulnerability
+URL: https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-16846 CVE-2020-16846: SaltStack Salt RCE Vulnerability CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt that allows shell injection via crafted web requests to the Salt API. This article covers technical details, affected versions, impact, and mitigation. Published: March 11, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2020-16846 Overview CVE-2020-16846 is a critical shell injection vulnerability discovered in SaltStack Salt through version 3002. The vulnerability allows unauthenticated remote attackers to execute arbitrary operating system commands by sending specially crafted web requests to the Salt API when the SSH client feature is enabled. This command injection flaw (CWE-78) represents a severe security risk for organizations using SaltStack Sa This vulnerability enables unauthenticated remote code execution through shell injection in the Salt API, allowing complete system compromise. CISA has added this vulnerability to the Known Exploited Vulnerabilities catalog, confirming active exploitation in the wild. SaltStack Salt through version 3002 (including versions 3001, 3002, and earlier) Debian Linux 9.0 and 10.0 November 3, 2020 - SaltStack publicly disclosed CVE-2020-16846 along with two other CVEs November 6, 2020 - CVE-2020-16846 published to NVD November 7, 2025 - Last updated in NVD database Technical Details for CVE-2020-16846 This shell injection vulnerability exists in SaltStack Salt's REST API implementation when the SSH client functionality is enabled. The flaw stems from improper input validation and sanitization of user-supplied data within API requests. When an attacker sends a crafted web request to the Salt API endpoint, the malicious input is passed directly to shell commands without adequate escaping or validation, enabling arbi The vulnerability is particularly dangerous because it can be exploited remotely over the network without requiring any authentication credentials. The Salt API, designed to provide programmatic access to Salt functionality, becomes a direct attack vector when SSH client features are active. Successful exploitation grants attackers the same privileges as the Salt master process, which typically runs with elevated per The root cause of CVE-2020-16846 is improper neutralization of special elements used in an OS command (CWE-78). The Salt API fails to properly sanitize input parameters before incorporating them into shell commands executed via the SSH client functionality. User-controlled data containing shell metacharacters (such as semicolons, pipes, backticks, or command substitution syntax) is processed without escaping, allowin The attack vector for this vulnerability is network-based, targeting the Salt API's HTTP/HTTPS endpoints. An attacker can exploit this vulnerability by: Identifying exposed Salt API instances with SSH client functionality enabled Crafting malicious HTTP re
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: SaltStack Salt Unauthenticated Remote Code Execution
+URL: https://github.com/advisories/GHSA-pjhf-vpx3-33r3
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). GitHub is where people build software. More than 225 million people use GitHub to discover, fork, and contribute to over 800 million ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. SaltStack Salt Unauthenticated Remote Code Execution to the GitHub Advisory Database An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions. https://nvd.nist.gov/vuln/detail/CVE-2020-11651 https://github.com/saltstack/salt/blob/v3000.2_docs/doc/topics/releases/3000.2.rst https://lists.debian.org/debian-lts-announce/2020/05/msg00027.html https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-salt-2vx545AG https://www.debian.org/security/2020/dsa-4676 http://lists.opensuse.org/opensuse-security-announce/2020-04/msg00047.html http://lists.opensuse.org/opensuse-security-announce/2020-07/msg00070.html http://packetstormsecurity.com/files/157560/Saltstack-3000.1-Remote-Code-Execution.html http://packetstormsecurity.com/files/157678/SaltStack-Salt-Master-Minion-Unauthenticated-Remote-Code-Execution.html http://www.vmware.com/security/advisories/VMSA-2020-0009.html https://github.com/pypa/advisory-database/tree/main/vulns/salt/PYSEC-2020-102.yaml https://usn.ubuntu.com/4459-1 Published by the National Vulnerability Database Published to the GitHub Advisory Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and execution conditions or variables of the vulnerable system that enable the attack. These differ from security-enhancing techniques/technologies (ref Attack Complexity) as the primary purpose of these conditions is not to explicitly mitigate attacks, but rather, emerge naturally as a consequence of the deployment and execution of the vulnerable system. This metric describes the level of privileges an attacker must possess prior to successfully expl
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: CVE-2020-25592 — SaltStack Authentication Bypass and ...
+URL: https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). In SaltStack Salt through 3002, salt-netapi improperly validates eauth credentials and tokens. A user can bypass authentication and invoke ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: CVE-2020-11651: SaltStack Salt-Master Auth Bypass
+URL: https://safeguard.sh/resources/blog/cve-2020-11651-authentication-bypass-in-saltstack-salt-master
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Deep dive on CVE-2020-11651, the critical SaltStack salt-master authentication bypass: affected versions, CVSS/KEV context, ...
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for secured.ai: gaierror: [Errno 11001] getaddrinfo failed | Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000003-001]: 172.19.0.1:34736 -> 172.19.0.2:4506 (TCP).
+- PCAP [E-S0000-F000019-003]: root user keyword observed.
+- PCAP [E-S0000-F000019-004]: LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=.
+- PCAP [E-S0000-F000020-005]: cmd.exe.
+- PCAP [E-S0000-F000004-002]: 172.19.0.2:4506 -> 172.19.0.1:34736 (TCP).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [CISA KEV] SaltStack Salt Authentication Bypass Vulnerability: SaltStack Salt: SaltStack Salt contains an authentication bypass vulnerability in the salt-master process ClearFuncs due to improperly validating method calls. The vulnerability allows a remote user to access some methods without authentication, which can be used to retrieve user tokens from the salt master and/or run commands on salt minions. Salt users who follow fundamental internet security guidelines and best practices are not affected by this vulnerability. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2020-11651 as exploited in the wild.
+- ONLINE [NIST NVD] CVE-2020-11651: NVD vulnerability record: An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-11651 Supports: NVD lists CVE-2020-11651 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2013-6617: NVD vulnerability record: The salt master in Salt (aka SaltStack) 0.11.0 through 0.17.0 does not properly drop group privileges, which makes it easier for remote attackers to gain privileges. Source: https://nvd.nist.gov/vuln/detail/CVE-2013-6617 Supports: NVD lists CVE-2013-6617 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-12791: NVD vulnerability record: Directory traversal vulnerability in minion id validation in SaltStack Salt before 2016.11.7 and 2017.7.x before 2017.7.1 allows remote minions with incorrect credentials to authenticate to a master via a crafted minion ID. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-12791 Supports: NVD lists CVE-2017-12791 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2020-16846: SaltStack Salt RCE Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-16846 CVE-2020-16846: SaltStack Salt RCE Vulnerability CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt that allows shell injection via crafted web requests to the Salt API. This article covers technical details, affected versions, impact, and mitigation. Published: March 11, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2020-16846 Overview CVE-2020-16846 is a critical shell injection vulnerability discovered in SaltStack Salt through version 3002. The vulnerability allows unauthenticated remote attackers to execute arbitrary operating system commands by sending specially crafted web requests to the Salt API when the SSH client feature is enabled. This command injection flaw (CWE-78) represents a severe security risk for organizations using SaltStack Sa This vulnerability enables unauthenticated remote code execution through shell injection in the Salt API, allowing complete system compromise. CISA has added this vulnerability to the Known Exploited Vulnerabilities catalog, confirming active exploitation in the wild. SaltStack Salt through version 3002 (including versions 3001, 3002, and earlier) Debian Linux 9.0 and 10.0 November 3, 2020 - SaltStack publicly disclosed CVE-2020-16846 along with two other CVEs November 6, 2020 - CVE-2020-16846 published to NVD November 7, 2025 - Last updated in NVD database Technical Details for CVE-2020-16846 This shell injection vulnerability exists in SaltStack Salt's REST API implementation when the SSH client functionality is enabled. The flaw stems from improper input validation and sanitization of user-supplied data within API requests. When an attacker sends a crafted web request to the Salt API endpoint, the malicious input is passed directly to shell commands without adequate escaping or validation, enabling arbi The vulnerability is particularly dangerous because it can be exploited remotely over the network without requiring any authentication credentials. The Salt API, designed to provide programmatic access to Salt functionality, becomes a direct attack vector when SSH client features are active. Successful exploitation grants attackers the same privileges as the Salt master process, which typically runs with elevated per The root cause of CVE-2020-16846 is improper neutralization of special elements used in an OS command (CWE-78). The Salt API fails to properly sanitize input parameters before incorporating them into shell commands executed via the SSH client functionality. User-controlled data containing shell metacharacters (such as semicolons, pipes, backticks, or command substitution syntax) is processed without escaping, allowin The attack vector for this vulnerability is network-based, targeting the Salt API's HTTP/HTTPS endpoints. An attacker can exploit this vulnerability by: Identifying exposed Salt API instances with SSH client functionality enabled Crafting malicious HTTP re Source: https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+- ONLINE [Serper web result] SaltStack Salt Unauthenticated Remote Code Execution: UNTRUSTED WEB RESEARCH (not PCAP evidence). GitHub is where people build software. More than 225 million people use GitHub to discover, fork, and contribute to over 800 million ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. SaltStack Salt Unauthenticated Remote Code Execution to the GitHub Advisory Database An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions. https://nvd.nist.gov/vuln/detail/CVE-2020-11651 https://github.com/saltstack/salt/blob/v3000.2_docs/doc/topics/releases/3000.2.rst https://lists.debian.org/debian-lts-announce/2020/05/msg00027.html https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-salt-2vx545AG https://www.debian.org/security/2020/dsa-4676 http://lists.opensuse.org/opensuse-security-announce/2020-04/msg00047.html http://lists.opensuse.org/opensuse-security-announce/2020-07/msg00070.html http://packetstormsecurity.com/files/157560/Saltstack-3000.1-Remote-Code-Execution.html http://packetstormsecurity.com/files/157678/SaltStack-Salt-Master-Minion-Unauthenticated-Remote-Code-Execution.html http://www.vmware.com/security/advisories/VMSA-2020-0009.html https://github.com/pypa/advisory-database/tree/main/vulns/salt/PYSEC-2020-102.yaml https://usn.ubuntu.com/4459-1 Published by the National Vulnerability Database Published to the GitHub Advisory Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and execution conditions or variables of the vulnerable system that enable the attack. These differ from security-enhancing techniques/technologies (ref Attack Complexity) as the primary purpose of these conditions is not to explicitly mitigate attacks, but rather, emerge naturally as a consequence of the deployment and execution of the vulnerable system. This metric describes the level of privileges an attacker must possess prior to successfully expl Source: https://github.com/advisories/GHSA-pjhf-vpx3-33r3
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2020-25592 — SaltStack Authentication Bypass and ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). In SaltStack Salt through 3002, salt-netapi improperly validates eauth credentials and tokens. A user can bypass authentication and invoke ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+- ONLINE [Serper web result] CVE-2020-11651: SaltStack Salt-Master Auth Bypass: UNTRUSTED WEB RESEARCH (not PCAP evidence). Deep dive on CVE-2020-11651, the critical SaltStack salt-master authentication bypass: affected versions, CVSS/KEV context, ... Source: https://safeguard.sh/resources/blog/cve-2020-11651-authentication-bypass-in-saltstack-salt-master
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2020-11651
+- https://nvd.nist.gov/vuln/detail/CVE-2013-6617
+- https://nvd.nist.gov/vuln/detail/CVE-2017-12791
+- https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+- https://github.com/advisories/GHSA-pjhf-vpx3-33r3
+- https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+- https://safeguard.sh/resources/blog/cve-2020-11651-authentication-bypass-in-saltstack-salt-master
+
+Search status: Valid
+Search query: SaltStack master authentication bypass remote code execution
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for secured.ai: gaierror: [Errno 11001] getaddrinfo failed
+- Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed CVE-2020-11651; independent Verifier CVE support: No. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: SaltStack master
+Associated CVE candidate (Analyst): CVE-2020-11651
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000003-001]: 172.19.0.1:34736 -> 172.19.0.2:4506 (TCP).
+- PCAP [E-S0000-F000019-003]: root user keyword observed.
+- PCAP [E-S0000-F000019-004]: LyN4X6/9yx/vJiccHgYYYPyu8cuq1tjG3I48fN1h3LcvhSsRKKf2C9LTRlxIivAYAkCEZyVc/pDs=.
+- PCAP [E-S0000-F000020-005]: cmd.exe.
+- PCAP [E-S0000-F000004-002]: 172.19.0.2:4506 -> 172.19.0.1:34736 (TCP).
+- ONLINE [CISA KEV] SaltStack Salt Authentication Bypass Vulnerability: SaltStack Salt: SaltStack Salt contains an authentication bypass vulnerability in the salt-master process ClearFuncs due to improperly validating method calls. The vulnerability allows a remote user to access some methods without authentication, which can be used to retrieve user tokens from the salt master and/or run commands on salt minions. Salt users who follow fundamental internet security guidelines and best practices are not affected by this vulnerability. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2020-11651 as exploited in the wild.
+- ONLINE [NIST NVD] CVE-2020-11651: NVD vulnerability record: An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-11651 Supports: NVD lists CVE-2020-11651 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2013-6617: NVD vulnerability record: The salt master in Salt (aka SaltStack) 0.11.0 through 0.17.0 does not properly drop group privileges, which makes it easier for remote attackers to gain privileges. Source: https://nvd.nist.gov/vuln/detail/CVE-2013-6617 Supports: NVD lists CVE-2013-6617 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-12791: NVD vulnerability record: Directory traversal vulnerability in minion id validation in SaltStack Salt before 2016.11.7 and 2017.7.x before 2017.7.1 allows remote minions with incorrect credentials to authenticate to a master via a crafted minion ID. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-12791 Supports: NVD lists CVE-2017-12791 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2020-16846: SaltStack Salt RCE Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-16846 CVE-2020-16846: SaltStack Salt RCE Vulnerability CVE-2020-16846 is a remote code execution vulnerability in SaltStack Salt that allows shell injection via crafted web requests to the Salt API. This article covers technical details, affected versions, impact, and mitigation. Published: March 11, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2020-16846 Overview CVE-2020-16846 is a critical shell injection vulnerability discovered in SaltStack Salt through version 3002. The vulnerability allows unauthenticated remote attackers to execute arbitrary operating system commands by sending specially crafted web requests to the Salt API when the SSH client feature is enabled. This command injection flaw (CWE-78) represents a severe security risk for organizations using SaltStack Sa This vulnerability enables unauthenticated remote code execution through shell injection in the Salt API, allowing complete system compromise. CISA has added this vulnerability to the Known Exploited Vulnerabilities catalog, confirming active exploitation in the wild. SaltStack Salt through version 3002 (including versions 3001, 3002, and earlier) Debian Linux 9.0 and 10.0 November 3, 2020 - SaltStack publicly disclosed CVE-2020-16846 along with two other CVEs November 6, 2020 - CVE-2020-16846 published to NVD November 7, 2025 - Last updated in NVD database Technical Details for CVE-2020-16846 This shell injection vulnerability exists in SaltStack Salt's REST API implementation when the SSH client functionality is enabled. The flaw stems from improper input validation and sanitization of user-supplied data within API requests. When an attacker sends a crafted web request to the Salt API endpoint, the malicious input is passed directly to shell commands without adequate escaping or validation, enabling arbi The vulnerability is particularly dangerous because it can be exploited remotely over the network without requiring any authentication credentials. The Salt API, designed to provide programmatic access to Salt functionality, becomes a direct attack vector when SSH client features are active. Successful exploitation grants attackers the same privileges as the Salt master process, which typically runs with elevated per The root cause of CVE-2020-16846 is improper neutralization of special elements used in an OS command (CWE-78). The Salt API fails to properly sanitize input parameters before incorporating them into shell commands executed via the SSH client functionality. User-controlled data containing shell metacharacters (such as semicolons, pipes, backticks, or command substitution syntax) is processed without escaping, allowin The attack vector for this vulnerability is network-based, targeting the Salt API's HTTP/HTTPS endpoints. An attacker can exploit this vulnerability by: Identifying exposed Salt API instances with SSH client functionality enabled Crafting malicious HTTP re Source: https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+- ONLINE [Serper web result] SaltStack Salt Unauthenticated Remote Code Execution: UNTRUSTED WEB RESEARCH (not PCAP evidence). GitHub is where people build software. More than 225 million people use GitHub to discover, fork, and contribute to over 800 million ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. SaltStack Salt Unauthenticated Remote Code Execution to the GitHub Advisory Database An issue was discovered in SaltStack Salt before 2019.2.4 and 3000 before 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions. https://nvd.nist.gov/vuln/detail/CVE-2020-11651 https://github.com/saltstack/salt/blob/v3000.2_docs/doc/topics/releases/3000.2.rst https://lists.debian.org/debian-lts-announce/2020/05/msg00027.html https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-salt-2vx545AG https://www.debian.org/security/2020/dsa-4676 http://lists.opensuse.org/opensuse-security-announce/2020-04/msg00047.html http://lists.opensuse.org/opensuse-security-announce/2020-07/msg00070.html http://packetstormsecurity.com/files/157560/Saltstack-3000.1-Remote-Code-Execution.html http://packetstormsecurity.com/files/157678/SaltStack-Salt-Master-Minion-Unauthenticated-Remote-Code-Execution.html http://www.vmware.com/security/advisories/VMSA-2020-0009.html https://github.com/pypa/advisory-database/tree/main/vulns/salt/PYSEC-2020-102.yaml https://usn.ubuntu.com/4459-1 Published by the National Vulnerability Database Published to the GitHub Advisory Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and execution conditions or variables of the vulnerable system that enable the attack. These differ from security-enhancing techniques/technologies (ref Attack Complexity) as the primary purpose of these conditions is not to explicitly mitigate attacks, but rather, emerge naturally as a consequence of the deployment and execution of the vulnerable system. This metric describes the level of privileges an attacker must possess prior to successfully expl Source: https://github.com/advisories/GHSA-pjhf-vpx3-33r3
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2020-25592 — SaltStack Authentication Bypass and ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). In SaltStack Salt through 3002, salt-netapi improperly validates eauth credentials and tokens. A user can bypass authentication and invoke ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+- ONLINE [Serper web result] CVE-2020-11651: SaltStack Salt-Master Auth Bypass: UNTRUSTED WEB RESEARCH (not PCAP evidence). Deep dive on CVE-2020-11651, the critical SaltStack salt-master authentication bypass: affected versions, CVSS/KEV context, ... Source: https://safeguard.sh/resources/blog/cve-2020-11651-authentication-bypass-in-saltstack-salt-master
+
+Verification Summary:
+- Affected service: SaltStack master.
+- Attack type: Authentication Bypass; Remote Code Execution.
+- Attack technique: Unauthenticated runner invocation on Salt master (salt.cmd -> cmd.exec_code) over ZeroMQ port 4506.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Unknown.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 1/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2020-11651; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: Specific runner invocation details (salt.cmd -> cmd.exec_code) are not directly evidenced in the deterministic packet items
+- Unsupported claim: Server acknowledgment of a salt/run JID (job accepted/scheduled) is not deterministically tied to the malicious request by a specific response frame
+- Unsupported claim: Execution details of python3 subprocess creating /tmp/POC are not visible in the provided packet evidence
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: Attack result is a forced low-confidence Analyst prediction; Verifier/Consensus did not establish it.
+- MCP evidence search status: Valid.
+- MCP investigation query: SaltStack master authentication bypass remote code execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-11651
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2013-6617
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-12791
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2020-16846/
+- Evidence-source URL: https://github.com/advisories/GHSA-pjhf-vpx3-33r3
+- Evidence-source URL: https://www.rapid7.com/blog/post/ra-cve-2020-25592-saltstack-authentication-bypass-and-salt-ssh-command-execution-analysis/
+- Evidence-source URL: https://safeguard.sh/resources/blog/cve-2020-11651-authentication-bypass-in-saltstack-salt-master
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for secured.ai: gaierror: [Errno 11001] getaddrinfo failed
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Restrict network exposure: limit or block inbound access to TCP/4506 from untrusted networks; allow only authorized management sources.
+- Apply current vendor updates for Salt master and follow vendor hardening guidance; track advisories referenced in CISA KEV.
+- Review and enforce authentication/authorization configurations for Salt operations; rotate any credentials or tokens that may have been exposed.
+- Enable and centralize Salt master and job/audit logs; alert on unexpected command execution requests or unusual 'cmd' usage patterns.
+- Deploy endpoint monitoring on Salt master and minions to detect suspicious shell or process creation initiated by Salt components.
+- Segregate Salt infrastructure onto a dedicated management network and require VPN or bastion access for administrative actions.
+- Baseline and monitor traffic on TCP/4506; alert on anomalous cleartext credentials/keywords or atypical binary blobs within control traffic.
+- If compromise is suspected, rotate keys, validate state files and pillars, and rebuild affected nodes from trusted images.

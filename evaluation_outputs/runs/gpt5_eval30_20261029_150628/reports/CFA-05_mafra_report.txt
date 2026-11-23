@@ -1,0 +1,777 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 19
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+Protocol Counts: TCP=273, ARP=2, MySQL=321
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:47626           <-> 172.18.0.2:3306                157 12 kB          94 95 kB         251 108 kB       15.461340000         1.9536
+172.18.0.3:47640           <-> 172.18.0.2:3306                 75 5585 bytes      47 30 kB         122 36 kB        17.434013000         1.6441
+172.18.0.3:37132           <-> 172.18.0.2:3306                 58 4546 bytes      41 48 kB          99 53 kB        19.091875000         0.9672
+172.18.0.3:37144           <-> 172.18.0.2:3306                 10 870 bytes      12 2128 bytes      22 2998 bytes    20.072244000         0.0297
+172.18.0.3:47598
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000001-001 | client->server] 172.18.0.3:42514 -> 172.18.0.2:3306 (TCP)
+- [E-S0000-F000002-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:42514 (TCP)
+- [E-S0001-F000003-001 | client->server] 172.18.0.3:42522 -> 172.18.0.2:3306 (TCP)
+- [E-S0001-F000004-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:42522 (TCP)
+- [E-S0002-F000005-001 | client->server] 172.18.0.3:42528 -> 172.18.0.2:3306 (TCP)
+- [E-S0002-F000006-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:42528 (TCP)
+- [E-S0003-F000007-001 | client->server] 172.18.0.3:42534 -> 172.18.0.2:3306 (TCP)
+- [E-S0003-F000008-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:42534 (TCP)
+- [E-S0004-F000011-001 | client->server] 172.18.0.3:42546 -> 172.18.0.2:3306 (TCP)
+- [E-S0004-F000012-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:42546 (TCP)
+- [E-S0005-F000013-001 | client->server] 172.18.0.3:47556 -> 172.18.0.2:3306 (TCP)
+- [E-S0005-F000014-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47556 (TCP)
+- [E-S0006-F000015-001 | client->server] 172.18.0.3:47568 -> 172.18.0.2:3306 (TCP)
+- [E-S0006-F000016-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47568 (TCP)
+- [E-S0007-F000017-001 | client->server] 172.18.0.3:47570 -> 172.18.0.2:3306 (TCP)
+- [E-S0007-F000018-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47570 (TCP)
+- [E-S0008-F000019-001 | client->server] 172.18.0.3:47574 -> 172.18.0.2:3306 (TCP)
+- [E-S0008-F000020-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47574 (TCP)
+- [E-S0009-F000021-001 | client->server] 172.18.0.3:47578 -> 172.18.0.2:3306 (TCP)
+- [E-S0009-F000022-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47578 (TCP)
+- [E-S0010-F000023-001 | client->server] 172.18.0.3:47584 -> 172.18.0.2:3306 (TCP)
+- [E-S0010-F000024-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47584 (TCP)
+- [E-S0010-F000029-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47584 (MySQL)
+- [E-S0011-F000031-001 | client->server] 172.18.0.3:47598 -> 172.18.0.2:3306 (TCP)
+- [E-S0011-F000032-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47598 (TCP)
+- [E-S0011-F000034-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47598 (MySQL)
+- [E-S0011-F000036-004 | client->server] 172.18.0.3:47598 -> 172.18.0.2:3306 (MySQL)
+- [E-S0011-F000036-005 | client->server] root user keyword observed
+- [E-S0011-F000040-006 | client->server] SHOW DATABASES LIKE "joomla"
+- [E-S0012-F000049-001 | client->server] 172.18.0.3:47610 -> 172.18.0.2:3306 (TCP)
+- [E-S0012-F000050-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47610 (TCP)
+- [E-S0012-F000052-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47610 (MySQL)
+- [E-S0012-F000054-004 | client->server] 172.18.0.3:47610 -> 172.18.0.2:3306 (MySQL)
+- [E-S0012-F000054-005 | client->server] root user keyword observed
+- [E-S0013-F000067-001 | client->server] 172.18.0.3:47626 -> 172.18.0.2:3306 (TCP)
+- [E-S0013-F000068-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47626 (TCP)
+- [E-S0013-F000070-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47626 (MySQL)
+- [E-S0013-F000072-004 | client->server] 172.18.0.3:47626 -> 172.18.0.2:3306 (MySQL)
+- [E-S0013-F000088-008 | client->server] POST Install
+- [E-S0013-F000072-005 | client->server] root user keyword observed
+- [E-S0013-F000088-009 | client->server] admin keyword observed
+- [E-S0013-F000084-006 | client->server] CREATE TABLE IF NOT EXISTS `j_assets` (
+- [E-S0013-F000088-010 | client->server] INSERT INTO `j_assets` (`id`, `parent_id`, `lft`, `rgt`, `level`, `name`, `title`, `rules`) VALUES
+- [E-S0013-F000092-011 | client->server] CREATE TABLE IF NOT EXISTS `j_extensions` (
+- [E-S0013-F000096-012 | client->server] INSERT INTO `j_extensions` (`package_id`, `name`, `type`, `element`, `folder`, `client_id`, `enabled`, `access`, `protected`, `locked`, `manifest_cache`, `params`, `custom_data`) VALUES
+- [E-S0013-F000110-013 | client->server] INSERT INTO `j_extensions` (`package_id`, `name`, `type`, `element`, `folder`, `client_id`, `enabled`, `access`, `protected`, `locked`, `manifest_cache`, `params`, `custom_data`, `ordering`, `state`) VALUES
+- [E-S0013-F000123-014 | client->server] INSERT INTO `j_extensions` (`package_id`, `name`, `type`, `element`, `folder`, `client_id`, `enabled`, `access`, `protected`, `locked`, `manifest_cache`, `params`, `custom_data`, `ordering`, `state`)
+- [E-S0013-F000123-015 | client->server] SELECT `extension_id`, 'English (en-GB)', 'language', 'en-GB', '', 0, 1, 1, 1, 1, '', '', '', 0, 0 FROM `j_extensions` WHERE `name` = 'English (en-GB) Language Pack'
+- [E-S0013-F000125-016 | client->server] SELECT `extension_id`, 'English (en-GB)', 'language', 'en-GB', '', 1, 1, 1, 1, 1, '', '', '', 0, 0 FROM `j_extensions` WHERE `name` = 'English (en-GB) Language Pack'
+- [E-S0013-F000127-017 | client->server] SELECT `extension_id`, 'English (en-GB)', 'language', 'en-GB', '', 3, 1, 1, 1, 1, '', '', '', 0, 0 FROM `j_extensions` WHERE `name` = 'English (en-GB) Language Pack'
+- [E-S0013-F000129-018 | client->server] CREATE TABLE IF NOT EXISTS `j_languages` (
+- [E-S0013-F000132-019 | client->server] INSERT INTO `j_languages` (`lang_id`, `lang_code`, `title`, `title_native`, `sef`, `image`, `description`, `metakey`, `metadesc`, `sitename`, `published`, `access`, `ordering`) VALUES
+- [E-S0013-F000135-020 | client->server] CREATE TABLE IF NOT EXISTS `j_menu` (
+- [E-S0013-F000138-021 | client->server] INSERT INTO `j_menu` (`id`, `menutype`, `title`, `alias`, `note`, `path`, `link`, `type`, `published`, `parent_id`, `level`, `component_id`, `browserNav`, `access`, `img`, `template_style_id`, `params`, `lft`, `rgt`, `home`, `language`, `client_id`, `publish_up`, `publish_down`) VALUES
+- [E-S0013-F000141-022 | client->server] INSERT INTO `j_menu` (`id`, `menutype`, `title`, `alias`, `note`, `path`, `link`, `type`, `published`, `parent_id`, `level`, `component_id`, `browserNav`, `access`, `img`, `template_style_id`, `params`, `lft`, `rgt`, `home`, `language`, `client_id`, `publish_up`, `publish_down`)
+- [E-S0013-F000141-023 | client->server] SELECT 2, 'main', 'com_banners', 'Banners', '', 'Banners', 'index.php?option=com_banners', 'component', 1, 1, 1, `extension_id`, 0, 0, 'class:bookmark', 0, '', 1, 10, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_banners'
+- [E-S0013-F000144-024 | client->server] SELECT 3, 'main', 'com_banners', 'Banners', '', 'Banners/Banners', 'index.php?option=com_banners&view=banners', 'component', 1, 2, 2, `extension_id`, 0, 0, 'class:banners', 0, '', 2, 3, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_banners'
+- [E-S0013-F000147-025 | client->server] SELECT 4, 'main', 'com_banners_categories', 'Categories', '', 'Banners/Categories', 'index.php?option=com_categories&view=categories&extension=com_banners', 'component', 1, 2, 2, `extension_id`, 0, 0, 'class:banners-cat', 0, '', 4, 5, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_cat...[TRUNCATED]
+- [E-S0013-F000150-026 | client->server] SELECT 5, 'main', 'com_banners_clients', 'Clients', '', 'Banners/Clients', 'index.php?option=com_banners&view=clients', 'component', 1, 2, 2, `extension_id`, 0, 0, 'class:banners-clients', 0, '', 6, 7, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_banners'
+- [E-S0013-F000153-027 | client->server] SELECT 6, 'main', 'com_banners_tracks', 'Tracks', '', 'Banners/Tracks', 'index.php?option=com_banners&view=tracks', 'component', 1, 2, 2, `extension_id`, 0, 0, 'class:banners-tracks', 0, '', 8, 9, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_banners'
+- [E-S0013-F000156-028 | client->server] SELECT 7, 'main', 'com_contact', 'Contacts', '', 'Contacts', 'index.php?option=com_contact', 'component', 1, 1, 1, `extension_id`, 0, 0, 'class:address-book', 0, '', 11, 20, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_contact'
+- [E-S0013-F000159-029 | client->server] SELECT 8, 'main', 'com_contact_contacts', 'Contacts', '', 'Contacts/Contacts', 'index.php?option=com_contact&view=contacts', 'component', 1, 7, 2, `extension_id`, 0, 0, 'class:contact', 0, '', 12, 13, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_contact'
+- [E-S0013-F000162-030 | client->server] SELECT 9, 'main', 'com_contact_categories', 'Categories', '', 'Contacts/Categories', 'index.php?option=com_categories&view=categories&extension=com_contact', 'component', 1, 7, 2, `extension_id`, 0, 0, 'class:contact-cat', 0, '', 14, 15, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_...[TRUNCATED]
+- [E-S0013-F000165-031 | client->server] SELECT 10, 'main', 'com_newsfeeds', 'News Feeds', '', 'News Feeds', 'index.php?option=com_newsfeeds', 'component', 1, 1, 1, `extension_id`, 0, 0, 'class:rss', 0, '', 23, 28, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_newsfeeds'
+- [E-S0013-F000168-032 | client->server] SELECT 11, 'main', 'com_newsfeeds_feeds', 'Feeds', '', 'News Feeds/Feeds', 'index.php?option=com_newsfeeds&view=newsfeeds', 'component', 1, 10, 2, `extension_id`, 0, 0, 'class:newsfeeds', 0, '', 24, 25, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_newsfeeds'
+- [E-S0013-F000171-033 | client->server] SELECT 12, 'main', 'com_newsfeeds_categories', 'Categories', '', 'News Feeds/Categories', 'index.php?option=com_categories&view=categories&extension=com_newsfeeds', 'component', 1, 10, 2, `extension_id`, 0, 0, 'class:newsfeeds-cat', 0, '', 26, 27, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `nam...[TRUNCATED]
+- [E-S0013-F000174-034 | client->server] SELECT 13, 'main', 'com_finder', 'Smart Search', '', 'Smart Search', 'index.php?option=com_finder', 'component', 1, 1, 1, `extension_id`, 0, 0, 'class:search-plus', 0, '', 29, 38, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_finder'
+- [E-S0013-F000177-035 | client->server] SELECT 14, 'main', 'com_tags', 'Tags', '', 'Tags', 'index.php?option=com_tags&view=tags', 'component', 1, 1, 1, `extension_id`, 0, 1, 'class:tags', 0, '', 39, 40, 0, '', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_tags'
+- [E-S0013-F000180-036 | client->server] SELECT 15, 'main', 'com_associations', 'Multilingual Associations', '', 'Multilingual Associations', 'index.php?option=com_associations&view=associations', 'component', 1, 1, 1, `extension_id`, 0, 0, 'class:language', 0, '', 21, 22, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_assoc...[TRUNCATED]
+- [E-S0013-F000183-037 | client->server] SELECT 16, 'main', 'mod_menu_fields', 'Contact Custom Fields', '', 'contact/Custom Fields', 'index.php?option=com_fields&context=com_contact.contact', 'component', 1, 7, 2, `extension_id`, 0, 0, 'class:messages-add', 0, '', 16, 17, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_fields...[TRUNCATED]
+- [E-S0013-F000186-038 | client->server] SELECT 17, 'main', 'mod_menu_fields_group', 'Contact Custom Fields Group', '', 'contact/Custom Fields Group', 'index.php?option=com_fields&view=groups&context=com_contact.contact', 'component', 1, 7, 2, `extension_id`, 0, 0, 'class:messages-add', 0, '', 18, 19, 0, '*', 1, NULL, NULL FROM `j_extensio...[TRUNCATED]
+- [E-S0013-F000189-039 | client->server] SELECT 18, 'main', 'com_finder_index', 'Smart-Search-Index', '', 'Smart Search/Index', 'index.php?option=com_finder&view=index', 'component', 1, 13, 2, `extension_id`, 0, 0, 'class:finder', 0, '', 30, 31, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_finder'
+- [E-S0013-F000192-040 | client->server] SELECT 19, 'main', 'com_finder_maps', 'Smart-Search-Maps', '', 'Smart Search/Maps', 'index.php?option=com_finder&view=maps', 'component', 1, 13, 2, `extension_id`, 0, 0, 'class:finder-maps', 0, '', 32, 33, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_finder'
+- [E-S0013-F000195-041 | client->server] SELECT 20, 'main', 'com_finder_filters', 'Smart-Search-Filters', '', 'Smart Search/Filters', 'index.php?option=com_finder&view=filters', 'component', 1, 13, 2, `extension_id`, 0, 0, 'class:finder-filters', 0, '', 34, 35, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_finder'
+- [E-S0013-F000198-042 | client->server] SELECT 21, 'main', 'com_finder_searches', 'Smart-Search-Searches', '', 'Smart Search/Searches', 'index.php?option=com_finder&view=searches', 'component', 1, 13, 2, `extension_id`, 0, 0, 'class:finder-searches', 0, '', 36, 37, 0, '*', 1, NULL, NULL FROM `j_extensions` WHERE `name` = 'com_finder'
+- [E-S0013-F000201-043 | client->server] SELECT 101, 'mainmenu', 'Home', 'home', '', 'home', 'index.php?option=com_content&view=featured', 'component', 1, 1, 1, `extension_id`, 0, 1, '', 0, '{"featured_categories":[""],"layout_type":"blog","blog_class_leading":"","blog_class":"","num_leading_articles":"1","num_intro_articles":"3","num_link...[TRUNCATED]
+- [E-S0013-F000204-044 | client->server] CREATE TABLE IF NOT EXISTS `j_menu_types` (
+- [E-S0013-F000210-045 | client->server] CREATE TABLE IF NOT EXISTS `j_modules` (
+- [E-S0013-F000213-046 | client->server] INSERT INTO `j_modules` (`id`, `asset_id`, `title`, `note`, `content`, `ordering`, `position`, `publish_up`, `publish_down`, `published`, `module`, `access`, `showtitle`, `params`, `client_id`, `language`) VALUES
+- [E-S0013-F000216-047 | client->server] CREATE TABLE IF NOT EXISTS `j_modules_menu` (
+- [E-S0013-F000219-048 | client->server] INSERT INTO `j_modules_menu` (`moduleid`, `menuid`) VALUES
+- [E-S0013-F000222-049 | client->server] CREATE TABLE IF NOT EXISTS `j_schemas` (
+- [E-S0013-F000225-050 | client->server] CREATE TABLE IF NOT EXISTS `j_session` (
+- [E-S0013-F000228-051 | client->server] CREATE TABLE IF NOT EXISTS `j_tags` (
+- [E-S0013-F000231-052 | client->server] INSERT INTO `j_tags` (`id`, `parent_id`, `lft`, `rgt`, `level`, `path`, `title`, `alias`, `note`, `description`, `published`, `access`, `params`, `metadesc`, `metakey`, `metadata`, `created_user_id`, `created_time`, `created_by_alias`, `modified_user_id`, `modified_time`, `images`, `urls`, `hits`, `...[TRUNCATED]
+- [E-S0013-F000233-053 | client->server] CREATE TABLE IF NOT EXISTS `j_template_overrides` (
+- [E-S0013-F000236-054 | client->server] CREATE TABLE IF NOT EXISTS `j_template_styles` (
+- [E-S0013-F000239-055 | client->server] INSERT INTO `j_template_styles` (`id`, `template`, `client_id`, `home`, `title`, `inheritable`, `parent`, `params`) VALUES
+- [E-S0013-F000242-056 | client->server] CREATE TABLE IF NOT EXISTS `j_updates` (
+- [E-S0013-F000245-057 | client->server] CREATE TABLE IF NOT EXISTS `j_update_sites` (
+- [E-S0013-F000245-058 | client->server] Update Sites'
+- [E-S0013-F000248-059 | client->server] INSERT INTO `j_update_sites` (`update_site_id`, `name`, `type`, `location`, `enabled`, `last_check_timestamp`) VALUES
+- [E-S0013-F000248-060 | client->server] update.joomla.org/core/list.xml', 1, 0),
+- [E-S0013-F000248-061 | client->server] update.joomla.org/language/translationlist_4.xml', 1, 0),
+- [E-S0013-F000248-062 | client->server] Update Component', 'extension', 'https://update.joomla.org/core/extensions/com_joomlaupdate.xml', 1, 0)
+- [E-S0013-F000251-063 | client->server] CREATE TABLE IF NOT EXISTS `j_update_sites_extensions` (
+- [E-S0013-F000254-064 | client->server] INSERT INTO `j_update_sites_extensions` (`update_site_id`, `extension_id`)
+- [E-S0013-F000254-065 | client->server] SELECT 1, `extension_id` FROM `j_extensions` WHERE `name` = 'files_joomla'
+- [E-S0013-F000257-066 | client->server] SELECT 2, `extension_id` FROM `j_extensions` WHERE `name` = 'English (en-GB) Language Pack'
+- [E-S0013-F000260-067 | client->server] SELECT 3, `extension_id` FROM `j_extensions` WHERE `name` = 'com_joomlaupdate'
+- [E-S0013-F000263-068 | client->server] CREATE TABLE IF NOT EXISTS `j_usergroups` (
+- [E-S0013-F000266-069 | client->server] INSERT INTO `j_usergroups` (`id`, `parent_id`, `lft`, `rgt`, `title`) VALUES
+- [E-S0013-F000269-070 | client->server] CREATE TABLE IF NOT EXISTS `j_users` (
+- [E-S0013-F000272-071 | client->server] CREATE TABLE IF NOT EXISTS `j_user_keys` (
+- [E-S0013-F000275-072 | client->server] CREATE TABLE IF NOT EXISTS `j_user_notes` (
+- [E-S0013-F000278-073 | client->server] CREATE TABLE IF NOT EXISTS `j_user_profiles` (
+- [E-S0013-F000281-074 | client->server] CREATE TABLE IF NOT EXISTS `j_user_mfa` (
+- [E-S0013-F000284-075 | client->server] CREATE TABLE IF NOT EXISTS `j_user_usergroup_map` (
+- [E-S0013-F000287-076 | client->server] CREATE TABLE IF NOT EXISTS `j_viewlevels` (
+- [E-S0013-F000290-077 | client->server] INSERT INTO `j_viewlevels` (`id`, `title`, `ordering`, `rules`) VALUES
+- [E-S0013-F000293-078 | client->server] CREATE TABLE IF NOT EXISTS `j_workflows` (
+- [E-S0013-F000296-079 | client->server] INSERT INTO `j_workflows` (`id`, `asset_id`, `published`, `title`, `description`, `extension`, `default`, `ordering`, `created`, `created_by`, `modified`, `modified_by`) VALUES
+- [E-S0013-F000299-080 | client->server] CREATE TABLE IF NOT EXISTS `j_workflow_associations` (
+- [E-S0013-F000302-081 | client->server] CREATE TABLE IF NOT EXISTS `j_workflow_stages` (
+- [E-S0013-F000305-082 | client->server] INSERT INTO `j_workflow_stages` (`id`, `asset_id`, `ordering`, `workflow_id`, `published`, `title`, `description`, `default`) VALUES
+- [E-S0013-F000308-083 | client->server] CREATE TABLE IF NOT EXISTS `j_workflow_transitions` (
+- [E-S0013-F000311-084 | client->server] INSERT INTO `j_workflow_transitions` (`id`, `asset_id`, `published`, `ordering`, `workflow_id`, `title`, `description`, `from_stage_id`, `to_stage_id`, `options`) VALUES
+- [E-S0013-F000084-007 | client->server] id
+- [E-S0014-F000318-001 | client->server] 172.18.0.3:47640 -> 172.18.0.2:3306 (TCP)
+- [E-S0014-F000319-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47640 (TCP)
+- [E-S0014-F000321-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:47640 (MySQL)
+- [E-S0014-F000323-004 | client->server] 172.18.0.3:47640 -> 172.18.0.2:3306 (MySQL)
+- [E-S0014-F000323-005 | client->server] root user keyword observed
+- [E-S0014-F000335-006 | client->server] CREATE TABLE IF NOT EXISTS `j_banners` (
+- [E-S0014-F000339-008 | client->server] CREATE TABLE IF NOT EXISTS `j_banner_clients` (
+- [E-S0014-F000343-009 | client->server] CREATE TABLE IF NOT EXISTS `j_banner_tracks` (
+- [E-S0014-F000346-010 | client->server] CREATE TABLE IF NOT EXISTS `j_contact_details` (
+- [E-S0014-F000349-011 | client->server] CREATE TABLE IF NOT EXISTS `j_content` (
+- [E-S0014-F000352-012 | client->server] CREATE TABLE IF NOT EXISTS `j_content_frontpage` (
+- [E-S0014-F000355-013 | client->server] CREATE TABLE IF NOT EXISTS `j_content_rating` (
+- [E-S0014-F000358-014 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_filters` (
+- [E-S0014-F000361-015 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_links` (
+- [E-S0014-F000364-016 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_links_terms` (
+- [E-S0014-F000367-017 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_logging` (
+- [E-S0014-F000370-018 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_taxonomy` (
+- [E-S0014-F000373-019 | client->server] INSERT INTO `j_finder_taxonomy` (`id`, `parent_id`, `lft`, `rgt`, `level`, `path`, `title`, `alias`, `state`, `access`, `language`) VALUES
+- [E-S0014-F000376-020 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_taxonomy_map` (
+- [E-S0014-F000379-021 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_terms` (
+- [E-S0014-F000382-022 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_terms_common` (
+- [E-S0014-F000385-023 | client->server] INSERT INTO `j_finder_terms_common` (`term`, `language`, `custom`) VALUES
+- [E-S0014-F000388-024 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_tokens` (
+- [E-S0014-F000391-025 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_tokens_aggregate` (
+- [E-S0014-F000394-026 | client->server] CREATE TABLE IF NOT EXISTS `j_finder_types` (
+- [E-S0014-F000397-027 | client->server] CREATE TABLE IF NOT EXISTS `j_messages` (
+- [E-S0014-F000400-028 | client->server] CREATE TABLE IF NOT EXISTS `j_messages_cfg` (
+- [E-S0014-F000403-029 | client->server] CREATE TABLE IF NOT EXISTS `j_newsfeeds` (
+- [E-S0014-F000406-030 | client->server] CREATE TABLE IF NOT EXISTS `j_privacy_requests` (
+- [E-S0014-F000409-031 | client->server] CREATE TABLE IF NOT EXISTS `j_privacy_consents` (
+- [E-S0014-F000412-032 | client->server] CREATE TABLE IF NOT EXISTS `j_redirect_links` (
+- [E-S0014-F000415-033 | client->server] CREATE TABLE IF NOT EXISTS `j_action_logs` (
+- [E-S0014-F000418-034 | client->server] CREATE TABLE IF NOT EXISTS `j_action_logs_extensions` (
+- [E-S0014-F000421-035 | client->server] INSERT INTO `j_action_logs_extensions` (`id`, `extension`) VALUES
+- [E-S0014-F000424-036 | client->server] CREATE TABLE IF NOT EXISTS `j_action_log_config` (
+- [E-S0014-F000427-037 | client->server] INSERT INTO `j_action_log_config` (`id`, `type_title`, `type_alias`, `id_holder`, `title_holder`, `table_name`, `text_prefix`) VALUES
+- [E-S0014-F000430-038 | client->server] CREATE TABLE IF NOT EXISTS `j_action_logs_users` (
+- [E-S0014-F000433-039 | client->server] CREATE TABLE IF NOT EXISTS `j_scheduler_tasks` (
+- [E-S0014-F000335-007 | client->server] id
+- [E-S0015-F000440-001 | client->server] 172.18.0.3:37132 -> 172.18.0.2:3306 (TCP)
+- [E-S0015-F000441-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37132 (TCP)
+- [E-S0015-F000443-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37132 (MySQL)
+- [E-S0015-F000445-004 | client->server] 172.18.0.3:37132 -> 172.18.0.2:3306 (MySQL)
+- [E-S0015-F000445-005 | client->server] root user keyword observed
+- [E-S0015-F000505-022 | client->server] admin keyword observed
+- [E-S0015-F000457-006 | client->server] CREATE TABLE IF NOT EXISTS `j_associations` (
+- [E-S0015-F000461-008 | client->server] CREATE TABLE IF NOT EXISTS `j_categories` (
+- [E-S0015-F000465-009 | client->server] INSERT INTO `j_categories` (`id`, `asset_id`, `parent_id`, `lft`, `rgt`, `level`, `path`, `extension`, `title`, `alias`, `note`, `description`, `published`, `access`, `params`, `metadesc`, `metakey`, `metadata`, `created_user_id`, `created_time`, `modified_user_id`, `modified_time`, `hits`, `languag...[TRUNCATED]
+- [E-S0015-F000469-010 | client->server] CREATE TABLE IF NOT EXISTS `j_content_types` (
+- [E-S0015-F000472-011 | client->server] INSERT INTO `j_content_types` (`type_id`, `type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
+- [E-S0015-F000481-012 | client->server] CREATE TABLE IF NOT EXISTS `j_contentitem_tag_map` (
+- [E-S0015-F000481-013 | client->server] UPDATE CURRENT_TIMESTAMP COMMENT 'Date of most recent save for this tag-item',
+- [E-S0015-F000484-014 | client->server] CREATE TABLE IF NOT EXISTS `j_fields` (
+- [E-S0015-F000487-015 | client->server] CREATE TABLE IF NOT EXISTS `j_fields_categories` (
+- [E-S0015-F000490-016 | client->server] CREATE TABLE IF NOT EXISTS `j_fields_groups` (
+- [E-S0015-F000493-017 | client->server] CREATE TABLE IF NOT EXISTS `j_fields_values` (
+- [E-S0015-F000496-018 | client->server] CREATE TABLE IF NOT EXISTS `j_overrider` (
+- [E-S0015-F000499-019 | client->server] CREATE TABLE IF NOT EXISTS `j_postinstall_messages` (
+- [E-S0015-F000502-020 | client->server] INSERT INTO `j_postinstall_messages` (`extension_id`, `title_key`, `description_key`, `action_key`, `language_extension`, `language_client_id`, `type`, `action_file`, `action`, `condition_file`, `condition_method`, `version_introduced`, `enabled`)
+- [E-S0015-F000502-021 | client->server] SELECT `extension_id`, 'COM_CPANEL_WELCOME_BEGINNERS_TITLE', 'COM_CPANEL_WELCOME_BEGINNERS_MESSAGE', '', 'com_cpanel', 1, 'message', '', '', '', '', '3.2.0', 1 FROM `j_extensions` WHERE `name` = 'files_joomla'
+- [E-S0015-F000505-023 | client->server] SELECT `extension_id`, 'COM_CPANEL_MSG_STATS_COLLECTION_TITLE', 'COM_CPANEL_MSG_STATS_COLLECTION_BODY', '', 'com_cpanel', 1, 'message', '', '', 'admin://components/com_admin/postinstall/statscollection.php', 'admin_postinstall_statscollection_condition', '3.5.0', 1 FROM `j_extensions` WHERE `name` =...[TRUNCATED]
+- [E-S0015-F000508-024 | client->server] SELECT `extension_id`, 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME', 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME_BODY', 'PLG_SYSTEM_UPDATENOTIFICATION_POSTINSTALL_UPDATECACHETIME_ACTION', 'plg_system_updatenotification', 1, 'action', 'site://plugins/system/updatenotific...[TRUNCATED]
+- [E-S0015-F000511-026 | client->server] SELECT `extension_id`, 'PLG_SYSTEM_HTTPHEADERS_POSTINSTALL_INTRODUCTION_TITLE', 'PLG_SYSTEM_HTTPHEADERS_POSTINSTALL_INTRODUCTION_BODY', 'PLG_SYSTEM_HTTPHEADERS_POSTINSTALL_INTRODUCTION_ACTION', 'plg_system_httpheaders', 1, 'action', 'site://plugins/system/httpheaders/postinstall/introduction.php', '...[TRUNCATED]
+- [E-S0015-F000514-028 | client->server] SELECT `extension_id`, 'COM_USERS_POSTINSTALL_MULTIFACTORAUTH_TITLE', 'COM_USERS_POSTINSTALL_MULTIFACTORAUTH_BODY', 'COM_USERS_POSTINSTALL_MULTIFACTORAUTH_ACTION', 'com_users', 1, 'action', 'admin://components/com_users/postinstall/multifactorauth.php', 'com_users_postinstall_mfa_action', 'admin://c...[TRUNCATED]
+- [E-S0015-F000517-029 | client->server] CREATE TABLE IF NOT EXISTS `j_ucm_base` (
+- [E-S0015-F000520-030 | client->server] CREATE TABLE IF NOT EXISTS `j_ucm_content` (
+- [E-S0015-F000523-031 | client->server] CREATE TABLE IF NOT EXISTS `j_history` (
+- [E-S0015-F000526-032 | client->server] CREATE TABLE IF NOT EXISTS `j_webauthn_credentials` (
+- [E-S0015-F000529-033 | client->server] CREATE TABLE IF NOT EXISTS `j_mail_templates` (
+- [E-S0015-F000532-034 | client->server] INSERT INTO `j_mail_templates` (`template_id`, `extension`, `language`, `subject`, `body`, `htmlbody`, `attachments`, `params`) VALUES
+- [E-S0015-F000457-007 | client->server] id
+- [E-S0015-F000508-025 | client->server] //plugins/system/updatenotification/postinstall/updatecachetime
+- [E-S0015-F000511-027 | client->server] //plugins/system/httpheaders/postinstall/introduction
+- [E-S0016-F000539-001 | client->server] 172.18.0.3:37144 -> 172.18.0.2:3306 (TCP)
+- [E-S0016-F000540-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37144 (TCP)
+- [E-S0016-F000542-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37144 (MySQL)
+- [E-S0016-F000544-004 | client->server] 172.18.0.3:37144 -> 172.18.0.2:3306 (MySQL)
+- [E-S0016-F000544-005 | client->server] root user keyword observed
+- [E-S0016-F000548-006 | client->server] admin keyword observed
+- [E-S0016-F000548-007 | client->server] INSERT INTO `j_users` (`id`, `name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`)
+- [E-S0016-F000552-009 | client->server] INSERT INTO `j_user_usergroup_map` (`user_id`, `group_id`)
+- [E-S0016-F000548-008 | client->server] id
+- [E-S0017-F000561-001 | client->server] 172.18.0.3:37158 -> 172.18.0.2:3306 (TCP)
+- [E-S0017-F000562-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37158 (TCP)
+- [E-S0017-F000564-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37158 (MySQL)
+- [E-S0017-F000566-004 | client->server] 172.18.0.3:37158 -> 172.18.0.2:3306 (MySQL)
+- [E-S0017-F000566-005 | client->server] root user keyword observed
+- [E-S0018-F000579-001 | client->server] 172.18.0.3:37168 -> 172.18.0.2:3306 (TCP)
+- [E-S0018-F000580-002 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37168 (TCP)
+- [E-S0018-F000582-003 | server->client] 172.18.0.2:3306 -> 172.18.0.3:37168 (MySQL)
+- [E-S0018-F000584-004 | client->server] 172.18.0.3:37168 -> 172.18.0.2:3306 (MySQL)
+- [E-S0018-F000584-005 | client->server] root user keyword observed
+- [E-S0018-F000588-006 | client->server] UPDATE j_extensions SET manifest_cache = '{"version": "4.2.7"}' WHERE manifest_cache = ''
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.3:42514 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 1: 172.18.0.3:42522 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 2: 172.18.0.3:42528 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 3: 172.18.0.3:42534 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 4: 172.18.0.3:42546 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 5: 172.18.0.3:47556 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 6: 172.18.0.3:47568 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 7: 172.18.0.3:47570 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 8: 172.18.0.3:47574 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 9: 172.18.0.3:47578 -> 172.18.0.2:3306; packets=2; client->server=1, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 10: 172.18.0.3:47584 -> 172.18.0.2:3306; packets=8; client->server=5, server->client=3; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 11: 172.18.0.3:47598 -> 172.18.0.2:3306; packets=18; client->server=9, server->client=9; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 12: 172.18.0.3:47610 -> 172.18.0.2:3306; packets=18; client->server=10, server->client=8; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 13: 172.18.0.3:47626 -> 172.18.0.2:3306; packets=251; client->server=94, server->client=157; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 14: 172.18.0.3:47640 -> 172.18.0.2:3306; packets=122; client->server=47, server->client=75; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 15: 172.18.0.3:37132 -> 172.18.0.2:3306; packets=99; client->server=41, server->client=58; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 16: 172.18.0.3:37144 -> 172.18.0.2:3306; packets=22; client->server=12, server->client=10; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 17: 172.18.0.3:37158 -> 172.18.0.2:3306; packets=18; client->server=10, server->client=8; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 18: 172.18.0.3:37168 -> 172.18.0.2:3306; packets=18; client->server=10, server->client=8; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- Joomla application/framework candidate: observed j_action_log_config, j_action_logs, j_action_logs_extensions, j_action_logs_users, j_assets, j_associations, j_banner_clients, j_banner_tracks. A MySQL connection is supporting backend evidence here.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- Primary application candidate: Joomla
+- Supporting fingerprints: j_action_log_config, j_action_logs, j_action_logs_extensions, j_action_logs_users, j_assets, j_associations, j_banner_clients, j_banner_tracks, j_banners, j_categories
+- Backend dependency: MySQL
+- Reason: application-specific schema and version artifacts are more specific than the database protocol label.
+- This is not a CVE or attack-success decision.
+
+--- Stream 0 [VALID] ---
+Service: MySQL database (version not visible; backend to Joomla per capture context)
+
+Relevant Events: 172.18.0.3 initiated a TCP connection to 172.18.0.2:3306. The server replied, but the client did not complete the handshake. No application data, authentication, or SQL traffic was exchanged.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0000-F000001-001] Client 172.18.0.3 -> 172.18.0.2:3306 initiated TCP connection (no payload observed).
+- [E-S0000-F000002-002] Server 172.18.0.2 -> 172.18.0.3:3306 responded (no payload observed); handshake not completed by client.
+
+--- Stream 1 [VALID] ---
+Service: MySQL database (port 3306; version not visible)
+Relevant Events: 172.18.0.3 attempted to connect to 172.18.0.2:3306; the server replied, but the TCP handshake was not completed. No MySQL handshake/authentication or SQL data was exchanged.
+Malicious Activities: None
+Attack Success: None
+Evidence: [E-S0001-F000003-001] Client 172.18.0.3 -> 172.18.0.2:3306 TCP packet (connection attempt; no application payload). [E-S0001-F000004-002] Server 172.18.0.2 -> 172.18.0.3:3306 TCP reply (no application payload); no follow-up from client.
+
+--- Stream 2 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; backend to Joomla per capture context)
+
+Relevant Events: 172.18.0.3 initiated a TCP connection to 172.18.0.2:3306; the server responded, but the client did not complete the TCP handshake. No MySQL greeting, authentication, or SQL commands were exchanged in this stream.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0002-F000005-001] 172.18.0.3:42528 -> 172.18.0.2:3306 TCP packet with no payload (handshake attempt).
+- [E-S0002-F000006-002] 172.18.0.2:3306 -> 172.18.0.3:42528 TCP packet with no payload (server reply); no subsequent client ACK or MySQL protocol exchange observed.
+
+--- Stream 3 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; backend to Joomla per primary application resolution)
+Relevant Events: 172.18.0.3 attempted to establish a TCP connection to 172.18.0.2:3306. The server replied, but the TCP handshake was not completed; no MySQL greeting, authentication, or SQL traffic followed.
+Malicious Activities: None
+Attack Success: None
+Evidence: [E-S0003-F000007-001] Client 172.18.0.3:42534 -> 172.18.0.2:3306 TCP packet (no payload; connection attempt). [E-S0003-F000008-002] Server 172.18.0.2:3306 -> 172.18.0.3:42534 TCP reply (no payload); no subsequent application data observed.
+
+--- Stream 4 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; backend to Joomla per whole-capture context)
+
+Relevant Events: 172.18.0.3 attempted to connect to 172.18.0.2:3306; the server replied, but no application data followed. No MySQL greeting, authentication, or SQL traffic is present in this stream.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0004-F000011-001] 172.18.0.3:42546 -> 172.18.0.2:3306 TCP connection attempt (no payload).
+- [E-S0004-F000012-002] 172.18.0.2:3306 -> 172.18.0.3:42546 TCP reply (no payload); no subsequent MySQL/authentication exchange observed.
+
+--- Stream 5 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; backend to Joomla per primary application resolution)
+
+Relevant Events: 172.18.0.3 attempted to open a TCP connection to 172.18.0.2:3306. The server replied, but only two TCP packets were exchanged with no MySQL handshake or data. The connection was not established and no authentication or SQL activity occurred.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0005-F000013-001] 172.18.0.3:47556 -> 172.18.0.2:3306 TCP packet; no payload (connection attempt).
+- [E-S0005-F000014-002] 172.18.0.2:3306 -> 172.18.0.3:47556 TCP reply; no payload; no subsequent MySQL greeting/authentication observed.
+
+--- Stream 6 [VALID] ---
+Service: MySQL database backend (version not visible; Joomla backend per capture context)
+
+Relevant Events: 172.18.0.3 attempted a TCP connection to 172.18.0.2:3306. The server replied, but the TCP handshake did not complete. No MySQL handshake, authentication, or SQL data was exchanged.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- E-S0006-F000015-001: 172.18.0.3:47568 -> 172.18.0.2:3306 TCP packet; no application payload.
+- E-S0006-F000016-002: 172.18.0.2:3306 -> 172.18.0.3:47568 TCP reply; no application payload; no subsequent MySQL/authentication observed.
+
+--- Stream 7 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; backend to Joomla per primary application resolution)
+
+Relevant Events: 172.18.0.3 attempted a TCP connection to 172.18.0.2:3306; the server replied, but no MySQL handshake, authentication, or SQL data followed. This appears to be an incomplete/aborted connection with no application activity.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: [E-S0007-F000017-001] 172.18.0.3:47570 -> 172.18.0.2:3306 TCP packet (no payload; connection attempt). [E-S0007-F000018-002] 172.18.0.2:3306 -> 172.18.0.3:47570 TCP reply (no payload); no subsequent MySQL/authentication exchange observed.
+
+--- Stream 8 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; Joomla backend per capture context)
+
+Relevant Events: 172.18.0.3 attempted to open a TCP connection to 172.18.0.2:3306. The server replied, but the TCP handshake was not completed and no MySQL greeting, authentication, or SQL traffic followed.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0008-F000019-001] 172.18.0.3:47574 -> 172.18.0.2:3306 TCP packet with 0 payload bytes (connection attempt; likely SYN).
+- [E-S0008-F000020-002] 172.18.0.2:3306 -> 172.18.0.3:47574 TCP reply with 0 payload bytes (likely SYN-ACK); no subsequent client ACK or MySQL protocol exchange observed.
+
+--- Stream 9 [VALID] ---
+Service: MySQL database on port 3306 (version not visible; backend to Joomla per primary application resolution)
+
+Relevant Events: 172.18.0.3 initiated a TCP connection to 172.18.0.2:3306; the server replied, but no further packets or MySQL handshake/authentication followed. This appears to be an incomplete/aborted connection attempt with no application-layer data.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- E-S0009-F000021-001: 172.18.0.3:47578 -> 172.18.0.2:3306 TCP packet with no payload; connection attempt.
+- E-S0009-F000022-002: 172.18.0.2:3306 -> 172.18.0.3:47578 TCP reply with no payload; no subsequent MySQL greeting/authentication observed.
+
+--- Stream 10 [VALID] ---
+Service: MySQL database on port 3306 (backend to Joomla per primary application resolution; version not confirmed in deterministic evidence)
+
+Relevant Events: 172.18.0.3 (client) initiated a TCP connection to 172.18.0.2:3306 (server). The server responded and sent a MySQL greeting/handshake packet, but the client did not proceed with authentication or any SQL activity. This appears to be an incomplete/aborted MySQL connection attempt.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- E-S0010-F000023-001: 172.18.0.3:47584 -> 172.18.0.2:3306 TCP connection initiation.
+- E-S0010-F000024-002: 172.18.0.2:3306 -> 172.18.0.3:47584 TCP reply.
+- E-S0010-F000029-003: 172.18.0.2:3306 -> 172.18.0.3:47584 MySQL packet (server greeting/handshake); no subsequent client authentication or SQL observed.
+
+--- Stream 11 [VALID] ---
+Service: MySQL database backend for Joomla (version not visible)
+
+Relevant Events: 172.18.0.3 connected to 172.18.0.2:3306, received the MySQL greeting, and sent a handshake/authentication response. The client authenticated as user “root” and then executed the SQL query SHOW DATABASES LIKE "joomla". The server responded, indicating the “joomla” database exists, and the client closed the connection.
+
+Malicious Activities: None observed in this flow (database enumeration after successful login)
+
+Attack Success: None
+
+Evidence:
+- E-S0011-F000034-003: Server->client MySQL greeting/handshake from 172.18.0.2:3306
+- E-S0011-F000036-004: Client->server MySQL handshake response from 172.18.0.3
+- E-S0011-F000036-005: “root” username observed in authentication attempt
+- E-S0011-F000040-006: SQL issued: SHOW DATABASES LIKE "joomla"
+- E-S0011-F000031-001, E-S0011-F000032-002: TCP setup confirming 172.18.0.3 -> 172.18.0.2:3306 connection establishment
+
+--- Stream 12 [VALID] ---
+Service: MySQL server on 3306 (backend to Joomla; version not visible)
+
+Relevant Events: 172.18.0.3 connects to 172.18.0.2:3306, receives the MySQL greeting, and sends a handshake/authentication response identifying the user as “root.” Follow-on MySQL messages occur after authentication, consistent with normal backend database activity for the Joomla application.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0012-F000052-003] 172.18.0.2:3306 -> 172.18.0.3:47610 MySQL server greeting/handshake observed.
+- [E-S0012-F000054-004] 172.18.0.3:47610 -> 172.18.0.2:3306 MySQL client handshake/authentication response sent.
+- [E-S0012-F000054-005] “root” username observed in authentication metadata.
+- [E-S0012-F000049-001], [E-S0012-F000050-002] TCP connection setup between 172.18.0.3 and 172.18.0.2:3306 confirmed.
+
+--- Stream 13 [VALID] ---
+Service: Joomla CMS using MySQL backend on port 3306 (server version not visible)
+
+Relevant Events: 172.18.0.3 (client) connects to 172.18.0.2:3306 (MySQL server), authenticates as user “root,” and proceeds to create and populate the Joomla schema. The flow shows typical Joomla installation/initialization activity: creating many j_* tables and inserting seed data (assets, extensions, languages, menus, modules, updates, users-related tables, viewlevels, workflows). This indicates successful backend initialization by the Joomla application.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- E-S0013-F000070-003: MySQL server greeting/handshake from 172.18.0.2:3306 to 172.18.0.3
+- E-S0013-F000072-004: MySQL client handshake/auth response from 172.18.0.3 to 172.18.0.2
+- E-S0013-F000072-005: “root” username observed in authentication metadata
+- Schema creation and seeding consistent with Joomla installation:
+  - E-S0013-F000084-006: CREATE TABLE IF NOT EXISTS `j_assets`
+  - E-S0013-F000088-010: INSERT INTO `j_assets` (initial ACL/asset tree)
+  - E-S0013-F000092-011, E-S0013-F000096-012, E-S0013-F000110-013, E-S0013-F000123-014/015/017: `j_extensions` creation and population
+  - E-S0013-F000129-018, E-S0013-F000132-019: `j_languages` table and inserts
+  - E-S0013-F000135-020, E-S0013-F000138-021, E-S0013-F000141-022/023 and subsequent SELECTs: `j_menu` and menu items tied to components
+  - E-S0013-F000210-045, E-S0013-F000213-046: `j_modules` creation and inserts
+  - E-S0013-F000222-049, E-S0013-F000225-050: `j_schemas`, `j_session` tables
+  - E-S0013-F000228-051, E-S0013-F000231-052: `j_tags` table and inserts
+  - E-S0013-F000236-054, E-S0013-F000239-055: `j_template_styles` table and inserts
+  - E-S0013-F000242-056, E-S0013-F000245-057/058, E-S0013-F000248-059/060/061/062, E-S0013-F000251-063, E-S0013-F000254-064/065/066/067/068: update sites and mapping tables
+  - E-S0013-F000263-068, E-S0013-F000266-069: `j_usergroups` table and inserts
+  - E-S0013-F000269-070, E-S0013-F000272-071, E-S0013-F000275-072, E-S0013-F000278-073, E-S0013-F000281-074, E-S0013-F000284-075: users-related tables (`j_users`, `j_user_keys`, `j_user_notes`, `j_user_profiles`, `j_user_mfa`, `j_user_usergroup_map`)
+  - E-S0013-F000287-076, E-S0013-F000290-077: `j_viewlevels` table and inserts
+  - E-S0013-F000293-078, E-S0013-F000296-079, E-S0013-F000299-080, E-S0013-F000302-081, E-S0013-F000305-082, E-S0013-F000308-083, E-S0013-F000311-084: workflows tables and seed data (associations, stages, transitions)
+
+--- Stream 14 [VALID] ---
+Service: MySQL on 3306 (backend to Joomla; version not visible)
+
+Relevant Events: 172.18.0.3 connects to 172.18.0.2:3306, completes the MySQL handshake, authenticates as user “root,” then issues standard Joomla installation/initialization SQL. The client creates multiple j_* tables and seeds data (e.g., banners, contacts, content, finder, action logs, scheduler), consistent with Joomla schema setup.
+
+Malicious Activities: None observed (DDL/seed data typical of Joomla install; no SQLi, file disclosure, or OS command execution indicators)
+
+Attack Success: None
+
+Evidence:
+- E-S0014-F000318-001, E-S0014-F000319-002: TCP connection setup 172.18.0.3:47640 -> 172.18.0.2:3306
+- E-S0014-F000321-003: MySQL server greeting/handshake from 172.18.0.2
+- E-S0014-F000323-004: MySQL client handshake/authentication response from 172.18.0.3
+- E-S0014-F000323-005: “root” username observed during authentication
+- Joomla schema creation and seeding:
+  - E-S0014-F000335-006: CREATE TABLE `j_banners`
+  - E-S0014-F000339-008: CREATE TABLE `j_banner_clients`
+  - E-S0014-F000343-009: CREATE TABLE `j_banner_tracks`
+  - E-S0014-F000346-010: CREATE TABLE `j_contact_details`
+  - E-S0014-F000349-011: CREATE TABLE `j_content`
+  - E-S0014-F000352-012: CREATE TABLE `j_content_frontpage`
+  - E-S0014-F000355-013: CREATE TABLE `j_content_rating`
+  - E-S0014-F000358-014: CREATE TABLE `j_finder_filters`
+  - E-S0014-F000361-015: CREATE TABLE `j_finder_links`
+  - E-S0014-F000364-016: CREATE TABLE `j_finder_links_terms`
+  - E-S0014-F000367-017: CREATE TABLE `j_finder_logging`
+  - E-S0014-F000370-018: CREATE TABLE `j_finder_taxonomy`
+  - E-S0014-F000373-019: INSERT INTO `j_finder_taxonomy`
+  - E-S0014-F000385-023: INSERT INTO `j_finder_terms_common`
+  - E-S0014-F000415-033: CREATE TABLE `j_action_logs`
+  - E-S0014-F000418-034: CREATE TABLE `j_action_logs_extensions`
+  - E-S0014-F000421-035: INSERT INTO `j_action_logs_extensions`
+  - E-S0014-F000424-036: CREATE TABLE `j_action_log_config`
+  - E-S0014-F000427-037: INSERT INTO `j_action_log_config`
+  - E-S0014-F000430-038: CREATE TABLE `j_action_logs_users`
+  - E-S0014-F000433-039: CREATE TABLE `j_scheduler_tasks`
+
+--- Stream 15 [VALID] ---
+Service: MySQL (backend for Joomla; version not visible)
+
+Relevant Events: 172.18.0.3 connects to 172.18.0.2:3306, completes the MySQL handshake, authenticates as user “root,” and executes Joomla schema creation and seed inserts (typical installation/initialization activity). Multiple j_* tables are created and populated, including associations, categories, content types, fields, postinstall messages, UCM, history, WebAuthn, and mail templates.
+
+Malicious Activities: None observed. No SQL injection, auth brute-force, or OS command execution indicators. The “id” token flagged as a command is part of SQL DDL column names, not an OS command.
+
+Attack Success: None
+
+Evidence:
+- Connection and handshake:
+  - E-S0015-F000440-001, E-S0015-F000441-002: TCP connection setup 172.18.0.3:37132 -> 172.18.0.2:3306
+  - E-S0015-F000443-003: MySQL server greeting/handshake
+  - E-S0015-F000445-004: MySQL client handshake/auth response
+- Authentication:
+  - E-S0015-F000445-005: “root” username observed during authentication (subsequent successful queries indicate login succeeded)
+  - E-S0015-F000505-022: “admin” keyword observed in SQL context (postinstall/com_admin), not a DB login
+- Joomla schema creation and data seeding (examples):
+  - E-S0015-F000457-006: CREATE TABLE IF NOT EXISTS `j_associations`
+  - E-S0015-F000461-008: CREATE TABLE IF NOT EXISTS `j_categories`
+  - E-S0015-F000465-009: INSERT INTO `j_categories` (seed data)
+  - E-S0015-F000469-010: CREATE TABLE IF NOT EXISTS `j_content_types`
+  - E-S0015-F000481-012/013: CREATE TABLE `j_contentitem_tag_map` and associated DDL
+  - E-S0015-F000484-014, E-S0015-F000487-015, E-S0015-F000490-016, E-S0015-F000493-017: CREATE TABLE `j_fields*` and `j_fields_values`
+  - E-S0015-F000496-018, E-S0015-F000499-019: CREATE TABLE `j_overrider`, `j_postinstall_messages`
+  - E-S0015-F000502-020/021, E-S0015-F000505-023, E-S0015-F000508-024/025, E-S0015-F000511-026/027, E-S0015-F000514-028: SELECTs/entries for postinstall messages and plugins (e.g., com_cpanel, updatenotification, httpheaders, com_users)
+  - E-S0015-F000517-029, E-S0015-F000520-030: CREATE TABLE `j_ucm_base`, `j_ucm_content`
+  - E-S0015-F000523-031: CREATE TABLE `j_history`
+  - E-S0015-F000526-032: CREATE TABLE `j_webauthn_credentials`
+  - E-S0015-F000529-033, E-S0015-F000532-034: CREATE TABLE and INSERTs for `j_mail_templates`
+- False-positive command indicator:
+  - E-S0015-F000457-007: “id” token flagged; present within SQL DDL (see E-S0015-F000457-006), not an OS command
+
+--- Stream 16 [VALID] ---
+Service: MySQL (backend for Joomla; version not visible)
+
+Relevant Events: 172.18.0.3 connects to 172.18.0.2:3306, completes the MySQL handshake, authenticates as user “root,” and seeds Joomla user data. Specifically, it issues an INSERT into j_users (with columns including id, name, username, email, password, etc.) and then inserts corresponding mappings into j_user_usergroup_map. The “admin” keyword appears in the SQL context (username), not as a DB login.
+
+Malicious Activities: None. No SQL injection, brute-force, or OS command execution. The “id” token flagged is a column name within the SQL, not an OS command.
+
+Attack Success: None
+
+Evidence:
+- Connection and handshake:
+  - E-S0016-F000539-001, E-S0016-F000540-002: TCP connection setup 172.18.0.3:37144 -> 172.18.0.2:3306
+  - E-S0016-F000542-003: MySQL server greeting/handshake
+  - E-S0016-F000544-004: MySQL client handshake/auth response
+- Authentication:
+  - E-S0016-F000544-005: “root” user keyword observed during authentication
+- Joomla user creation and mapping:
+  - E-S0016-F000548-006: “admin” keyword observed (in SQL username context)
+  - E-S0016-F000548-007: INSERT INTO `j_users` (Joomla user seeding)
+  - E-S0016-F000552-009: INSERT INTO `j_user_usergroup_map` (group mappings)
+- False-positive command indicator:
+  - E-S0016-F000548-008: “id” token is a SQL column name, not an OS command
+
+--- Stream 17 [VALID] ---
+Service: MySQL (backend for Joomla; version not visible)
+
+Relevant Events: 172.18.0.3 connects to 172.18.0.2:3306, completes a MySQL handshake, and authenticates using the “root” username. The session proceeds with MySQL requests consistent with backend application activity.
+
+Malicious Activities: None observed. No signs of SQL injection, brute-force, or OS command execution in this stream.
+
+Attack Success: None
+
+Evidence:
+- E-S0017-F000561-001, E-S0017-F000562-002: TCP connection setup 172.18.0.3:37158 -> 172.18.0.2:3306
+- E-S0017-F000564-003: MySQL server greeting/handshake from 172.18.0.2
+- E-S0017-F000566-004: MySQL client authentication response from 172.18.0.3
+- E-S0017-F000566-005: “root” user keyword observed during authentication
+
+--- Stream 18 [VALID] ---
+Service: MySQL (backend for Joomla; version not visible)
+Relevant Events: 172.18.0.3 connects to 172.18.0.2:3306, completes MySQL handshake, authenticates as user “root,” then updates Joomla’s j_extensions table to populate empty manifest_cache fields with a JSON string containing "version": "4.2.7".
+Malicious Activities: None. Traffic is consistent with backend application setup/maintenance; no SQL injection or OS command execution observed.
+Attack Success: None
+Evidence: 
+- E-S0018-F000579-001, E-S0018-F000580-002: TCP connection setup 172.18.0.3:37168 -> 172.18.0.2:3306
+- E-S0018-F000582-003: MySQL server greeting/handshake from 172.18.0.2
+- E-S0018-F000584-004: MySQL client authentication response from 172.18.0.3
+- E-S0018-F000584-005: “root” username observed during authentication
+- E-S0018-F000588-006: SQL UPDATE on j_extensions setting manifest_cache = '{"version": "4.2.7"}' where empty
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Joomla",
+    "application": "Joomla",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "Observed MySQL traffic shows Joomla database initialization and routine queries (e.g., schema creation and seeding). No exploit or malicious mechanism identifiable from packet evidence."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Joomla",
+    "application": "Joomla",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "MySQL"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Low",
+    "reason": "Observed MySQL traffic shows Joomla database initialization and routine queries (e.g., schema creation and seeding). No exploit or malicious mechanism identifiable from packet evidence."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0013-F000084-006",
+    "E-S0013-F000088-010",
+    "E-S0013-F000092-011",
+    "E-S0013-F000210-045",
+    "E-S0014-F000335-006",
+    "E-S0016-F000548-007",
+    "E-S0011-F000034-003",
+    "E-S0011-F000036-004",
+    "E-S0011-F000036-005",
+    "E-S0011-F000040-006",
+    "E-S0010-F000029-003",
+    "E-S0015-F000443-003",
+    "E-S0018-F000588-006"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Joomla
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: Unknown
+Verifier Confidence: High
+Overall Confidence: Low
+Score: 1/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Abstain
+Query: Joomla header
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-29T23:04:33.210011+00:00
+Candidate CVEs: None
+Sources: 0
+Warnings: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- None
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- None
+
+=== SOURCE URLS ===
+- None
+
+Search status: Abstain
+Search query: Joomla header
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- No online source was returned by the MCP search.
+- Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Joomla
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP packet evidence E-S0013-F000084-006: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0013-F000088-010: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0013-F000092-011: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0013-F000210-045: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0014-F000335-006: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0016-F000548-007: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0011-F000034-003: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0011-F000036-004: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0011-F000036-005: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0011-F000040-006: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0010-F000029-003: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0015-F000443-003: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+- PCAP packet evidence E-S0018-F000588-006: referenced during verification; no confirmed exploit or malicious mechanism identified from provided materials.
+
+Verification Summary:
+- Affected service: Joomla.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Abstain.
+- MCP investigation query: Joomla header.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Retain full PCAPs and maintain a clear mapping between evidence IDs and packet contents to enable reproducible verification and deeper inspection.
+- Harden Joomla and its extensions by applying current security updates; review and minimize enabled plugins; enforce least-privilege for MySQL credentials used by Joomla.
+- Restrict network access to MySQL (TCP/3306) to only the application host; monitor for unexpected database connections and anomalous query patterns.
+- Enable detailed application, web server, and database audit logging; correlate logs with packet timestamps and evidence IDs for anomaly detection.
+- Deploy a web application firewall in front of Joomla and enable rulesets for Joomla-specific and generic CMS threats; tune alerts and block policies accordingly.

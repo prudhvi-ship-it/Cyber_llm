@@ -90,6 +90,7 @@ def calculate_summary(df, systems=None):
         "Cases Evaluated",
         "Service Accuracy (Strict)",
         "CVE Accuracy (Strict)",
+        "Associated CVE Candidate Accuracy (Strict, Diagnostic)",
         "Vulnerability Accuracy (Strict)",
         "Attack Success Accuracy (Strict)",
         "Overall Accuracy (Strict)",
@@ -111,10 +112,26 @@ def calculate_summary(df, systems=None):
             f"{prefix}_vulnerable_match",
             f"{prefix}_success_match",
         ]
+        # FRA has no independently defined Analyst-candidate field.
+        # The candidate metric applies only to MAFRA-MCP and never changes
+        # the legacy final-CVE or overall accuracy calculation.
+        candidate_accuracy = (
+            _column_mean(df, "mafra_cve_candidate_match")
+            if (
+                prefix == "mafra"
+                and "mafra_cve_candidate_match" in df
+                and not (
+                    "shared_flow_summary" in df
+                    and df["shared_flow_summary"].astype(bool).all()
+                )
+            )
+            else math.nan
+        )
         values[display_name] = [
             len(df),
             _column_mean(df, f"{prefix}_service_match"),
             _column_mean(df, f"{prefix}_cve_match"),
+            candidate_accuracy,
             vulnerability["strict_accuracy"],
             success["strict_accuracy"],
             _mean(df, strict_columns),

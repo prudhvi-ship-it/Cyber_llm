@@ -1,0 +1,1178 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 38
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37
+Protocol Counts: RESP=4860, TCP=3180, RESP/JSON=24, HTTP=4, PGSQL=111
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.4:45680           <-> 172.18.0.3:6379                263 239 kB        493 211 kB        756 450 kB       22.930176000        66.0242
+172.18.0.4:45778           <-> 172.18.0.3:6379                116 85 kB         231 104 kB        347 190 kB        2.311395000        30.4147
+172.18.0.3:6379            <-> 172.18.0.4:45828               145 802 kB        178 11 kB         323 814 kB        2.070263000        88.1786
+172.18.0.3:6379            <-> 172.18.0.4:45732               151 827 kB        163 24 kB         314 851 kB        0.000000000        91.2808
+172.18.0.3:6379     
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 26; score=11/12; frame=2452; HTTP request candidate POST /uploads/user to 172.18.0.4:80; request frame=2452; indicator frame=2452; indicators=shell command expression, multipart upload, uploaded file signature differs from image filename; bounded indicator excerpt=qx{touch /tmp/success}; response HTTP 422 frame=2560 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000001-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45732 (RESP)
+- [E-S0000-F000002-002 | server->client] 172.18.0.4:45732 -> 172.18.0.3:6379 (RESP)
+- [E-S0000-F000003-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45732 (TCP)
+- [E-S0000-F005483-004 | server->client] 172.18.0.4:45732 -> 172.18.0.3:6379 (TCP)
+- [E-S0000-F005491-005 | server->client] 172.18.0.4:45732 -> 172.18.0.3:6379 (RESP/JSON)
+- [E-S0000-F005507-007 | server->client] GET $136
+- [E-S0000-F005504-006 | server->client] b7e6f80f33dcfe34c0063ecebbf493886ddf9e733ae1eb38bf5b3cb14e46fc10
+- [E-S0001-F000008-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45842 (RESP)
+- [E-S0001-F000009-002 | server->client] 172.18.0.4:45842 -> 172.18.0.3:6379 (RESP)
+- [E-S0001-F000011-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45842 (TCP)
+- [E-S0001-F005527-004 | server->client] 172.18.0.4:45842 -> 172.18.0.3:6379 (RESP/JSON)
+- [E-S0001-F005555-006 | server->client] 172.18.0.4:45842 -> 172.18.0.3:6379 (TCP)
+- [E-S0001-F005537-005 | server->client] 7f90e3d92b5bd1e9921cefb3145dbfe3a3c2eabb62ac4fc78d18a05725a8c2bb
+- [E-S0002-F000014-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45742 (RESP)
+- [E-S0002-F000015-002 | server->client] 172.18.0.4:45742 -> 172.18.0.3:6379 (RESP)
+- [E-S0002-F000017-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45742 (TCP)
+- [E-S0002-F001879-004 | server->client] 172.18.0.4:45742 -> 172.18.0.3:6379 (TCP)
+- [E-S0003-F000020-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45686 (RESP)
+- [E-S0003-F000021-002 | server->client] 172.18.0.4:45686 -> 172.18.0.3:6379 (TCP)
+- [E-S0003-F000022-003 | server->client] 172.18.0.4:45686 -> 172.18.0.3:6379 (RESP)
+- [E-S0003-F000023-004 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45686 (TCP)
+- [E-S0004-F000028-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45754 (RESP)
+- [E-S0004-F000032-002 | server->client] 172.18.0.4:45754 -> 172.18.0.3:6379 (RESP)
+- [E-S0004-F000033-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45754 (TCP)
+- [E-S0004-F001923-004 | server->client] 172.18.0.4:45754 -> 172.18.0.3:6379 (TCP)
+- [E-S0005-F000029-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45756 (RESP)
+- [E-S0005-F000048-002 | server->client] 172.18.0.4:45756 -> 172.18.0.3:6379 (RESP)
+- [E-S0005-F000050-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45756 (TCP)
+- [E-S0005-F005669-004 | server->client] 172.18.0.4:45756 -> 172.18.0.3:6379 (TCP)
+- [E-S0006-F000030-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45698 (RESP)
+- [E-S0006-F000040-002 | server->client] 172.18.0.4:45698 -> 172.18.0.3:6379 (RESP)
+- [E-S0006-F000045-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45698 (TCP)
+- [E-S0007-F000031-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45700 (RESP)
+- [E-S0007-F000038-002 | server->client] 172.18.0.4:45700 -> 172.18.0.3:6379 (RESP)
+- [E-S0007-F000042-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45700 (TCP)
+- [E-S0008-F000053-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45738 (RESP)
+- [E-S0008-F000054-002 | server->client] 172.18.0.4:45738 -> 172.18.0.3:6379 (RESP)
+- [E-S0008-F000055-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45738 (TCP)
+- [E-S0009-F000060-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45806 (RESP)
+- [E-S0009-F000061-002 | server->client] 172.18.0.4:45806 -> 172.18.0.3:6379 (RESP)
+- [E-S0009-F000062-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45806 (TCP)
+- [E-S0009-F000712-004 | server->client] 172.18.0.4:45806 -> 172.18.0.3:6379 (TCP)
+- [E-S0010-F000067-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:56800 (RESP)
+- [E-S0010-F000070-002 | server->client] 172.18.0.4:56800 -> 172.18.0.3:6379 (RESP)
+- [E-S0010-F000071-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:56800 (TCP)
+- [E-S0010-F000269-004 | server->client] 172.18.0.4:56800 -> 172.18.0.3:6379 (TCP)
+- [E-S0011-F000068-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45770 (RESP)
+- [E-S0011-F000081-002 | server->client] 172.18.0.4:45770 -> 172.18.0.3:6379 (RESP)
+- [E-S0011-F000082-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45770 (TCP)
+- [E-S0011-F000719-004 | server->client] 172.18.0.4:45770 -> 172.18.0.3:6379 (TCP)
+- [E-S0012-F000069-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45790 (RESP)
+- [E-S0012-F000076-002 | server->client] 172.18.0.4:45790 -> 172.18.0.3:6379 (RESP)
+- [E-S0012-F000078-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45790 (TCP)
+- [E-S0012-F000268-004 | server->client] 172.18.0.4:45790 -> 172.18.0.3:6379 (TCP)
+- [E-S0013-F000087-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:56796 (RESP)
+- [E-S0013-F000089-002 | server->client] 172.18.0.4:56796 -> 172.18.0.3:6379 (RESP)
+- [E-S0013-F000091-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:56796 (TCP)
+- [E-S0013-F001491-004 | server->client] 172.18.0.4:56796 -> 172.18.0.3:6379 (TCP)
+- [E-S0014-F000088-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45798 (RESP)
+- [E-S0014-F000094-002 | server->client] 172.18.0.4:45798 -> 172.18.0.3:6379 (RESP)
+- [E-S0014-F000095-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45798 (TCP)
+- [E-S0014-F001310-004 | server->client] 172.18.0.4:45798 -> 172.18.0.3:6379 (TCP)
+- [E-S0015-F000100-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45818 (RESP)
+- [E-S0015-F000101-002 | server->client] 172.18.0.4:45818 -> 172.18.0.3:6379 (RESP)
+- [E-S0015-F000103-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45818 (TCP)
+- [E-S0016-F000106-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45736 (RESP)
+- [E-S0016-F000107-002 | server->client] 172.18.0.4:45736 -> 172.18.0.3:6379 (RESP)
+- [E-S0016-F000108-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45736 (TCP)
+- [E-S0016-F001334-004 | server->client] 172.18.0.4:45736 -> 172.18.0.3:6379 (TCP)
+- [E-S0017-F000113-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:35562 (RESP)
+- [E-S0017-F000114-002 | server->client] 172.18.0.4:35562 -> 172.18.0.3:6379 (RESP)
+- [E-S0017-F000116-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:35562 (TCP)
+- [E-S0017-F002129-004 | server->client] 172.18.0.4:35562 -> 172.18.0.3:6379 (TCP)
+- [E-S0018-F000119-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45716 (RESP)
+- [E-S0018-F000120-002 | server->client] 172.18.0.4:45716 -> 172.18.0.3:6379 (RESP)
+- [E-S0018-F000122-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45716 (TCP)
+- [E-S0019-F000125-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45836 (RESP)
+- [E-S0019-F000127-002 | server->client] 172.18.0.4:45836 -> 172.18.0.3:6379 (RESP)
+- [E-S0019-F000128-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45836 (TCP)
+- [E-S0019-F002190-004 | server->client] 172.18.0.4:45836 -> 172.18.0.3:6379 (TCP)
+- [E-S0020-F000126-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45746 (RESP)
+- [E-S0020-F000133-002 | server->client] 172.18.0.4:45746 -> 172.18.0.3:6379 (RESP)
+- [E-S0020-F000135-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45746 (TCP)
+- [E-S0020-F002182-004 | server->client] 172.18.0.4:45746 -> 172.18.0.3:6379 (TCP)
+- [E-S0021-F000138-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45794 (RESP)
+- [E-S0021-F000139-002 | server->client] 172.18.0.4:45794 -> 172.18.0.3:6379 (RESP)
+- [E-S0021-F000140-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45794 (TCP)
+- [E-S0021-F002191-004 | server->client] 172.18.0.4:45794 -> 172.18.0.3:6379 (TCP)
+- [E-S0022-F000145-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45828 (RESP)
+- [E-S0022-F000147-002 | server->client] 172.18.0.4:45828 -> 172.18.0.3:6379 (RESP)
+- [E-S0022-F000148-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45828 (TCP)
+- [E-S0022-F003334-004 | server->client] 172.18.0.4:45828 -> 172.18.0.3:6379 (TCP)
+- [E-S0023-F000146-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45694 (RESP)
+- [E-S0023-F000153-002 | server->client] 172.18.0.4:45694 -> 172.18.0.3:6379 (RESP)
+- [E-S0023-F000154-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45694 (TCP)
+- [E-S0023-F005828-004 | server->client] 172.18.0.4:45694 -> 172.18.0.3:6379 (TCP)
+- [E-S0024-F000159-001 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45682 (RESP)
+- [E-S0024-F000160-002 | server->client] 172.18.0.4:45682 -> 172.18.0.3:6379 (RESP)
+- [E-S0024-F000161-003 | client->server] 172.18.0.3:6379 -> 172.18.0.4:45682 (TCP)
+- [E-S0024-F005482-004 | server->client] 172.18.0.4:45682 -> 172.18.0.3:6379 (TCP)
+- [E-S0025-F000173-001 | client->server] 172.18.0.4:45778 -> 172.18.0.3:6379 (RESP)
+- [E-S0025-F000177-002 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45778 (TCP)
+- [E-S0025-F000180-003 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45778 (RESP)
+- [E-S0025-F000182-004 | client->server] 172.18.0.4:45778 -> 172.18.0.3:6379 (TCP)
+- [E-S0025-F000198-005 | client->server] 172.18.0.4:45778 -> 172.18.0.3:6379 (RESP/JSON)
+- [E-S0026-F001761-001 | client->server] 172.18.0.1:57854 -> 172.18.0.4:80 (TCP)
+- [E-S0026-F001762-002 | server->client] 172.18.0.4:80 -> 172.18.0.1:57854 (TCP)
+- [E-S0026-F001764-003 | client->server] 172.18.0.1:57854 -> 172.18.0.4:80 (HTTP)
+- [E-S0026-F002450-029 | server->client] 172.18.0.4:80 -> 172.18.0.1:57854 (HTTP)
+- [E-S0026-F001764-004 | client->server] GET /users/sign_in
+- [E-S0026-F001764-005 | client->server] Host: 127.17.0.1:8080
+- [E-S0026-F001764-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0026-F002420-007 | server->client] HTTP Status 200
+- [E-S0026-F002420-008 | server->client] Content-Type: text/html; charset=utf-8
+- [E-S0026-F002422-011 | server->client] HEAD prefix="og:
+- [E-S0026-F002452-030 | client->server] POST /uploads/user
+- [E-S0026-F002452-031 | client->server] Content-Type: multipart/form-data; boundary=8c305af7c2f82e6d3cdfa638583d5a0a
+- [E-S0026-F002452-032 | client->server] Content-Type: image/jpeg
+- [E-S0026-F002560-033 | server->client] HTTP Status 422
+- [E-S0026-F002560-034 | server->client] Content-Type: text/plain; charset=utf-8
+- [E-S0026-F002420-009 | server->client] Cookie header observed: [REDACTED]
+- [E-S0026-F002444-018 | server->client] admin keyword observed
+- [E-S0026-F002428-016 | server->client] select:none
+- [E-S0026-F002434-017 | server->client] select{width:300px}@media (max-width: 767.98px){.dropdown-select{width:100%}}.dropdown-content{max-height:252px
+- [E-S0026-F002444-019 | server->client] select:none}.search .search-input-wrap .clear-icon{display:none}.search .search-input-wrap .dropdown{position:static}.search .search-input-wrap .dropdown-menu{left:-5px
+- [E-S0026-F002420-010 | server->client] Id
+- [E-S0026-F002422-012 | server->client] 02aa9533ec4957bb01d206d6eaa51d762c7b7396362f0f7a3b5fb4dd6088745b
+- [E-S0026-F002422-013 | server->client] a9ac9757d6459344060c9834d594504c87bd5cab6ec60038ceb507ca95d38121
+- [E-S0026-F002422-014 | server->client] 7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58
+- [E-S0026-F002422-015 | server->client] 7901bd695fb93edb07975966062049829afb56cf11511236e61bcf425070e36e
+- [E-S0026-F002444-020 | server->client] 141cf4b0e7dd89f71e9af4d2847a4f267482c4eed57370411d215239c3cab7fd
+- [E-S0026-F002444-021 | server->client] 6VNef5pV8kCLpyFGObD3adXdpbtOef9BOsPwj95i5Kjy07jc+6QvN+yAetsPfsHB/Sw92kAF7AKL/rAcLU19dQ==
+- [E-S0026-F002446-022 | server->client] 5a9cee0e8a51212e70b90c87c12f382c428870c0ff67d1eb034d884b78d2dae7
+- [E-S0026-F002446-023 | server->client] a6eec6aeb9da138e507593b464fdac213047e49d3093fc30e90d9a995df83ba3
+- [E-S0026-F002446-024 | server->client] 72e2aadf86513a56e050e7f0f2355deaa19cc17ed97bbe5147847f2748e5a3e3
+- [E-S0026-F002446-025 | server->client] 8ebe416f5313483d9c1bc772b5bbe03ecad52a54eba443e5215a22caed2a16a2
+- [E-S0026-F002446-026 | server->client] d36b5212042cebc89b96df4bf6ac24e43db316143e89926c0db839ff694d2de4
+- [E-S0026-F002446-027 | server->client] 1196ec67452f618d39cdd85e2e3a542f76574c071051ae7effbfde01710eb17d
+- [E-S0026-F002446-028 | server->client] WCu9XnI/rUEFAyZqc/H2EG06YrixpaV5GrqRAKD8EOxDq1v9E85wNmIkffdFP8C4Rcv62b/Ztjqrh9GTU9OJMQ==
+- [E-S0026-F002452-035 | client->server] HTTP request candidate POST /uploads/user to 172.18.0.4:80; request frame=2452; indicator frame=2452; indicators=shell command expression, multipart upload, uploaded file signature differs from image filename; bounded indicator excerpt=qx{touch /tmp/success}; response HTTP 422 frame=2560 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0027-F001814-001 | client->server] 172.18.0.4:44812 -> 172.18.0.2:5432 (TCP)
+- [E-S0027-F001815-002 | server->client] 172.18.0.2:5432 -> 172.18.0.4:44812 (TCP)
+- [E-S0027-F001817-003 | client->server] 172.18.0.4:44812 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0027-F001819-004 | server->client] 172.18.0.2:5432 -> 172.18.0.4:44812 (PGSQL)
+- [E-S0027-F001912-013 | client->server] admin keyword observed
+- [E-S0027-F001929-016 | server->client] root user keyword observed
+- [E-S0027-F001840-005 | client->server] SELECT t.oid, t.typname
+- [E-S0027-F001841-006 | server->client] SELECT 9 Z   I
+- [E-S0027-F001842-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0027-F001871-008 | server->client] SELECT 687 Z   I
+- [E-S0027-F001888-009 | client->server] SHOW TIME ZONE 
+- [E-S0027-F001891-010 | client->server] SELECT 1 
+- [E-S0027-F001892-011 | server->client] SELECT 1 Z   I
+- [E-S0027-F001894-012 | client->server] SELECT COUNT(*) FROM (SELECT 1 AS one FROM "users" LIMIT $1) subquery_for_count      B            2   D   P E   	     S   
+- [E-S0027-F001912-014 | client->server] SELECT "users".* FROM "users" WHERE "users"."admin" = $1 ORDER BY "users"."id" DESC LIMIT $2   S   
+- [E-S0027-F001950-017 | client->server] SELECT "application_settings".* FROM "application_settings" ORDER BY "application_settings"."id" DESC LIMIT $1   S   
+- [E-S0027-F001984-056 | client->server] SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+- [E-S0027-F002001-057 | server->client] SELECT 8 Z   I
+- [E-S0027-F002018-058 | client->server] SELECT 1 AS one FROM "identities" WHERE "identities"."user_id" = $1 AND (provider LIKE 'ldap%' AND extern_uid IS NOT NULL) LIMIT $2          B              1   1   D   P E   	     S   
+- [E-S0027-F002019-059 | server->client] SELECT 0 Z   I
+- [E-S0027-F002028-060 | client->server] SELECT c.relname FROM pg_class c LEFT JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY (current_schemas(false)) AND c.relkind IN ('r','v','m','p','f') 
+- [E-S0027-F002035-061 | server->client] SELECT 477 Z   I
+- [E-S0027-F002239-062 | client->server] SELECT indrelid, indkey, generate_subscripts(indkey, 1) idx
+- [E-S0027-F002256-063 | client->server] SELECT "appearances".* FROM "appearances" ORDER BY "appearances"."id" ASC LIMIT $1   S   
+- [E-S0027-F002269-064 | server->client] SELECT 22 Z   I
+- [E-S0027-F001912-015 | client->server] id
+- [E-S0027-F001964-018 | server->client] 0KjqkdrEkcoYedkxx41OQp+tpr+hgY0aSZruYnMzU7GwTAfWH
+- [E-S0027-F001964-019 | server->client] JamkzUym2lhNcn5QpE/yvT8cOn3zAiY3sTg9+bs6c3KWb4itaA2grZtteH5t
+- [E-S0027-F001964-020 | server->client] qznpP9mh/NvAqGvQEa+Pf2C4wKGgdjRSQ1kUXNoL4l/rVmWJpJoSBV29wnPI
+- [E-S0027-F001964-021 | server->client] wgI2sYfGl/0criVLl5qIBlZ7mnPW5G/eAEO5tbm7Rq+DRLh4zTCPhuzUz6Kw
+- [E-S0027-F001964-022 | server->client] GLNwDDb62nOhWaehiyo6aH7z1mcoMtiA6ibI/ZPpnBGKhxDo6jBrmHLHicjN
+- [E-S0027-F001964-023 | server->client] SZ2O64odR+W8A7HOuFP1/oy/RctmGsQiGHkdkp4uclHnNPkRf7S2p2ULQo3m
+- [E-S0027-F001964-024 | server->client] 4JrVlOhiB90tRdhePDVUs8cyzhTd8SK1sKIA17aZyBrun0aWkCd2XpoMR5aJ
+- [E-S0027-F001964-025 | server->client] uFz3Lu6ZEsDAdXSaizirCaslmJupskEkvSgj/z3IUCbyn5v4bE9ERQ66Um1P
+- [E-S0027-F001964-026 | server->client] CjalMQ5eycSwY+H6A4ssJRjrl6OuxCZIC/mB+YHg8R/RpsiPLM4SV2Y5YQO1
+- [E-S0027-F001964-027 | server->client] HXnewPGajDYnNxVPODkvgyLKvY/TdNGmU+iWwFcJmghRktwpuAqPI4ryEcUj
+- [E-S0027-F001964-028 | server->client] YF11d4EJs3JT80NmleYLU40r/nqIUlZaZIl+1mNqw/woTroUliW2PLC+vo1E
+- [E-S0027-F001964-029 | server->client] UHk6SW9KaCfmNJR3dnoYYjuIEyCON++5r9s4kwmGz9s6hhMiSN9Qu7/jRC9J
+- [E-S0027-F001964-030 | server->client] IhzNRb6FtZKldVMBwnfZ4Mt5KAvzV8Oua9kjZST44kef+1VaS9lPTh45dpz3
+- [E-S0027-F001964-031 | server->client] CBBwXAtT8gqJyuLKfuzlQ2nY5Wbj0I3EjY1Oty0T8TZZRHZ1D/deYxdkP1d4
+- [E-S0027-F001964-032 | server->client] N228AzykTUAitq8e/udNmMZ4g9NPb++cJL3GeY5ALFAD/Naass1NW7EnFvVV
+- [E-S0027-F001964-033 | server->client] NdNE/1E2wG2P1uOw03/X5mLrRukwotB7T2UuQUfttcCJxKNXOyZyLiCRT8VW
+- [E-S0027-F001964-034 | server->client] 4DdqSbjEYfpnshbcQEOp/CRl0gEhVOdV+TU+zpmpUXie04/buNRRmPDaTWwA
+- [E-S0027-F001964-035 | server->client] 6W/TMZ/gcrxfhseyV5Win+98UVA+3gZV/I2/8mtx65JrC44e1jLNE4/yGAKV
+- [E-S0027-F001964-036 | server->client] VKYM9QtJijaauMBYYadURIt3gLkhDlulq0ITVZR9ceKBlyz8tJsw4
+- [E-S0027-F001966-037 | server->client] Znsm7D4u6HVQqKV0DAHcK2kIxVEV7AGdqzwKmu5etlpBKWz1B+zYUjVCHx6P
+- [E-S0027-F001966-038 | server->client] 4C5SwEinK9HKIkS72HyAbNUOUtyiHBG7XE+30I3MI32Xb3Mw2OS7PRwuF6jt
+- [E-S0027-F001966-039 | server->client] 4zxq40qyPNx5PVKYCH74VvbGfHWqgGy75lS+z1PW5jRAMepRuW1dboAZHPB2
+- [E-S0027-F001966-040 | server->client] FKEDnSlnOVG4/XcYxMhJoF4Wi2Sh+AKysGqNAKSQprpl5wPX9X9RJ+mr2DXT
+- [E-S0027-F001966-041 | server->client] Cc1hKtYNkAyxr9AtDuVOiV+b4S9JIvL/ykW6ox/sPB5dq6S3DCzT5nX2Ip7m
+- [E-S0027-F001966-042 | server->client] 2ggA3YShdTIGL30uRM1D2gpP3j6QK7CGoNHofYnUKIS7afRWvvs+B63u5noC
+- [E-S0027-F001966-043 | server->client] DuHoblfFWqLv8klSj7Jh7Ky5Qbl1QZiajMNHFJMZm2+WXcV8mZH40F14CH2V
+- [E-S0027-F001966-044 | server->client] pcD4Eb4ljhSG11VpU17f0uJKb0U8A1FF0i1CI2gCqfAb96nTFUGb/5iYR76P
+- [E-S0027-F001966-045 | server->client] shUi0UNfMxZySTJ66746RT/m/+Vpgn0mG7j6nW458wkHJTkZpe8UPLOaGCxI
+- [E-S0027-F001966-046 | server->client] B2tzyUyt+FWTe+7eqZT46sZb3SGD8l8fHXFax5+cjDDVA147ZR3wUkRbcUwj
+- [E-S0027-F001966-047 | server->client] hgrONyaO18mpTY7dSnURd8wl50hhh42kaFu5hMFUp6pg9hmrPGIMeaJe45a4
+- [E-S0027-F001966-048 | server->client] VhMqDkiugFIdELVOjecmVEYNZq+mT9y9/C6Iub+fIOdSGxI+++aymkEUQh2l
+- [E-S0027-F001966-049 | server->client] sfyU4RXpHAZs+QnicbHOCilrDi0pdh/BXEjeEFoXNazTYJp05Shq1japAZmD
+- [E-S0027-F001966-050 | server->client] VDsUXmk/BosEQ3Lc4kKItucAcJRbuUKUmrH3iarzvLwsbywtJ8+M/5fnsyKV
+- [E-S0027-F001966-051 | server->client] cYLlfUyNth2sXtFRWWl3N5f490+O9jBPi6wzdfPfrIeS6+ZP21Ns7VKv9BJh
+- [E-S0027-F001966-052 | server->client] /gXlKo5c3jeB9er2dHjXXaCAmJPJXjb4GjrfERN67GtpE+Kkgvsy6YJOW1cz
+- [E-S0027-F001966-053 | server->client] zcNpGl61Jzp4uSNAm2aE1IFhPw09DVB0N+M2z+Wy+u+utYf9u/pngaenV3J8
+- [E-S0027-F001966-054 | server->client] l1s1S5Vd6IfjWKUpA+W7csAedVmkM0wDts4PxU72GSkGBh8371QD7jLNgmHu
+- [E-S0027-F001966-055 | server->client] JcP4pOpViPxHlcG+4UlzKZ2aPvgvxNsZV/RePd1kU4TpCegITudiVe7eHbFV
+- [E-S0028-F002037-001 | client->server] 172.18.0.4:45082 -> 172.18.0.3:6379 (TCP)
+- [E-S0028-F002038-002 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45082 (TCP)
+- [E-S0028-F002040-003 | client->server] 172.18.0.4:45082 -> 172.18.0.3:6379 (RESP)
+- [E-S0028-F002042-005 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45082 (RESP)
+- [E-S0028-F002040-004 | client->server] GET $52
+- [E-S0028-F002060-006 | client->server] GET $40
+- [E-S0028-F002235-007 | client->server] GET $39
+- [E-S0028-F002400-008 | client->server] GET $50
+- [E-S0028-F002405-009 | client->server] GET $56
+- [E-S0029-F002045-001 | client->server] 172.18.0.4:45084 -> 172.18.0.3:6379 (TCP)
+- [E-S0029-F002046-002 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45084 (TCP)
+- [E-S0029-F002049-003 | client->server] 172.18.0.4:45084 -> 172.18.0.3:6379 (RESP)
+- [E-S0029-F002057-004 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45084 (RESP)
+- [E-S0030-F002218-001 | client->server] 172.18.0.4:45680 -> 172.18.0.3:6379 (RESP)
+- [E-S0030-F002219-002 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45680 (RESP)
+- [E-S0030-F002220-003 | client->server] 172.18.0.4:45680 -> 172.18.0.3:6379 (TCP)
+- [E-S0030-F002224-004 | server->client] 172.18.0.3:6379 -> 172.18.0.4:45680 (TCP)
+- [E-S0030-F002722-005 | client->server] 172.18.0.4:45680 -> 172.18.0.3:6379 (RESP/JSON)
+- [E-S0030-F005461-007 | client->server] GET $146
+- [E-S0030-F005459-006 | client->server] 7f90e3d92b5bd1e9921cefb3145dbfe3a3c2eabb62ac4fc78d18a05725a8c2bb
+- [E-S0031-F002413-001 | client->server] 172.18.0.4:41320 -> 172.18.0.3:6379 (TCP)
+- [E-S0031-F002414-002 | server->client] 172.18.0.3:6379 -> 172.18.0.4:41320 (TCP)
+- [E-S0031-F002416-003 | client->server] 172.18.0.4:41320 -> 172.18.0.3:6379 (RESP)
+- [E-S0031-F002418-006 | server->client] 172.18.0.3:6379 -> 172.18.0.4:41320 (RESP)
+- [E-S0031-F002416-004 | client->server] c1c00a68562cc1983828b1f35b7542df2a26c908656b83ae7da12d5a13eff3a7
+- [E-S0031-F002416-005 | client->server] 1VhXmVztvmvnbIhiUrD5Hp4qsH1NPpxNYgZy+HmmM//g=
+- [E-S0032-F002462-001 | client->server] 172.18.0.4:48902 -> 172.18.0.3:6379 (RESP)
+- [E-S0032-F002463-004 | server->client] 172.18.0.3:6379 -> 172.18.0.4:48902 (TCP)
+- [E-S0032-F002464-005 | server->client] 172.18.0.3:6379 -> 172.18.0.4:48902 (RESP)
+- [E-S0032-F002465-007 | client->server] 172.18.0.4:48902 -> 172.18.0.3:6379 (TCP)
+- [E-S0032-F002462-002 | client->server] GET $82
+- [E-S0032-F002462-003 | client->server] c1c00a68562cc1983828b1f35b7542df2a26c908656b83ae7da12d5a13eff3a7
+- [E-S0032-F002464-006 | server->client] 1VhXmVztvmvnbIhiUrD5Hp4qsH1NPpxNYgZy+HmmM//g=
+- [E-S0033-F002466-001 | client->server] 172.18.0.4:35846 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0033-F002467-003 | server->client] 172.18.0.2:5432 -> 172.18.0.4:35846 (PGSQL)
+- [E-S0033-F002468-005 | client->server] 172.18.0.4:35846 -> 172.18.0.2:5432 (TCP)
+- [E-S0033-F002466-002 | client->server] SELECT 1 
+- [E-S0033-F002467-004 | server->client] SELECT 1 Z   I
+- [E-S0034-F005498-001 | client->server] 172.18.0.4:36818 -> 172.18.0.3:6379 (RESP)
+- [E-S0034-F005499-002 | server->client] 172.18.0.3:6379 -> 172.18.0.4:36818 (RESP)
+- [E-S0034-F005500-003 | client->server] 172.18.0.4:36818 -> 172.18.0.3:6379 (TCP)
+- [E-S0035-F005511-001 | client->server] 172.18.0.4:33786 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0035-F005513-003 | server->client] 172.18.0.2:5432 -> 172.18.0.4:33786 (PGSQL)
+- [E-S0035-F005514-005 | client->server] 172.18.0.4:33786 -> 172.18.0.2:5432 (TCP)
+- [E-S0035-F005511-002 | client->server] SELECT 1 
+- [E-S0035-F005513-004 | server->client] SELECT 1 Z   I
+- [E-S0036-F005528-001 | client->server] 172.18.0.4:41030 -> 172.18.0.3:6379 (RESP)
+- [E-S0036-F005530-003 | server->client] 172.18.0.3:6379 -> 172.18.0.4:41030 (RESP)
+- [E-S0036-F005532-004 | client->server] 172.18.0.4:41030 -> 172.18.0.3:6379 (TCP)
+- [E-S0036-F005528-002 | client->server] GET $52
+- [E-S0036-F005556-005 | client->server] GET $58
+- [E-S0037-F005539-001 | client->server] 172.18.0.4:35494 -> 172.18.0.2:5432 (TCP)
+- [E-S0037-F005540-002 | server->client] 172.18.0.2:5432 -> 172.18.0.4:35494 (TCP)
+- [E-S0037-F005542-003 | client->server] 172.18.0.4:35494 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0037-F005544-004 | server->client] 172.18.0.2:5432 -> 172.18.0.4:35494 (PGSQL)
+- [E-S0037-F005619-005 | client->server] SELECT t.oid, t.typname
+- [E-S0037-F005620-006 | server->client] SELECT 9 Z   I
+- [E-S0037-F005622-007 | client->server] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0037-F005636-008 | server->client] SELECT 687 Z   I
+- [E-S0037-F005638-009 | client->server] SHOW TIME ZONE 
+- [E-S0037-F005640-010 | client->server] SELECT 1 
+- [E-S0037-F005641-011 | server->client] SELECT 1 Z   I
+- [E-S0037-F005645-012 | client->server] SELECT 1 AS one FROM "user_statuses" WHERE "user_statuses"."clear_status_at" <= '2025-06-08 22:05:35.642883' LIMIT $1      B            1   D   P E   	     S   
+- [E-S0037-F005646-013 | server->client] SELECT 0 Z   I
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.3:6379 -> 172.18.0.4:45732; packets=314; client->server=163, server->client=151; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.3:6379 -> 172.18.0.4:45842; packets=246; client->server=119, server->client=127; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 2: 172.18.0.3:6379 -> 172.18.0.4:45742; packets=266; client->server=145, server->client=121; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.3:6379 -> 172.18.0.4:45686; packets=272; client->server=155, server->client=117; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 4: 172.18.0.3:6379 -> 172.18.0.4:45754; packets=244; client->server=117, server->client=127; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 5: 172.18.0.3:6379 -> 172.18.0.4:45756; packets=254; client->server=134, server->client=120; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 6: 172.18.0.3:6379 -> 172.18.0.4:45698; packets=237; client->server=116, server->client=121; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 7: 172.18.0.3:6379 -> 172.18.0.4:45700; packets=311; client->server=174, server->client=137; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 8: 172.18.0.3:6379 -> 172.18.0.4:45738; packets=281; client->server=160, server->client=121; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 9: 172.18.0.3:6379 -> 172.18.0.4:45806; packets=304; client->server=158, server->client=146; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 10: 172.18.0.3:6379 -> 172.18.0.4:56800; packets=276; client->server=147, server->client=129; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 11: 172.18.0.3:6379 -> 172.18.0.4:45770; packets=278; client->server=146, server->client=132; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 12: 172.18.0.3:6379 -> 172.18.0.4:45790; packets=270; client->server=116, server->client=154; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 13: 172.18.0.3:6379 -> 172.18.0.4:56796; packets=307; client->server=157, server->client=150; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 14: 172.18.0.3:6379 -> 172.18.0.4:45798; packets=302; client->server=168, server->client=134; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 15: 172.18.0.3:6379 -> 172.18.0.4:45818; packets=258; client->server=115, server->client=143; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 16: 172.18.0.3:6379 -> 172.18.0.4:45736; packets=277; client->server=155, server->client=122; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 17: 172.18.0.3:6379 -> 172.18.0.4:35562; packets=234; client->server=112, server->client=122; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 18: 172.18.0.3:6379 -> 172.18.0.4:45716; packets=225; client->server=112, server->client=113; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 19: 172.18.0.3:6379 -> 172.18.0.4:45836; packets=257; client->server=140, server->client=117; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 20: 172.18.0.3:6379 -> 172.18.0.4:45746; packets=229; client->server=113, server->client=116; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 21: 172.18.0.3:6379 -> 172.18.0.4:45794; packets=278; client->server=154, server->client=124; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 22: 172.18.0.3:6379 -> 172.18.0.4:45828; packets=323; client->server=178, server->client=145; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 23: 172.18.0.3:6379 -> 172.18.0.4:45694; packets=274; client->server=151, server->client=123; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 24: 172.18.0.3:6379 -> 172.18.0.4:45682; packets=272; client->server=152, server->client=120; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 25: 172.18.0.4:45778 -> 172.18.0.3:6379; packets=347; client->server=231, server->client=116; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 26: 172.18.0.1:57854 -> 172.18.0.4:80; packets=44; client->server=23, server->client=21; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 27: 172.18.0.4:44812 -> 172.18.0.2:5432; packets=122; client->server=61, server->client=61; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 28: 172.18.0.4:45082 -> 172.18.0.3:6379; packets=22; client->server=12, server->client=10; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 29: 172.18.0.4:45084 -> 172.18.0.3:6379; packets=9; client->server=5, server->client=4; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 30: 172.18.0.4:45680 -> 172.18.0.3:6379; packets=756; client->server=493, server->client=263; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 31: 172.18.0.4:41320 -> 172.18.0.3:6379; packets=7; client->server=4, server->client=3; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 32: 172.18.0.4:48902 -> 172.18.0.3:6379; packets=8; client->server=4, server->client=4; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 33: 172.18.0.4:35846 -> 172.18.0.2:5432; packets=3; client->server=2, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 34: 172.18.0.4:36818 -> 172.18.0.3:6379; packets=6; client->server=4, server->client=2; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 35: 172.18.0.4:33786 -> 172.18.0.2:5432; packets=3; client->server=2, server->client=1; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 36: 172.18.0.4:41030 -> 172.18.0.3:6379; packets=6; client->server=4, server->client=2; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 37: 172.18.0.4:35494 -> 172.18.0.2:5432; packets=57; client->server=31, server->client=26; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45732. The client is interacting with various Redis queues related to GitLab operations, such as deployment, project updates, and incident management.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0000-F000001-001 | client->server | epoch=1749420274.371899] 172.18.0.3:6379 -> 172.18.0.4:45732 (RESP)
+- [E-S0000-F000002-002 | server->client | epoch=1749420274.375384] 172.18.0.4:45732 -> 172.18.0.3:6379 (RESP)
+- [E-S0000-F005504-006 | server->client | epoch=1749420334.927557] b7e6f80f33dcfe34c0063ecebbf493886ddf9e733ae1eb38bf5b3cb14e46fc10
+
+--- Stream 1 [VALID] ---
+Service: Redis
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45842. The client is interacting with various Redis queues related to GitLab operations, such as deployment, project updates, and incident management.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0001-F000008-001 | client->server | epoch=1749420274.474972] 172.18.0.3:6379 -> 172.18.0.4:45842 (RESP)
+- [E-S0001-F000009-002 | server->client | epoch=1749420274.478168] 172.18.0.4:45842 -> 172.18.0.3:6379 (RESP)
+- [E-S0001-F000011-003 | client->server | epoch=1749420274.478857] 172.18.0.3:6379 -> 172.18.0.4:45842 (TCP)
+- [E-S0001-F005527-004 | server->client | epoch=1749420334.971916] 172.18.0.4:45842 -> 172.18.0.3:6379 (RESP/JSON)
+- [E-S0001-F005555-006 | server->client | epoch=1749420335.041437] 172.18.0.4:45842 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 2 [VALID] ---
+Service: Redis
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45742. The client is interacting with various Redis queues related to GitLab operations, such as deployment, project updates, and incident management.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0002-F000014-001 | client->server | epoch=1749420274.577284] 172.18.0.3:6379 -> 172.18.0.4:45742 (RESP)
+- [E-S0002-F000015-002 | server->client | epoch=1749420274.579257] 172.18.0.4:45742 -> 172.18.0.3:6379 (RESP)
+- [E-S0002-F000017-003 | client->server | epoch=1749420274.581609] 172.18.0.3:6379 -> 172.18.0.4:45742 (TCP)
+- [E-S0002-F001879-004 | server->client | epoch=1749420295.408107] 172.18.0.4:45742 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 3 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45686. The client is interacting with various Redis queues related to GitLab operations, such as object pool creation, analytics usage trends, pages transfer, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0003-F000020-001 | client->server | epoch=1749420274.998277] 172.18.0.3:6379 -> 172.18.0.4:45686 (RESP)
+- [E-S0003-F000021-002 | server->client | epoch=1749420274.998719] 172.18.0.4:45686 -> 172.18.0.3:6379 (TCP)
+- [E-S0003-F000022-003 | server->client | epoch=1749420275.002053] 172.18.0.4:45686 -> 172.18.0.3:6379 (RESP)
+- [E-S0003-F000023-004 | client->server | epoch=1749420275.002458] 172.18.0.3:6379 -> 172.18.0.4:45686 (TCP)
+
+--- Stream 4 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45754. The client is interacting with various Redis queues related to GitLab operations, such as auto-merge processes, cluster updates, pipeline processing, GitHub importer tasks, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0004-F000028-001 | client->server | epoch=1749420275.309020] 172.18.0.3:6379 -> 172.18.0.4:45754 (RESP)
+- [E-S0004-F000032-002 | server->client | epoch=1749420275.314000] 172.18.0.4:45754 -> 172.18.0.3:6379 (RESP)
+- [E-S0004-F000033-003 | client->server | epoch=1749420275.314748] 172.18.0.3:6379 -> 172.18.0.4:45754 (TCP)
+- [E-S0004-F001923-004 | server->client | epoch=1749420296.178337] 172.18.0.4:45754 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 5 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45756. The client is interacting with various Redis queues related to GitLab operations, such as LDAP group synchronization, deployment management, cron jobs for usage statistics, pipeline artifact creation, project template export, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0005-F000029-001 | client->server | epoch=1749420275.309691] 172.18.0.3:6379 -> 172.18.0.4:45756 (RESP)
+- [E-S0005-F000048-002 | server->client | epoch=1749420275.334344] 172.18.0.4:45756 -> 172.18.0.3:6379 (RESP)
+- [E-S0005-F000050-003 | client->server | epoch=1749420275.335185] 172.18.0.3:6379 -> 172.18.0.4:45756 (TCP)
+- [E-S0005-F005669-004 | server->client | epoch=1749420335.920033] 172.18.0.4:45756 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 6 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45698. The client is interacting with various Redis queues related to GitLab operations, such as merge requests, deployment processes, GitHub importer tasks, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0006-F000030-001 | client->server | epoch=1749420275.310114] 172.18.0.3:6379 -> 172.18.0.4:45698 (RESP)
+- [E-S0006-F000040-002 | server->client | epoch=1749420275.323660] 172.18.0.4:45698 -> 172.18.0.3:6379 (RESP)
+- [E-S0006-F000045-003 | client->server | epoch=1749420275.328962] 172.18.0.3:6379 -> 172.18.0.4:45698 (TCP)
+
+--- Stream 7 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45700. The client is interacting with various Redis queues related to GitLab operations, such as project statistics updates, pipeline processing, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0007-F000031-001 | client->server | epoch=1749420275.310622] 172.18.0.3:6379 -> 172.18.0.4:45700 (RESP)
+- [E-S0007-F000038-002 | server->client | epoch=1749420275.319861] 172.18.0.4:45700 -> 172.18.0.3:6379 (RESP)
+- [E-S0007-F000042-003 | client->server | epoch=1749420275.325207] 172.18.0.3:6379 -> 172.18.0.4:45700 (TCP)
+
+--- Stream 8 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45738. The client is interacting with various Redis queues related to GitLab operations, such as pipeline creation, deployment processes, note diff file creation, repository storage updates, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0008-F000053-001 | client->server | epoch=1749420275.413853] 172.18.0.3:6379 -> 172.18.0.4:45738 (RESP)
+- [E-S0008-F000054-002 | server->client | epoch=1749420275.426333] 172.18.0.4:45738 -> 172.18.0.3:6379 (RESP)
+- [E-S0008-F000055-003 | client->server | epoch=1749420275.427281] 172.18.0.3:6379 -> 172.18.0.4:45738 (TCP)
+
+--- Stream 9 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45806. The client is interacting with various Redis queues related to GitLab operations, such as cluster management, object storage tasks, pipeline processing, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0009-F000060-001 | client->server | epoch=1749420275.517321] 172.18.0.3:6379 -> 172.18.0.4:45806 (RESP)
+- [E-S0009-F000061-002 | server->client | epoch=1749420275.521540] 172.18.0.4:45806 -> 172.18.0.3:6379 (RESP)
+- [E-S0009-F000062-003 | client->server | epoch=1749420275.521903] 172.18.0.3:6379 -> 172.18.0.4:45806 (TCP)
+- [E-S0009-F000712-004 | server->client | epoch=1749420282.510913] 172.18.0.4:45806 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 10 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:56800. The client is interacting with various Redis queues related to GitLab operations, such as note diff file creation, pipeline processing, external pull request updates, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0010-F000067-001 | client->server | epoch=1749420275.523382] 172.18.0.3:6379 -> 172.18.0.4:56800 (RESP)
+- [E-S0010-F000070-002 | server->client | epoch=1749420275.528579] 172.18.0.4:56800 -> 172.18.0.3:6379 (RESP)
+- [E-S0010-F000071-003 | client->server | epoch=1749420275.528816] 172.18.0.3:6379 -> 172.18.0.4:56800 (TCP)
+- [E-S0010-F000269-004 | server->client | epoch=1749420277.829962] 172.18.0.4:56800 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 11 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45770. The client is interacting with various Redis queues related to GitLab operations, such as destroy pages deployments, process commit, pipeline processing, repository check, authorized project update, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0011-F000068-001 | client->server | epoch=1749420275.523954] 172.18.0.3:6379 -> 172.18.0.4:45770 (RESP)
+- [E-S0011-F000081-002 | server->client | epoch=1749420275.539022] 172.18.0.4:45770 -> 172.18.0.3:6379 (RESP)
+- [E-S0011-F000082-003 | client->server | epoch=1749420275.539422] 172.18.0.3:6379 -> 172.18.0.4:45770 (TCP)
+- [E-S0011-F000719-004 | server->client | epoch=1749420282.524887] 172.18.0.4:45770 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 12 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45790. The client is interacting with various Redis queues related to GitLab operations, such as cron jobs, pipeline cache expiration, external service caching, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0012-F000069-001 | client->server | epoch=1749420275.527166] 172.18.0.3:6379 -> 172.18.0.4:45790 (RESP)
+- [E-S0012-F000076-002 | server->client | epoch=1749420275.535054] 172.18.0.4:45790 -> 172.18.0.3:6379 (RESP)
+- [E-S0012-F000078-003 | client->server | epoch=1749420275.536063] 172.18.0.3:6379 -> 172.18.0.4:45790 (TCP)
+- [E-S0012-F000268-004 | server->client | epoch=1749420277.829818] 172.18.0.4:45790 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 13 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:56796. The client is interacting with various Redis queues related to GitLab operations, such as pipeline processing, status page publishing, cron jobs, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0013-F000087-001 | client->server | epoch=1749420275.619515] 172.18.0.3:6379 -> 172.18.0.4:56796 (RESP)
+- [E-S0013-F000089-002 | server->client | epoch=1749420275.623262] 172.18.0.4:56796 -> 172.18.0.3:6379 (RESP)
+- [E-S0013-F000091-003 | client->server | epoch=1749420275.624921] 172.18.0.3:6379 -> 172.18.0.4:56796 (TCP)
+- [E-S0013-F001491-004 | server->client | epoch=1749420291.790468] 172.18.0.4:56796 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 14 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45798. The client is interacting with various Redis queues related to GitLab operations, such as git garbage collection, mail scheduler notifications, cron jobs, pipeline processing, SSL renewal, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0014-F000088-001 | client->server | epoch=1749420275.620021] 172.18.0.3:6379 -> 172.18.0.4:45798 (RESP)
+- [E-S0014-F000094-002 | server->client | epoch=1749420275.629452] 172.18.0.4:45798 -> 172.18.0.3:6379 (RESP)
+- [E-S0014-F000095-003 | client->server | epoch=1749420275.629832] 172.18.0.3:6379 -> 172.18.0.4:45798 (TCP)
+- [E-S0014-F001310-004 | server->client | epoch=1749420289.453074] 172.18.0.4:45798 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 15 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45818. The client is interacting with various Redis queues related to GitLab operations, such as hashed storage project migration, pipeline processing, GitHub importer tasks, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0015-F000100-001 | client->server | epoch=1749420275.723168] 172.18.0.3:6379 -> 172.18.0.4:45818 (RESP)
+- [E-S0015-F000101-002 | server->client | epoch=1749420275.726686] 172.18.0.4:45818 -> 172.18.0.3:6379 (RESP)
+- [E-S0015-F000103-003 | client->server | epoch=1749420275.727316] 172.18.0.3:6379 -> 172.18.0.4:45818 (TCP)
+
+--- Stream 16 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45736. The client is interacting with various Redis queues related to GitLab operations, such as pipeline creation, group import, package repositories, hashed storage, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0016-F000106-001 | client->server | epoch=1749420275.825695] 172.18.0.3:6379 -> 172.18.0.4:45736 (RESP)
+- [E-S0016-F000107-002 | server->client | epoch=1749420275.830085] 172.18.0.4:45736 -> 172.18.0.3:6379 (RESP)
+- [E-S0016-F000108-003 | client->server | epoch=1749420275.830483] 172.18.0.3:6379 -> 172.18.0.4:45736 (TCP)
+- [E-S0016-F001334-004 | server->client | epoch=1749420289.777612] 172.18.0.4:45736 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 17 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:35562. The client is interacting with various Redis queues related to GitLab operations, such as metrics dashboard synchronization, incident management, GCP cluster application uninstallation, pipeline processing, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0017-F000113-001 | client->server | epoch=1749420275.927806] 172.18.0.3:6379 -> 172.18.0.4:35562 (RESP)
+- [E-S0017-F000114-002 | server->client | epoch=1749420275.931480] 172.18.0.4:35562 -> 172.18.0.3:6379 (RESP)
+- [E-S0017-F000116-003 | client->server | epoch=1749420275.932578] 172.18.0.3:6379 -> 172.18.0.4:35562 (TCP)
+- [E-S0017-F002129-004 | server->client | epoch=1749420296.808665] 172.18.0.4:35562 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 18 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45716. The client is interacting with various Redis queues related to GitLab operations, such as pipeline processing, deployment management, analytics usage, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0018-F000119-001 | client->server | epoch=1749420276.029827] 172.18.0.3:6379 -> 172.18.0.4:45716 (RESP)
+- [E-S0018-F000120-002 | server->client | epoch=1749420276.033006] 172.18.0.4:45716 -> 172.18.0.3:6379 (RESP)
+- [E-S0018-F000122-003 | client->server | epoch=1749420276.034459] 172.18.0.3:6379 -> 172.18.0.4:45716 (TCP)
+
+--- Stream 19 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45836. The client is interacting with various Redis queues related to GitLab operations, such as cron jobs, pipeline creation, deployment updates, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0019-F000125-001 | client->server | epoch=1749420276.131705] 172.18.0.3:6379 -> 172.18.0.4:45836 (RESP)
+- [E-S0019-F000127-002 | server->client | epoch=1749420276.136856] 172.18.0.4:45836 -> 172.18.0.3:6379 (RESP)
+- [E-S0019-F000128-003 | client->server | epoch=1749420276.137045] 172.18.0.3:6379 -> 172.18.0.4:45836 (TCP)
+- [E-S0019-F002190-004 | server->client | epoch=1749420297.116691] 172.18.0.4:45836 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 20 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45746. The client is interacting with various Redis queues related to GitLab operations, such as process commit, packages composer cache update, GitHub importer tasks, Jira importer tasks, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0020-F000126-001 | client->server | epoch=1749420276.133406] 172.18.0.3:6379 -> 172.18.0.4:45746 (RESP)
+- [E-S0020-F000133-002 | server->client | epoch=1749420276.141202] 172.18.0.4:45746 -> 172.18.0.3:6379 (RESP)
+- [E-S0020-F000135-003 | client->server | epoch=1749420276.142831] 172.18.0.3:6379 -> 172.18.0.4:45746 (TCP)
+- [E-S0020-F002182-004 | server->client | epoch=1749420297.008742] 172.18.0.4:45746 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 21 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45794. The client is interacting with various Redis queues related to GitLab operations, such as pipeline processing, email notifications, bulk imports, cron jobs, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0021-F000138-001 | client->server | epoch=1749420276.235039] 172.18.0.3:6379 -> 172.18.0.4:45794 (RESP)
+- [E-S0021-F000139-002 | server->client | epoch=1749420276.238710] 172.18.0.4:45794 -> 172.18.0.3:6379 (RESP)
+- [E-S0021-F000140-003 | client->server | epoch=1749420276.238975] 172.18.0.3:6379 -> 172.18.0.4:45794 (TCP)
+- [E-S0021-F002191-004 | server->client | epoch=1749420297.116890] 172.18.0.4:45794 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 22 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45828. The client is interacting with various Redis queues related to GitLab operations, such as email processing, project statistics updates, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0022-F000145-001 | client->server | epoch=1749420276.442162] 172.18.0.3:6379 -> 172.18.0.4:45828 (RESP)
+- [E-S0022-F000147-002 | server->client | epoch=1749420276.447138] 172.18.0.4:45828 -> 172.18.0.3:6379 (RESP)
+- [E-S0022-F000148-003 | client->server | epoch=1749420276.447581] 172.18.0.3:6379 -> 172.18.0.4:45828 (TCP)
+- [E-S0022-F003334-004 | server->client | epoch=1749420309.746121] 172.18.0.4:45828 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 23 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45694. The client is interacting with various Redis queues related to GitLab operations, such as pipeline processing, deployment management, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0023-F000146-001 | client->server | epoch=1749420276.442593] 172.18.0.3:6379 -> 172.18.0.4:45694 (RESP)
+- [E-S0023-F000153-002 | server->client | epoch=1749420276.455205] 172.18.0.4:45694 -> 172.18.0.3:6379 (RESP)
+- [E-S0023-F000154-003 | client->server | epoch=1749420276.455831] 172.18.0.3:6379 -> 172.18.0.4:45694 (TCP)
+- [E-S0023-F005828-004 | server->client | epoch=1749420337.201720] 172.18.0.4:45694 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 24 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45682. The client is interacting with various Redis queues related to GitLab operations, such as prometheus alerts, cron jobs, deployment success, and other GitLab-related tasks.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0024-F000159-001 | client->server | epoch=1749420276.544934] 172.18.0.3:6379 -> 172.18.0.4:45682 (RESP)
+- [E-S0024-F000160-002 | server->client | epoch=1749420276.547615] 172.18.0.4:45682 -> 172.18.0.3:6379 (RESP)
+- [E-S0024-F000161-003 | client->server | epoch=1749420276.549057] 172.18.0.3:6379 -> 172.18.0.4:45682 (TCP)
+- [E-S0024-F005482-004 | server->client | epoch=1749420334.809730] 172.18.0.4:45682 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 25 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a Redis server at 172.18.0.3:6379 and a client at 172.18.0.4:45778. The client is interacting with Redis using commands such as `multi`, `incrby`, and `exec`, which are typical for managing transactions and counters in Redis. This activity is related to GitLab operations, as indicated by the use of keys like `resque:gitlab:stat`.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0025-F000173-001 | client->server | epoch=1749420276.683294] 172.18.0.4:45778 -> 172.18.0.3:6379 (RESP)
+- [E-S0025-F000177-002 | server->client | epoch=1749420276.685721] 172.18.0.3:6379 -> 172.18.0.4:45778 (TCP)
+- [E-S0025-F000180-003 | server->client | epoch=1749420276.686354] 172.18.0.3:6379 -> 172.18.0.4:45778 (RESP)
+- [E-S0025-F000182-004 | client->server | epoch=1749420276.686665] 172.18.0.4:45778 -> 172.18.0.3:6379 (TCP)
+- [E-S0025-F000198-005 | client->server | epoch=1749420276.694038] 172.18.0.4:45778 -> 172.18.0.3:6379 (RESP/JSON)
+
+--- Stream 26 [VALID] ---
+Service: Web application (potentially GitLab-related)
+
+Relevant Events: The flow involves HTTP communication between a client at 172.18.0.1:57854 and a server at 172.18.0.4:80. The client attempts to access the sign-in page and subsequently uploads a file using a POST request to the /uploads/user endpoint.
+
+Malicious Activities: The POST request to /uploads/user contains a suspicious payload with a shell command expression (`qx{touch /tmp/success}`), indicating an attempt to execute a command on the server. The response to this request is HTTP Status 422, which suggests a failure to process the image, but does not confirm whether the command execution attempt succeeded or failed.
+
+Attack Success: Failed (The HTTP Status 422 response indicates a failure to process the image, and there is no evidence of successful command execution or observable effects.)
+
+Evidence:
+- [E-S0026-F001764-004 | client->server | epoch=1749420294.631803] GET /users/sign_in
+- [E-S0026-F002452-030 | client->server | epoch=1749420299.139924] POST /uploads/user
+- [E-S0026-F002452-035 | client->server | epoch=1749420299.139924] HTTP request candidate POST /uploads/user to 172.18.0.4:80; request frame=2452; indicator frame=2452; indicators=shell command expression, multipart upload, uploaded file signature differs from image filename; bounded indicator excerpt=qx{touch /tmp/success}; response HTTP 422 frame=2560 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0026-F002560-033 | server->client | epoch=1749420300.959140] HTTP Status 422
+
+--- Stream 27 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:44812 and a PostgreSQL server at 172.18.0.2:5432. The client is executing various SQL queries, including selecting user information and application settings, which suggests database interaction potentially related to a web application, possibly GitLab.
+
+Malicious Activities: The flow contains SQL queries that include keywords such as "admin" and "root," which could indicate attempts to access or manipulate privileged information. Additionally, there is a command execution attempt with the keyword "id," which is suspicious in the context of SQL interactions.
+
+Attack Success: Failed (There is no evidence of successful command execution or observable effects from the SQL queries or command attempts.)
+
+Evidence:
+- [E-S0027-F001912-013 | client->server | epoch=1749420296.165515] admin keyword observed
+- [E-S0027-F001929-016 | server->client | epoch=1749420296.194939] root user keyword observed
+- [E-S0027-F001912-015 | client->server | epoch=1749420296.165515] id command observed
+- [E-S0027-F001840-005 | client->server | epoch=1749420295.268949] SELECT t.oid, t.typname
+- [E-S0027-F001842-007 | client->server | epoch=1749420295.285035] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0027-F001894-012 | client->server | epoch=1749420296.081883] SELECT COUNT(*) FROM (SELECT 1 AS one FROM "users" LIMIT $1) subquery_for_count
+- [E-S0027-F001912-014 | client->server | epoch=1749420296.165515] SELECT "users".* FROM "users" WHERE "users"."admin" = $1 ORDER BY "users"."id" DESC LIMIT $2
+- [E-S0027-F001950-017 | client->server | epoch=1749420296.270646] SELECT "application_settings".* FROM "application_settings" ORDER BY "application_settings"."id" DESC LIMIT $1
+
+--- Stream 28 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:45082 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0028-F002037-001 | client->server | epoch=1749420296.539415] 172.18.0.4:45082 -> 172.18.0.3:6379 (TCP)
+- [E-S0028-F002038-002 | server->client | epoch=1749420296.539798] 172.18.0.3:6379 -> 172.18.0.4:45082 (TCP)
+- [E-S0028-F002040-003 | client->server | epoch=1749420296.543488] 172.18.0.4:45082 -> 172.18.0.3:6379 (RESP)
+- [E-S0028-F002042-005 | server->client | epoch=1749420296.545224] 172.18.0.3:6379 -> 172.18.0.4:45082 (RESP)
+
+--- Stream 29 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:45084 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0029-F002045-001 | client->server | epoch=1749420296.561031] 172.18.0.4:45084 -> 172.18.0.3:6379 (TCP)
+- [E-S0029-F002046-002 | server->client | epoch=1749420296.561327] 172.18.0.3:6379 -> 172.18.0.4:45084 (TCP)
+- [E-S0029-F002049-003 | client->server | epoch=1749420296.562898] 172.18.0.4:45084 -> 172.18.0.3:6379 (RESP)
+- [E-S0029-F002057-004 | server->client | epoch=1749420296.571574] 172.18.0.3:6379 -> 172.18.0.4:45084 (RESP)
+
+--- Stream 30 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:45680 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering. The commands observed include `sscan` and `scard`, which are used for scanning and counting elements in a set, respectively.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0030-F002218-001 | client->server | epoch=1749420297.302075] 172.18.0.4:45680 -> 172.18.0.3:6379 (RESP)
+- [E-S0030-F002219-002 | server->client | epoch=1749420297.303615] 172.18.0.3:6379 -> 172.18.0.4:45680 (RESP)
+- [E-S0030-F002220-003 | client->server | epoch=1749420297.304311] 172.18.0.4:45680 -> 172.18.0.3:6379 (TCP)
+- [E-S0030-F002224-004 | server->client | epoch=1749420297.314554] 172.18.0.3:6379 -> 172.18.0.4:45680 (TCP)
+- [E-S0030-F002722-005 | client->server | epoch=1749420301.998190] 172.18.0.4:45680 -> 172.18.0.3:6379 (RESP/JSON)
+
+--- Stream 31 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:41320 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0031-F002413-001 | client->server | epoch=1749420299.073903] 172.18.0.4:41320 -> 172.18.0.3:6379 (TCP)
+- [E-S0031-F002414-002 | server->client | epoch=1749420299.074483] 172.18.0.3:6379 -> 172.18.0.4:41320 (TCP)
+- [E-S0031-F002416-003 | client->server | epoch=1749420299.075773] 172.18.0.4:41320 -> 172.18.0.3:6379 (RESP)
+- [E-S0031-F002418-006 | server->client | epoch=1749420299.078573] 172.18.0.3:6379 -> 172.18.0.4:41320 (RESP)
+
+--- Stream 32 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:48902 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0032-F002462-001 | client->server | epoch=1749420299.219154] 172.18.0.4:48902 -> 172.18.0.3:6379 (RESP)
+- [E-S0032-F002463-004 | server->client | epoch=1749420299.219494] 172.18.0.3:6379 -> 172.18.0.4:48902 (TCP)
+- [E-S0032-F002464-005 | server->client | epoch=1749420299.220609] 172.18.0.3:6379 -> 172.18.0.4:48902 (RESP)
+- [E-S0032-F002465-007 | client->server | epoch=1749420299.220874] 172.18.0.4:48902 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 33 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:35846 and a PostgreSQL server at 172.18.0.2:5432. The client is sending a simple SQL query (`SELECT 1`) to the server, which is a common test query used to check connectivity and basic functionality of the database server.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0033-F002466-001 | client->server | epoch=1749420299.258841] 172.18.0.4:35846 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0033-F002467-003 | server->client | epoch=1749420299.262346] 172.18.0.2:5432 -> 172.18.0.4:35846 (PGSQL)
+- [E-S0033-F002468-005 | client->server | epoch=1749420299.262568] 172.18.0.4:35846 -> 172.18.0.2:5432 (TCP)
+- [E-S0033-F002466-002 | client->server | epoch=1749420299.258841] SELECT 1
+- [E-S0033-F002467-004 | server->client | epoch=1749420299.262346] SELECT 1Z   I
+
+--- Stream 34 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:36818 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0034-F005498-001 | client->server | epoch=1749420334.918818] 172.18.0.4:36818 -> 172.18.0.3:6379 (RESP)
+- [E-S0034-F005499-002 | server->client | epoch=1749420334.920992] 172.18.0.3:6379 -> 172.18.0.4:36818 (RESP)
+- [E-S0034-F005500-003 | client->server | epoch=1749420334.921236] 172.18.0.4:36818 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 35 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:33786 and a PostgreSQL server at 172.18.0.2:5432. The client is sending a simple SQL query (`SELECT 1`) to the server, which is a common test query used to check connectivity and basic functionality of the database server.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0035-F005511-001 | client->server | epoch=1749420334.945313] 172.18.0.4:33786 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0035-F005511-002 | client->server | epoch=1749420334.945313] SELECT 1
+- [E-S0035-F005513-003 | server->client | epoch=1749420334.947078] 172.18.0.2:5432 -> 172.18.0.4:33786 (PGSQL)
+- [E-S0035-F005513-004 | server->client | epoch=1749420334.947078] SELECT 1Z   I
+- [E-S0035-F005514-005 | client->server | epoch=1749420334.949903] 172.18.0.4:33786 -> 172.18.0.2:5432 (TCP)
+
+--- Stream 36 [VALID] ---
+Service: Redis
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:41030 and a Redis server at 172.18.0.3:6379. The client is sending commands to the Redis server, which is a common backend data store used for caching and message brokering.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0036-F005528-001 | client->server | epoch=1749420334.975059] 172.18.0.4:41030 -> 172.18.0.3:6379 (RESP)
+- [E-S0036-F005530-003 | server->client | epoch=1749420334.977225] 172.18.0.3:6379 -> 172.18.0.4:41030 (RESP)
+- [E-S0036-F005532-004 | client->server | epoch=1749420334.977455] 172.18.0.4:41030 -> 172.18.0.3:6379 (TCP)
+
+--- Stream 37 [VALID] ---
+Service: PostgreSQL
+
+Relevant Events: The flow involves communication between a client at 172.18.0.4:35494 and a PostgreSQL server at 172.18.0.2:5432. The client is executing various SQL queries, including `SELECT t.oid, t.typname`, `SHOW TIME ZONE`, and a query targeting the "user_statuses" table with a condition on "clear_status_at". These queries suggest typical database interaction, possibly for application functionality or data retrieval.
+
+Malicious Activities: None observed. The flow does not contain any suspicious payloads or exploit indicators such as command execution attempts, path traversal, or SQL injection.
+
+Attack Success: None
+
+Evidence:
+- [E-S0037-F005539-001 | client->server | epoch=1749420335.007260] 172.18.0.4:35494 -> 172.18.0.2:5432 (TCP)
+- [E-S0037-F005540-002 | server->client | epoch=1749420335.007584] 172.18.0.2:5432 -> 172.18.0.4:35494 (TCP)
+- [E-S0037-F005542-003 | client->server | epoch=1749420335.014725] 172.18.0.4:35494 -> 172.18.0.2:5432 (PGSQL)
+- [E-S0037-F005544-004 | server->client | epoch=1749420335.018185] 172.18.0.2:5432 -> 172.18.0.4:35494 (PGSQL)
+- [E-S0037-F005619-005 | client->server | epoch=1749420335.519553] SELECT t.oid, t.typname
+- [E-S0037-F005620-006 | server->client | epoch=1749420335.529046] SELECT 9 Z   I
+- [E-S0037-F005622-007 | client->server | epoch=1749420335.545686] SELECT t.oid, t.typname, t.typelem, t.typdelim, t.typinput, r.rngsubtype, t.typtype, t.typbasetype
+- [E-S0037-F005636-008 | server->client | epoch=1749420335.603206] SELECT 687 Z   I
+- [E-S0037-F005638-009 | client->server | epoch=1749420335.622087] SHOW TIME ZONE 
+- [E-S0037-F005640-010 | client->server | epoch=1749420335.627034] SELECT 1 
+- [E-S0037-F005641-011 | server->client | epoch=1749420335.629500] SELECT 1 Z   I
+- [E-S0037-F005645-012 | client->server | epoch=1749420335.647148] SELECT 1 AS one FROM "user_statuses" WHERE "user_statuses"."clear_status_at" <= '2025-06-08 22:05:35.642883' LIMIT $1      B            1   D   P E   	     S   
+- [E-S0037-F005646-013 | server->client | epoch=1749420335.650787] SELECT 0 Z   I
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Web application",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Command Injection",
+    "technique": "Shell Command Execution",
+    "success": "Fail",
+    "evidence": [
+      "E-S0026-F001764-004",
+      "E-S0026-F002452-030",
+      "E-S0026-F002452-035",
+      "E-S0026-F002560-033"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "The evidence suggests a command injection attempt, but no specific CVE could be identified from the packet data."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Web application",
+    "application": "GitLab",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "PostgreSQL"
+  },
+  "attack": {
+    "type": "Command Injection",
+    "technique": "Shell Command Execution",
+    "success": "Fail",
+    "evidence": [
+      "E-S0026-F001764-004",
+      "E-S0026-F002452-030",
+      "E-S0026-F002452-035",
+      "E-S0026-F002560-033"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-22205",
+    "confidence": "Medium",
+    "reason": "The attack involved a command injection attempt via a multipart upload to a GitLab instance, matching the mechanism of CVE-2021-22205, which involves improper validation of image files leading to command execution. However, the HTTP 422 response indicates the attempt failed, and the specific version vulnerability is not confirmed."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0026-F001764-004",
+    "E-S0026-F002452-030",
+    "E-S0026-F002452-035",
+    "E-S0026-F002560-033"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Web application
+Attack Type: Command Injection
+Attack Success: Fail
+CVE: CVE-2021-22205
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: Medium
+Overall Confidence: Medium
+Score: 4/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Command Injection vulnerability web
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T02:09:26.288926+00:00
+Candidate CVEs: None
+Sources: 5
+
+Source 1: MITRE ATT&CK
+Title: Exploit Public-Facing Application
+URL: https://attack.mitre.org/techniques/T1190
+Summary: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.
+
+Exploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+If an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.
+
+Adversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+For websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)
+Supports: Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application).
+Contradicts: None
+
+Source 2: Serper web result
+Title: What is OS command injection, and how to prevent it?
+URL: https://portswigger.net/web-security/os-command-injection
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). It allows an attacker to execute operating system (OS) commands on the server that is running an application, and typically fully compromise the application and ... | Webpage text: In this section, we explain what OS command injection is, and describe how vulnerabilities can be detected and exploited. We also show you some useful commands and techniques for different operating systems, and describe how to prevent OS command injection. If you're familiar with the basic concepts behind OS command injection vulnerabilities and want to practice exploiting them on some realistic, deliberately vulnerable targets, you can access labs in this topic from the link below. View all OS command injection labs What is OS command injection? OS command injection is also known as shell injection. It allows an attacker to execute operating system (OS) commands on the server that is running an application, and typically fully compromise the application and its data. Often, an attacker can leverage an OS command injection vulnerability to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot the attack to other system In this example, a shopping application lets the user view whether an item is in stock in a particular store. This information is accessed via a URL: https://insecure-website.com/stockStatus?productID=381&storeID=29 To provide the stock information, the application must query various legacy systems. For historical reasons, the functionality is implemented by calling out to a shell command with the product and store IDs as arguments: This command outputs the stock status for the specified item, which is returned to the user. The application implements no defenses against OS command injection, so an attacker can submit the following input to execute an arbitrary command: If this input is submitted in the productID parameter, the command executed by the application is: stockreport.pl & echo aiwefwlguh & 29 The echo command causes the supplied string to be echoed in the output. This is a useful way to test for some types of OS command injection. The & character is a shell command separator. In this example, it causes three separate commands to execute, one after another. The output returned to the user is: Error - productID was not provided The three lines of output demonstrate that: The original stockreport.pl command was executed without its expected arguments, and so returned an error message. The injected echo command was executed, and the supplied string was echoed in the output. The original argument 29 was executed as a command, which caused an error. Placing the additional command separator & after the injected command is useful because it separates the injected command from whatever follows the injection point. This reduces the chance that what follows will prevent the injected command from executing. After you identify an OS command injection vulnerability, it's useful to execute some initial commands to obtain information about the system. Below is a summary of some commands that are useful on Linux and Windows platforms: Blind OS command injection vulnerabilities Many instances of OS command injection are blind vulnerabilities. This means that the application does not return the output from the command within its HTTP response. Blind vulnerabilities can still be exploited, but different techniques
+Supports: None
+Contradicts: None
+
+Source 3: Serper web result
+Title: Command Injection | OWASP Foundation
+URL: https://community.owasp.org/attacks/Command_Injection
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Description. Command injection is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application. | Webpage text: Contributor(s): Wichers, Amwestgate, Rezos, Clow808, KristenS, Jason Li, Andrew Smith, Jmanico, Tal Mel, kingthorin Command injection is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application. Command injection attacks are possible when an application passes unsafe user supplied data (forms, cookies, HTTP headers etc.) to a system shell. In this attack, the attacker-supplied operating system commands are usually executed with the privileges of the vulnerable application. Command injection attacks are possible largely due to insufficient input validation. This attack differs from Code Injection, in that code injection allows the attacker to add their own code that is then executed by the application. In Command Injection, the attacker extends the default functionality of the application, which execute system commands, without the necessity of injecting code. The following code is a wrapper around the UNIX command cat which prints the contents of a file to standard output. It is also injectable: int main(int argc, char **argv) { commandLength = strlen(cat) + strlen(argv[1]) + 1; command = (char *) malloc(commandLength); strncpy(command, cat, commandLength); strncat(command, argv[1], (commandLength - strlen(cat)) ); Used normally, the output is simply the contents of the file requested: When last we left our heroes... However, if we add a semicolon and another command to the end of this line, the command is executed by catWrapper with no complaint: $ ./catWrapper "Story.txt; ls" When last we left our heroes... Story.txt doubFree.c nullpointer.c format.c strlen.c useFree* catWrapper* misnull.c strlength.c useFree.c commandinjection.c nodefault.c trunc.c writeWhatWhere.c If catWrapper had been set to have a higher privilege level than the standard user, arbitrary commands could be executed with that higher The following simple program accepts a filename as a command line argument, and displays the contents of the file back to the user. The program is installed setuid root because it is intended for use as a learning tool to allow system administrators in-training to inspect privileged system files without giving them the ability to modify them int main(char* argc, char** argv) { char cmd[CMD_MAX] = "/usr/bin/cat "; Because the program runs with root privileges, the call to system() also executes with root privileges. If a user specifies a standard filename, the call works as expected. However, if an attacker passes a string of the form “;rm -rf /”, then the call to system() fails to execute cat due to a lack of arguments and then plows on to recursively delete the contents of the root partition. The following code from a privileged program uses the environment variable $APPHOME to determine the application’s installation directory, and then executes an initialization script in that directory. char* home=getenv("APPHOME"); char* cmd=(char*)malloc(strlen(home)+strlen(INITCMD)); As in Example 2, the code in this example allows an attacker to execute arbitrary commands with the elevated privilege of the application. In this example, the attacker can modify the environment variable $APPHOME to specify a different p
+Supports: None
+Contradicts: None
+
+Source 4: Serper web result
+Title: Detecting command injection attacks in web applications ...
+URL: https://www.nature.com/articles/s41598-024-74350-3
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). by X Wang · 2024 · Cited by 30 — These vulnerabilities typically arise from improper handling of untrusted data, enabling attackers to introduce arbitrary code or commands into ... | Webpage text: A required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable any ad blockers, or try using a different browser.
+Supports: None
+Contradicts: None
+
+Source 5: Serper web result
+Title: Command Injection Vulnerabilities & Security Best Practices
+URL: https://www.vaadata.com/en/blog/what-is-command-injection-exploitations-and-security-best-practices/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Command injections are one of the most critical vulnerabilities in web security. They occur when an attacker manages to execute arbitrary system commands on ... | Webpage text: What is Command Injection? Exploitations and Security Best Practices What is Command Injection? Exploitations and Security Best Practices Command injections are one of the most critical vulnerabilities in web security. They occur when an attacker manages to execute arbitrary system commands on the web server. This type of attack can result in the leakage of sensitive data, data corruption or complete control of the target environment. In this article, we explore the principles and methods of command injection exploitation. We also present the security best practices and measures to implement to prevent these attacks. What is Command Injection? Command injections occur when user input is not properly validated before being integrated into functions that execute system commands. If an application accepts data from users without filtering it, an attacker can hijack the initial command and execute arbitrary commands. To bypass the intended command, it is possible to use special characters that act as command separators, allowing the original context to be removed and other commands to be executed. The main command separators on Windows and Unix systems include: &, &&, | or ||. On Unix systems, there are additional separators that can also be used to chain commands. 0x0a ou n (caractère du saut à la ligne) How to Identify and Exploit Command Injections? Several approaches can be taken to identify command injection vulnerabilities. One is to examine the application’s source code to identify where system commands are executed with unvalidated user input. Another approach is to use pre-established dictionaries of payloads to detect vulnerabilities. By sending these payloads to the server and analysing the responses, it is possible to determine whether the server is vulnerable to command injections. This is the method we are going to explore, focusing on the most common cases of exploitation from a black box point of view. Exploiting a command injection in a PHP application Let’s take the case of a PHP application running on a Linux server that returns the IP address for a given domain name. What can often attract the attention of a pentester is the use of functions suggesting the execution of system commands. For example, one might assume that the backend uses a system function to call a native binary such as dig, allowing DNS servers to be queried. As a simplified example, the code might look something like this: shell_exec("dig ".$_POST['domain']); In this context, it is possible to add characters that allow several system commands to be chained together. For example, by adding the ‘;’ character followed by the cat /etc/passwd command, you can display the contents of the ‘/etc/passwd’ file. In this way, the command executed by the server will be as follows: The server responds with part of the contents of the ‘/etc/passwd’ file, confirming that the server is vulnerable to command injection. It may happen that the server does not return the result of the commands in its response. In this case, several binaries native to the operating systems can be used to confirm a command injection. For example, the ‘sleep’ binary under Linux or ‘timeout’ under Windows can be used to te
+Supports: None
+Contradicts: None
+Warnings: NVD lookup skipped: unknown product and no distinctive packet clues. | Webpage read unavailable for www.cisa.gov: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0026-F001764-004]: GET /users/sign_in.
+- PCAP [E-S0026-F002452-030]: POST /uploads/user.
+- PCAP [E-S0026-F002452-035]: HTTP request candidate POST /uploads/user to 172.18.0.4:80; request frame=2452; indicator frame=2452; indicators=shell command expression, multipart upload, uploaded file signature differs from image filename; bounded indicator excerpt=qx{touch /tmp/success}; response HTTP 422 frame=2560 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0026-F002560-033]: HTTP Status 422.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [MITRE ATT&CK] Exploit Public-Facing Application: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.
+
+Exploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+If an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.
+
+Adversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+For websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25) Source: https://attack.mitre.org/techniques/T1190 Supports: Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application).
+- ONLINE [Serper web result] What is OS command injection, and how to prevent it?: UNTRUSTED WEB RESEARCH (not PCAP evidence). It allows an attacker to execute operating system (OS) commands on the server that is running an application, and typically fully compromise the application and ... | Webpage text: In this section, we explain what OS command injection is, and describe how vulnerabilities can be detected and exploited. We also show you some useful commands and techniques for different operating systems, and describe how to prevent OS command injection. If you're familiar with the basic concepts behind OS command injection vulnerabilities and want to practice exploiting them on some realistic, deliberately vulnerable targets, you can access labs in this topic from the link below. View all OS command injection labs What is OS command injection? OS command injection is also known as shell injection. It allows an attacker to execute operating system (OS) commands on the server that is running an application, and typically fully compromise the application and its data. Often, an attacker can leverage an OS command injection vulnerability to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot the attack to other system In this example, a shopping application lets the user view whether an item is in stock in a particular store. This information is accessed via a URL: https://insecure-website.com/stockStatus?productID=381&storeID=29 To provide the stock information, the application must query various legacy systems. For historical reasons, the functionality is implemented by calling out to a shell command with the product and store IDs as arguments: This command outputs the stock status for the specified item, which is returned to the user. The application implements no defenses against OS command injection, so an attacker can submit the following input to execute an arbitrary command: If this input is submitted in the productID parameter, the command executed by the application is: stockreport.pl & echo aiwefwlguh & 29 The echo command causes the supplied string to be echoed in the output. This is a useful way to test for some types of OS command injection. The & character is a shell command separator. In this example, it causes three separate commands to execute, one after another. The output returned to the user is: Error - productID was not provided The three lines of output demonstrate that: The original stockreport.pl command was executed without its expected arguments, and so returned an error message. The injected echo command was executed, and the supplied string was echoed in the output. The original argument 29 was executed as a command, which caused an error. Placing the additional command separator & after the injected command is useful because it separates the injected command from whatever follows the injection point. This reduces the chance that what follows will prevent the injected command from executing. After you identify an OS command injection vulnerability, it's useful to execute some initial commands to obtain information about the system. Below is a summary of some commands that are useful on Linux and Windows platforms: Blind OS command injection vulnerabilities Many instances of OS command injection are blind vulnerabilities. This means that the application does not return the output from the command within its HTTP response. Blind vulnerabilities can still be exploited, but different techniques Source: https://portswigger.net/web-security/os-command-injection
+- ONLINE [Serper web result] Command Injection | OWASP Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). Description. Command injection is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application. | Webpage text: Contributor(s): Wichers, Amwestgate, Rezos, Clow808, KristenS, Jason Li, Andrew Smith, Jmanico, Tal Mel, kingthorin Command injection is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application. Command injection attacks are possible when an application passes unsafe user supplied data (forms, cookies, HTTP headers etc.) to a system shell. In this attack, the attacker-supplied operating system commands are usually executed with the privileges of the vulnerable application. Command injection attacks are possible largely due to insufficient input validation. This attack differs from Code Injection, in that code injection allows the attacker to add their own code that is then executed by the application. In Command Injection, the attacker extends the default functionality of the application, which execute system commands, without the necessity of injecting code. The following code is a wrapper around the UNIX command cat which prints the contents of a file to standard output. It is also injectable: int main(int argc, char **argv) { commandLength = strlen(cat) + strlen(argv[1]) + 1; command = (char *) malloc(commandLength); strncpy(command, cat, commandLength); strncat(command, argv[1], (commandLength - strlen(cat)) ); Used normally, the output is simply the contents of the file requested: When last we left our heroes... However, if we add a semicolon and another command to the end of this line, the command is executed by catWrapper with no complaint: $ ./catWrapper "Story.txt; ls" When last we left our heroes... Story.txt doubFree.c nullpointer.c format.c strlen.c useFree* catWrapper* misnull.c strlength.c useFree.c commandinjection.c nodefault.c trunc.c writeWhatWhere.c If catWrapper had been set to have a higher privilege level than the standard user, arbitrary commands could be executed with that higher The following simple program accepts a filename as a command line argument, and displays the contents of the file back to the user. The program is installed setuid root because it is intended for use as a learning tool to allow system administrators in-training to inspect privileged system files without giving them the ability to modify them int main(char* argc, char** argv) { char cmd[CMD_MAX] = "/usr/bin/cat "; Because the program runs with root privileges, the call to system() also executes with root privileges. If a user specifies a standard filename, the call works as expected. However, if an attacker passes a string of the form “;rm -rf /”, then the call to system() fails to execute cat due to a lack of arguments and then plows on to recursively delete the contents of the root partition. The following code from a privileged program uses the environment variable $APPHOME to determine the application’s installation directory, and then executes an initialization script in that directory. char* home=getenv("APPHOME"); char* cmd=(char*)malloc(strlen(home)+strlen(INITCMD)); As in Example 2, the code in this example allows an attacker to execute arbitrary commands with the elevated privilege of the application. In this example, the attacker can modify the environment variable $APPHOME to specify a different p Source: https://community.owasp.org/attacks/Command_Injection
+- ONLINE [Serper web result] Detecting command injection attacks in web applications ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). by X Wang · 2024 · Cited by 30 — These vulnerabilities typically arise from improper handling of untrusted data, enabling attackers to introduce arbitrary code or commands into ... | Webpage text: A required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable any ad blockers, or try using a different browser. Source: https://www.nature.com/articles/s41598-024-74350-3
+- ONLINE [Serper web result] Command Injection Vulnerabilities & Security Best Practices: UNTRUSTED WEB RESEARCH (not PCAP evidence). Command injections are one of the most critical vulnerabilities in web security. They occur when an attacker manages to execute arbitrary system commands on ... | Webpage text: What is Command Injection? Exploitations and Security Best Practices What is Command Injection? Exploitations and Security Best Practices Command injections are one of the most critical vulnerabilities in web security. They occur when an attacker manages to execute arbitrary system commands on the web server. This type of attack can result in the leakage of sensitive data, data corruption or complete control of the target environment. In this article, we explore the principles and methods of command injection exploitation. We also present the security best practices and measures to implement to prevent these attacks. What is Command Injection? Command injections occur when user input is not properly validated before being integrated into functions that execute system commands. If an application accepts data from users without filtering it, an attacker can hijack the initial command and execute arbitrary commands. To bypass the intended command, it is possible to use special characters that act as command separators, allowing the original context to be removed and other commands to be executed. The main command separators on Windows and Unix systems include: &, &&, | or ||. On Unix systems, there are additional separators that can also be used to chain commands. 0x0a ou n (caractère du saut à la ligne) How to Identify and Exploit Command Injections? Several approaches can be taken to identify command injection vulnerabilities. One is to examine the application’s source code to identify where system commands are executed with unvalidated user input. Another approach is to use pre-established dictionaries of payloads to detect vulnerabilities. By sending these payloads to the server and analysing the responses, it is possible to determine whether the server is vulnerable to command injections. This is the method we are going to explore, focusing on the most common cases of exploitation from a black box point of view. Exploiting a command injection in a PHP application Let’s take the case of a PHP application running on a Linux server that returns the IP address for a given domain name. What can often attract the attention of a pentester is the use of functions suggesting the execution of system commands. For example, one might assume that the backend uses a system function to call a native binary such as dig, allowing DNS servers to be queried. As a simplified example, the code might look something like this: shell_exec("dig ".$_POST['domain']); In this context, it is possible to add characters that allow several system commands to be chained together. For example, by adding the ‘;’ character followed by the cat /etc/passwd command, you can display the contents of the ‘/etc/passwd’ file. In this way, the command executed by the server will be as follows: The server responds with part of the contents of the ‘/etc/passwd’ file, confirming that the server is vulnerable to command injection. It may happen that the server does not return the result of the commands in its response. In this case, several binaries native to the operating systems can be used to confirm a command injection. For example, the ‘sleep’ binary under Linux or ‘timeout’ under Windows can be used to te Source: https://www.vaadata.com/en/blog/what-is-command-injection-exploitations-and-security-best-practices/
+
+=== SOURCE URLS ===
+- https://attack.mitre.org/techniques/T1190
+- https://portswigger.net/web-security/os-command-injection
+- https://community.owasp.org/attacks/Command_Injection
+- https://www.nature.com/articles/s41598-024-74350-3
+- https://www.vaadata.com/en/blog/what-is-command-injection-exploitations-and-security-best-practices/
+
+Search status: Valid
+Search query: Command Injection vulnerability web
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- NVD lookup skipped: unknown product and no distinctive packet clues.
+- Webpage read unavailable for www.cisa.gov: HTTPError: HTTP Error 403: Forbidden
+- 1 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2021-22205",
+  "cve_supported": "Yes",
+  "confidence": "Medium",
+  "reasons": [
+    "Analyst proposed CVE-2021-22205; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Web application
+Associated CVE candidate (Analyst): CVE-2021-22205
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2021-22205
+Attack: Failed
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0026-F001764-004]: GET /users/sign_in.
+- PCAP [E-S0026-F002452-030]: POST /uploads/user.
+- PCAP [E-S0026-F002452-035]: HTTP request candidate POST /uploads/user to 172.18.0.4:80; request frame=2452; indicator frame=2452; indicators=shell command expression, multipart upload, uploaded file signature differs from image filename; bounded indicator excerpt=qx{touch /tmp/success}; response HTTP 422 frame=2560 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0026-F002560-033]: HTTP Status 422.
+- ONLINE RESEARCH LEAD [MITRE ATT&CK] Exploit Public-Facing Application: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.
+
+Exploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).
+
+If an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.
+
+Adversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)
+
+For websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25) Source: https://attack.mitre.org/techniques/T1190 Supports: Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application).
+- ONLINE [Serper web result] What is OS command injection, and how to prevent it?: UNTRUSTED WEB RESEARCH (not PCAP evidence). It allows an attacker to execute operating system (OS) commands on the server that is running an application, and typically fully compromise the application and ... | Webpage text: In this section, we explain what OS command injection is, and describe how vulnerabilities can be detected and exploited. We also show you some useful commands and techniques for different operating systems, and describe how to prevent OS command injection. If you're familiar with the basic concepts behind OS command injection vulnerabilities and want to practice exploiting them on some realistic, deliberately vulnerable targets, you can access labs in this topic from the link below. View all OS command injection labs What is OS command injection? OS command injection is also known as shell injection. It allows an attacker to execute operating system (OS) commands on the server that is running an application, and typically fully compromise the application and its data. Often, an attacker can leverage an OS command injection vulnerability to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot the attack to other system In this example, a shopping application lets the user view whether an item is in stock in a particular store. This information is accessed via a URL: https://insecure-website.com/stockStatus?productID=381&storeID=29 To provide the stock information, the application must query various legacy systems. For historical reasons, the functionality is implemented by calling out to a shell command with the product and store IDs as arguments: This command outputs the stock status for the specified item, which is returned to the user. The application implements no defenses against OS command injection, so an attacker can submit the following input to execute an arbitrary command: If this input is submitted in the productID parameter, the command executed by the application is: stockreport.pl & echo aiwefwlguh & 29 The echo command causes the supplied string to be echoed in the output. This is a useful way to test for some types of OS command injection. The & character is a shell command separator. In this example, it causes three separate commands to execute, one after another. The output returned to the user is: Error - productID was not provided The three lines of output demonstrate that: The original stockreport.pl command was executed without its expected arguments, and so returned an error message. The injected echo command was executed, and the supplied string was echoed in the output. The original argument 29 was executed as a command, which caused an error. Placing the additional command separator & after the injected command is useful because it separates the injected command from whatever follows the injection point. This reduces the chance that what follows will prevent the injected command from executing. After you identify an OS command injection vulnerability, it's useful to execute some initial commands to obtain information about the system. Below is a summary of some commands that are useful on Linux and Windows platforms: Blind OS command injection vulnerabilities Many instances of OS command injection are blind vulnerabilities. This means that the application does not return the output from the command within its HTTP response. Blind vulnerabilities can still be exploited, but different techniques Source: https://portswigger.net/web-security/os-command-injection
+- ONLINE [Serper web result] Command Injection | OWASP Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). Description. Command injection is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application. | Webpage text: Contributor(s): Wichers, Amwestgate, Rezos, Clow808, KristenS, Jason Li, Andrew Smith, Jmanico, Tal Mel, kingthorin Command injection is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application. Command injection attacks are possible when an application passes unsafe user supplied data (forms, cookies, HTTP headers etc.) to a system shell. In this attack, the attacker-supplied operating system commands are usually executed with the privileges of the vulnerable application. Command injection attacks are possible largely due to insufficient input validation. This attack differs from Code Injection, in that code injection allows the attacker to add their own code that is then executed by the application. In Command Injection, the attacker extends the default functionality of the application, which execute system commands, without the necessity of injecting code. The following code is a wrapper around the UNIX command cat which prints the contents of a file to standard output. It is also injectable: int main(int argc, char **argv) { commandLength = strlen(cat) + strlen(argv[1]) + 1; command = (char *) malloc(commandLength); strncpy(command, cat, commandLength); strncat(command, argv[1], (commandLength - strlen(cat)) ); Used normally, the output is simply the contents of the file requested: When last we left our heroes... However, if we add a semicolon and another command to the end of this line, the command is executed by catWrapper with no complaint: $ ./catWrapper "Story.txt; ls" When last we left our heroes... Story.txt doubFree.c nullpointer.c format.c strlen.c useFree* catWrapper* misnull.c strlength.c useFree.c commandinjection.c nodefault.c trunc.c writeWhatWhere.c If catWrapper had been set to have a higher privilege level than the standard user, arbitrary commands could be executed with that higher The following simple program accepts a filename as a command line argument, and displays the contents of the file back to the user. The program is installed setuid root because it is intended for use as a learning tool to allow system administrators in-training to inspect privileged system files without giving them the ability to modify them int main(char* argc, char** argv) { char cmd[CMD_MAX] = "/usr/bin/cat "; Because the program runs with root privileges, the call to system() also executes with root privileges. If a user specifies a standard filename, the call works as expected. However, if an attacker passes a string of the form “;rm -rf /”, then the call to system() fails to execute cat due to a lack of arguments and then plows on to recursively delete the contents of the root partition. The following code from a privileged program uses the environment variable $APPHOME to determine the application’s installation directory, and then executes an initialization script in that directory. char* home=getenv("APPHOME"); char* cmd=(char*)malloc(strlen(home)+strlen(INITCMD)); As in Example 2, the code in this example allows an attacker to execute arbitrary commands with the elevated privilege of the application. In this example, the attacker can modify the environment variable $APPHOME to specify a different p Source: https://community.owasp.org/attacks/Command_Injection
+- ONLINE [Serper web result] Detecting command injection attacks in web applications ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). by X Wang · 2024 · Cited by 30 — These vulnerabilities typically arise from improper handling of untrusted data, enabling attackers to introduce arbitrary code or commands into ... | Webpage text: A required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable any ad blockers, or try using a different browser. Source: https://www.nature.com/articles/s41598-024-74350-3
+- ONLINE [Serper web result] Command Injection Vulnerabilities & Security Best Practices: UNTRUSTED WEB RESEARCH (not PCAP evidence). Command injections are one of the most critical vulnerabilities in web security. They occur when an attacker manages to execute arbitrary system commands on ... | Webpage text: What is Command Injection? Exploitations and Security Best Practices What is Command Injection? Exploitations and Security Best Practices Command injections are one of the most critical vulnerabilities in web security. They occur when an attacker manages to execute arbitrary system commands on the web server. This type of attack can result in the leakage of sensitive data, data corruption or complete control of the target environment. In this article, we explore the principles and methods of command injection exploitation. We also present the security best practices and measures to implement to prevent these attacks. What is Command Injection? Command injections occur when user input is not properly validated before being integrated into functions that execute system commands. If an application accepts data from users without filtering it, an attacker can hijack the initial command and execute arbitrary commands. To bypass the intended command, it is possible to use special characters that act as command separators, allowing the original context to be removed and other commands to be executed. The main command separators on Windows and Unix systems include: &, &&, | or ||. On Unix systems, there are additional separators that can also be used to chain commands. 0x0a ou n (caractère du saut à la ligne) How to Identify and Exploit Command Injections? Several approaches can be taken to identify command injection vulnerabilities. One is to examine the application’s source code to identify where system commands are executed with unvalidated user input. Another approach is to use pre-established dictionaries of payloads to detect vulnerabilities. By sending these payloads to the server and analysing the responses, it is possible to determine whether the server is vulnerable to command injections. This is the method we are going to explore, focusing on the most common cases of exploitation from a black box point of view. Exploiting a command injection in a PHP application Let’s take the case of a PHP application running on a Linux server that returns the IP address for a given domain name. What can often attract the attention of a pentester is the use of functions suggesting the execution of system commands. For example, one might assume that the backend uses a system function to call a native binary such as dig, allowing DNS servers to be queried. As a simplified example, the code might look something like this: shell_exec("dig ".$_POST['domain']); In this context, it is possible to add characters that allow several system commands to be chained together. For example, by adding the ‘;’ character followed by the cat /etc/passwd command, you can display the contents of the ‘/etc/passwd’ file. In this way, the command executed by the server will be as follows: The server responds with part of the contents of the ‘/etc/passwd’ file, confirming that the server is vulnerable to command injection. It may happen that the server does not return the result of the commands in its response. In this case, several binaries native to the operating systems can be used to confirm a command injection. For example, the ‘sleep’ binary under Linux or ‘timeout’ under Windows can be used to te Source: https://www.vaadata.com/en/blog/what-is-command-injection-exploitations-and-security-best-practices/
+
+Verification Summary:
+- Affected service: Web application.
+- Attack type: Command Injection.
+- Attack technique: Shell Command Execution.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 4/5.
+- Consensus attack outcome: Fail.
+- Validated CVE: CVE-2021-22205.
+- CVE assessment: Analyst proposed CVE-2021-22205; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Command Injection vulnerability web.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://attack.mitre.org/techniques/T1190
+- Evidence-source URL: https://portswigger.net/web-security/os-command-injection
+- Evidence-source URL: https://community.owasp.org/attacks/Command_Injection
+- Evidence-source URL: https://www.nature.com/articles/s41598-024-74350-3
+- Evidence-source URL: https://www.vaadata.com/en/blog/what-is-command-injection-exploitations-and-security-best-practices/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: NVD lookup skipped: unknown product and no distinctive packet clues.
+- Evidence limitation: Webpage read unavailable for www.cisa.gov: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 1 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Ensure proper validation of image files and other user inputs to prevent command injection vulnerabilities.
+- Regularly update GitLab and other web applications to patch known vulnerabilities.
+- Implement robust logging and monitoring to detect and respond to suspicious activities promptly.

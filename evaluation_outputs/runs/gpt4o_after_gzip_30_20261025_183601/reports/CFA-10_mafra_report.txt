@@ -1,0 +1,341 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 6
+TCP Stream IDs: 0, 1, 2, 3, 4, 5
+Protocol Counts: RESP=67, TCP=51, RESP/JSON=13
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:6379            <-> 172.18.0.7:45572                16 2528 bytes      32 2192 bytes      48 4720 bytes     0.000000000        16.5143
+172.18.0.7:45638           <-> 172.18.0.2:6379                  9 630 bytes      18 8013 bytes      27 8643 bytes     0.882430000        16.0402
+172.18.0.2:6379            <-> 172.18.0.7:45616                 9 594 bytes       9 7671 bytes      18 8265 bytes     0.883338000        16.0398
+172.18.0.2:6379            <-> 172.18.0.6:49268                 9 594 bytes       9 7608 bytes      18 8202 bytes     0.883621000        16.0404
+172.18.0.6:
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000001-001 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45572 (RESP)
+- [E-S0000-F000002-002 | server->client] 172.18.0.7:45572 -> 172.18.0.2:6379 (RESP)
+- [E-S0000-F000003-003 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45572 (TCP)
+- [E-S0001-F000004-001 | client->server] 172.18.0.6:49346 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0001-F000005-003 | server->client] 172.18.0.2:6379 -> 172.18.0.6:49346 (RESP)
+- [E-S0001-F000006-004 | client->server] 172.18.0.6:49346 -> 172.18.0.2:6379 (TCP)
+- [E-S0001-F000004-002 | client->server] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+- [E-S0002-F000007-001 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45654 (RESP)
+- [E-S0002-F000008-003 | server->client] 172.18.0.7:45654 -> 172.18.0.2:6379 (TCP)
+- [E-S0002-F000007-002 | client->server] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+- [E-S0003-F000009-001 | client->server] 172.18.0.7:45638 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0003-F000010-003 | server->client] 172.18.0.2:6379 -> 172.18.0.7:45638 (RESP)
+- [E-S0003-F000011-004 | client->server] 172.18.0.7:45638 -> 172.18.0.2:6379 (TCP)
+- [E-S0003-F000009-002 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000022-005 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000035-006 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000053-007 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4OSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000066-008 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5MSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0003-F000081-009 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0003-F000094-010 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0003-F000107-011 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5OCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS40NSwgMC45MywgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0003-F000125-012 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiAxMDEsICJmcmVxIjogMi4wLCAiYWN0aXZlIjogMCwgInByb2Nlc3NlZCI6IDAsICJsb2FkYXZnIjogWzEuNDUsIDAuOTMsIDAuNThdLCAic3dfaWRlbnQiOiAicHktY2VsZXJ5IiwgInN3X3ZlciI6ICI0LjQuMiIsICJzd19zeXMiOiAiTGludXgiLCAidGltZXN0YW1wIjog...[TRUNCATED]
+- [E-S0004-F000012-001 | client->server] 172.18.0.2:6379 -> 172.18.0.7:45616 (RESP)
+- [E-S0004-F000013-003 | server->client] 172.18.0.7:45616 -> 172.18.0.2:6379 (TCP)
+- [E-S0004-F000012-002 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000025-004 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000038-005 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000056-006 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4OSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000069-007 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5MSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0004-F000084-008 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0004-F000097-009 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0004-F000110-010 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5OCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS40NSwgMC45MywgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0004-F000128-011 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiAxMDEsICJmcmVxIjogMi4wLCAiYWN0aXZlIjogMCwgInByb2Nlc3NlZCI6IDAsICJsb2FkYXZnIjogWzEuNDUsIDAuOTMsIDAuNThdLCAic3dfaWRlbnQiOiAicHktY2VsZXJ5IiwgInN3X3ZlciI6ICI0LjQuMiIsICJzd19zeXMiOiAiTGludXgiLCAidGltZXN0YW1wIjog...[TRUNCATED]
+- [E-S0005-F000014-001 | client->server] 172.18.0.2:6379 -> 172.18.0.6:49268 (RESP)
+- [E-S0005-F000015-003 | server->client] 172.18.0.6:49268 -> 172.18.0.2:6379 (TCP)
+- [E-S0005-F000014-002 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000027-004 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000040-005 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000058-006 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4OSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000071-007 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5MSwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS4yLCAwLjg2LCAwLjU2XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+- [E-S0005-F000086-008 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0005-F000099-009 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5NiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS41OCwgMC45NCwgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0005-F000112-010 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA5OCwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMS40NSwgMC45MywgMC41OF0sICJzd19pZGVudCI6ICJweS1jZWxlcnkiLCAic3dfdmVyIjogIjQuNC4yIiwgInN3X3N5cyI6ICJMaW51eCIsICJ0aW1lc3RhbXAiOiAx...[TRUNCATED]
+- [E-S0005-F000130-011 | client->server] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiAxMDEsICJmcmVxIjogMi4wLCAiYWN0aXZlIjogMCwgInByb2Nlc3NlZCI6IDAsICJsb2FkYXZnIjogWzEuNDUsIDAuOTMsIDAuNThdLCAic3dfaWRlbnQiOiAicHktY2VsZXJ5IiwgInN3X3ZlciI6ICI0LjQuMiIsICJzd19zeXMiOiAiTGludXgiLCAidGltZXN0YW1wIjog...[TRUNCATED]
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.2:6379 -> 172.18.0.7:45572; packets=48; client->server=32, server->client=16; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.6:49346 -> 172.18.0.2:6379; packets=12; client->server=8, server->client=4; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 2: 172.18.0.2:6379 -> 172.18.0.7:45654; packets=8; client->server=4, server->client=4; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.7:45638 -> 172.18.0.2:6379; packets=27; client->server=18, server->client=9; role_hint=backend/data-plane candidate (heuristic; do not assume primary application)
+- TCP stream 4: 172.18.0.2:6379 -> 172.18.0.7:45616; packets=18; client->server=9, server->client=9; role_hint=other protocol/application candidate (heuristic; verify from payload)
+- TCP stream 5: 172.18.0.2:6379 -> 172.18.0.6:49268; packets=18; client->server=9, server->client=9; role_hint=other protocol/application candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Redis
+Relevant Events: The IP address 172.18.0.2 is acting as a Redis server, and 172.18.0.7 is a client connecting to it. The client is repeatedly issuing the BRPOP command, which is used to remove and get the last element in a list, or block until one is available.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0000-F000001-001 | client->server | epoch=1738160314.318286] 172.18.0.2:6379 -> 172.18.0.7:45572 (RESP)
+- [E-S0000-F000002-002 | server->client | epoch=1738160314.318798] 172.18.0.7:45572 -> 172.18.0.2:6379 (RESP)
+- [E-S0000-F000003-003 | client->server | epoch=1738160314.319183] 172.18.0.2:6379 -> 172.18.0.7:45572 (TCP)
+
+--- Stream 1 [VALID] ---
+Service: Redis
+Relevant Events: The IP address 172.18.0.6 is acting as a client connecting to a Redis server at 172.18.0.2. The client is issuing PUBLISH commands to the Redis server, targeting the `/0.celery.pidbox` channel, which is typically used for Celery task messaging.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0001-F000004-001 | client->server | epoch=1738160314.699763] 172.18.0.6:49346 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0001-F000005-003 | server->client | epoch=1738160314.700181] 172.18.0.2:6379 -> 172.18.0.6:49346 (RESP)
+- [E-S0001-F000006-004 | client->server | epoch=1738160314.700299] 172.18.0.6:49346 -> 172.18.0.2:6379 (TCP)
+
+--- Stream 2 [VALID] ---
+Service: Redis
+Relevant Events: The IP address 172.18.0.2 is acting as a Redis server, and 172.18.0.7 is a client connecting to it. The client is receiving messages from the `/0.celery.pidbox` channel, which is typically used for Celery task messaging.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0002-F000007-001 | client->server | epoch=1738160314.700427] 172.18.0.2:6379 -> 172.18.0.7:45654 (RESP)
+- [E-S0002-F000008-003 | server->client | epoch=1738160314.700498] 172.18.0.7:45654 -> 172.18.0.2:6379 (TCP)
+- [E-S0002-F000007-002 | client->server | epoch=1738160314.700427] eyJtZXRob2QiOiAiZW5hYmxlX2V2ZW50cyIsICJhcmd1bWVudHMiOiB7fSwgImRlc3RpbmF0aW9uIjogbnVsbCwgInBhdHRlcm4iOiBudWxsLCAibWF0Y2hlciI6IG51bGx9
+
+--- Stream 3 [VALID] ---
+Service: Redis
+Relevant Events: The IP address 172.18.0.7 is acting as a client connecting to a Redis server at 172.18.0.2. The client is issuing PUBLISH commands to the Redis server, targeting the `/0.celeryev/worker.heartbeat` channel, which is typically used for Celery task messaging.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0003-F000009-001 | client->server | epoch=1738160315.200716] 172.18.0.7:45638 -> 172.18.0.2:6379 (RESP/JSON)
+- [E-S0003-F000010-003 | server->client | epoch=1738160315.201339] 172.18.0.2:6379 -> 172.18.0.7:45638 (RESP)
+- [E-S0003-F000011-004 | client->server | epoch=1738160315.201472] 172.18.0.7:45638 -> 172.18.0.2:6379 (TCP)
+
+--- Stream 4 [VALID] ---
+Service: Redis
+Relevant Events: The IP address 172.18.0.2 is acting as a Redis server, and 172.18.0.7 is a client connecting to it. The client is receiving messages from the `/0.celeryev/worker.heartbeat` channel, which is typically used for Celery task messaging.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0004-F000012-001 | client->server | epoch=1738160315.201624] 172.18.0.2:6379 -> 172.18.0.7:45616 (RESP)
+- [E-S0004-F000013-003 | server->client | epoch=1738160315.201749] 172.18.0.7:45616 -> 172.18.0.2:6379 (TCP)
+- [E-S0004-F000012-002 | client->server | epoch=1738160315.201624] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+
+--- Stream 5 [VALID] ---
+Service: Redis
+Relevant Events: The IP address 172.18.0.2 is acting as a Redis server, and 172.18.0.6 is a client connecting to it. The client is receiving messages from the `/0.celeryev/worker.heartbeat` channel, which is typically used for Celery task messaging.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0005-F000014-001 | client->server | epoch=1738160315.201907] 172.18.0.2:6379 -> 172.18.0.6:49268 (RESP)
+- [E-S0005-F000015-003 | server->client | epoch=1738160315.202032] 172.18.0.6:49268 -> 172.18.0.2:6379 (TCP)
+- [E-S0005-F000014-002 | client->server | epoch=1738160315.201907] eyJob3N0bmFtZSI6ICJjZWxlcnlAODU5MjcwZmRlYWU2IiwgInV0Y29mZnNldCI6IDAsICJwaWQiOiA3LCAiY2xvY2siOiA4MiwgImZyZXEiOiAyLjAsICJhY3RpdmUiOiAwLCAicHJvY2Vzc2VkIjogMCwgImxvYWRhdmciOiBbMC45NSwgMC44LCAwLjU0XSwgInN3X2lkZW50IjogInB5LWNlbGVyeSIsICJzd192ZXIiOiAiNC40LjIiLCAic3dfc3lzIjogIkxpbnV4IiwgInRpbWVzdGFtcCI6IDE3...[TRUNCATED]
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Redis",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No evidence of a specific attack or CVE association found in the packet data."
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Redis",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No evidence of a specific attack or CVE association found in the packet data."
+  },
+  "confidence": "Unknown"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "No",
+  "success_supported": "No",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [
+    "attack.type",
+    "attack.technique",
+    "attack.success"
+  ],
+  "evidence_check": [
+    "E-S0000-F000001-001",
+    "E-S0000-F000002-002",
+    "E-S0000-F000003-003",
+    "E-S0001-F000004-001",
+    "E-S0001-F000005-003",
+    "E-S0001-F000006-004",
+    "E-S0002-F000007-001",
+    "E-S0002-F000008-003",
+    "E-S0002-F000007-002",
+    "E-S0003-F000009-001",
+    "E-S0003-F000010-003",
+    "E-S0003-F000011-004",
+    "E-S0004-F000012-001",
+    "E-S0004-F000013-003",
+    "E-S0004-F000012-002",
+    "E-S0005-F000014-001",
+    "E-S0005-F000015-003",
+    "E-S0005-F000014-002"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Redis
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: Unknown
+Verifier Confidence: High
+Overall Confidence: Low
+Score: 1/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Abstain
+Query: Redis exploit code execution
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T01:49:21.378040+00:00
+Candidate CVEs: None
+Sources: 0
+Warnings: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- None
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- None
+
+=== SOURCE URLS ===
+- None
+
+Search status: Abstain
+Search query: Redis exploit code execution
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- No online source was returned by the MCP search.
+- Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Redis
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- None
+
+Verification Summary:
+- Affected service: Redis.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: No.
+- Attack success supported by Verifier: No.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: Low.
+- Consensus score: 1/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Unsupported claim: attack.type
+- Unsupported claim: attack.technique
+- Unsupported claim: attack.success
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Abstain.
+- MCP investigation query: Redis exploit code execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Upgrade Redis to the latest supported patched version and apply relevant vendor security advisories.
+- Restrict network access to Redis to trusted systems and dedicated management networks.
+- Run Redis with least privileges and review service, host, and network logs for related indicators of compromise.

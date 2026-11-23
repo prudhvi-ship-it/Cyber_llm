@@ -1,0 +1,483 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 17
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+Protocol Counts: TCP=337, ARP=2, MySQL=1689
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.3:60626           <-> 172.18.0.2:3306               1092 81 kB         848 174 kB       1940 256 kB       12.168150000        11.8579
+172.18.0.3:60622           <-> 172.18.0.2:3306                  8 749 bytes      10 897 bytes      18 1646 bytes    12.154748000         0.0041
+172.18.0.3:58280           <-> 172.18.0.2:3306                  8 687 bytes      10 955 bytes      18 1642 bytes    24.039831000         0.0118
+172.18.0.3:58284           <-> 172.18.0.2:3306                  8 646 bytes      10 914 bytes      18 1560 bytes    24.068979000         0.0057
+172.18.0.3:60608 
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: MySQL (version not visible)
+Relevant Events:
+- [E-S0000-F000001-001] TCP connection from client to server
+- [E-S0000-F000002-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TCP, MySQL, E-S0000-F000001-001, E-S0000-F000002-002
+
+--- Stream 1 [VALID] ---
+Service: None
+Relevant Events:
+- [E-S0001-F000003-001] TCP connection from client to server
+- [E-S0001-F000004-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: E-S0001-F000003-001, E-S0001-F000004-002
+
+--- Stream 2 [VALID] ---
+Service: MySQL (based on port 3306)
+Relevant Events:
+- [E-S0002-F000005-001] TCP connection from client to server
+- [E-S0002-F000006-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TCP, MySQL, E-S0002-F000005-001, E-S0002-F000006-002
+
+--- Stream 3 [VALID] ---
+Service: MySQL (assumed from port 3306)
+Relevant Events:
+- [E-S0003-F000009-001] TCP connection from client to server on MySQL port
+- [E-S0003-F000010-002] TCP response from server to client on MySQL port
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, E-S0003-F000009-001, E-S0003-F000010-002
+
+--- Stream 4 [VALID] ---
+Service: MySQL (or another service on port 3306)
+Relevant Events:
+- E-S0004-F000011-001 Client initiated a connection to the server on port 3306
+- E-S0004-F000012-002 Server responded to the client on port 3306
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, port 3306, E-S0004-F000011-001, E-S0004-F000012-002
+
+--- Stream 5 [VALID] ---
+Service: MySQL (version not visible)
+Relevant Events:
+- [E-S0005-F000013-001] TCP connection from client to server
+- [E-S0005-F000014-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TCP, MySQL, E-S0005-F000013-001, E-S0005-F000014-002
+
+--- Stream 6 [VALID] ---
+Service: MySQL (assumed from port 3306)
+Relevant Events:
+- [E-S0006-F000015-001] TCP connection from client to server on MySQL port
+- [E-S0006-F000016-002] TCP response from server to client on MySQL port
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, E-S0006-F000015-001, E-S0006-F000016-002
+
+--- Stream 7 [VALID] ---
+Service: MySQL (assumed from port 3306)
+Relevant Events:
+- [E-S0007-F000017-001] TCP connection from client to server on port 3306
+- [E-S0007-F000018-002] TCP response from server to client on port 3306
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, TCP, E-S0007-F000017-001, E-S0007-F000018-002
+
+--- Stream 8 [VALID] ---
+Service: MySQL (version not visible)
+Relevant Events:
+- [E-S0008-F000019-001] TCP connection from client to server
+- [E-S0008-F000020-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TCP, MySQL, E-S0008-F000019-001, E-S0008-F000020-002
+
+--- Stream 9 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0009-F000021-001] TCP connection from client to server
+- [E-S0009-F000022-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, E-S0009-F000021-001, E-S0009-F000022-002
+
+--- Stream 10 [VALID] ---
+Service: MySQL (version not visible)
+Relevant Events:
+- [E-S0010-F000023-001] TCP connection from client to server
+- [E-S0010-F000024-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TCP, MySQL, E-S0010-F000023-001, E-S0010-F000024-002
+
+--- Stream 11 [VALID] ---
+Service: MySQL (assumed from port 3306)
+Relevant Events:
+- [E-S0011-F000025-001] TCP connection from client to server
+- [E-S0011-F000026-002] TCP response from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: TCP, MySQL, E-S0011-F000025-001, E-S0011-F000026-002
+
+--- Stream 12 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0012-F000027-001] TCP connection initiated from client to server
+- [E-S0012-F000028-002] TCP acknowledgment from server to client
+- [E-S0012-F000033-003] MySQL server greeting packet sent to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, 5.7.44, E-S0012-F000033-003
+
+--- Stream 13 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0013-F000038-003] MySQL server version 5.7.44 observed
+- [E-S0013-F000040-005] root user keyword observed
+- [E-S0013-F000044-006] SQL command 'show tables' executed
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, show tables, E-S0013-F000038-003, E-S0013-F000040-005, E-S0013-F000044-006
+
+--- Stream 14 [VALID] ---
+Service: MySQL
+Relevant Events:
+- [E-S0014-F000058-005] root user keyword observed
+- [E-S0014-F000144-034] admin keyword observed
+- [E-S0014-F000082-012] CREATE TABLE `aggregate_graph_templates`
+Exploit Indicators:
+- [E-S0014-F000066-006] SELECT LOCATE('MariaDB', @@version) > 0 INTO ismaria
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: MySQL, root, admin, CREATE TABLE, SELECT, E-S0014-F000058-005, E-S0014-F000144-034, E-S0014-F000082-012, E-S0014-F000066-006
+
+--- Stream 15 [VALID] ---
+Service: MySQL 5.7.44
+Relevant Events:
+- [E-S0015-F001996-003] MySQL server version 5.7.44 identified
+- [E-S0015-F001998-005] root user keyword observed
+- [E-S0015-F002002-007] SQL command executed: UPDATE user_auth SET must_change_password='' WHERE username = 'admin'
+Exploit Indicators:
+- [E-S0015-F002002-007] UPDATE user_auth SET must_change_password='' WHERE username = 'admin'
+Malicious Activities: SQL command to potentially bypass password change requirement
+Attack Success: Succeeded
+Evidence Keywords: MySQL, root, admin, UPDATE, user_auth, E-S0015-F001996-003, E-S0015-F001998-005, E-S0015-F002002-007
+
+--- Stream 16 [VALID] ---
+Service: MySQL 5.7.44
+
+Relevant Events:
+- [E-S0016-F002014-003] MySQL server version 5.7.44 identified
+- [E-S0016-F002016-005] Authentication attempt with root user keyword observed
+- [E-S0016-F002016-004] MySQL client connection attempt
+
+Exploit Indicators:
+- None
+
+Malicious Activities: None
+
+Attack Success: Unknown
+
+Evidence Keywords: MySQL, root, authentication, E-S0016-F002014-003, E-S0016-F002016-005, E-S0016-F002016-004
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "MySQL",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "MySQL 5.7.44"
+  },
+  "attack": {
+    "type": "SQL Injection",
+    "technique": "SQL Command Injection",
+    "success": "Success",
+    "evidence": [
+      "E-S0015-F001996-003",
+      "E-S0015-F001998-005",
+      "E-S0015-F002002-007"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No specific CVE identified from the evidence."
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "MySQL",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "MySQL 5.7.44"
+  },
+  "attack": {
+    "type": "SQL Injection",
+    "technique": "SQL Command Injection",
+    "success": "Success",
+    "evidence": [
+      "E-S0015-F001996-003",
+      "E-S0015-F001998-005",
+      "E-S0015-F002002-007"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No specific CVE identified from the evidence."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0015-F001996-003",
+    "E-S0015-F001998-005",
+    "E-S0015-F002002-007"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: MySQL
+Attack Type: SQL Injection
+Attack Success: Success
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Not Applicable
+Verifier Confidence: High
+Overall Confidence: High
+Score: 4/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: MySQL 5.7.44 SQL Injection
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-22T05:30:36.701309+00:00
+Candidate CVEs: CVE-2023-34362, CVE-2002-2043, CVE-2003-0515, CVE-2004-2354
+Sources: 8
+
+Source 1: CISA KEV
+Title: Progress MOVEit Transfer SQL Injection Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Progress MOVEit Transfer: Progress MOVEit Transfer contains a SQL injection vulnerability that could allow an unauthenticated attacker to gain unauthorized access to MOVEit Transfer's database. Depending on the database engine being used (MySQL, Microsoft SQL Server, or Azure SQL), an attacker may be able to infer information about the structure and contents of the database in addition to executing SQL statements that alter or delete database elements. Required action: Apply updates per vendor instructions.
+Supports: CISA KEV identifies CVE-2023-34362 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2002-2043: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2002-2043
+Summary: SQL injection vulnerability in the LDAP and MySQL authentication patch for Cyrus SASL 1.5.24 and 1.5.27 allows remote attackers to execute arbitrary SQL commands and log in as arbitrary POP mail users via the password.
+Supports: NVD lists CVE-2002-2043 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2003-0515: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2003-0515
+Summary: SQL injection vulnerabilities in the (1) PostgreSQL or (2) MySQL authentication modules for teapop 0.3.5 and earlier allow attackers to execute arbitrary SQL and possibly gain privileges.
+Supports: NVD lists CVE-2003-0515 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2004-2354: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2004-2354
+Summary: SQL injection vulnerability in 4nGuestbook 0.92 for PHP-Nuke 6.5 through 6.9 allows remote attackers to modify SQL statements via the entry parameter to modules.php, which can also facilitate cross-site scripting (XSS) attacks when MySQL errors are triggered.
+Supports: NVD lists CVE-2004-2354 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Official vendor webpage
+Title: A Guide to MySQL and PCI Data Security Standard ...
+URL: https://www.oracle.com/a/ocom/docs/dc/6.1.mysql_wp_pci.pdf
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). MySQL supports use of Oracle Audit Vault and Database Firewall for inspecting inbound SQL statements for SQL injection and other statement based attacks,
+Supports: None
+Contradicts: None
+
+Source 6: Official vendor webpage
+Title: Oracle Critical Patch Update Advisory - April 2026
+URL: https://www.oracle.com/security-alerts/cpuapr2026.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This Critical Patch Update contains 34 new security patches, plus additional third party patches noted below, for Oracle MySQL. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] MySQL Cluster, versions 8.0.0-8.0.44, 8.4.0-8.4.7, 9.0.0-9.5.0 MySQL Connectors, versions 9.0.0-9.6.0 MySQL Enterprise Backup, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Server, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Shell, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Workbench, versions 8.0.0-8.0.46
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: SQL Injection Cheat Sheet
+URL: https://www.invicti.com/blog/web-security/sql-injection-cheat-sheet
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] SQL injection cheat sheet Use the Invicti SQL Injection Cheat Sheet to learn about exploiting different variants of the SQL injection vulnerability. The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL database servers. What is an SQL injection cheat sheet? This SQL injection cheat sheet is a cybersecurity resource with detailed technical information and attack payloads to test for different types of SQL injection (SQLi) vulnerabilities caused by insufficient user input validation and sanitization. It can be used as a reference for penetration testers but also as a general guide for anyone interested in web application security and all the unexpected things you can do w About the Invicti SQL injection cheat sheet This cheat sheet has been the web’s leading reference for SQL injection payloads ever since it was first published in 2015. It is a living document in constant development and currently contains payloads and tips for MySQL, Microsoft SQL Server, Oracle, PostgreSQL, and SQLite. While originally focused on web form inputs, the payloads and techniques here apply equally to any injection point that reaches a SQL database As with any cheat sheet, some examples might not work in every situation because injection in real live environments will vary depending on the server configuration
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: New MySQL Enterprise Firewall - Prevent SQL Injection ...
+URL: https://dev.mysql.com/blog-archive/new-mysql-enterprise-firewall-prevent-sql-injection-attacks/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The most common web application attack is SQL Injection, is the result of poorly coded applications. SQL injection can be prevented by properly ... | Webpage excerpt: For the latest blogs go to blogs.oracle.com/mysql New MySQL Enterprise Firewall - Prevent SQL Injection Attacks MySQL Enterprise Firewall is a commercial extension, and is included with MySQL Enterprise Edition. This new SQL based firewall was just released in the MySQL 5.6.24 Enterprise Server! Let me tell you a bit more about how it reduces security vulnerabilities, how it works, and how to use it. The most common web application attack is SQL Injection, which according to security reports like the Verizon Data Breach Investigation Report, OWASP lists and others, is the result of poorly coded applications. Without going into too much detail, it is true that SQL injection can be prevented by properly coding an application. However we cannot guarantee that all applications are coded correctly to prevent an SQL In And it not just your code you need to be concerned about. There are plenty of web-frameworks out there, from rigid and complex frameworks to simple ones that carry a set of security issues, including SQL injection and other attack vulnerabilities. Or maybe you’re running other third party software which can have its own set of security vulnerabilities. To overcome SQL Injection vulnerabilities, some would say just use prepared statements, but even this helpful API often seems to be a hurdle for developers under pressure to get their applications to market ASAP. And, wh
+Supports: None
+Contradicts: None
+Warnings: Webpage extraction skipped for www.oracle.com: ValueError: Only HTML/plaintext webpages are supported
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0015-F001996-003]: MySQL server version 5.7.44 identified.
+- PCAP [E-S0015-F001998-005]: root user keyword observed.
+- PCAP [E-S0015-F002002-007]: SQL command executed: UPDATE user_auth SET must_change_password='' WHERE username = 'admin'.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [CISA KEV] Progress MOVEit Transfer SQL Injection Vulnerability: Progress MOVEit Transfer: Progress MOVEit Transfer contains a SQL injection vulnerability that could allow an unauthenticated attacker to gain unauthorized access to MOVEit Transfer's database. Depending on the database engine being used (MySQL, Microsoft SQL Server, or Azure SQL), an attacker may be able to infer information about the structure and contents of the database in addition to executing SQL statements that alter or delete database elements. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2023-34362 as exploited in the wild.
+- ONLINE [NIST NVD] CVE-2002-2043: NVD vulnerability record: SQL injection vulnerability in the LDAP and MySQL authentication patch for Cyrus SASL 1.5.24 and 1.5.27 allows remote attackers to execute arbitrary SQL commands and log in as arbitrary POP mail users via the password. Source: https://nvd.nist.gov/vuln/detail/CVE-2002-2043 Supports: NVD lists CVE-2002-2043 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2003-0515: NVD vulnerability record: SQL injection vulnerabilities in the (1) PostgreSQL or (2) MySQL authentication modules for teapop 0.3.5 and earlier allow attackers to execute arbitrary SQL and possibly gain privileges. Source: https://nvd.nist.gov/vuln/detail/CVE-2003-0515 Supports: NVD lists CVE-2003-0515 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2004-2354: NVD vulnerability record: SQL injection vulnerability in 4nGuestbook 0.92 for PHP-Nuke 6.5 through 6.9 allows remote attackers to modify SQL statements via the entry parameter to modules.php, which can also facilitate cross-site scripting (XSS) attacks when MySQL errors are triggered. Source: https://nvd.nist.gov/vuln/detail/CVE-2004-2354 Supports: NVD lists CVE-2004-2354 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] A Guide to MySQL and PCI Data Security Standard ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). MySQL supports use of Oracle Audit Vault and Database Firewall for inspecting inbound SQL statements for SQL injection and other statement based attacks, Source: https://www.oracle.com/a/ocom/docs/dc/6.1.mysql_wp_pci.pdf
+- ONLINE [Official vendor webpage] Oracle Critical Patch Update Advisory - April 2026: UNTRUSTED WEB RESEARCH (not PCAP evidence). This Critical Patch Update contains 34 new security patches, plus additional third party patches noted below, for Oracle MySQL. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] MySQL Cluster, versions 8.0.0-8.0.44, 8.4.0-8.4.7, 9.0.0-9.5.0 MySQL Connectors, versions 9.0.0-9.6.0 MySQL Enterprise Backup, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Server, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Shell, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Workbench, versions 8.0.0-8.0.46 Source: https://www.oracle.com/security-alerts/cpuapr2026.html
+- ONLINE [Serper web result] SQL Injection Cheat Sheet: UNTRUSTED WEB RESEARCH (not PCAP evidence). The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] SQL injection cheat sheet Use the Invicti SQL Injection Cheat Sheet to learn about exploiting different variants of the SQL injection vulnerability. The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL database servers. What is an SQL injection cheat sheet? This SQL injection cheat sheet is a cybersecurity resource with detailed technical information and attack payloads to test for different types of SQL injection (SQLi) vulnerabilities caused by insufficient user input validation and sanitization. It can be used as a reference for penetration testers but also as a general guide for anyone interested in web application security and all the unexpected things you can do w About the Invicti SQL injection cheat sheet This cheat sheet has been the web’s leading reference for SQL injection payloads ever since it was first published in 2015. It is a living document in constant development and currently contains payloads and tips for MySQL, Microsoft SQL Server, Oracle, PostgreSQL, and SQLite. While originally focused on web form inputs, the payloads and techniques here apply equally to any injection point that reaches a SQL database As with any cheat sheet, some examples might not work in every situation because injection in real live environments will vary depending on the server configuration Source: https://www.invicti.com/blog/web-security/sql-injection-cheat-sheet
+- ONLINE [Serper web result] New MySQL Enterprise Firewall - Prevent SQL Injection ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). The most common web application attack is SQL Injection, is the result of poorly coded applications. SQL injection can be prevented by properly ... | Webpage excerpt: For the latest blogs go to blogs.oracle.com/mysql New MySQL Enterprise Firewall - Prevent SQL Injection Attacks MySQL Enterprise Firewall is a commercial extension, and is included with MySQL Enterprise Edition. This new SQL based firewall was just released in the MySQL 5.6.24 Enterprise Server! Let me tell you a bit more about how it reduces security vulnerabilities, how it works, and how to use it. The most common web application attack is SQL Injection, which according to security reports like the Verizon Data Breach Investigation Report, OWASP lists and others, is the result of poorly coded applications. Without going into too much detail, it is true that SQL injection can be prevented by properly coding an application. However we cannot guarantee that all applications are coded correctly to prevent an SQL In And it not just your code you need to be concerned about. There are plenty of web-frameworks out there, from rigid and complex frameworks to simple ones that carry a set of security issues, including SQL injection and other attack vulnerabilities. Or maybe you’re running other third party software which can have its own set of security vulnerabilities. To overcome SQL Injection vulnerabilities, some would say just use prepared statements, but even this helpful API often seems to be a hurdle for developers under pressure to get their applications to market ASAP. And, wh Source: https://dev.mysql.com/blog-archive/new-mysql-enterprise-firewall-prevent-sql-injection-attacks/
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2002-2043
+- https://nvd.nist.gov/vuln/detail/CVE-2003-0515
+- https://nvd.nist.gov/vuln/detail/CVE-2004-2354
+- https://www.oracle.com/a/ocom/docs/dc/6.1.mysql_wp_pci.pdf
+- https://www.oracle.com/security-alerts/cpuapr2026.html
+- https://www.invicti.com/blog/web-security/sql-injection-cheat-sheet
+- https://dev.mysql.com/blog-archive/new-mysql-enterprise-firewall-prevent-sql-injection-attacks/
+
+Search status: Valid
+Search query: MySQL 5.7.44 SQL Injection
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage extraction skipped for www.oracle.com: ValueError: Only HTML/plaintext webpages are supported
+
+=== ONLINE CVE DECISION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "MCP returned 8 online source(s) for the investigation query.",
+    "The Analyzer did not propose an exact CVE to corroborate."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: MySQL
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0015-F001996-003]: MySQL server version 5.7.44 identified.
+- PCAP [E-S0015-F001998-005]: root user keyword observed.
+- PCAP [E-S0015-F002002-007]: SQL command executed: UPDATE user_auth SET must_change_password='' WHERE username = 'admin'.
+- ONLINE [CISA KEV] Progress MOVEit Transfer SQL Injection Vulnerability: Progress MOVEit Transfer: Progress MOVEit Transfer contains a SQL injection vulnerability that could allow an unauthenticated attacker to gain unauthorized access to MOVEit Transfer's database. Depending on the database engine being used (MySQL, Microsoft SQL Server, or Azure SQL), an attacker may be able to infer information about the structure and contents of the database in addition to executing SQL statements that alter or delete database elements. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2023-34362 as exploited in the wild.
+- ONLINE [NIST NVD] CVE-2002-2043: NVD vulnerability record: SQL injection vulnerability in the LDAP and MySQL authentication patch for Cyrus SASL 1.5.24 and 1.5.27 allows remote attackers to execute arbitrary SQL commands and log in as arbitrary POP mail users via the password. Source: https://nvd.nist.gov/vuln/detail/CVE-2002-2043 Supports: NVD lists CVE-2002-2043 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2003-0515: NVD vulnerability record: SQL injection vulnerabilities in the (1) PostgreSQL or (2) MySQL authentication modules for teapop 0.3.5 and earlier allow attackers to execute arbitrary SQL and possibly gain privileges. Source: https://nvd.nist.gov/vuln/detail/CVE-2003-0515 Supports: NVD lists CVE-2003-0515 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2004-2354: NVD vulnerability record: SQL injection vulnerability in 4nGuestbook 0.92 for PHP-Nuke 6.5 through 6.9 allows remote attackers to modify SQL statements via the entry parameter to modules.php, which can also facilitate cross-site scripting (XSS) attacks when MySQL errors are triggered. Source: https://nvd.nist.gov/vuln/detail/CVE-2004-2354 Supports: NVD lists CVE-2004-2354 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] A Guide to MySQL and PCI Data Security Standard ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). MySQL supports use of Oracle Audit Vault and Database Firewall for inspecting inbound SQL statements for SQL injection and other statement based attacks, Source: https://www.oracle.com/a/ocom/docs/dc/6.1.mysql_wp_pci.pdf
+- ONLINE [Official vendor webpage] Oracle Critical Patch Update Advisory - April 2026: UNTRUSTED WEB RESEARCH (not PCAP evidence). This Critical Patch Update contains 34 new security patches, plus additional third party patches noted below, for Oracle MySQL. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] MySQL Cluster, versions 8.0.0-8.0.44, 8.4.0-8.4.7, 9.0.0-9.5.0 MySQL Connectors, versions 9.0.0-9.6.0 MySQL Enterprise Backup, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Server, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Shell, versions 8.0.0-8.0.45, 8.4.0-8.4.8, 9.0.0-9.6.0 MySQL Workbench, versions 8.0.0-8.0.46 Source: https://www.oracle.com/security-alerts/cpuapr2026.html
+- ONLINE [Serper web result] SQL Injection Cheat Sheet: UNTRUSTED WEB RESEARCH (not PCAP evidence). The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] SQL injection cheat sheet Use the Invicti SQL Injection Cheat Sheet to learn about exploiting different variants of the SQL injection vulnerability. The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL database servers. What is an SQL injection cheat sheet? This SQL injection cheat sheet is a cybersecurity resource with detailed technical information and attack payloads to test for different types of SQL injection (SQLi) vulnerabilities caused by insufficient user input validation and sanitization. It can be used as a reference for penetration testers but also as a general guide for anyone interested in web application security and all the unexpected things you can do w About the Invicti SQL injection cheat sheet This cheat sheet has been the web’s leading reference for SQL injection payloads ever since it was first published in 2015. It is a living document in constant development and currently contains payloads and tips for MySQL, Microsoft SQL Server, Oracle, PostgreSQL, and SQLite. While originally focused on web form inputs, the payloads and techniques here apply equally to any injection point that reaches a SQL database As with any cheat sheet, some examples might not work in every situation because injection in real live environments will vary depending on the server configuration Source: https://www.invicti.com/blog/web-security/sql-injection-cheat-sheet
+- ONLINE [Serper web result] New MySQL Enterprise Firewall - Prevent SQL Injection ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). The most common web application attack is SQL Injection, is the result of poorly coded applications. SQL injection can be prevented by properly ... | Webpage excerpt: For the latest blogs go to blogs.oracle.com/mysql New MySQL Enterprise Firewall - Prevent SQL Injection Attacks MySQL Enterprise Firewall is a commercial extension, and is included with MySQL Enterprise Edition. This new SQL based firewall was just released in the MySQL 5.6.24 Enterprise Server! Let me tell you a bit more about how it reduces security vulnerabilities, how it works, and how to use it. The most common web application attack is SQL Injection, which according to security reports like the Verizon Data Breach Investigation Report, OWASP lists and others, is the result of poorly coded applications. Without going into too much detail, it is true that SQL injection can be prevented by properly coding an application. However we cannot guarantee that all applications are coded correctly to prevent an SQL In And it not just your code you need to be concerned about. There are plenty of web-frameworks out there, from rigid and complex frameworks to simple ones that carry a set of security issues, including SQL injection and other attack vulnerabilities. Or maybe you’re running other third party software which can have its own set of security vulnerabilities. To overcome SQL Injection vulnerabilities, some would say just use prepared statements, but even this helpful API often seems to be a hurdle for developers under pressure to get their applications to market ASAP. And, wh Source: https://dev.mysql.com/blog-archive/new-mysql-enterprise-firewall-prevent-sql-injection-attacks/
+
+Verification Summary:
+- Affected service: MySQL.
+- Attack type: SQL Injection.
+- Attack technique: SQL Command Injection.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 4/4.
+- Consensus attack outcome: Success.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: MCP returned 8 online source(s) for the investigation query.
+- CVE assessment: The Analyzer did not propose an exact CVE to corroborate.
+- MCP evidence search status: Valid.
+- MCP investigation query: MySQL 5.7.44 SQL Injection.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2002-2043
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2003-0515
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2004-2354
+- Evidence-source URL: https://www.oracle.com/a/ocom/docs/dc/6.1.mysql_wp_pci.pdf
+- Evidence-source URL: https://www.oracle.com/security-alerts/cpuapr2026.html
+- Evidence-source URL: https://www.invicti.com/blog/web-security/sql-injection-cheat-sheet
+- Evidence-source URL: https://dev.mysql.com/blog-archive/new-mysql-enterprise-firewall-prevent-sql-injection-attacks/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage extraction skipped for www.oracle.com: ValueError: Only HTML/plaintext webpages are supported
+
+Defensive Recommendation:
+- Implement input validation and sanitization to prevent SQL injection.
+- Use prepared statements and parameterized queries.
+- Regularly update MySQL server to the latest version.
+- Monitor and audit database access logs for suspicious activities.

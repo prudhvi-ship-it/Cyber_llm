@@ -11,7 +11,7 @@ import re
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator, model_validator
 
 
 UNKNOWN = "Unknown"
@@ -395,6 +395,17 @@ class CVERetrievalResult(ContractModel):
 
 
 class FinalReport(ContractModel):
+    # Display-only MAFRA annotations, excluded from the LLM/report JSON schema.
+    _show_mafra_cve_context: bool = PrivateAttr(default=False)
+    _show_mafra_attack_uncertainty: bool = PrivateAttr(default=False)
+    _associated_cve_candidate: str = PrivateAttr(default=NOT_FOUND)
+    _verifier_cve_support: str = PrivateAttr(default=Decision.ABSTAIN.value)
+    _binary_benchmark: bool = PrivateAttr(default=False)
+    _binary_mechanism_match: str = PrivateAttr(default="No")
+    _binary_exact_applicability: str = PrivateAttr(default="No")
+    _binary_attack_confidence: str = PrivateAttr(default="Low")
+    _binary_attack_verified: bool = PrivateAttr(default=False)
+
     affected_service: str = UNKNOWN
     identified_cve: str = NOT_FOUND
     attack: AttackOutcome = AttackOutcome.ABSTAIN
@@ -421,14 +432,35 @@ class FinalReport(ContractModel):
         attack_label = {
             AttackOutcome.SUCCESS.value: "Successful",
             AttackOutcome.FAILURE.value: "Failed",
-            AttackOutcome.ABSTAIN.value: UNKNOWN,
+            # Preserve legacy FRA's binary rendering. MAFRA explicitly
+            # displays unresolved outcomes as Unknown instead of Failed.
+            AttackOutcome.ABSTAIN.value: (
+                "Unknown" if self._show_mafra_attack_uncertainty else "Failed"
+            ),
         }[self.attack]
 
         def lines(values: list[str]) -> str:
             return "\n".join(f"- {value}" for value in values) or "- None"
 
+        # Preserve the existing identified-CVE line used for evaluation.
+        if self._binary_benchmark:
+            cve_context = (
+                f"Associated CVE candidate (Analyst): {self._associated_cve_candidate}\n"
+                f"Associated CVE mechanism match (binary): {self._binary_mechanism_match}\n"
+                f"Exact CVE applicability established: {self._binary_exact_applicability}\n"
+                f"Attack prediction confidence: {self._binary_attack_confidence}\n"
+                f"Attack outcome evidence-verified: {'Yes' if self._binary_attack_verified else 'No'}\n"
+            )
+        else:
+            cve_context = (
+                f"Associated CVE candidate (Analyst): {self._associated_cve_candidate}\n"
+                f"Verifier support for exact CVE: {self._verifier_cve_support}\n"
+                if self._show_mafra_cve_context else ""
+            )
+
         return (
             f"Affected Service: {self.affected_service}\n"
+            f"{cve_context}"
             f"Identified CVE: {self.identified_cve}\n"
             f"Attack: {attack_label}\n"
             f"Is Service Vulnerable: {self.is_service_vulnerable}\n"

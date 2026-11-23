@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "Jenkins 2.441 command injection vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Jenkins Command Line Interface (CLI) Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Jenkins Jenkins Command Line Interface (CLI): Jenkins Command Line Interface (CLI) contains a path traversal vulnerability that allows attackers limited read access to certain files, which can lead to code execution. Required action: Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2024-23897 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2024-43044: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-43044",
+      "snippet": "Jenkins 2.470 and earlier, LTS 2.452.3 and earlier allows agent processes to read arbitrary files from the Jenkins controller file system by using the `ClassLoaderProxy#fetchJar` method in the Remoting library.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2024-43044 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2016-0789: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-0789",
+      "snippet": "CRLF injection vulnerability in the CLI command documentation in Jenkins before 1.650 and LTS before 1.642.2 allows remote attackers to inject arbitrary HTTP headers and conduct HTTP response splitting attacks via unspecified vectors.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2016-0789 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-2200: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-2200",
+      "snippet": "Jenkins Play Framework Plugin 1.0.2 and earlier lets users specify the path to the `play` command on the Jenkins master for a form validation endpoint, resulting in an OS command injection vulnerability exploitable by users able to store such a file on the Jenkins master.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2020-2200 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins Security Advisory 2024-01-24",
+      "url": "https://www.jenkins.io/security/advisory/2024-01-24/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability allows attackers to execute CLI commands on the Jenkins controller. The impact depends on the permissions of the ... | Webpage text: Vulnerabilities and Scoring Vulnerabilities in Plugins How We Fix Security Issues Reporting Vulnerabilities Vulnerabilities in Plugins Jenkins Security Advisory 2024-01-24 This advisory announces vulnerabilities in the following Jenkins deliverables: Qualys Policy Compliance Scanning Connector Red Hat Dependency Analytics Arbitrary file read vulnerability through the CLI can lead to RCE CVE-2024-23897 Jenkins has a built-in command line interface (CLI) to access Jenkins from a script or shell environment. Jenkins uses the args4j library to parse command arguments and options on the Jenkins controller when processing CLI commands. This command parser has a feature that replaces an @ character followed by a file path in an argument with the file’s contents (expandAtFiles). This feature is enabled by default and Jenkins 2.441 and earlier, LTS 2.426.2 and earlier does not disable it. This allows attackers to read arbitrary files on the Jenkins controller file system using the default character encoding of the Jenkins controller process. Attackers with Overall/Read permission can read entire files. Attackers without Overall/Read permission can read the first few lines of files. The number of lines that can be read depends on available CLI commands. As of publication of this advisory, the Jenkins security team has found ways to read the first three lines of files in recent releases of Jenkins without having any plugins installed, and has not identified any plugins that would increase this line count. Binary files containing cryptographic keys used for various Jenkins features can also be read, with some limitations (see note on binary files below). As of publication, the Jenkins security team has confirmed the following possible attacks in addition to reading contents of all files with a known file path. All of them leverage attackers' ability to obtain cryptographic keys from binary files, and are therefore only applicable to instances where that is feasible. This list is not definitive. Further attacks likely exist, including ones that do not need attackers to obtain cryptographic keys from binary files. Remote code execution via Resource Root URLs (Variant 1) Exploitation requires that all of the following conditions are met: The \"Resource Root URL\" functionality is enabled (see documentation). The CLI WebSocket endpoint is accessible. This requires that Jenkins is running on a version of Jetty for which Jenkins supports WebSockets. This is the case when using the provided native installers, packages, or the Docker containers, as well as when running Jenkins with the command java -jar jenkins.war. Additionally, reverse proxies may not allow WebSocket requests if improperly configured. Attackers can retrieve binary secrets (see note below). Attackers know, or can guess, the user name of any user with Overall/Read permission. Remote code execution via Resource Root URLs (Variant 2) Exploitation requires that all of the following conditions are met: The \"Resource Root URL\" functionality is enabled (see documentation). Attackers can retrieve binary secrets (see note below). The attacker needs an API token for a (non-anonymous) user account. It is not necessary for this user account to (still) hav",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "NVD-CVE-2024-23897 - NIST",
+      "url": "https://nvd.nist.gov/vuln/detail/cve-2024-23897",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Description. Jenkins 2.441 and earlier, LTS 2.426.2 and earlier does not disable a feature of its CLI command parser that replaces an ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Jenkins Args4j CVE-2024-23897 Files Exposed Code at Risk",
+      "url": "https://www.trendmicro.com/en_us/research/24/c/cve-2024-23897.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Jenkins, a popular open-source automation server, was discovered to be affected by a file read vulnerability, CVE-2024-23897. | Webpage text: Content has been added to your Folio Exploits & Vulnerabilities Jenkins Args4j CVE-2024-23897: Files Exposed, Code at Risk Jenkins, a popular open-source automation server, was discovered to be affected by a file read vulnerability, CVE-2024-23897. Jenkins, a popular open-source automation server, was discovered to be affected by a file read vulnerability, CVE-2024-23897. Jenkins employs a built-in Command-Line Interface (CLI) to facilitate interaction from script or shell environments and uses the args4j library to parse command arguments and options on the Jenkins controller during CLI command processing. The vulnerability exists in this library, allowing an Given its high severity we would like to emphasize the need for swift measures to secure Jenkins installations. Description: This command parser feature automatically replaces an '@' character followed by a file path in an argument with the file’s content. Affected Versions: Jenkins 2.441 and earlier, LTS 2.426.2 and earlier. Attack Vector: Arbitrary File Read Description: Attackers can read arbitrary files on the Jenkins controller file system using the default character encoding of the Jenkins controller process. Permissions Impact: Attackers with Overall/Read permission can read entire files while attackers without Overall/Read permissions can read the first few lines of files. The specific line count depends on available CLI commands. Over 45,000 unpatched Jenkins instances were identified by the non-profit security organization ShadowServer. Severity: Critical (per Jenkins Advisory: CVSS 10), High (NVD Rating: CVSS 7.5) Beyond file reads: RCE possibilities Figure 1 shows some of the possibilities that can result from an “Arbitrary File Read” leading to remote code execution (RCE). More information about this can be found on the Jenkins advisory page. Figure 1. For CVE-2024-23897, shows the possibilities that can result from an “Arbitrary File Read” leading to remote code execution Our analysis found several attack instances originating from various regions, with the majority of the source IP addresses of the attacks originating from the Netherlands, as per Shadowserver data. Meanwhile, most of the targets were from South Africa, as shown in Figure 3. Figure 2. Country origin of attack attempts exploiting CVE-2024-23897 (based on Shadowserver data) Figure 3. Distribution of targets for attack attempts exploiting CVE-2024-23897 (based on Shadowserver data) Most of the observed attack events lead to the use of proof-of-concept (POC) scanners. We also came across instances where RCE exploits were actively being traded — specifically, we found entries related to the sale of the CVE-2024-23897 exploit that grants unauthenticated RCE capabilities (although there is a possibility that the exploit in question may be fraudulent or fabricated). Figure 4. Sale of a CVE-2024-23897 exploit CVE-2024-23897 can be exploited via HTTP, WebSocket and over Secure Shell (SSH), with the first two having the highest chance of exploitation. Figure 5. HTTP exploitation flow The HTTP endpoint requires making two POST requests by default. One of the requests will send an “upload” request containing the commands and its arguments while the second request is a “downlo",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Analysis of CVE-2024-43044 - Conviso AppSec",
+      "url": "https://blog.convisoappsec.com/en/analysis-of-cve-2024-43044/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The Jenkins team released an advisory (CVE-2024-43044) for an arbitrary file read vulnerability that allows an agent to be able to read ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T05:24:58.887771+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2024-23897",
+    "CVE-2024-43044",
+    "CVE-2016-0789",
+    "CVE-2020-2200"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for blog.convisoappsec.com: HTTPError: HTTP Error 301: Moved Permanently",
+    "Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>"
+  ]
+}

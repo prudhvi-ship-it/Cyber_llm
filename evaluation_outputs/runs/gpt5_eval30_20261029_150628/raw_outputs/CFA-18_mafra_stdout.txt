@@ -1,0 +1,85 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_6e284dfc0e8040cbfb33
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event18_cve-2021-22205_fail_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Unknown
+  Attack Type: Unknown
+  Attack Success: Unknown
+  CVE: Not Found
+  Overall Confidence: Low
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-18_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-18_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-18_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Unknown
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0037-F005297-004]: GET /users/sign_in.
+- PCAP [E-S0037-F005299-008]: HTTP Status 502.
+
+Verification Summary:
+- Affected service: Unknown.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: No.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: High.
+- Consensus confidence: Low.
+- Consensus score: 0/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Unsupported claim: Service.database claimed Unknown despite clear PostgreSQL traffic present (e.g., E-S0026-F000692-003, E-S0031-F000979-005).
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Abstain.
+- MCP investigation query: network forensic investigation.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Correlate web application, reverse proxy/gateway, and database logs around the time of the HTTP 502 event [E-S0037-F005299-008] to pinpoint the upstream cause.
+- Monitor and alert on spikes in HTTP 5xx responses and on authentication endpoint activity such as /users/sign_in [E-S0037-F005297-004].
+- Review database exposure and authentication posture; ensure PostgreSQL is not publicly reachable and enforce least-privilege access (database traffic observed: [E-S0026-F000692-003, E-S0031-F000979-005]).
+- Implement distributed tracing or request IDs across web, gateway, and backend services to attribute 5xx errors to specific components.
+- Harden authentication endpoints with strict input validation, rate limiting, and WAF policies to mitigate probing absent a confirmed CVE.
+- Preserve PCAPs and synchronized system logs to maintain evidentiary integrity and support further correlation.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

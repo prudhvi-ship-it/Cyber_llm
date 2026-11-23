@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "Apache Tomcat 9.0.97 Deserialization packet clues: endpoint sessions absholi7ly session",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Apache Tomcat Missing Encryption of Sensitive Data Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Apache Tomcat: Apache Tomcat contains a missing encryption of sensitive data vulnerability that allows the bypass of the EncryptInterceptor. This vulnerability can be chained with CVE‑2025‑24813. Required action: Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA’s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA’s “Forensics Triage Requirements” (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2026-34486 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2007-3382: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-3382",
+      "snippet": "Apache Tomcat 6.0.0 to 6.0.13, 5.5.0 to 5.5.24, 5.0.0 to 5.0.30, 4.1.0 to 4.1.36, and 3.3 to 3.3.2 treats single quotes (\"'\") as delimiters in cookies, which might cause sensitive information such as session IDs to be leaked and allow remote attackers to conduct session hijacking attacks.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2007-3382 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2007-3385: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-3385",
+      "snippet": "Apache Tomcat 6.0.0 to 6.0.13, 5.5.0 to 5.5.24, 5.0.0 to 5.0.30, 4.1.0 to 4.1.36, and 3.3 to 3.3.2 does not properly handle the \\\" character sequence in a cookie value, which might cause sensitive information such as session IDs to be leaked to remote attackers and enable session hijacking attacks.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2007-3385 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2007-5333: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-5333",
+      "snippet": "Apache Tomcat 6.0.0 through 6.0.14, 5.5.0 through 5.5.25, and 4.1.0 through 4.1.36 does not properly handle (1) double quote (\") characters or (2) %5C (encoded backslash) sequences in a cookie value, which might cause sensitive information such as session IDs to be leaked to remote attackers and enable session hijacking attacks.  NOTE: this issue exists because of an incomplete fix for CVE-2007-3385.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2007-5333 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 9 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-9.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Apache Tomcat 9.x vulnerabilities of Apache Tomcat® 9.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Apache Tomcat version that you are using. For Tomcat 9.0 those are",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 11 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-11.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 11.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: Apache Tomcat 11.x vulnerabilities of Apache Tomcat® 11.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Apache Tomcat version that you are using. For Tomcat 11.0.x those are",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache Tomcat 10 vulnerabilities",
+      "url": "https://tomcat.apache.org/security-10.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 10.x. Each vulnerability is given a security impact rating by the ... | Webpage excerpt: Apache Tomcat 10.x vulnerabilities of Apache Tomcat® 10.x. Each vulnerability is given a Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat Please note that Tomcat 10.0.x has reached",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache Tomcat Session Deserialization Attacks",
+      "url": "https://research.splunk.com/stories/apache_tomcat_session_deserialization_attacks/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Updated Date: 2026-05-13 ID: 1a0f125a-0f65-44fc-a96f-576d53d69478 Author: Michael Haag, Splunk Product: Splunk Enterprise Security ... | Webpage excerpt: Analytics Story: Apache Tomcat Session Deserialization Attacks This analytic story addresses critical vulnerabilities in Apache Tomcat that allow attackers to achieve remote code execution through session deserialization attacks. These attacks exploit path equivalence issues in Tomcat's session handling mechanisms, particularly when configured with writable DefaultServlet and file-based session persistence, enabling attackers to upload and execute malicious serialized objects th Apache Tomcat's session management functionality can be exploited when specific configurations are present, particularly involving the DefaultServlet and file-based session persistence. Attackers leverage this by first uploading a malicious serialized object disguised as a session file through an HTTP PUT request. Once the file is uploaded, they manipulate the JSESSIONID cookie to reference this malicious file, forci Tomcat Session File Upload Attempt Tomcat Session Deserialization Attempt https://www.rapid7.com/db/vulnerabilities/apache-tomcat-cve-2025-24813/ https://github.com/vulhub/vulhub/tree/master/tomcat/CVE-2025-24813",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:50:36.769126+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2026-34486",
+    "CVE-2007-3382",
+    "CVE-2007-3385",
+    "CVE-2007-5333"
+  ],
+  "retrieval_errors": [
+    "NVD lookup failed: TimeoutError: The read operation timed out",
+    "Webpage extraction skipped for www.sangfor.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

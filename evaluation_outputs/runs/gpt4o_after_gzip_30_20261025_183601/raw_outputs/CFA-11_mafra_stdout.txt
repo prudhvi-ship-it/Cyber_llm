@@ -1,0 +1,100 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_d621823d7c2d7a8f0d95
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event11_CVE-2020-11981_sucess_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Redis
+  Attack Type: Command Injection
+  Attack Success: Fail
+  CVE: CVE-2021-32761
+  Overall Confidence: Medium
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-11_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-11_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-11_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Redis
+Associated CVE candidate (Analyst): CVE-2021-32761
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0009-F000203-003]: 172.18.0.1:60000 -> 172.18.0.3:6379 (RESP).
+- PCAP [E-S0009-F000205-004]: 172.18.0.3:6379 -> 172.18.0.1:60000 (RESP).
+- PCAP [E-S0009-F000209-005]: 172.18.0.1:60000 -> 172.18.0.3:6379 (RESP/JSON).
+- PCAP [E-S0009-F000209-007]: W1tbInRvdWNoIiwgIi90bXAvYWlyZmxvd19jZWxlcnlfc3VjY2VzcyJdXSwge30sIHsiY2hhaW4iOiBudWxsLCAiY2hvcmQiOiBudWxsLCAiZXJyYmFja3MiOiBudWxsLCAiY2FsbGJhY2tzIjogbnVsbH1d.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-62507: NVD vulnerability record: Redis is an open source, in-memory database that persists on disk. In versions 8.2.0 and above, a user can run the XACKDEL command with multiple ID's and trigger a stack buffer overflow, which may potentially lead to remote code execution. This issue is fixed in version 8.2.3. To workaround this issue without patching the redis-server executable is to prevent users from executing XACKDEL operation. This can be done using ACL to restrict XACKDEL command. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-62507 Supports: Web-cited CVE-2025-62507 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-23479: NVD vulnerability record: Redis is an in-memory data structure store. In redis-server from 7.2.0 until 8.6.3, the unblock client flow does not handle an error return from `processCommandAndResetClient` when re-executing a blocked command. If a blocked client is evicted during this flow, an authenticated attacker can trigger a use-after-free that may lead to remote code execution. This has been patched in version 8.6.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-23479 Supports: Web-cited CVE-2026-23479 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2021-32761: NVD vulnerability record: Redis is an in-memory database that persists on disk. A vulnerability involving out-of-bounds read and integer overflow to buffer overflow exists starting with version 2.2 and prior to versions 5.0.13, 6.0.15, and 6.2.5. On 32-bit systems, Redis `*BIT*` command are vulnerable to integer overflow that can potentially be exploited to corrupt the heap, leak arbitrary heap contents or trigger remote code execution. The vulnerability involves changing the default `proto-max-bulk-len` configuration parameter to a very large value and constructing specially crafted commands bit commands. This problem only affects Redis on 32-bit platforms, or compiled as a 32-bit binary. Redis versions 5.0.`3m 6.0.15, and 6.2.5 contain patches for this issue. An additional workaround to mitigate the problem without patching the `redis-server` executable is to prevent users from modifying the `proto-max-bulk-len` configuration parameter. This can be done using ACL to restrict unprivileged users from using the CONFIG SET command. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-32761 Supports: NVD lists CVE-2021-32761 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2016-8339: NVD vulnerability record: A buffer overflow in Redis 3.2.x prior to 3.2.4 causes arbitrary code execution when a crafted command is sent. An out of bounds write vulnerability exists in the handling of the client-output-buffer-limit option during the CONFIG SET command for the Redis data structure store. A crafted CONFIG SET command can lead to an out of bounds write potentially resulting in code execution. Source: https://nvd.nist.gov/vuln/detail/CVE-2016-8339 Supports: NVD lists CVE-2016-8339 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] Exploiting Redis RCE (CVE-2025-62507): Technical Analysis: UNTRUSTED WEB RESEARCH (not PCAP evidence). See how JFrog Security Research exploit CVE-2025-62507, a high-severity stack buffer overflow in the Redis XACKDEL command leading to ... Source: https://jfrog.com/blog/exploiting-remote-code-execution-in-redis/
+- ONLINE [Serper web result] Exposed Redis Instances Abused for Remote Code ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Recently, we wrote an article about more than 8000 unsecured Redis instances found in the cloud. In this article, we expound on how these ... | Webpage text: Content has been added to your Folio Exposed Redis Instances Abused for Remote Code Execution, Cryptocurrency Mining Recently, we wrote an article about more than 8,000 unsecured Redis instances found in the cloud. In this article, we expound on how these instances can be abused to perform remote code execution (RCE), as demonstrated by malware samples captured in the wild. Recently, we wrote an article about more than 8,000 unsecured Redis instances found in the cloud. In this article, we expound on how these instances can be abused to perform remote code execution (RCE), as demonstrated by malware samples captured in the wild. These malicious files have been found to turn Redis instances into cryptocurrency-mining bots and have been discovered to infect other vulnerable instances via Redis, which is intended to be used in trusted environments, has a protected mode configuration and is set to be updated to a new version, Redis 6.0, which will introduce new security features such as access-control lists (ACLs). However, as of now, Redis users with instances that don’t bear Transport Layer Security (TLS) encryption, password protection, or both are susceptible to having over 200 commands available o We’ve observed attackers using these scenarios in a honeypot we’ve set up to attract and monitor attackers in the wild: Scenario 1: Abusing the config command An attacker sets several keys on a Redis database file as cron tasks. The database values follow a specification of cron (a daemon that executes scheduled commands) and crontab (a file that is used to schedule the execution of programs) file formats. Figure 1. Setting keys as cron tasks Using the config command, the attacker sets the directory to /var/spool/cron and the dbfilename to a username (e.g., root) and saves the database (with the file name root).Figure 2. Saving the database to cron directories The content of the root file name looks like the screenshot below — basically a few readable lines written in the cron file format in between binary data. Figure 3. What the cron file name looks like Despite the fact that the file has a partly binary format, when cron is installed, it finds a valid entry and executes a downloaded shell script at the attacker’s discretion — all caused by an unsecured Redis instance. Figure 4. An example of an RCE attack performed on an exposed Redis instance using cron Scenario 2: Abusing the slaveof feature The second approach is based on the fact that Redis can be used as a distributed database. In this approach, an attacker first crafts a malicious Redis instance and compiles a malicious Redis module. The crafted Redis instance becomes a master server that sends the slaveof command to the vulnerable instance. The attacker then initiates a full resync from the master and sends the malicious Redis module. Afterward, the It should be noted that starting with Redis 5.0, which was released in October 2018, Redis no longer uses the word “slave” and uses the replicaof command instead. However, for backward compatibility, the slaveof command still works for earlier versions. Figure 5. An example of a malicious Redis module registering three commands Figure 6. An example of a malicious Redis module’s deploy Source: https://www.trendmicro.com/en_us/research/20/d/exposed-redis-instances-abused-for-remote-code-execution-cryptocurrency-mining.html
+- ONLINE RESEARCH LEAD [Serper web result] Redis Use-After-Free Remote Code Execution ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability exists in the client unblocking logic and may allow an authenticated attacker to achieve remote code execution under specific ... | Webpage text: Founder & Technical Director In May 2026, Redis disclosed a high severity memory safety vulnerability tracked as CVE-2026-23479. The issue affects the Redis server, a widely deployed in memory data structure store used for caching, messaging, and real time analytics across cloud and on premises environments. The vulnerability exists in the client unblocking logic and may allow an authenticated attacker to achieve remote code execution under spec Redis RCE vulnerability detailslink CVE-2026-23479 is a use after free vulnerability in the Redis server unblock client flow. Redis supports blocking commands that suspend client execution until a key becomes available. When such a command is resumed, the server attempts to re process the original request. In the vulnerable code path, Redis fails to verify whether the client object remains valid after command re execution. An authenticated attacker can deliberately trigger eviction of a blocked client while this re execution is in progress. This results in Redis accessing memory that has already been freed. With careful manipulation of heap state, this condition can be escalated into arbitrary memory writes, ultimately allowing execution of attacker controlled commands in the context of the Redis server process. The flaw was introduced in Redis version 7.2.0 and remained present across multiple stable branches for over two years. Redis server versions 7.2.0 up to but not including 8.6.3 are affected by the flaw. Impact of the Redis Use-After-Free RCElink From a technical perspective, successful exploitation may lead to full remote code execution on the host system. This includes the ability to execute operating system commands, modify application data, or disable Redis entirely. While the vulnerability requires an authenticated session, many Redis deployments remain exposed with unauthenticated access by default, which materially increases the likelihood of exploitat The business impact can be significant. Redis is frequently used as a shared infrastructure component, meaning compromise may provide a foothold into wider application stacks. Organisations may face service disruption, data exposure, and regulatory consequences if personal or sensitive data is affected. In cloud environments, misconfigured Redis instances with weak authentication increase the practical risk of exploi Remediation for CVE-2026-23479link Redis has addressed CVE-2026-23479 in version 8.6.3. Organisations running self managed Redis deployments should prioritise upgrading to this release or later. Redis Cloud customers have already received the fix as part of managed service updates. Where immediate upgrading is not possible, organisations should restrict network access to Redis instances, enforce authentication, and limit client privileges. These measures reduce exposure but should not be treated as a substitute for patching. How can Sentrium help?link Sentrium supports organisations in identifying and reducing exposure to vulnerabilities affecting core infrastructure services. Through penetration testing, configuration reviews, and ongoing security assessments, we help validate whether issues such as CVE-2026-23479 can be exploited in real world environments an Source: https://www.sentrium.co.uk/labs/redis-use-after-free-remote-code-execution-vulnerability-cve-2026-23479
+- ONLINE RESEARCH LEAD [Serper web result] Security advisory: [CVE‑2026‑23479 ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Developers love Redis. Unlock the full potential of the Redis database with Redis Enterprise and start building blazing fast apps. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] 86.5% accuracy. ~$0.07 per session. See how Redis stacks up in the Agent Memory Benchmark. Source: https://redis.io/blog/security-advisory-cve202623479-cve202625243-cve-2026-25588-cve202625589-cve-2026-23631/
+
+Verification Summary:
+- Affected service: Redis.
+- Attack type: Command Injection.
+- Attack technique: LPUSH with encoded payload.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Medium.
+- Consensus score: 3/5.
+- Consensus attack outcome: Fail.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2021-32761; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: CVE-2021-32761 association
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Redis command injection vulnerability.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-62507
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-23479
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2021-32761
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2016-8339
+- Evidence-source URL: https://jfrog.com/blog/exploiting-remote-code-execution-in-redis/
+- Evidence-source URL: https://www.trendmicro.com/en_us/research/20/d/exposed-redis-instances-abused-for-remote-code-execution-cryptocurrency-mining.html
+- Evidence-source URL: https://www.sentrium.co.uk/labs/redis-use-after-free-remote-code-execution-vulnerability-cve-2026-23479
+- Evidence-source URL: https://redis.io/blog/security-advisory-cve202623479-cve202625243-cve-2026-25588-cve202625589-cve-2026-23631/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for safecomputing.umich.edu: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 6 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Restrict network access to Redis instances.
+- Enforce authentication and limit client privileges.
+- Regularly update Redis to the latest secure version.
+- Implement access control lists (ACLs) to restrict command execution.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

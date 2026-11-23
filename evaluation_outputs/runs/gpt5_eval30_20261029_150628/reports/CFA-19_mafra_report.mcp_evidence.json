@@ -1,0 +1,105 @@
+{
+  "status": "Valid",
+  "query": "GitLab remote code execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "GitLab Community and Enterprise Editions Remote Code Execution Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "GitLab Community and Enterprise Editions: GitHub Community and Enterprise Editions that utilize the ability to upload images through GitLab Workhorse are vulnerable to remote code execution. Workhorse passes image file extensions through ExifTool, which improperly validates the image files. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2021-22205 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-97229: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97229",
+      "snippet": "GitLab has remediated an issue in GitLab CE/EE affecting all versions from 19.2 before 19.2.8, 19.3 before 19.3.5, and 19.4 before 19.4.2 that, under certain conditions, could have allowed an unauthenticated user to execute arbitrary code on the GitLab server via a specially crafted regular expression in a CI/CD configuration, due to insufficient regular expression validation.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2026-97229 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-110264: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-110264",
+      "snippet": "An issue has been discovered in GitLab CE/EE affecting all versions from 7.0 before 18.11.13, 19.0 before 19.0.10, 19.1 before 19.1.9, 19.2 before 19.2.9, 19.3 before 19.3.6, 19.4 before 19.4.3, and 19.5 before 19.5.1 that, under certain conditions, could have allowed an unauthenticated user to execute arbitrary code on the GitLab server due to integer overflow when compiling a specially crafted regular expression.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2026-110264 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-22205: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22205",
+      "snippet": "An issue has been discovered in GitLab CE/EE affecting all versions starting from 11.9. GitLab was not properly validating image files that were passed to a file parser which resulted in a remote command execution.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-22205 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Critical remote code execution in vm2, a widely used Node. ...",
+      "url": "https://about.gitlab.com/blog/critical-remote-code-execution-in-vm2/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). GitLab's Threat Research Group found a critical sandbox escape in vm2 that runs attacker code using the library's own documented configuration. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] To search repositories and projects, login to gitlab.com. GitLab Duo Agent PlatformCode Suggestions (AI)CI/CDGitLab on AWSGitLab on Google CloudWhy GitLab? Published on: September 2, 2026 Critical remote code execution in vm2, a widely used Node.js sandbox library GitLab's Threat Research Group found a critical sandbox escape in vm2 that runs attacker code using the library's own documented configuration. GitLab's Threat Research Group found a critical sandbox escape vulnerability in vm2, one of the most widely adopted Node.js sandboxing libraries. The vulnerability uses a configuration copied straight from vm2's own README. We found the flaw, rated CVSS 3.1: 10.0, critical, using our own AI automated tools. Anyone running vm2 Version 3.11.6 or earlier with require.external turned on should treat this as directly expl Once we found the vulnerability, we verified GitLab does not use vm2. We also reported it privately to vm2 and the maintainer fixed it fast, in vm2 Version 3.11.7. When we tested that fix again, it blocked the exact attack we reported. For anyone relying on vm2, it’s worth flagging that there's a broader configuration risk here that goes beyond this one patch, based on the maintainer's own description of the fix. Critical vulnerability: GitLab's Threat Research Group discovered a critical sandbox escape (CVSS 3.1: 10.0) in vm2, a widely used Node.js sandboxing library, which allows for remote code execution. The root cause: The vulnerability stems from default configurations found in the library's own \"Quick Examples\" README, where the sandbox fails to properly isolate itself from the host system, allowing malicious code to gain unrestricted access. Fix limitations: While updating to Version 3.11.7 blocks the specific attack reported, it does not fully resolve the underlying configuration risk; developers remain vulnerable if they continue to use require.external with overly broad require.root settings. Immediate recommendations: Users should update to Version 3.11.7, but must also manually harden their configurations by restricting require.root to only necessary files and setting context: 'sandbox' instead of relying on the default 'host' setting. Long-term advice: Due to vm2's history of recurring sandbox escape bugs, it is recommended to avoid using it for isolating truly untrusted code and instead opt for more robust methods like containers or separate processes. Why sandboxing libraries are a high-value target Apps that run code they don't fully trust (plugin systems, coding playgrounds, CI test runners, and now tools that let an AI run its own generated code) can't just hand that code to Node's normal require() and eval() functions. If they did, the code would have the same power as the app itself. vm2 is built to close that gap. It gives the untrusted code a fake version of a normal JavaScript environment, and blocks anything that tries to reach the real system underneath. But if an attacker can break out of that sandbox, none of that protection is real, even though it still looks fine to the developer who installed vm2. And because so many apps use vm2, one hole in it becomes a hole in every app built on it.",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-97229: Critical Unauthenticated Remote Code ...",
+      "url": "https://www.rapid7.com/blog/post/etr-cve-2026-97229-critical-unauthenticated-remote-code-execution-in-gitlab/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Under certain conditions, a remote attacker can execute arbitrary code on an affected GitLab server through a specially crafted regular ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "GitLab Critical Patch Release: 19.5.1, 19.4.3, 19.3.6, 19.2.9 ...",
+      "url": "https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). GitLab has remediated an issue that, under certain conditions, could have allowed an unauthenticated user to execute arbitrary code on the ... | Webpage text: GitLab Critical Patch Release: 19.5.1, 19.4.3, 19.3.6, 19.2.9, 19.1.9, 19.0.10, 18.11.13 On October 21, 2026, we released versions 19.5.1, 19.4.3, 19.3.6, 19.2.9, 19.1.9, 19.0.10, 18.11.13 for GitLab Community Edition (CE) and Enterprise Edition (EE). These versions contain important bug and security fixes, and we strongly recommend that all self-managed GitLab installations be upgraded to one of these versions immediately. GitLab.com is already running the patched version. GitLab Dedicated tenants running 19.3.5-internal0 and 19.4.2-internal0 or later already include these fixes and do not need to take action. GitLab releases fixes for vulnerabilities in patch releases. There are two types of patch releases: scheduled releases and ad-hoc critical patches for high-severity vulnerabilities. Scheduled releases are released twice a month on the second and fourth Wednesdays. For more information, please visit our releases handbook and security FAQ. You can see all of GitLab release blog posts here. For security fixes, the issues detailing each vulnerability are made public on our 90 days after the release in which they were patched. We are committed to ensuring that all aspects of GitLab that are exposed to customers or that host customer data are held to the highest security standards. To maintain good security hygiene, it is highly recommended that all customers upgrade to the latest patch release for their supported version. You can read more best practices in securing your GitLab instance in our blog post. We strongly recommend that all installations running a version affected by the issues described below are upgraded to the latest version as soon as possible. When no specific deployment type (omnibus, source code, helm chart, etc.) of a product is mentioned, it means all types are affected. Integer Overflow issue in Regular Expression Compiler impacts GitLab CE/EE Improper Authentication issue in OmniAuth-to-LDAP auto-linking email lookup impacts GitLab CE/EE Cache Poisoning issue in OAuth/OIDC discovery endpoints impacts GitLab CE/EE Improper Access Control issue in GraphQL work item email address field impacts GitLab CE/EE Incomplete enforcement of instance-wide SAML/LDAP membership lock allows unauthorized member additions in GitLab EE Internal Credential Exposure issue in internal response headers impacts GitLab CE/EE Authorization Bypass Through User-Controlled Key issue in group milestones API impacts GitLab CE/EE Use of Less Trusted Source issue in AI Gateway feature enablement header impacts GitLab EE Use of Cache Containing Sensitive Information issue in merge request title rendering impacts GitLab CE/EE Improper Access Control issue in merge request approval policy enforcement impacts GitLab EE Improper Cleanup on Thrown Exception issue in security findings impacts GitLab EE Improper Access Control issue in group Duo admin-lock enforcement for Amazon Q settings impacts GitLab EE CVE-2026-110264 - Integer Overflow issue in Regular Expression Compiler impacts GitLab CE/EE GitLab has remediated an issue that, under certain conditions, could have allowed an unauthenticated user to execute arbitrary code on the GitLab server due to integer overflow when compiling a specially",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Critical GitLab Flaw (CVSS 10.0) Could Allow ...",
+      "url": "https://www.google.com/goto?url=CAESlgEB6zswFc_Fq7trlo09Rj570GBiT1Wg_6zQ9RMy7nJtmK_bdHDNvK4q7S3wj0OB44reZuPJ1KRivFhx3h6iLHi-gJDcdKMsBRHsry7T5TJnE9Ruh4riAqF_GbSlMJ1-4og0k8c9f1TsdSHvMzpATeN0WP0zQVpfbWlZgQLaiPzT1x_XSw91SWPVqFoWvlKefhGFdc3X6U8",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). GitLab fixes CVE-2026-110264, a critical flaw that could allow unauthenticated code execution on self-managed versions dating back to 7.0. Open.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:33:56.838751+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2021-22205",
+    "CVE-2026-97229",
+    "CVE-2026-110264"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found"
+  ]
+}

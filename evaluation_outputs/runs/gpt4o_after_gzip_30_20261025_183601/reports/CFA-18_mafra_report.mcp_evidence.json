@@ -1,0 +1,11 @@
+{
+  "status": "Abstain",
+  "query": "Redis exploit code execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T02:04:54.215548+00:00",
+  "sources": [],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified."
+  ]
+}

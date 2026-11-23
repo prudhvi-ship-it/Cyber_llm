@@ -1,0 +1,105 @@
+{
+  "status": "Valid",
+  "query": "Apache 2.4.50 Path Traversal packet clues: endpoint icons etc passwd; endpoint icons etc shadow; endpoint icons etc hosts; endpoint icons etc hostname",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Apache HTTP Server Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Apache HTTP Server: Apache HTTP Server contains a path traversal vulnerability that allows an attacker to perform remote code execution if files outside directories configured by Alias-like directives are not under default require all denied or if CGI scripts are enabled. This CVE ID resolves an incomplete patch for CVE-2021-41773. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2021-42013 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2020-36939: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-36939",
+      "snippet": "Cassandra Web 0.5.0 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by manipulating path traversal parameters. Attackers can exploit the disabled Rack::Protection module to read sensitive system files like /etc/passwd and retrieve Apache Cassandra database credentials.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2020-36939 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-42013: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-42013",
+      "snippet": "It was found that the fix for CVE-2021-41773 in Apache HTTP Server 2.4.50 was insufficient. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. If files outside of these directories are not protected by the usual default configuration \"require all denied\", these requests can succeed. If CGI scripts are also enabled for these aliased pathes, this could allow for remote code execution. This issue only affects Apache 2.4.49 and Apache 2.4.50 and not earlier versions.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-42013 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2007-5461: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-5461",
+      "snippet": "Absolute path traversal vulnerability in Apache Tomcat 4.0.0 through 4.0.6, 4.1.0, 5.0.0, 5.5.0 through 5.5.25, and 6.0.0 through 6.0.14, under certain configurations, allows remote authenticated users to read arbitrary files via a WebDAV write request that specifies an entity with a SYSTEM tag.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2007-5461 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2021-41773: Path Traversal & RCE in Apache HTTP ...",
+      "url": "https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Address the critical vulnerabilities in Apache HTTP Server (CVE-2021-41773 & CVE-2021-42013) that enable path traversal and remote code ... | Webpage text: About CVE-2021-41773 About CVE-2021-42013 Detecting the Vulnerabilities with Qualys WAS On October 4, 2021, Apache HTTP Server Project released Security advisory on a Path traversal and File disclosure vulnerability in Apache HTTP Server 2.4.49 and 2.4.50 tracked as CVE-2021-41773 and CVE-2021-42013. In the advisory, Apache also highlighted “the issue is known to be exploited in the wild” and later it was identified that the vulnerability can be abused to perform remote code execution. For exploiting bo Get Full Access to the Qualys Cloud Platform Free As the vulnerabilities are configuration dependent, checking the version of Apache web server is not enough to identify vulnerable servers. With both the CVEs being actively exploited, Qualys Web Application Scanning has released QID 150372, 150373, 150374 which sends specially crafted HTTP request to the target server to determine if it is exploitable. Once successfully detected, users can remediate the vulnerabilit About CVE-2021-41773 According to CVE-2021-41773, Apache HTTP Server 2.4.49 is vulnerable to Path Traversal and Remote Code execution attacks. The path traversal vulnerability was introduced due to the new code change added for path normalization i.e., for URL paths to remove unwanted or dangerous parts from the pathname, but it was inadequate to detect different techniques of encoding the path traversal characters “dot-dot-slash (../)” To prevent path traversal attacks, the normalization function which is responsible to resolve URL-encoded values from the requested URI, resolved Unicode values one at a time. Hence when URL encoding the second dot as %2e, the logic fails to recognize %2e as dot thereby not decoding it, this converts the characters ../ to .%2e/ and bypasses the check. Along with Path traversal check bypass, for an Apache HTTP server to be vulnerable, the HTTP Server configuration should either contain the directory directive for entire server’s filesystem as Require all granted or the directory directive should be completely missing from the configuration file. Vulnerable Configuration: Therefore, bypassing the dot-dot check as .%2e and chaining it with misconfigured directory directive allows an attacker to read arbitrary files such as passwd from the vulnerable server file system. Exploitation: Path Traversal GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Upgrade-Insecure-Requests: 1 Date: Mon, 18 Oct 2021 08:13:02 GMT Server: Apache/2.4.49 (Unix) Last-Modified: Mon, 27 Sep 2021 00:00:00 GMT ETag: \"39e-5cceec7356000\" root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/u",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE Record: CVE-2021-41773",
+      "url": "https://www.cve.org/CVERecord?id=CVE-2021-41773",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs ... | Webpage text: Common vulnerabilities and Exposures (CVE)",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Apache HTTP Server 2.4.49 - Path Traversal & Remote ...",
+      "url": "https://www.exploit-db.com/exploits/50383",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache HTTP Server 2.4.49 - Path Traversal & Remote Code Execution (RCE). CVE-2021-41773 . webapps exploit for Multiple platform.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2021-41773 & CVE-2021-42013",
+      "url": "https://arcticwolf.com/resources/blog/new-vulnerabilities-affecting-apache-server-2-4-49-2-4-50-cve-2021-41773-cve-2021-42013/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). New Vulnerabilities Affecting Apache Server features vulnerability analysis on CVE-2021-41773 and CVE-2021-42013. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Partner with the world's largest commercial agentic SOC. Tailored security expertise and guided risk mitigation. Arctic Wolf Security Teams Security experts proactively protecting you 24x7. Incident Response In Action Learn how our IR team stops attacks and swiftly restores your organization to pre-incident operations.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T04:48:51.694187+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2021-42013",
+    "CVE-2020-36939",
+    "CVE-2007-5461"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>",
+    "Webpage read unavailable for safecomputing.umich.edu: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

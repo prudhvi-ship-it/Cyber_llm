@@ -1,0 +1,100 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_2dffcb8e26b37b6853ee
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event16_cve-2017-15709_fail_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: ActiveMQ
+  Attack Type: Deserialization
+  Attack Success: Unknown
+  CVE: CVE-2023-46604
+  Overall Confidence: Low
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-16_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-16_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-16_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: ActiveMQ
+Associated CVE candidate (Analyst): CVE-2023-46604
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000003-001]: 172.18.0.1:41374 -> 172.18.0.2:61616 (TCP).
+- PCAP [E-S0000-F000004-002]: 172.18.0.2:61616 -> 172.18.0.1:41374 (TCP).
+- PCAP [E-S0000-F000006-003]: 172.18.0.2:61616 -> 172.18.0.1:41374 (OpenWire).
+- ONLINE RESEARCH LEAD [CISA KEV] Apache ActiveMQ Improper Input Validation Vulnerability: Apache ActiveMQ: Apache ActiveMQ contains an improper input validation vulnerability that allows for code injection. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2026-34197 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-0684: NVD vulnerability record: Cross-site scripting (XSS) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote authenticated users to inject arbitrary web script or HTML via the JMSDestination parameter in a queue action. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-0684 Supports: NVD lists CVE-2010-0684 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-1244: NVD vulnerability record: Cross-site request forgery (CSRF) vulnerability in createDestination.action in Apache ActiveMQ before 5.3.1 allows remote attackers to hijack the authentication of unspecified victims for requests that create queues via the JMSDestination parameter in a queue action. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-1244 Supports: NVD lists CVE-2010-1244 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-1587: NVD vulnerability record: The Jetty ResourceHandler in Apache ActiveMQ 5.x before 5.3.2 and 5.4.x before 5.4.0 allows remote attackers to read JSP source code via a // (slash slash) initial substring in a URI for (1) admin/index.jsp, (2) admin/queues.jsp, or (3) admin/topics.jsp. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-1587 Supports: NVD lists CVE-2010-1587 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Apache ActiveMQ Remote Code Execution ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). This issue has a CVSS base score of 10.0. CVE-2023-46604 is an unauthenticated deserialization vulnerability in ActiveMQ's OpenWire transport ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The SonicWall Capture Labs Threat Research team has observed attackers targeting a critical vulnerability affecting Apache ActiveMQ allowing a remote attacker with network access to a broker to run arbitrary shell commands by manipulating serialized class types in the OpenWire protocol to cause the broker to instantiate any class on the classpath. The vulnerability is categorized as an Unbounded deserialization resul Apache ActiveMQ 5.18.0 before 5.18.3 Apache ActiveMQ 5.17.0 before 5.17.6 Apache ActiveMQ 5.16.0 before 5.16.7 Apache ActiveMQ before 5.15.16 Apache ActiveMQ Legacy OpenWire Module 5.18.0 before 5.18.3 Apache ActiveMQ Legacy OpenWire Module 5.17.0 before 5.17.6 Apache ActiveMQ Legacy OpenWire Module 5.16.0 before 5.16.7 Apache ActiveMQ Legacy OpenWire Module 5.8.0 before 5.15.16 Organizations still running one of the vulnerable software versions should upgrade to version 5.15.16, 5.16.7, 5.17.6 or 5.18.3, which fixes this issue. This vulnerability has been assigned the Common Vulnerabilities and Exposures (CVE) identifier CVE-2023-46604. The overall CVSS 3.1 score is 10 (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:H). Base score is 10 (AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:H), based on the following metrics: Attack vector is network. Attack complexity is low. Privileges required is none. User interaction is none. Impact of this vulnerability on data confidentiality is low. Impact of this vulnerability on data integrity is high. Impact of this vulnerability on data availability is high. Temporal score is 9.4 (E:P/RL:O/RC:C), based on the following metrics: The exploit code maturity level of this vulnerability is proof of concept code. The remediation level of this vulnerability is official fix. The report confidence level of this vulnerability is confirmed. Apache ActiveMQ is a widely used open-source message broker written in Java, known for its multi-protocol compatibility. It offers clients the flexibility of choosing from a variety of programming languages and platforms, with support for JavaScript, C, C++, Python, .Net and others. An attacker connected to OpenWire TCP port 61616 can send an OpenWire packet to unmarshall an ExceptionResponse object instance. By supplying an arbitrary class name as well as an arbitrary string parameter to the BaseDataStreamMarshaller.createThrowable, the attacker will, have access to an arbitrary class to be instantiated with a single command string parameter. At SonicWall Capture Labs Threat Research, we have recreated the PoC using Metasploit framework as demonstrated in Figure 1. Before exploitation can occur, the following conditions must be true: The attacker must have network access. The attacker must send a manipulated OpenWire “command” (used to instantiate an arbitrary class on the classpath with a String parameter). A class must be present on the installation in the classpath which can execute arbitrary code simply by instantiating it with a String parameter. Figure 1 below demonstrates the following steps to exploit this vulnerability: Create and start a vulnerable victim server. Uses a Metasploit module to host the poc.xml file on the attacker’s server. Finally, run the exp Source: https://www.sonicwall.com/blog/apache-activemq-remote-code-execution-cve_2023_46604
+- ONLINE [Serper web result] Update on CVE-2023-46604 - ActiveMQ: UNTRUSTED WEB RESEARCH (not PCAP evidence). Users of both ActiveMQ and ActiveMQ Artemis brokers are recommended to upgrade. Users of any Java-based OpenWire client (e.g. Maven dependency ... | Webpage text: Update on CVE-2023-46604 News > Update on CVE-2023-46604 CVE-2023-46604 was recently announced and it has caused quite a bit of traffic on the mailing lists and in Jira from users curious about its impact on both ActiveMQ and ActiveMQ Artemis clients and brokers. In short: Users of both ActiveMQ and ActiveMQ Artemis brokers are recommended to upgrade. Users of any Java-based OpenWire client (e.g. Maven dependency on activemq-client) are recommended to upgrade (regardless of which broker you’re using). New releases for all current branches were made available on the day the CVE was announced: 5.16.7 (last release from this branch) 5.15.16 (last release from this branch) As stated in the official CVE description: The Java OpenWire protocol marshaller is vulnerable to Remote Code Execution. This vulnerability may allow a remote attacker with network access to either a Java-based OpenWire broker or client to run arbitrary shell commands by manipulating serialized class types in the OpenWire protocol to cause either the client or the broker (respectively) to instantiate any class on the classpath. Three things are required to exploit this vulnerability: A manipulated OpenWire command (used to instantiate an arbitrary class on the classpath with a String parameter) A class on the classpath which can execute arbitrary code simply by instantiating it with a String parameter The manipulated command (i.e. #2) can be sent by a client to a broker or from a broker to a client so both are vulnerable. The ActiveMQ broker ships with a handful of Spring dependencies including org.springframework.context.support.ClassPathXmlApplicationContext which is used to run Spring applications. This class is not only present on the broker, but it is an extremely common client-side dependency as well. It has a constructor which takes a String which can be an HTTP URL pointing to an XML application configuration file across the n The only known exploit of this vulnerability uses this ClassPathXmlApplicationContext to load a malicious XML application configuration file from somewhere on the network via HTTP. This malicious XML specifically defines the arbitrary code to be run on the machine with the vulnerability (i.e. broker or client). ActiveMQ Artemis supports the OpenWire protocol and therefore has dependencies from ActiveMQ for this support. These dependencies include the vulnerable code. However, Artemis doesn’t ship Spring so there is currently no known exploit. Regardless, upgrading is still recommended. Apache, ActiveMQ, Apache ActiveMQ, the Apache logo, and the Apache ActiveMQ project logo are trademarks of The Apache Software Foundation. Copyright © 2025, The Apache Software Foundation. Licensed under Apache License 2.0. Source: https://activemq.apache.org/news/cve-2023-46604
+- ONLINE [Serper web result] Suspected Exploitation of Apache ActiveMQ CVE-2023- ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). On October 27, Rapid7 Managed Detection & Response identified suspected exploitation of Apache ActiveMQ CVE-2023-46604 in 2 separate ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/blog/post/2023/11/01/etr-suspected-exploitation-of-apache-activemq-cve-2023-46604/
+- ONLINE [Serper web result] Threat Response - Critical vulnerability in Apache ActiveMQ: UNTRUSTED WEB RESEARCH (not PCAP evidence). On 26 October 2023, Apache Foundation issued a patch for a vulnerability in ActiveMQ tracked under CVE-2023-46604 [1]. | Webpage text: Threat Response - Critical vulnerability in Apache ActiveMQ On 26 October 2023, Apache Foundation issued a patch for a vulnerability in ActiveMQ tracked under CVE-2023-46604 [1]. The vulnerability allows for remote code execution. We urge all recipients to install updates on vulnerable instances of ActiveMQ as soon as possible. Public exploitation code is available for this vulnerability. Northwave observed recent exploitation of this vulnerability leading to ransomware deplo Apache ActiveMQ is a Java-based message broker, which is used to let different components of a software system communicate with each other. In the Apache ActiveMQ software, a remote threat actor with network access to the ActiveMQ service is able to abuse this vulnerability. The Apache ActiveMQ server contains a deserialisation error which can be abused to execute code as the service user of ActiveMQ. The vulnerability allows for remote code execution as the service user of ActiveMQ [2, 3]. All of this can be done remotely and without authentication. From the vulnerable server, the threat actor can obtain access to the rest of the network. The Northwave CERT has observed misuse of this vulnerability leading to ransomware deployment. Based on this, Northwave assesses the impact to be high. We assess the risk of this vulnerability as high, because the code for this exploit is available and exploitation has been observed. The following versions of Apache ActiveMQ are affected [2]: - Apache ActiveMQ 5.18.0 before 5.18.3 - Apache ActiveMQ 5.17.0 before 5.17.6 - Apache ActiveMQ 5.16.0 before 5.16.7 - Apache ActiveMQ before 5.15.16 - Apache ActiveMQ Legacy OpenWire Module 5.18.0 before 5.18.3 - Apache ActiveMQ Legacy OpenWire Module 5.17.0 before 5.17.6 - Apache ActiveMQ Legacy OpenWire Module 5.16.0 before 5.16.7 - Apache ActiveMQ Legacy OpenWire Module 5.8.0 before 5.15.16 Apache recommends users to upgrade to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3, which fixes this issue. We recommend to update Apache ActiveMQ as soon as possible to one of the versions mentioned above. There are hot-patches available for older versions, so an upgrade to a major release is not strictly necessary. Successful exploitation might not be logged. If the server was publicly reachable and vulnerable, we advise to check for signs of compromise and to actively monitor the server. If signs of compromise are detec We will monitor any developments regarding this vulnerability. If new critical information about this threat arises we will reach out to you. You can call us by phone or send us an email if you would like additional information. Do you have an incident right now? Call our Incident Response Team: 00800 1744 0000 Disclaimer applies, see below. [1]: https://www.cve.org/CVERecord?id=CVE-2023-46604 [2]: https://activemq.apache.org/security-advisories.data/CVE-2023-46604-announcement.txt [3]: https://advisories.ncsc.nl/advisory?id=NCSC-2023-0561 Northwave has made every effort to make this information accurate and reliable. However, the information provided is without warranty of any kind and its use is at the sole risk of the user. Northwave does not accept any responsibility or liability for the accuracy, content, completeness, legality or reliability of the Source: https://northwave-cybersecurity.com/threat-response-critical-vulnerability-in-apache-activemq
+
+Verification Summary:
+- Affected service: ActiveMQ.
+- Attack type: Deserialization.
+- Attack technique: Unauthenticated Deserialization via OpenWire.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: No.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Unsupported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 1/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2023-46604; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: Unauthenticated Deserialization via OpenWire
+- Unsupported claim: CVE-2023-46604
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Valid.
+- MCP investigation query: ActiveMQ 5.17.3 vulnerability exploit.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2010-0684
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2010-1244
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2010-1587
+- Evidence-source URL: https://www.sonicwall.com/blog/apache-activemq-remote-code-execution-cve_2023_46604
+- Evidence-source URL: https://activemq.apache.org/news/cve-2023-46604
+- Evidence-source URL: https://www.rapid7.com/blog/post/2023/11/01/etr-suspected-exploitation-of-apache-activemq-cve-2023-46604/
+- Evidence-source URL: https://northwave-cybersecurity.com/threat-response-critical-vulnerability-in-apache-activemq
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Context-only product/version research: CVE results are leads, not proof of an observed attack.
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Upgrade Apache ActiveMQ to a version that addresses known vulnerabilities, such as 5.15.16, 5.16.7, 5.17.6, or 5.18.3.
+- Apply mitigations per vendor instructions and follow applicable security guidance.
+- Monitor network traffic for signs of exploitation and ensure logging is enabled to detect potential attacks.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

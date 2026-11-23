@@ -1,0 +1,211 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=9, OpenWire=1
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:41374           <-> 172.18.0.2:61616                 5 680 bytes       5 344 bytes      10 1024 bytes     0.000252000         7.5458
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+=== Flow Analysis ===
+
+--- Stream 0 [VALID] ---
+Service: ActiveMQ 5.17.3
+Relevant Events:
+- [E-S0000-F000003-001] TCP connection initiated from client to server
+- [E-S0000-F000004-002] TCP connection response from server to client
+- [E-S0000-F000006-003] OpenWire protocol communication from server to client
+Exploit Indicators:
+- None
+Malicious Activities: None
+Attack Success: Unknown
+Evidence Keywords: ActiveMQ, OpenWire, E-S0000-F000003-001, E-S0000-F000004-002, E-S0000-F000006-003
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "ActiveMQ",
+    "application": "ActiveMQ 5.17.3",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000003-001",
+      "E-S0000-F000004-002",
+      "E-S0000-F000006-003"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "ActiveMQ",
+    "application": "ActiveMQ 5.17.3",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Unknown",
+    "technique": "Unknown",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0000-F000003-001",
+      "E-S0000-F000004-002",
+      "E-S0000-F000006-003"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "Unknown"
+  },
+  "confidence": "Unknown"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Unknown",
+  "success_supported": "Unknown",
+  "cve_supported": "Not Applicable",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000003-001",
+    "E-S0000-F000004-002",
+    "E-S0000-F000006-003"
+  ],
+  "confidence": "Unknown"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: ActiveMQ
+Attack Type: Unknown
+Attack Success: Unknown
+CVE: Not Found
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Unknown
+Success Supported: Unknown
+CVE Supported: Not Applicable
+Verifier Confidence: Unknown
+Overall Confidence: Medium
+Score: 2/4
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Abstain
+Query: ActiveMQ 5.17.3
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-22T05:38:45.769828+00:00
+Candidate CVEs: None
+Sources: 0
+Warnings: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000003-001]: TCP connection initiated from client to server.
+- PCAP [E-S0000-F000004-002]: TCP connection response from server to client.
+- PCAP [E-S0000-F000006-003]: OpenWire protocol communication from server to client.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- None
+
+=== SOURCE URLS ===
+- None
+
+Search status: Abstain
+Search query: ActiveMQ 5.17.3
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- No online source was returned by the MCP search.
+- Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+=== ONLINE CVE DECISION ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "MCP online evidence retrieval was unavailable or failed.",
+    "The Analyzer did not propose an exact CVE to corroborate."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: ActiveMQ
+Identified CVE: Not Found
+Attack: Unknown
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000003-001]: TCP connection initiated from client to server.
+- PCAP [E-S0000-F000004-002]: TCP connection response from server to client.
+- PCAP [E-S0000-F000006-003]: OpenWire protocol communication from server to client.
+
+Verification Summary:
+- Affected service: ActiveMQ.
+- Attack type: Unknown.
+- Attack technique: Unknown.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Unknown.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: Medium.
+- Consensus score: 2/4.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: MCP online evidence retrieval was unavailable or failed.
+- CVE assessment: The Analyzer did not propose an exact CVE to corroborate.
+- MCP evidence search status: Abstain.
+- MCP investigation query: ActiveMQ 5.17.3.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: No online source was returned by the MCP search.
+- Evidence limitation: Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified.
+
+Defensive Recommendation:
+- Monitor network traffic for unusual patterns or anomalies.
+- Ensure that ActiveMQ is updated to the latest version to mitigate potential vulnerabilities.
+- Implement network segmentation to limit exposure of critical services.

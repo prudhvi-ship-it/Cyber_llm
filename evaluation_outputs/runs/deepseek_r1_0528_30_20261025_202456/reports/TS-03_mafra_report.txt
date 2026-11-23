@@ -1,0 +1,352 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=4, TCP=16, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:33004           <-> 172.18.0.2:5173                  4 778 bytes       6 717 bytes      10 1495 bytes     0.000147000         0.0240
+172.18.0.1:33014           <-> 172.18.0.2:5173                  5 844 bytes       5 657 bytes      10 1501 bytes     0.024102000         0.0060
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0001-F000016-004 | client->server] GET /@fs/etc/passwd?raw??
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:33004 -> 172.18.0.2:5173 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.2:5173 -> 172.18.0.1:33004 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:33004 -> 172.18.0.2:5173 (HTTP)
+- [E-S0000-F000008-007 | server->client] 172.18.0.2:5173 -> 172.18.0.1:33004 (HTTP)
+- [E-S0000-F000006-004 | client->server] GET /@fs/etc/passwd
+- [E-S0000-F000006-005 | client->server] Host: 172.17.0.1:5173
+- [E-S0000-F000006-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+- [E-S0000-F000008-008 | server->client] HTTP Status 403
+- [E-S0001-F000011-001 | client->server] 172.18.0.1:33014 -> 172.18.0.2:5173 (TCP)
+- [E-S0001-F000014-002 | server->client] 172.18.0.2:5173 -> 172.18.0.1:33014 (TCP)
+- [E-S0001-F000016-003 | client->server] 172.18.0.1:33014 -> 172.18.0.2:5173 (HTTP)
+- [E-S0001-F000018-007 | server->client] 172.18.0.2:5173 -> 172.18.0.1:33014 (HTTP)
+- [E-S0001-F000016-004 | client->server] GET /@fs/etc/passwd?raw??
+- [E-S0001-F000016-005 | client->server] Host: 172.17.0.1:5173
+- [E-S0001-F000016-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+- [E-S0001-F000018-008 | server->client] HTTP Status 403
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:33004 -> 172.18.0.2:5173; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.1:33014 -> 172.18.0.2:5173; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Vite development server (version not visible)  
+Relevant Events: Client (172.18.0.1) attempted to read the sensitive system file `/etc/passwd` via Vite's file-serving feature (`/@fs` path). Server (172.18.0.2) rejected the request with a 403 Forbidden error.  
+Malicious Activities: Path traversal attempt to disclose sensitive system file (Vite)  
+Attack Success: Failed  
+Evidence:  
+- E-S0000-F000006-004 (GET /@fs/etc/passwd request)  
+- E-S0000-F000008-008 (HTTP 403 Forbidden response)  
+- Server response explicitly blocked access to `/etc/passwd` as it violates Vite's filesystem allow-list (only `/usr/src` permitted).
+
+--- Stream 1 [VALID] ---
+Service: Vite development server (version not visible)  
+Relevant Events: Client (172.18.0.1) attempted to read the sensitive system file `/etc/passwd` via Vite's file-serving feature (`/@fs` path). Server (172.18.0.2) rejected the request with a 403 Forbidden error.  
+Malicious Activities: Path traversal attempt to disclose sensitive system file (Vite)  
+Attack Success: Failed  
+Evidence:  
+- E-S0001-F000016-004 (GET /@fs/etc/passwd request)  
+- E-S0001-F000018-008 (HTTP 403 Forbidden response)  
+- Server response explicitly blocked access to `/etc/passwd` as it violates Vite's filesystem allow-list (only `/usr/src` permitted).
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "File Disclosure via /@fs",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000016-004",
+      "E-S0001-F000018-008"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2023-34092",
+    "confidence": "Low",
+    "reason": "Distinctive /@fs traversal pattern matches known Vite vulnerability, but server version unobserved and 403 response suggests possible mitigation"
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "File Disclosure via /@fs",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000016-004",
+      "E-S0001-F000018-008"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2025-30208",
+    "confidence": "Medium",
+    "reason": "Distinctive query string '?raw??' in E-S0001-F000016-004 matches documented bypass mechanism for Vite's @fs handler. Differentiates from other CVEs by requiring specific query manipulation rather than path normalization or symlink abuse. Server version remains unobserved."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "No",
+  "unsupported_claims": [
+    "CVE association with CVE-2025-30208"
+  ],
+  "evidence_check": [
+    "E-S0000-F000006-004",
+    "E-S0000-F000008-008",
+    "E-S0001-F000016-004",
+    "E-S0001-F000018-008"
+  ],
+  "confidence": "Unknown"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Vite
+Attack Type: Path Traversal
+Attack Success: Fail
+CVE: CVE-2025-30208
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: No
+Verifier Confidence: Unknown
+Overall Confidence: Medium
+Score: 3/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: vite path traversal vulnerability packet clues: endpoint etc passwd
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T13:03:24.683690+00:00
+Candidate CVEs: CVE-2023-34092, CVE-2026-112946, CVE-2026-112950, CVE-2026-114063
+Sources: 8
+
+Source 1: NIST NVD
+Title: CVE-2023-34092: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2023-34092
+Summary: Vite provides frontend tooling. Prior to versions 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, and 4.3.9, Vite Server Options (`server.fs.deny`) can be bypassed using double forward-slash (//) allows any unauthenticated user to read file from the Vite root-path of the application including the default `fs.deny` settings (`['.env', '.env.*', '*.{crt,pem}']`). Only users explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected, and only files in the immediate Vite project root folder could be exposed. This issue is fixed in vite@4.3.9, vite@4.2.3, vite@4.1.5, vite@4.0.5, vite@3.2.7, and vite@2.9.16.
+Supports: NVD lists CVE-2023-34092 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2026-112946: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-112946
+Summary: Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3.
+Supports: NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2026-112950: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-112950
+Summary: Vitest is a Vite-native testing framework for JavaScript and TypeScript projects. From 4.1.11 until 4.1.12 and 5.0.3, isFileLoadingAllowed and the filesystem read interpret backslashes differently on Windows in packages/mocker/src/node/interceptorPlugin.ts. When a client can reach the Vite dev server on Windows and register a redirect mock containing backslash traversal, POSIX joining preserves a Windows backslash traversal that the later filesystem read interprets as a path separator, so the client can read a file outside server.fs.allow that the Vitest process can access. This issue is fixed in versions 4.1.12 and 5.0.3.
+Supports: NVD lists CVE-2026-112950 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2026-114063: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-114063
+Summary: SvelteKit (@sveltejs/kit) from 2.10.0 before 3.0.0 contains a path traversal vulnerability in the vite preview server on Windows that allows unauthenticated attackers to read files outside the prerendered output directory. Attackers who can reach the preview server through network access or a tunnel can send crafted requests to expose source code, configuration, or credentials readable by the server process.
+Supports: NVD lists CVE-2026-114063 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability
+URL: https://www.sentinelone.com/vulnerability-database/cve-2025-58751/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-58751 is a path traversal vulnerability in Vitejs Vite. Learn about its impact, affected versions, and mitigation methods for your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2025-58751 CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability CVE-2025-58751 is a path traversal flaw in Vitejs Vite that allows bypassing server.fs settings to serve unauthorized files. This article covers the technical details, affected versions, security impact, and mitigation. CVE-2025-58751 Overview CVE-2025-58751 is a path traversal vulnerability [CWE-22] in Vite, a widely used frontend tooling framework for JavaScript. The flaw allows the Vite development server to serve files that bypass the server.fs restrictions when a symlink exists inside the public directory. Attackers can request files whose names share a prefix with entries in the public directory to read files outside intended boundaries. The issue af Attackers on the same network as an exposed Vite dev server can read files outside the server.fs.allow boundary when a symlink exists in the public directory. 2025-09-08 - CVE-2025-58751 published to NVD 2026-06-17 - Last updated in NVD database Technical Details for CVE-2025-58751 Vite's development server serves static assets from the public directory in addition to source files governed by the server.fs allow-list. The vulnerability stems from how the underlying sirv static file handler resolves requested paths against public directory entries. Files whose names start with the same prefix as an entry in the public directory were served without applying the server.fs filesystem restrictions. When a symlink is present inside the public directory, this prefix-matching behavior allows an attacker to construct requests that follow the symlink and reach files outside the project workspace. The result is unauthorized read access to files that server.fs.allow was configured to protect. The CWE-22 classification reflects the path traversal characteristic of the flaw. The root cause is improper path normalization in the static file middleware. The public directory lookup used a prefix comparison rather than strict path segment equality, and symlink targets were not validated against the server.fs allow-list. Fix commits in both vitejs/vite and the upstream lukeed/sirv project correct the path handling. Exploitation requires network reachability to a Vite dev server started with --host or a truthy server.host config value. The attacker sends crafted HTTP requests to the dev server with paths that share a prefix with a symlinked entry in the public directory. Since Vite dev servers are intended for local development, production deployments are not directly affected, but shared networks, coworking spaces, and cloud de The vulnerability does not enable code execution or write access. Impact is confined to confidentiality of local files reachable through the symlink target. Detection Methods for CVE-2025-58751 Unexpected HTTP GET requests to the Vite dev server for paths that share a prefix with files in the public directory but include additional characters or traversal segments. Access log entries showing successful 200 responses for files that resolve outside the project root through a symlink target. Pre
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Vite Vulnerable to Path Traversal in Optimized Deps `.map ...
+URL: https://github.com/advisories/GHSA-4w7w-66w2-5vf9
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Integrity of the VULNERABLE SYSTEM is impacted when an attacker makes unauthorized modification of system data. Integrity is also impacted when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Vite Vulnerable to Path Traversal in Optimized Deps `.map` Handling Any files ending with .map even out side the project can be returned to the browser. Only apps that match the following conditions are affected: explicitly exposes the Vite dev server to the network (using --host or server.host config option) have a sensitive content in files ending with .map and the path is predictable In Vite v7.3.1, the dev server’s handling of .map requests for optimized dependencies resolves file paths and calls readFile without restricting ../ segments in the URL. As a result, it is possible to bypass the server.fs.strict allow list and retrieve .map files located outside the project root, provided they can be parsed as valid source map JSON. Create a minimal PoC sourcemap outside the project root cat > /tmp/poc.map <<'EOF' {"version":3,"file":"x.js","sources":[],"names":[],"mappings":""} Start the Vite dev server (example) pnpm -C playground/fs-serve dev --host 127.0.0.1 --port 18080 Confirm that direct /@fs access is blocked by strict (returns 403) Inject ../ segments under the optimized deps .map URL prefix to reach /tmp/poc.map
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...
+URL: https://www.offsec.com/blog/cve-2025-30208/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs ... | Webpage text: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs URL handling to access sensitive files. CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server’s filesystem by abusing Vite’s @fs URL handling. CVE ID: CVE-2025-30208 Impact: Information Disclosure Authentication Required: No Vulnerable Component: @fs path handler in the Vite Dev Server This issue affects applications running Vite in development mode, exposing sensitive server-side files if the dev server is accessible remotely. Vite supports special paths like /@fs/absolute/path to import files directly from the filesystem during development. Normally, Vite restricts access to files outside its allow list (i.e., project root). However, by appending ?import&raw?? to the request, an attacker can bypass this protection and force Vite to read and return arbitrary file contents as a raw ES module export. Conditions for Exploitation The application is running Vite dev server (typically on port 5173). The server is remotely accessible (e.g., exposed over the internet or intranet). The attacker can issue crafted HTTP GET requests to the dev server. The target file is readable by the user running the Vite process. $ curl "http://localhost:5173/@fs/etc/passwd" Security bypass (vulnerable): $ curl "http://localhost:5173/@fs/etc/passwd?import&raw??" export default "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash\n"; //# sourceMappingURL=data:application/json;base64,... The double question marks (??) confuse Vite’s import parser, bypassing the default allow list restriction and enabling arbitrary file disclosure. The server responds with file content wrapped in an ES module export default. Never expose Vite’s dev server to the public internet. Upgrade Vite to the latest patched version where this bypass is fixed. Consider running the dev server behind a local-only proxy or with strict firewall rules.
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: CVE-2026-39365: Vite Path Traversal Vulnerability
+URL: https://www.sentinelone.com/vulnerability-database/cve-2026-39365/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-39365 is a path traversal vulnerability in Vite that allows attackers to bypass security restrictions and access files outside the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-39365 CVE-2026-39365: Vite Path Traversal Vulnerability CVE-2026-39365 is a path traversal vulnerability in Vite that allows attackers to bypass security restrictions and access files outside the project root. This article covers technical details, affected versions, and mitigation. Published: April 10, 2026 CVE-2026-39365 Overview A path traversal vulnerability has been identified in Vite, a popular frontend tooling framework for JavaScript. The vulnerability exists in the development server's handling of .map requests for optimized dependencies. The server resolves file paths and calls readFile without properly restricting ../ path traversal segments in the URL. This allows attackers to bypass the server.fs.strict allow list and retrieve .map Attackers can bypass filesystem security restrictions to access sensitive source map files outside the intended project directory, potentially exposing proprietary source code and configuration details. Vite versions 6.0.0 to before 6.4.2 Vite versions 7.x to before 7.3.2 Vite versions 8.x to before 8.0.5 2026-04-07 - CVE CVE-2026-39365 published to NVD 2026-04-08 - Last updated in NVD database Technical Details for CVE-2026-39365 This vulnerability is classified as CWE-22 (Path Traversal), a well-known weakness that occurs when software uses external input to construct a pathname intended to identify a file or directory located underneath a restricted parent directory, but fails to properly neutralize special elements within the pathname. In the context of Vite's development server, the vulnerability manifests when handling requests for source map (.map) files associated with optimized dependencies. The server's file resolution logic does not adequately sanitize URL paths containing directory traversal sequences such as ../. This oversight allows an attacker to craft malicious requests that escape the intended project root directory. The server.fs.strict configuration option, which is designed to restrict file access to within the project workspace, can be effectively bypassed through this path traversal technique. However, the exploitability is somewhat limited by the requirement that retrieved files must be parseable as valid JSON source map files. The root cause of this vulnerability lies in insufficient input validation within Vite's development server request handler. When processing requests for .map files of optimized dependencies, the server constructs file paths by directly incorporating URL segments without first neutralizing path traversal sequences. The readFile operation is then called on these unsanitized paths, allowing access to files outside the The vulnerability is exploitable over the network when a Vite development server is accessible to an attacker. An attacker can send specially crafted HTTP requests to the development server containing path traversal sequences targeting .map files outside the project root. The attack scenario involves: Identifying a Vite development server exposed on the network Crafting a request URL containing ../ sequences ta
+Supports: None
+Contradicts: None
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000016-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 403.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-34092: NVD vulnerability record: Vite provides frontend tooling. Prior to versions 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, and 4.3.9, Vite Server Options (`server.fs.deny`) can be bypassed using double forward-slash (//) allows any unauthenticated user to read file from the Vite root-path of the application including the default `fs.deny` settings (`['.env', '.env.*', '*.{crt,pem}']`). Only users explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected, and only files in the immediate Vite project root folder could be exposed. This issue is fixed in vite@4.3.9, vite@4.2.3, vite@4.1.5, vite@4.0.5, vite@3.2.7, and vite@2.9.16. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-34092 Supports: NVD lists CVE-2023-34092 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-112946: NVD vulnerability record: Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-112946 Supports: NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-112950: NVD vulnerability record: Vitest is a Vite-native testing framework for JavaScript and TypeScript projects. From 4.1.11 until 4.1.12 and 5.0.3, isFileLoadingAllowed and the filesystem read interpret backslashes differently on Windows in packages/mocker/src/node/interceptorPlugin.ts. When a client can reach the Vite dev server on Windows and register a redirect mock containing backslash traversal, POSIX joining preserves a Windows backslash traversal that the later filesystem read interprets as a path separator, so the client can read a file outside server.fs.allow that the Vitest process can access. This issue is fixed in versions 4.1.12 and 5.0.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-112950 Supports: NVD lists CVE-2026-112950 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-114063: NVD vulnerability record: SvelteKit (@sveltejs/kit) from 2.10.0 before 3.0.0 contains a path traversal vulnerability in the vite preview server on Windows that allows unauthenticated attackers to read files outside the prerendered output directory. Attackers who can reach the preview server through network access or a tunnel can send crafted requests to expose source code, configuration, or credentials readable by the server process. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-114063 Supports: NVD lists CVE-2026-114063 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-58751 is a path traversal vulnerability in Vitejs Vite. Learn about its impact, affected versions, and mitigation methods for your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2025-58751 CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability CVE-2025-58751 is a path traversal flaw in Vitejs Vite that allows bypassing server.fs settings to serve unauthorized files. This article covers the technical details, affected versions, security impact, and mitigation. CVE-2025-58751 Overview CVE-2025-58751 is a path traversal vulnerability [CWE-22] in Vite, a widely used frontend tooling framework for JavaScript. The flaw allows the Vite development server to serve files that bypass the server.fs restrictions when a symlink exists inside the public directory. Attackers can request files whose names share a prefix with entries in the public directory to read files outside intended boundaries. The issue af Attackers on the same network as an exposed Vite dev server can read files outside the server.fs.allow boundary when a symlink exists in the public directory. 2025-09-08 - CVE-2025-58751 published to NVD 2026-06-17 - Last updated in NVD database Technical Details for CVE-2025-58751 Vite's development server serves static assets from the public directory in addition to source files governed by the server.fs allow-list. The vulnerability stems from how the underlying sirv static file handler resolves requested paths against public directory entries. Files whose names start with the same prefix as an entry in the public directory were served without applying the server.fs filesystem restrictions. When a symlink is present inside the public directory, this prefix-matching behavior allows an attacker to construct requests that follow the symlink and reach files outside the project workspace. The result is unauthorized read access to files that server.fs.allow was configured to protect. The CWE-22 classification reflects the path traversal characteristic of the flaw. The root cause is improper path normalization in the static file middleware. The public directory lookup used a prefix comparison rather than strict path segment equality, and symlink targets were not validated against the server.fs allow-list. Fix commits in both vitejs/vite and the upstream lukeed/sirv project correct the path handling. Exploitation requires network reachability to a Vite dev server started with --host or a truthy server.host config value. The attacker sends crafted HTTP requests to the dev server with paths that share a prefix with a symlinked entry in the public directory. Since Vite dev servers are intended for local development, production deployments are not directly affected, but shared networks, coworking spaces, and cloud de The vulnerability does not enable code execution or write access. Impact is confined to confidentiality of local files reachable through the symlink target. Detection Methods for CVE-2025-58751 Unexpected HTTP GET requests to the Vite dev server for paths that share a prefix with files in the public directory but include additional characters or traversal segments. Access log entries showing successful 200 responses for files that resolve outside the project root through a symlink target. Pre Source: https://www.sentinelone.com/vulnerability-database/cve-2025-58751/
+- ONLINE [Serper web result] Vite Vulnerable to Path Traversal in Optimized Deps `.map ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Integrity of the VULNERABLE SYSTEM is impacted when an attacker makes unauthorized modification of system data. Integrity is also impacted when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Vite Vulnerable to Path Traversal in Optimized Deps `.map` Handling Any files ending with .map even out side the project can be returned to the browser. Only apps that match the following conditions are affected: explicitly exposes the Vite dev server to the network (using --host or server.host config option) have a sensitive content in files ending with .map and the path is predictable In Vite v7.3.1, the dev server’s handling of .map requests for optimized dependencies resolves file paths and calls readFile without restricting ../ segments in the URL. As a result, it is possible to bypass the server.fs.strict allow list and retrieve .map files located outside the project root, provided they can be parsed as valid source map JSON. Create a minimal PoC sourcemap outside the project root cat > /tmp/poc.map <<'EOF' {"version":3,"file":"x.js","sources":[],"names":[],"mappings":""} Start the Vite dev server (example) pnpm -C playground/fs-serve dev --host 127.0.0.1 --port 18080 Confirm that direct /@fs access is blocked by strict (returns 403) Inject ../ segments under the optimized deps .map URL prefix to reach /tmp/poc.map Source: https://github.com/advisories/GHSA-4w7w-66w2-5vf9
+- ONLINE [Serper web result] CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs ... | Webpage text: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs URL handling to access sensitive files. CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server’s filesystem by abusing Vite’s @fs URL handling. CVE ID: CVE-2025-30208 Impact: Information Disclosure Authentication Required: No Vulnerable Component: @fs path handler in the Vite Dev Server This issue affects applications running Vite in development mode, exposing sensitive server-side files if the dev server is accessible remotely. Vite supports special paths like /@fs/absolute/path to import files directly from the filesystem during development. Normally, Vite restricts access to files outside its allow list (i.e., project root). However, by appending ?import&raw?? to the request, an attacker can bypass this protection and force Vite to read and return arbitrary file contents as a raw ES module export. Conditions for Exploitation The application is running Vite dev server (typically on port 5173). The server is remotely accessible (e.g., exposed over the internet or intranet). The attacker can issue crafted HTTP GET requests to the dev server. The target file is readable by the user running the Vite process. $ curl "http://localhost:5173/@fs/etc/passwd" Security bypass (vulnerable): $ curl "http://localhost:5173/@fs/etc/passwd?import&raw??" export default "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash\n"; //# sourceMappingURL=data:application/json;base64,... The double question marks (??) confuse Vite’s import parser, bypassing the default allow list restriction and enabling arbitrary file disclosure. The server responds with file content wrapped in an ES module export default. Never expose Vite’s dev server to the public internet. Upgrade Vite to the latest patched version where this bypass is fixed. Consider running the dev server behind a local-only proxy or with strict firewall rules. Source: https://www.offsec.com/blog/cve-2025-30208/
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-39365: Vite Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-39365 is a path traversal vulnerability in Vite that allows attackers to bypass security restrictions and access files outside the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-39365 CVE-2026-39365: Vite Path Traversal Vulnerability CVE-2026-39365 is a path traversal vulnerability in Vite that allows attackers to bypass security restrictions and access files outside the project root. This article covers technical details, affected versions, and mitigation. Published: April 10, 2026 CVE-2026-39365 Overview A path traversal vulnerability has been identified in Vite, a popular frontend tooling framework for JavaScript. The vulnerability exists in the development server's handling of .map requests for optimized dependencies. The server resolves file paths and calls readFile without properly restricting ../ path traversal segments in the URL. This allows attackers to bypass the server.fs.strict allow list and retrieve .map Attackers can bypass filesystem security restrictions to access sensitive source map files outside the intended project directory, potentially exposing proprietary source code and configuration details. Vite versions 6.0.0 to before 6.4.2 Vite versions 7.x to before 7.3.2 Vite versions 8.x to before 8.0.5 2026-04-07 - CVE CVE-2026-39365 published to NVD 2026-04-08 - Last updated in NVD database Technical Details for CVE-2026-39365 This vulnerability is classified as CWE-22 (Path Traversal), a well-known weakness that occurs when software uses external input to construct a pathname intended to identify a file or directory located underneath a restricted parent directory, but fails to properly neutralize special elements within the pathname. In the context of Vite's development server, the vulnerability manifests when handling requests for source map (.map) files associated with optimized dependencies. The server's file resolution logic does not adequately sanitize URL paths containing directory traversal sequences such as ../. This oversight allows an attacker to craft malicious requests that escape the intended project root directory. The server.fs.strict configuration option, which is designed to restrict file access to within the project workspace, can be effectively bypassed through this path traversal technique. However, the exploitability is somewhat limited by the requirement that retrieved files must be parseable as valid JSON source map files. The root cause of this vulnerability lies in insufficient input validation within Vite's development server request handler. When processing requests for .map files of optimized dependencies, the server constructs file paths by directly incorporating URL segments without first neutralizing path traversal sequences. The readFile operation is then called on these unsanitized paths, allowing access to files outside the The vulnerability is exploitable over the network when a Vite development server is accessible to an attacker. An attacker can send specially crafted HTTP requests to the development server containing path traversal sequences targeting .map files outside the project root. The attack scenario involves: Identifying a Vite development server exposed on the network Crafting a request URL containing ../ sequences ta Source: https://www.sentinelone.com/vulnerability-database/cve-2026-39365/
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2023-34092
+- https://nvd.nist.gov/vuln/detail/CVE-2026-112946
+- https://nvd.nist.gov/vuln/detail/CVE-2026-112950
+- https://nvd.nist.gov/vuln/detail/CVE-2026-114063
+- https://www.sentinelone.com/vulnerability-database/cve-2025-58751/
+- https://github.com/advisories/GHSA-4w7w-66w2-5vf9
+- https://www.offsec.com/blog/cve-2025-30208/
+- https://www.sentinelone.com/vulnerability-database/cve-2026-39365/
+
+Search status: Valid
+Search query: vite path traversal vulnerability packet clues: endpoint etc passwd
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- 6 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed CVE-2025-30208; independent Verifier CVE support: No. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Vite
+Associated CVE candidate (Analyst): CVE-2025-30208
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000016-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 403.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-34092: NVD vulnerability record: Vite provides frontend tooling. Prior to versions 2.9.16, 3.2.7, 4.0.5, 4.1.5, 4.2.3, and 4.3.9, Vite Server Options (`server.fs.deny`) can be bypassed using double forward-slash (//) allows any unauthenticated user to read file from the Vite root-path of the application including the default `fs.deny` settings (`['.env', '.env.*', '*.{crt,pem}']`). Only users explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected, and only files in the immediate Vite project root folder could be exposed. This issue is fixed in vite@4.3.9, vite@4.2.3, vite@4.1.5, vite@4.0.5, vite@3.2.7, and vite@2.9.16. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-34092 Supports: NVD lists CVE-2023-34092 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-112946: NVD vulnerability record: Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-112946 Supports: NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-112950: NVD vulnerability record: Vitest is a Vite-native testing framework for JavaScript and TypeScript projects. From 4.1.11 until 4.1.12 and 5.0.3, isFileLoadingAllowed and the filesystem read interpret backslashes differently on Windows in packages/mocker/src/node/interceptorPlugin.ts. When a client can reach the Vite dev server on Windows and register a redirect mock containing backslash traversal, POSIX joining preserves a Windows backslash traversal that the later filesystem read interprets as a path separator, so the client can read a file outside server.fs.allow that the Vitest process can access. This issue is fixed in versions 4.1.12 and 5.0.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-112950 Supports: NVD lists CVE-2026-112950 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-114063: NVD vulnerability record: SvelteKit (@sveltejs/kit) from 2.10.0 before 3.0.0 contains a path traversal vulnerability in the vite preview server on Windows that allows unauthenticated attackers to read files outside the prerendered output directory. Attackers who can reach the preview server through network access or a tunnel can send crafted requests to expose source code, configuration, or credentials readable by the server process. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-114063 Supports: NVD lists CVE-2026-114063 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-58751 is a path traversal vulnerability in Vitejs Vite. Learn about its impact, affected versions, and mitigation methods for your ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2025-58751 CVE-2025-58751: Vitejs Vite Path Traversal Vulnerability CVE-2025-58751 is a path traversal flaw in Vitejs Vite that allows bypassing server.fs settings to serve unauthorized files. This article covers the technical details, affected versions, security impact, and mitigation. CVE-2025-58751 Overview CVE-2025-58751 is a path traversal vulnerability [CWE-22] in Vite, a widely used frontend tooling framework for JavaScript. The flaw allows the Vite development server to serve files that bypass the server.fs restrictions when a symlink exists inside the public directory. Attackers can request files whose names share a prefix with entries in the public directory to read files outside intended boundaries. The issue af Attackers on the same network as an exposed Vite dev server can read files outside the server.fs.allow boundary when a symlink exists in the public directory. 2025-09-08 - CVE-2025-58751 published to NVD 2026-06-17 - Last updated in NVD database Technical Details for CVE-2025-58751 Vite's development server serves static assets from the public directory in addition to source files governed by the server.fs allow-list. The vulnerability stems from how the underlying sirv static file handler resolves requested paths against public directory entries. Files whose names start with the same prefix as an entry in the public directory were served without applying the server.fs filesystem restrictions. When a symlink is present inside the public directory, this prefix-matching behavior allows an attacker to construct requests that follow the symlink and reach files outside the project workspace. The result is unauthorized read access to files that server.fs.allow was configured to protect. The CWE-22 classification reflects the path traversal characteristic of the flaw. The root cause is improper path normalization in the static file middleware. The public directory lookup used a prefix comparison rather than strict path segment equality, and symlink targets were not validated against the server.fs allow-list. Fix commits in both vitejs/vite and the upstream lukeed/sirv project correct the path handling. Exploitation requires network reachability to a Vite dev server started with --host or a truthy server.host config value. The attacker sends crafted HTTP requests to the dev server with paths that share a prefix with a symlinked entry in the public directory. Since Vite dev servers are intended for local development, production deployments are not directly affected, but shared networks, coworking spaces, and cloud de The vulnerability does not enable code execution or write access. Impact is confined to confidentiality of local files reachable through the symlink target. Detection Methods for CVE-2025-58751 Unexpected HTTP GET requests to the Vite dev server for paths that share a prefix with files in the public directory but include additional characters or traversal segments. Access log entries showing successful 200 responses for files that resolve outside the project root through a symlink target. Pre Source: https://www.sentinelone.com/vulnerability-database/cve-2025-58751/
+- ONLINE [Serper web result] Vite Vulnerable to Path Traversal in Optimized Deps `.map ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Integrity of the VULNERABLE SYSTEM is impacted when an attacker makes unauthorized modification of system data. Integrity is also impacted when ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Vite Vulnerable to Path Traversal in Optimized Deps `.map` Handling Any files ending with .map even out side the project can be returned to the browser. Only apps that match the following conditions are affected: explicitly exposes the Vite dev server to the network (using --host or server.host config option) have a sensitive content in files ending with .map and the path is predictable In Vite v7.3.1, the dev server’s handling of .map requests for optimized dependencies resolves file paths and calls readFile without restricting ../ segments in the URL. As a result, it is possible to bypass the server.fs.strict allow list and retrieve .map files located outside the project root, provided they can be parsed as valid source map JSON. Create a minimal PoC sourcemap outside the project root cat > /tmp/poc.map <<'EOF' {"version":3,"file":"x.js","sources":[],"names":[],"mappings":""} Start the Vite dev server (example) pnpm -C playground/fs-serve dev --host 127.0.0.1 --port 18080 Confirm that direct /@fs access is blocked by strict (returns 403) Inject ../ segments under the optimized deps .map URL prefix to reach /tmp/poc.map Source: https://github.com/advisories/GHSA-4w7w-66w2-5vf9
+- ONLINE [Serper web result] CVE-2025-30208 – Vite Arbitrary File Read via @fs Path ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs ... | Webpage text: CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass CVE-2025-30208 – Vite Arbitrary File Read via @fs Path Traversal Bypass Discover CVE-2025-30208, a critical arbitrary file read vulnerability in the Vite development server. Learn how remote attackers exploit @fs URL handling to access sensitive files. CVE-2025-30208 is an arbitrary file read vulnerability in the Vite development server. This vulnerability allows remote, unauthenticated attackers to access arbitrary files on the server’s filesystem by abusing Vite’s @fs URL handling. CVE ID: CVE-2025-30208 Impact: Information Disclosure Authentication Required: No Vulnerable Component: @fs path handler in the Vite Dev Server This issue affects applications running Vite in development mode, exposing sensitive server-side files if the dev server is accessible remotely. Vite supports special paths like /@fs/absolute/path to import files directly from the filesystem during development. Normally, Vite restricts access to files outside its allow list (i.e., project root). However, by appending ?import&raw?? to the request, an attacker can bypass this protection and force Vite to read and return arbitrary file contents as a raw ES module export. Conditions for Exploitation The application is running Vite dev server (typically on port 5173). The server is remotely accessible (e.g., exposed over the internet or intranet). The attacker can issue crafted HTTP GET requests to the dev server. The target file is readable by the user running the Vite process. $ curl "http://localhost:5173/@fs/etc/passwd" Security bypass (vulnerable): $ curl "http://localhost:5173/@fs/etc/passwd?import&raw??" export default "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash\n"; //# sourceMappingURL=data:application/json;base64,... The double question marks (??) confuse Vite’s import parser, bypassing the default allow list restriction and enabling arbitrary file disclosure. The server responds with file content wrapped in an ES module export default. Never expose Vite’s dev server to the public internet. Upgrade Vite to the latest patched version where this bypass is fixed. Consider running the dev server behind a local-only proxy or with strict firewall rules. Source: https://www.offsec.com/blog/cve-2025-30208/
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-39365: Vite Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-39365 is a path traversal vulnerability in Vite that allows attackers to bypass security restrictions and access files outside the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-39365 CVE-2026-39365: Vite Path Traversal Vulnerability CVE-2026-39365 is a path traversal vulnerability in Vite that allows attackers to bypass security restrictions and access files outside the project root. This article covers technical details, affected versions, and mitigation. Published: April 10, 2026 CVE-2026-39365 Overview A path traversal vulnerability has been identified in Vite, a popular frontend tooling framework for JavaScript. The vulnerability exists in the development server's handling of .map requests for optimized dependencies. The server resolves file paths and calls readFile without properly restricting ../ path traversal segments in the URL. This allows attackers to bypass the server.fs.strict allow list and retrieve .map Attackers can bypass filesystem security restrictions to access sensitive source map files outside the intended project directory, potentially exposing proprietary source code and configuration details. Vite versions 6.0.0 to before 6.4.2 Vite versions 7.x to before 7.3.2 Vite versions 8.x to before 8.0.5 2026-04-07 - CVE CVE-2026-39365 published to NVD 2026-04-08 - Last updated in NVD database Technical Details for CVE-2026-39365 This vulnerability is classified as CWE-22 (Path Traversal), a well-known weakness that occurs when software uses external input to construct a pathname intended to identify a file or directory located underneath a restricted parent directory, but fails to properly neutralize special elements within the pathname. In the context of Vite's development server, the vulnerability manifests when handling requests for source map (.map) files associated with optimized dependencies. The server's file resolution logic does not adequately sanitize URL paths containing directory traversal sequences such as ../. This oversight allows an attacker to craft malicious requests that escape the intended project root directory. The server.fs.strict configuration option, which is designed to restrict file access to within the project workspace, can be effectively bypassed through this path traversal technique. However, the exploitability is somewhat limited by the requirement that retrieved files must be parseable as valid JSON source map files. The root cause of this vulnerability lies in insufficient input validation within Vite's development server request handler. When processing requests for .map files of optimized dependencies, the server constructs file paths by directly incorporating URL segments without first neutralizing path traversal sequences. The readFile operation is then called on these unsanitized paths, allowing access to files outside the The vulnerability is exploitable over the network when a Vite development server is accessible to an attacker. An attacker can send specially crafted HTTP requests to the development server containing path traversal sequences targeting .map files outside the project root. The attack scenario involves: Identifying a Vite development server exposed on the network Crafting a request URL containing ../ sequences ta Source: https://www.sentinelone.com/vulnerability-database/cve-2026-39365/
+
+Verification Summary:
+- Affected service: Vite.
+- Attack type: Path Traversal.
+- Attack technique: File Disclosure via /@fs.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: Medium.
+- Consensus score: 3/5.
+- Consensus attack outcome: Fail.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2025-30208; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: CVE association with CVE-2025-30208
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: vite path traversal vulnerability packet clues: endpoint etc passwd.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2023-34092
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-112946
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-112950
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-114063
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2025-58751/
+- Evidence-source URL: https://github.com/advisories/GHSA-4w7w-66w2-5vf9
+- Evidence-source URL: https://www.offsec.com/blog/cve-2025-30208/
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2026-39365/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: 6 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Restrict network exposure of development servers using firewall policies
+- Maintain Vite installations at latest patched versions
+- Implement strict filesystem access controls (server.fs.allow/deny)
+- Monitor development servers for abnormal filesystem access patterns

@@ -1,0 +1,107 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_b945d2ecfa0225d5678a
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event0_CVE-2022-24706_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: CouchDB
+  Attack Type: Remote Code Execution via Erlang distribution using default cookie
+  Attack Success: Success
+  CVE: CVE-2022-24706
+  Overall Confidence: High
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-00_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-00_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-00_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: CouchDB
+Associated CVE candidate (Analyst): CVE-2022-24706
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2022-24706
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0001-F000023-011]: CouchDB Erlang distribution challenge from 172.18.0.2:9100 with node couchdb@127.0.0.1.
+- PCAP [E-S0001-F000025-012]: Erlang client authentication digest matches the publicly documented CouchDB default cookie (legacy challenge-response).
+- PCAP [E-S0001-F000027-013]: Erlang server authentication acknowledgement digest matches the same publicly documented CouchDB default cookie.
+- PCAP [E-S0001-F000029-009]: Erlang RPC request: os:cmd('id') from 172.18.0.1:58612 to 172.18.0.2:9100, paired with server response frame 31 in the same TCP stream.
+- PCAP [E-S0001-F000031-010]: Server response contains Erlang rex command output 'uid=0(root) gid=0(root)', paired with client os:cmd('id') request frame 29 in the same TCP stream.
+- PCAP [E-S0001-F000031-007]: Server response contains uid=0(root) (possible command output; correlate with request).
+- PCAP [E-S0001-F000031-008]: Server response contains gid=0(root) (possible command output; correlate with request).
+- ONLINE [CISA KEV] Apache CouchDB Insecure Default Initialization of Resource Vulnerability: Apache CouchDB: Apache CouchDB contains an insecure default initialization of resource vulnerability which can allow an attacker to escalate to administrative privileges. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2022-24706 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-11769: NVD vulnerability record: CouchDB administrative users before 2.2.0 can configure the database server via HTTP(S). Due to insufficient validation of administrator-supplied configuration settings via the HTTP API, it is possible for a CouchDB administrator user to escalate their privileges to that of the operating system's user under which CouchDB runs, by bypassing the blacklist of configuration settings that are not allowed to be modified via the HTTP API. This privilege escalation effectively allows a CouchDB admin user to gain arbitrary remote code execution, bypassing CVE-2017-12636 and CVE-2018-8007. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-11769 Supports: NVD lists CVE-2018-11769 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2018-8007: NVD vulnerability record: Apache CouchDB administrative users can configure the database server via HTTP(S). Due to insufficient validation of administrator-supplied configuration settings via the HTTP API, it is possible for a CouchDB administrator user to escalate their privileges to that of the operating system's user that CouchDB runs under, by bypassing the blacklist of configuration settings that are not allowed to be modified via the HTTP API. This privilege escalation effectively allows an existing CouchDB admin user to gain arbitrary remote code execution, bypassing already disclosed CVE-2017-12636. Mitigation: All users should upgrade to CouchDB releases 1.7.2 or 2.1.2. Source: https://nvd.nist.gov/vuln/detail/CVE-2018-8007 Supports: NVD lists CVE-2018-8007 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2012-5641: NVD vulnerability record: Directory traversal vulnerability in the partition2 function in mochiweb_util.erl in MochiWeb before 2.4.0, as used in Apache CouchDB before 1.0.4, 1.1.x before 1.1.2, and 1.2.x before 1.2.1, allows remote attackers to read arbitrary files via a ..\ (dot dot backslash) in the default URI. Source: https://nvd.nist.gov/vuln/detail/CVE-2012-5641 Supports: NVD lists CVE-2012-5641 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CouchDB, Erlang and cookies — RCE on default settings: UNTRUSTED WEB RESEARCH (not PCAP evidence). When updating, the installer will require a cookie to be changed. Additional links for information on the topic: Distributed Erlang System ... Source: https://medium.com/%40_sadshade/couchdb-erlang-and-cookies-rce-on-default-settings-b1e9173a4bcd
+- ONLINE [Serper web result] 1.2.25. Authentication — Apache CouchDB® 3.5 Documentation: UNTRUSTED WEB RESEARCH (not PCAP evidence). When CouchDB sees a valid token in a subsequent request, it will authenticate the user by this token without requesting the password again. By default, cookies ... | Webpage text: Interfaces for obtaining session and authorization data. We also strongly recommend you set up SSL to improve all authentication methods’ security. 1.2.25.1. Basic Authentication Changed in version 3.4: In order to aid transition to stronger password hashing without causing a performance penalty, CouchDB will send a Set-Cookie header when a request authenticates successfully with Basic authentication. All browsers and many http libraries will automatically send this cookie on subsequent requests. The cost of verifying the cookie is significantly less than PBKDF2 with a high iteration count, for example. Basic authentication (RFC 2617) is a quick and simple way to authenticate with CouchDB. The main drawback is the need to send user credentials with each request which may be insecure and could hurt operation performance (since CouchDB must compute the password hash with every request): Authorization: Basic cm9vdDpyZWxheA== Cache-Control: must-revalidate Content-Type: application/json Date: Mon, 03 Dec 2012 00:44:47 GMT Server: CouchDB (Erlang/OTP) "uuid":"0a959b9b8227188afc2ac26ccdf345a6", "name":"The Apache Software Foundation" 1.2.25.2. Cookie Authentication For cookie authentication (RFC 2109) CouchDB generates a token that the client can use for the next few requests to CouchDB. Tokens are valid until a timeout. When CouchDB sees a valid token in a subsequent request, it will authenticate the user by this token without requesting the password again. By default, cookies are valid for 10 minutes, but it’s adjustable via timeout. Also it’s possible to make cookies To obtain the first token and thus authenticate a user for the first time, the username and password must be sent to the _session API. Initiates new session for specified user credentials by providing Cookie application/x-www-form-urlencoded next (string) – Enforces redirect after successful login to the specified location. This location is relative from server root. Set-Cookie – Authorization token ok (boolean) – Operation status roles (array) – List of user roles 200 OK – Successfully authenticated 302 Found – Redirect after successful authentication 401 Unauthorized – Username or password wasn’t recognized 403 Forbidden – Insufficient permissions / Too many requests with invalid credentials Content-Type: application/x-www-form-urlencoded It’s also possible to send data as JSON: Content-Type: application/json Cache-Control: must-revalidate Content-Type: application/json Date: Mon, 03 Dec 2012 01:23:14 GMT Server: CouchDB (Erlang/OTP) Set-Cookie: AuthSession=cm9vdDo1MEJCRkYwMjq0LO0ylOIwShrgt8y-UkhI-c6BGw; Version=1; Path=/; HttpOnly {"ok":true,"name":"root","roles":["_admin"]} If next query parameter was provided the response will trigger redirection to the specified location in case of successful authentication: POST /_session?next=/blog/_design/sofa/_rewrite/recent-posts HTTP/1.1 Content-Type: application/x-www-form-urlencoded HTTP/1.1 302 Moved Temporarily Cache-Control: must-revalidate Content-Type: application/json Date: Mon, 03 Dec 2012 01:32:46 GMT Location: http://localhost:5984/blog/_design/sofa/_rewrite/recent-posts Server: CouchDB (Erlang/OTP) Set-Cookie: AuthSession=cm9vdDo1MEJDMDEzRTp7V Source: https://docs.couchdb.org/en/stable/api/server/authn.html
+- ONLINE [Serper web result] Erlang cookie not the same on all nodes #97: UNTRUSTED WEB RESEARCH (not PCAP evidence). setcookie=monster in the values.yaml , both to no avail. The values.yaml is shown below. They are mostly the defaults. adminUsername: admin ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/apache/couchdb-helm/issues/97
+- ONLINE [Serper web result] [couchdb] 01/10: Remove the default "monster" cookie: UNTRUSTED WEB RESEARCH (not PCAP evidence). # All nodes must share the same magic cookie for distributed Erlang to work. -# Comment out this line if you synchronized the cookies by ... Source: https://lists.apache.org/thread/h9xozg063l866btodypcospo4s3ctb5b
+
+Verification Summary:
+- Affected service: CouchDB.
+- Attack type: Remote Code Execution via Erlang distribution using default cookie.
+- Attack technique: Abuse of default credentials to authenticate Erlang node and execute os:cmd RPC.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2022-24706.
+- CVE assessment: Analyst proposed CVE-2022-24706; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: CouchDB Erlang distribution default cookie.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-11769
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2018-8007
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2012-5641
+- Evidence-source URL: https://medium.com/%40_sadshade/couchdb-erlang-and-cookies-rce-on-default-settings-b1e9173a4bcd
+- Evidence-source URL: https://docs.couchdb.org/en/stable/api/server/authn.html
+- Evidence-source URL: https://github.com/apache/couchdb-helm/issues/97
+- Evidence-source URL: https://lists.apache.org/thread/h9xozg063l866btodypcospo4s3ctb5b
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for secured.ai: gaierror: [Errno 11001] getaddrinfo failed
+- Evidence limitation: Webpage read unavailable for www.scaleway.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 3 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Immediately remove public or untrusted network exposure of EPMD (TCP/4369) and Erlang distribution ports (e.g., 9100); restrict to trusted cluster networks via firewall/segmentation.
+- Rotate and set a strong, unique Erlang cookie on all CouchDB nodes; ensure cookie file permissions are restrictive (e.g., owner-only). Do not use default values.
+- Apply vendor updates and configuration guidance for CVE-2022-24706 per Apache CouchDB advisory; verify post-remediation that distribution ports are not exposed.
+- If clustering/distribution is not required, disable Erlang distribution for CouchDB or bind it to localhost/management network only.
+- Conduct incident response on the affected host(s): review process history and logs, rotate credentials/keys, and assess for lateral movement given confirmed root-level command execution.
+- Implement network monitoring and alerting for EPMD and Erlang distribution traffic patterns to detect future misuse.
+- Harden CouchDB deployment using least privilege, TLS where supported, and separate management networks for administrative and clustering functions.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

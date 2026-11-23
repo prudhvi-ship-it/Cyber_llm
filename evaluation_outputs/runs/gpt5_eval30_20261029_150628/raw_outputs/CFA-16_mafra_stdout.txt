@@ -1,0 +1,116 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_2dffcb8e26b37b6853ee
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event16_cve-2017-15709_fail_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Apache ActiveMQ Broker
+  Attack Type: Reconnaissance
+  Attack Success: Success
+  CVE: Not Found
+  Overall Confidence: Medium
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-16_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-16_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt5_eval30_20261029_150628\reports\CFA-16_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Apache ActiveMQ Broker
+Associated CVE candidate (Analyst): Not Found
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Medium
+Attack outcome evidence-verified: Yes
+Identified CVE: Not Found
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000003-001]: 172.18.0.1:41374 -> 172.18.0.2:61616 (TCP).
+- PCAP [E-S0000-F000004-002]: 172.18.0.2:61616 -> 172.18.0.1:41374 (TCP).
+- PCAP [E-S0000-F000006-003]: 172.18.0.2:61616 -> 172.18.0.1:41374 (OpenWire).
+- ONLINE RESEARCH LEAD [CISA KEV] Apache ActiveMQ Deserialization of Untrusted Data Vulnerability: Apache ActiveMQ: Apache ActiveMQ contains a deserialization of untrusted data vulnerability that may allow a remote attacker with network access to a broker to run shell commands by manipulating serialized class types in the OpenWire protocol to cause the broker to instantiate any class on the classpath. Required action: Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2023-46604 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-49270: NVD vulnerability record: Exposure of Sensitive Information Through Metadata vulnerability in Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All.
+
+Brokers that are configured with a network connector with syncDurableSubs set to true, are vulnerable to an unauthenticated attacker who can receive a list of all durable topic subscriptions in the broker, including client identifiers, subscription names, topic destinations, and JMS selector expressions, by sending a BrokerInfo command. The broker incorrectly responds without first ensuring the connection is authenticated.
+This issue affects Apache ActiveMQ Broker: before 5.19.7, from 6.0.0 before 6.2.6; Apache ActiveMQ: before 5.19.7, from 6.0.0 before 6.2.6; Apache ActiveMQ All: before 5.19.7, from 6.0.0 before 6.2.6.
+
+Users are recommended to upgrade to version 6.2.6 or 5.19.7, which fixes the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-49270 Supports: Web-cited CVE-2026-49270 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2023-46604: NVD vulnerability record: The Java OpenWire protocol marshaller is vulnerable to Remote Code 
+Execution. This vulnerability may allow a remote attacker with network 
+access to either a Java-based OpenWire broker or client to run arbitrary
+ shell commands by manipulating serialized class types in the OpenWire 
+protocol to cause either the client or the broker (respectively) to 
+instantiate any class on the classpath.
+
+Users are recommended to upgrade
+ both brokers and clients to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3 
+which fixes this issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2023-46604 Supports: NVD lists CVE-2023-46604 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2011-4905: NVD vulnerability record: Apache ActiveMQ before 5.6.0 allows remote attackers to cause a denial of service (file-descriptor exhaustion and broker crash or hang) by sending many openwire failover:tcp:// connection requests. Source: https://nvd.nist.gov/vuln/detail/CVE-2011-4905 Supports: NVD lists CVE-2011-4905 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] ActiveMQ - Apache Software Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache ActiveMQ® is the most popular open source, multi-protocol, Java-based message broker. It supports industry standard protocols so users get the ... | Webpage text: Flexible & Powerful Open Source Apache ActiveMQ® is the most popular open source, multi-protocol, Java-based message broker. It supports industry standard protocols so users get the benefits of client choices across a broad range of languages and platforms. Connect from clients written in JavaScript, C, C++, Python, .Net, and more. Integrate your multi-platform applications using the ubiquitous AMQP protocol. Exchange messages between your web appl ActiveMQ 6.4.0 is a new milestone in the project, starting the 6.4.x series...more ActiveMQ 6.3.3 is a maintenance release on the 6.3.x series....more Maintenance release on the 5.19.x series....more Long established, endlessly pluggable architecture serving many generations of applications. Partial Jakarta Messaging 3.1 & JMS 2.0 support and full JMS 1.1 support + full client implementation including JNDI High availability using shared storage Familiar JMS-based addressing model Network of brokers for distributing load KahaDB & JDBC options for persistence Looking for Artemis? See the news. Enjoy the benefits of open source by contributing to a code-base, asking a question on one of our mailing lists, or reporting a bug or requesting a feature. When you participate, we all win. That's the power of community. That's the power of open source. Protect your data & Balance your Load ActiveMQ provides many advanced features including message load-balancing and high-availability for your data. Multiple connected "master" brokers can dynamically respond to consumer demand by moving messages between the nodes in the background. Brokers can also be paired together in a master-slave configuration so that if a master fails then the slave takes over ensuring clients can get to their important data and e Easy Enterprise Integration Patterns Enterprise Integration Patterns describe the various ways in which multiple applications generally interact and integrate with each other. Aysnchronous messaging is at the heart of this integration, and ActiveMQ makes it easy to leverage these patterns via Apache Camel routes deployed directly on the broker. ActiveMQ is most commonly deployed as a standalone process. This option isolates ActiveMQ from any particular application and provides maximum flexibility for resource allocation and management. However, ActiveMQ can be configured to have a very small footprint which makes it viable to embed it within your application. This option can provide an application with simple, powerful messaging semantics and also allow eas Apache, ActiveMQ, Apache ActiveMQ, the Apache logo, and the Apache ActiveMQ project logo are trademarks of The Apache Software Foundation. Copyright © 2025, The Apache Software Foundation. Licensed under Apache License 2.0. Source: https://activemq.apache.org/
+- ONLINE [Serper web result] Run Broker - ActiveMQ - Apache Software Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). Using ActiveMQ > Run Broker. Running an ActiveMQ Broker. Note if you want to use an embedded broker then see How do I embed a Broker inside a Connection. | Webpage text: You'll be able to continue in a few seconds. Don't refresh this page. Source: https://www.google.com/goto?url=CAESggEB6zswFaTLcEVIvBRLmm9bOi1hKx_Dfu4Sjz093X-ZdzPcgEp34q7O7Ioo_C__dbxgFKkqgQlEYQs6mLxPPJHyzJdGzz4wVAXvV1gzLrngrOr9-m7NSeSKQN4Ej5l_V1dmSG8SHkQ92xhEgsCMybRyt5DRBfShdiAW6Je8Juzgcshn
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-49270: Apache ActiveMQ Info Disclosure Flaw: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache ActiveMQ supports broker-to-broker networking through network connectors. When syncDurableSubs is enabled, brokers exchange durable ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-49270 CVE-2026-49270: Apache ActiveMQ Info Disclosure Flaw CVE-2026-49270 is an information disclosure vulnerability in Apache ActiveMQ that exposes sensitive subscription metadata to unauthenticated attackers. This article covers technical details, affected versions, and mitigation. Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2026-49270 Overview CVE-2026-49270 is an information disclosure vulnerability in Apache ActiveMQ and Apache ActiveMQ Broker. The flaw allows an unauthenticated remote attacker to retrieve the complete list of durable topic subscriptions from a broker by sending a BrokerInfo command. Exposed metadata includes client identifiers, subscription names, topic destinations, and Java Message Service (JMS) selector expressions. The vulnerability Unauthenticated attackers can enumerate durable topic subscription metadata, including client IDs and JMS selectors, exposing sensitive details about message flows and subscriber identities. Apache ActiveMQ before 5.19.7 Apache ActiveMQ from 6.0.0 before 6.2.6 Apache ActiveMQ Broker (and ActiveMQ All) in the same version ranges 2026-06-01 - CVE-2026-49270 published to the National Vulnerability Database (NVD) 2026-06-01 - Last updated in NVD database Technical Details for CVE-2026-49270 Apache ActiveMQ supports broker-to-broker networking through network connectors. When syncDurableSubs is enabled, brokers exchange durable subscription state so subscribers can receive messages regardless of which broker holds the active connection. This synchronization uses a BrokerInfo command exchanged early in the OpenWire connection lifecycle. The broker responds to an inbound BrokerInfo command with the full list of durable topic subscriptions before validating that the peer connection is authenticated. An attacker who can reach the OpenWire transport port can send a single BrokerInfo frame and receive subscription metadata in return. The disclosed fields include client identifiers, subscription names, topic destinations, and JMS selector expressions. The exposed data is intelligence-grade reconnaissance. JMS selectors frequently embed business identifiers, routing logic, or filtering criteria, and client identifiers can reveal tenant names, application roles, or hostnames. The broker performs the authentication check after dispatching the response to the BrokerInfo command. The protocol handler treats this command as part of connection negotiation rather than as an authenticated request, so credentials are never validated before sensitive metadata is serialized back to the peer. Exploitation requires network reachability to the OpenWire listener on a broker configured with syncDurableSubs=true on a network connector. No credentials, user interaction, or prior foothold are required. The attacker establishes a transport-level connection and issues a single BrokerInfo command. The broker replies with the subscrip Source: https://www.sentinelone.com/vulnerability-database/cve-2026-49270/
+- ONLINE [Serper web result] What Is Apache ActiveMQ?: UNTRUSTED WEB RESEARCH (not PCAP evidence). A single node of ActiveMQ which allows clients to connect to it and use these messaging concepts is called an “ActiveMQ Broker.” So, ActiveMQ is ... | Webpage text: You'll be able to continue in a few seconds. Don't refresh this page. Source: https://www.google.com/goto?url=CAESbgHrOzAVisub4YTQ0mg7-LcyM8gZIFObFRt4oMKQG3NeMIDOoPsLOKu1XSj_2gvq9avisfDJY4WCmMelrkExZruQe9T2Vp7VCv1vxA2QnEFD4BZhwGw_JJL-nIhoAFrv1eivETRM-ZvostijuLrr
+
+Verification Summary:
+- Affected service: Apache ActiveMQ Broker.
+- Attack type: Reconnaissance.
+- Attack technique: OpenWire banner grabbing/probe on port 61616.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Partially Supported.
+- Verifier confidence: High.
+- Consensus confidence: Medium.
+- Consensus score: 3/4.
+- Consensus attack outcome: Success.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed Not Found; independent Verifier CVE support: Not Applicable. No separate online CVE validator was run.
+- Unsupported claim: Service.language=Java
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (Medium confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Apache ActiveMQ Broker reconnaissance.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-49270
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2023-46604
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2011-4905
+- Evidence-source URL: https://activemq.apache.org/
+- Evidence-source URL: https://www.google.com/goto?url=CAESggEB6zswFaTLcEVIvBRLmm9bOi1hKx_Dfu4Sjz093X-ZdzPcgEp34q7O7Ioo_C__dbxgFKkqgQlEYQs6mLxPPJHyzJdGzz4wVAXvV1gzLrngrOr9-m7NSeSKQN4Ej5l_V1dmSG8SHkQ92xhEgsCMybRyt5DRBfShdiAW6Je8Juzgcshn
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2026-49270/
+- Evidence-source URL: https://www.google.com/goto?url=CAESbgHrOzAVisub4YTQ0mg7-LcyM8gZIFObFRt4oMKQG3NeMIDOoPsLOKu1XSj_2gvq9avisfDJY4WCmMelrkExZruQe9T2Vp7VCv1vxA2QnEFD4BZhwGw_JJL-nIhoAFrv1eivETRM-ZvostijuLrr
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Restrict OpenWire (TCP/61616) exposure to trusted networks via firewall ACLs and segmentation; block unsolicited external access.
+- Enforce authentication/authorization on OpenWire transports; disable anonymous or unauthenticated access paths.
+- Upgrade Apache ActiveMQ to versions addressing known issues even though no exploit was observed: for CVE-2023-46604, upgrade to 5.15.16/5.16.7/5.17.6/5.18.3 (NVD: https://nvd.nist.gov/vuln/detail/CVE-2023-46604); for CVE-2026-49270, upgrade to 5.19.7 or 6.2.6 (NVD: https://nvd.nist.gov/vuln/detail/CVE-2026-49270).
+- Monitor and alert on OpenWire handshake-only connections that retrieve WireFormatInfo then terminate without authentication, as these may indicate reconnaissance.
+- Deploy IDS/IPS detections for known OpenWire exploit patterns (e.g., deserialization/type-manipulation indicative of CVE-2023-46604) and for unsolicited BrokerInfo metadata responses.
+- Enable detailed broker and network logging on connection attempts; rate-limit repeated connection bursts to reduce reconnaissance signal and potential DoS risk.
+- Review and rotate credentials or access tokens if any unintended exposure is suspected; apply least-privilege to broker users and connectors.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

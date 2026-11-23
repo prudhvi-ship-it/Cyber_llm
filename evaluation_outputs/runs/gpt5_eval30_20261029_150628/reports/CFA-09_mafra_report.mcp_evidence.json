@@ -1,0 +1,107 @@
+{
+  "status": "Valid",
+  "query": "Cacti Direct database tampering of Cacti backend via MySQL",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Cacti Command Injection Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Cacti Cacti: Cacti contains a command injection vulnerability that allows an unauthenticated user to execute code. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2022-46169 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-71287: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-71287",
+      "snippet": "Cacti's sanitize_sql_column (lib/functions.php) sanitizes user-supplied ORDER BY column names using the regex . Because this allowlist retains letters, digits, underscore, parentheses, and dot (intended to support expressions like COUNT(id) and table.column), a payload such as passes through completely unmodified.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2026-71287 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-39893: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39893",
+      "snippet": "Cacti is an open source performance and fault management framework. In versions 1.2.30 and prior, the rfilter request variable was concatenated into a RLIKE SQL clause without sanitization. The endpoint does not require authentication (graph viewing supports guest access via the configured guest user), so the SQLi was reachable pre-auth on installs with guest viewing enabled. This issue was fixed in version 1.2.31.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2026-39893 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2006-0146: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2006-0146",
+      "snippet": "The server.php test script in ADOdb for PHP before 4.70, as used in multiple products including (1) Mantis, (2) PostNuke, (3) Moodle, (4) Cacti, (5) Xaraya, (6) PHPOpenChat, (7) MAXdev MD-Pro, and (8) MediaBeez, when the MySQL root password is empty, allows remote attackers to execute arbitrary SQL commands via the sql parameter.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2006-0146 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-71287: Cacti SQL Injection Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2026-71287/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-71287 is a SQL injection vulnerability in Cacti's ORDER BY sanitization. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-71287 CVE-2026-71287: Cacti SQL Injection Vulnerability CVE-2026-71287 is a SQL injection flaw in Cacti that allows authenticated users to exploit the sanitize_sql_column() function. This post covers technical details, affected versions, impact, and mitigation steps. Published: August 6, 2026 Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2026-71287 Overview CVE-2026-71287 is a SQL injection vulnerability in Cacti, an open-source network monitoring and graphing platform. The flaw resides in the sanitize_sql_column() function within lib/functions.php, which sanitizes user-supplied ORDER BY column names using an overly permissive regex allowlist. Any authenticated Cacti user, regardless of privilege level, can inject SQL functions such as SLEEP() through the sort_column GE Authenticated attackers with any Cacti account can extract database contents, including credential hashes, through blind SQL injection in ORDER BY clauses that cannot be parameterized. Cacti (open-source network monitoring platform) lib/functions.php — sanitize_sql_column() function Scripts: user_log.php, utilities.php, user_domains.php, user_group_admin.php 2026-08-05 - CVE-2026-71287 published to NVD 2026-08-05 - Last updated in NVD database Technical Details for CVE-2026-71287 Cacti's sanitize_sql_column() function attempts to safely handle user-supplied ORDER BY column names by filtering input through the regex preg_replace('/[^a-zA-Z0-9_().]/', '', $column). The allowlist preserves letters, digits, underscore, parentheses, and dot to support legitimate expressions like COUNT(id) and table.column. This design decision leaves the door open to SQL function calls. A payload such as SLEEP(5) contains only allowlisted characters and passes through the sanitizer unchanged. The sanitized value is then concatenated directly into raw SQL ORDER BY clauses. ORDER BY clauses cannot be parameterized in prepared statements, so the vulnerability cannot be mitigated by binding parameters alone. The root cause is an incomplete character allowlist combined with unsafe string concatenation into SQL. The regex trusts any input composed of alphanumerics, underscores, dots, and parentheses. It does not validate that the resulting string is an actual column name from a known schema. Function invocations and nested SQL expressions therefore survive sanitization intact. An authenticated attacker sends a crafted HTTP GET request with the sort_column parameter set to a time-delay payload such as SLEEP(5) or a conditional expression like IF(SUBSTRING(user_auth.password,1,1)='a',SLEEP(5),0). The injected SQL executes against the Cacti database backend. Boolean and time-based inference techniques allow attackers to extract arbitrary data, including password hashes stored in user_auth, on See the Cacti functions.php source for the affected sanitizer implementation. Detection Methods for CVE-2026-71287 HTTP requests",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "cacti/CHANGELOG at develop",
+      "url": "https://github.com/Cacti/cacti/blob/develop/CHANGELOG",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Database Audit utility does not check database permissions. You have an error in your SQL syntax due to using table field without backtick. Ability to see ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-39893 – Pre-Auth SQL Injection – Cacti 1.2.30 ...",
+      "url": "https://www.ionix.io/threat-center/cve-2026-39893/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-39893 is a critical pre-authentication SQL injection vulnerability in Cacti, affecting all versions up to and including 1.2.30.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Blind SQL injection in Cacti (CVE-2023-51448) - vsociety",
+      "url": "https://www.vicarius.io/vsociety/posts/blind-sql-injection-in-cacti-cve-2023-51448",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This vulnerability pertains to a Blind SQL Injection (SQLi) within the SNMP Notification Receivers feature, specifically in the managers.php ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T23:42:52.423798+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2022-46169",
+    "CVE-2026-71287",
+    "CVE-2026-39893",
+    "CVE-2006-0146"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.ionix.io: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for publications-cnrc.canada.ca: ValueError: Only HTML/plaintext webpages are supported",
+    "Webpage read unavailable for docs.cacti.net: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

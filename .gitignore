@@ -23,3 +23,14 @@ __pycache__/
 .DS_Store
 Thumbs.db
 Microsoft.Services.Store.winmd
+
+# Local archives and logs
+*.zip
+*.log
+
+# Local databases and code backups
+/chroma_db/
+/chroma_db_v2/
+/evaluation/backup_before_graph_patch/
+/evaluation_outputs/runs/deepseek_r1_0528_30_20261025_202456/reports/CFA-11_mafra_report.mcp_evidence.json
+/evaluation_outputs/runs/deepseek_r1_0528_30_20261025_202456/reports/CFA-11_mafra_report.txt

@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "Next.js packet clues: header middleware subrequest",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-30218: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-30218",
+      "snippet": "Next.js is a React framework for building full-stack web applications. To mitigate CVE-2025-29927, Next.js validated the x-middleware-subrequest-id which persisted across multiple incoming requests. However, this subrequest ID is sent to all requests, even if the destination is not the same host as the Next.js application. Initiating a fetch request to a third-party within Middleware will send the x-middleware-subrequest-id to that third party. This vulnerability is fixed in 12.3.6, 13.5.10, 14.2.26, and 15.2.4.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-30218 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2024-51479: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-51479",
+      "snippet": "Next.js is a React framework for building full-stack web applications. In affected versions if a Next.js application is performing authorization in middleware based on pathname, it was possible for this authorization to be bypassed for pages directly under the application's root directory. For example: * [Not affected] `https://example.com/` * [Affected] `https://example.com/foo` * [Not affected] `https://example.com/foo/bar`. This issue is patched in Next.js `14.2.15` and later. If your Next.js application is hosted on Vercel, this vulnerability has been automatically mitigated, regardless of Next.js version. There are no official workarounds for this vulnerability.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2024-51479 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-57822: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-57822",
+      "snippet": "Next.js is a React framework for building full-stack web applications. Prior to versions 14.2.32 and 15.4.7, when next() was used without explicitly passing the request object, it could lead to SSRF in self-hosted applications that incorrectly forwarded user-supplied headers. This vulnerability has been fixed in Next.js versions 14.2.32 and 15.4.7. All users implementing custom middleware logic in self-hosted environments are strongly encouraged to upgrade and verify correct usage of the next() function.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-57822 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-16877: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-16877",
+      "snippet": "ZEIT Next.js before 2.4.1 has directory traversal under the /_next and /static request namespace, allowing attackers to obtain sensitive information.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-16877 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-29927: Next.js Middleware Authorization Bypass",
+      "url": "https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability in CVE-2025-29927 stems from a design flaw in how Next.js processes the x-middleware-subrequest header. This header was ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] Exploitation Across Different Next.js Versions CVE-2025-29927: Next.js Middleware Authorization Bypass - Technical Analysis Next.js is an open-source web framework built by Vercel that powers React-based apps with features like server-side and static rendering. Recently, a critical vulnerability (CVE) was disclosed that lets attackers bypass middleware-based authorization checks. The issue was originally discovered and analyzed by Rachid Allam (zhero). In this blog, we’ll break down the vulnerability and walk through their research and wi The vulnerability specifically affects the middleware functionality in Next.js, which is commonly used for implementing authorization, path rewriting, server-side redirects, and adding response headers such as Content Security Policy (CSP). All versions of Next.js from 11.1.4 through 13.5.6, 14.x before 14.2.25, and 15.x before 15.2.3 are affected by this vulnerability. The impact is particularly significant for applications that rely on middleware for implementing access controls, as attackers can gain unauthorized access to protected resources without authentication. Next.js deployments hosted on Vercel are automatically protected against this vulnerability, as mentioned in the official security advisory. However, self-hosted Next.js applications remain vulnerable unless patched or mitigated using the recommended workarounds. Next.js middlew",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-29927: Next.js Middleware Bypass Vulnerability ...",
+      "url": "https://www.picussecurity.com/resource/blog/cve-2025-29927-nextjs-middleware-bypass-vulnerability",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). By crafting a request with a specific x-middleware-subrequest value, attackers could trick the application into skipping middleware execution ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] CVE-2025-29927: Next.js Middleware Bypass Vulnerability Explained On March 21st, 2025, Vercel disclosed a critical vulnerability affecting Next.js middleware [1]. CVE-2025-29927 is an authorization bypass vulnerability that impacts the framework's middleware system, which is often used by developers to enforce authentication, authorization, path rewriting, server-side redirects, and security-related headers like Content Security Policy (CSP). Given the popularity of Next.js, with m In this blog, we explained how the Next.js CVE-2025-29927 vulnerability works and how organizations can defend against CVE-2025-29927 attacks. Next.js CVE-2025-29927 Vulnerability Explained Next.js is an open-source web development framework built on top of React, designed to make building fast, scalable, and user-friendly web applications. It is commonly used as a middleware, which allows developers to run custom code for tasks like authentication, redirects, and modifying responses before a request reaches the final page. On February 27th, 2025, security researchers reported to Vercel that Next.js is vulnerable to authentication bypass [2]. The vulnerability allows adversaries to gain unauthorized access to protected routes such as \"/dashboard/admin\". CVE-2025-29927 has a CVSS score of 9.1 (Critical). This vulnerability affects the Next.js versions below, and organizations are advised to patch thei",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Next.js Middleware Exploit: Deep Dive into CVE-2025- ...",
+      "url": "https://www.reddit.com/r/programming/comments/1jhloj4/nextjs_middleware_exploit_deep_dive_into/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). \"Next.js uses an internal header x-middleware-subrequest to prevent recursive requests from triggering infinite loops.\" JS library, custom ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "How Attackers Can Bypass Next.js Middleware With a ...",
+      "url": "https://traefik.io/blog/security-alert-how-attackers-can-bypass-next-js-middleware-with-a-single-http-header",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Importantly, the official workaround recommendation from Next.js is to prevent the x-middleware-subrequest header from reaching your ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Critical Vulnerability Every Next.js Developer Should Know About Did you know that a simple HTTP header manipulation could completely bypass your authentication and authorization systems in Next.js applications? Recently, a critical vulnerability (CVE-2025-29927) was disclosed in the popular Next.js framework, allowing attackers to circumvent middleware execution—including security checks—by leveraging an internal header. Understanding Next.js Architecture and Why It Matters According to Next.js documentation: Middleware [in Next.js] allows you to run code before a request is completed. Then, based on the incoming request, you can modify the response by rewriting, redirecting, modifying the request or response headers, or responding directly. By supplying a specific value to this header—easily inferred from the target application's structure—attackers can completely bypass Next.js middleware execution. For example, accessing a protected admin section at dashboard/panel/admin would simply require trying requests with headers like: The Response from Next.js",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:47:39.779819+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-30218",
+    "CVE-2024-51479",
+    "CVE-2025-57822",
+    "CVE-2017-16877"
+  ],
+  "retrieval_errors": []
+}

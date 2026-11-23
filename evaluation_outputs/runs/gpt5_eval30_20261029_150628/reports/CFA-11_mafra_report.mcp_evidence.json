@@ -1,0 +1,55 @@
+{
+  "status": "Valid",
+  "query": "Apache Airflow CeleryExecutor Redis task injection vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-30T00:00:16.248867+00:00",
+  "sources": [
+    {
+      "source_name": "Serper web result",
+      "title": "NVD-CVE-2020-11981 - NIST",
+      "url": "https://nvd.nist.gov/vuln/detail/cve-2020-11981",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). When using CeleryExecutor, if an attacker can connect to the broker (Redis, RabbitMQ) directly, it is possible to inject commands, resulting in ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T00:00:16.248867+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2020-11981: Airflow Celery Broker RCE Flaw",
+      "url": "https://www.miggo.io/vulnerability-database/cve/CVE-2020-11981",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache Airflow RCE in CeleryExecutor permits remote command execution on workers by injecting malicious tasks directly into the Celery message broker queue. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Concerned about an active attack path? Talk to our security experts and see Miggo in action. Miggo Vulnerability Database CVE-2020-11981 CVE-2020-11981: Is this CVE running in your environment? Easily map the attack path and prioritize which CVEs are a threat to your organization Vulnerability Intelligence Unlock WAF rules for this CVE Generate vendor-ready rules for the observed attack patterns, plus reasoning and safe deployment guidance Miggo KnowMiggo ProveMiggo ShieldMiggo ADR AI Runtime Vulnerability Prioritization1st and 3rd Party Application ProtectionRuntime Detection and ResponseBlock AI Attacks with Custom WAF Rule Secure AI Applications React2Shell BlogReports and Webinars NewsAcademyIndustriesMiggo Engineering Insights Predictive Vulnerability Database Terms of UsePrivacy Policy",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T00:00:16.248867+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Command Injection in Apache Airflow CeleryExecutor Broker ...",
+      "url": "https://mallory.ai/vulnerabilities/CVE-2020-11981",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-11981 is a command injection vulnerability in Apache Airflow 1.10.10 and earlier affecting deployments that use CeleryExecutor. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] CriticalPublic exploitVulnerability CVE-2020-11981 Command injection in Apache Airflow CeleryExecutor Published Jul 16, 2020 · Updated 14 days ago Trending this weekNot trendingOutside this week’s top 100 Mention activity · 30 daysNo mention activity in the last 30 days. In the wildNonePublic exploit, no exploitation reported VendorApache Software Foundation IdentifiersCVE-2020-11981CWE-78 · Improper Neutralization of Special… CVE-2020-11981 is a command injection vulnerability in Apache Airflow 1.10.10 and earlier when CeleryExecutor is used. Airflow executes commands received through its Redis or RabbitMQ message broker without adequate sanitization. An attacker able to insert a crafted broker message can cause a Celery worker to execute arbitrary commands. Unlike the related deserialization vulnerability CVE-2020-11982, this flaw does n Do you run this?See affected versions in your environment and whether adversaries are exploiting this vulnerability against assets like yours. Impact, mitigation & remediation What it means and what to do now: patch path, interim mitigations, and the assume-compromise checklist. What an attacker gets, and what they’ve been doing with it. Successful exploitation allows arbitrary command execution and potentially complete control of Airflow worker machines. Worker compromise can expose secrets, disrupt services, and provide access to additional machines in the infrastructure; these secondary consequences depend on the worker's access and environment. If you can’t patch tonight, do this now. Restrict Redis or RabbitMQ broker access to trusted Airflow components and remove brokers and management interfaces from public exposure. Enforce broker authentication and TLS. Validate broker-derived command input, allow only known commands, and sanitize unexpected input. Broker isolation remains important because mitigating the original command-execution flaw does not eliminate other risks from unauthorized queue a Patch, then assume compromise. Apply an Apache Airflow release containing the command injection fix. The exact first fixed Airflow release is not established by the available information; Airflow 2.10.4 is identified as mitigating the original command-execution variant. For affected FortiAnalyzer deployments, upgrade the 7.0 branch to 7.0.3 or later and the 6.4 branch to 6.4.8 or later using vendor-provided product upgrades. 1 exploit validated by Mallory's analysis. CVE-2020-11981-PoCRepository provides a working PoC for CVE-2020-11981 (Apache Airflow <=1.10.10) command injection/RCE when using CeleryExecutor with Redis as broker. The core exploit is `PoC/src/scanner.py` (Python): it connects to a specified Redis endpoint (`--targets ip:port`), crafts a Celery task message whose `task` is `airflow.executors.celery_executor.execute_command`, base64-encodes a body containing a com - `PoC/` contains a Dockerfile to run the scanner with Poetry dependencies (redis, scapy, psutil) and the PoC code under `PoC/src/`. - `Stand/` contains a docker-compose demo environment: Airflow 1.10.10 (custom image) configured for CeleryExecutor with Redis broker (no auth) and Postgres backend, plus Flower. Redis is exposed on",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T00:00:16.248867+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Command injection via Celery broker in Apache Airflow",
+      "url": "https://github.com/advisories/GHSA-976r-qfjj-c24w",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). When using CeleryExecutor, if an attacker can connect to the broker (Redis, RabbitMQ) directly, it is possible to inject commands, resulting in ... | Webpage text: You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Command injection via Celery broker in Apache Airflow to the GitHub Advisory Database An issue was found in Apache Airflow versions 1.10.10 and below. When using CeleryExecutor, if an attacker can connect to the broker (Redis, RabbitMQ) directly, it is possible to inject commands, resulting in the celery worker running arbitrary commands. https://nvd.nist.gov/vuln/detail/CVE-2020-11981 https://lists.apache.org/thread.html/r7255cf0be3566f23a768e2a04b40fb09e52fcd1872695428ba9afe91%40%3Cusers.airflow.apache.org%3E https://web.archive.org/web/20220427031325/https://issues.apache.org/jira/browse/AIRFLOW-6351 https://github.com/pypa/advisory-database/tree/main/vulns/apache-airflow/PYSEC-2020-15.yaml Published to the GitHub Advisory Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Vulnerable System Impact Metrics Subsequent System Impact Metrics Learn more about base metrics This metric reflects the context by which vulnerability exploitation is possible. This metric value (and consequently the resulting severity) will be larger the more remote (logically, and physically) an attacker can be in order to exploit the vulnerable system. The assumption is that the number of potential attackers for a vulnerability that could be exploited from across a network is larger than the number of poten This metric captures measurable actions that must be taken by the attacker to actively evade or circumvent existing built-in security-enhancing conditions in order to obtain a working exploit. These are conditions whose primary purpose is to increase security and/or increase exploit engineering complexity. A vulnerability exploitable without a target-specific variable has a lower complexity than a vulnerability that This metric captures the prerequisite deployment and execution conditions or variables of the vulnerable system that enable the attack. These differ from security-enhancing techniques/technologies (ref Attack Complexity) as the primary purpose of these conditions is not to explicitly mitigate attacks, but rather, emerge naturally as a consequence of the deployment and execution of the vulnerable system. This metric describes the level of privileges an attacker must possess prior to successfully exploiting the vulnerability. The method by which the attacker obtains privileged credentials prior to the attack (e.g., free trial accounts), is outside the scope of this metric. Generally, self-service provisioned accounts do not constitute a privilege requirement if the attacker can grant themselves privileges as part of t This metric captures the requirement for a human user, other than the attacker, to participate in the successful compromise of the vulnerable system. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. Vulnerable System Impact Metr",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T00:00:16.248867+00:00"
+    }
+  ],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "NVD lookup failed: TimeoutError: The read operation timed out",
+    "NVD lookup failed: TimeoutError: The read operation timed out",
+    "NVD web-candidate lookup failed: HTTPError: HTTP Error 503: Service Unavailable",
+    "NVD web-candidate lookup failed: HTTPError: HTTP Error 503: Service Unavailable"
+  ]
+}

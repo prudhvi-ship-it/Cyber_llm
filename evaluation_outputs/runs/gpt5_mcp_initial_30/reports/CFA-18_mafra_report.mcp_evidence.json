@@ -1,0 +1,107 @@
+{
+  "status": "Valid",
+  "query": "Redis 172.18.0.4 Unauthorized Redis cache access Unauthenticated Redis exposure; data read via GET without prior AUTH",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Cisco IOS XR Open Port Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Cisco IOS XR: Cisco IOS XR software health check opens TCP port 6379 by default on activation. An attacker can connect to the Redis instance on the open port and allow access to the Redis instance that is running within the NOSi container. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2022-20821 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2016-2121: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-2121",
+      "snippet": "A permissions flaw was found in redis, which sets weak permissions on certain files and directories that could potentially contain sensitive information. A local, unprivileged user could possibly use this flaw to access unauthorized system information.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2016-2121 for a product matching 'Redis'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-15047: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-15047",
+      "snippet": "The clusterLoadConfig function in cluster.c in Redis 4.0.2 allows attackers to cause a denial of service (out-of-bounds array index and application crash) or possibly have unspecified other impact by leveraging \"limited access to the machine.\"",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-15047 for a product matching 'Redis'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-5169: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-5169",
+      "snippet": "An issue was discovered in Hanwha Techwin Smart Security Manager Versions 1.5 and prior. Multiple Cross Site Request Forgery vulnerabilities have been identified. The flaws exist within the Redis and Apache Felix Gogo servers that are installed as part of this product. By issuing specific HTTP Post requests, an attacker can gain system level access to a remote shell session. Smart Security Manager Versions 1.5 and prior are affected by these vulnerabilities. These vulnerabilities can allow for remote code execution.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-5169 for a product matching 'Redis'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Troubleshooting Redis",
+      "url": "https://docs.gitlab.com/administration/redis/troubleshooting/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). If you get an error in GitLab like Redis::CannotConnectError: No sentinels available. , there may be something wrong with your configuration files or it can be ... | Webpage excerpt: Connect to the other Redis machines via TCP in 6379 Connect to the Redis machines via TCP in 6379 Basic Redis activity check Start Redis troubleshooting with a basic Redis activity check: Run gitlab-redis-cli --stat and observe the output while it runs. basic Redis functionality is working and GitLab can connect to it. Troubleshooting Redis replication",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Support Azure / Microsoft Entra RBAC/ACLS for Redis",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/issues/479281",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Similar to Support Azure Managed Identities for Blob Storage (#242245 - closed) Microsoft offers a password-free approach for Redis (Azure Cache ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "\"NOAUTH Authentication required\" Gitlab error with Azure ...",
+      "url": "https://stackoverflow.com/questions/60336948/noauth-authentication-required-gitlab-error-with-azure-cache-for-redis",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). I have created an Azure cache for Redis and I am trying to use it as external redis for Gitlab. My gitlab.rb is this: #external_url \"https://ci ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Redis cache read error prevents CAS users from remaining ...",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/issues/121670",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Problem. CAS users are signed out every handful of requests due to token validation incorrectly failing to retrieve the token.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T03:59:22.279450+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2016-2121",
+    "CVE-2017-15047",
+    "CVE-2017-5169",
+    "CVE-2022-20821"
+  ],
+  "retrieval_errors": [
+    "Webpage extraction skipped for gitlab.com: HTTPError: HTTP Error 302: Found",
+    "Webpage extraction skipped for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage extraction skipped for gitlab.com: HTTPError: HTTP Error 302: Found"
+  ]
+}

@@ -1,0 +1,120 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_1f05f3fc151172b2f34d
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event15_CVE-2021-45232_success_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Apache APISIX
+  Attack Type: Command Injection
+  Attack Success: Success
+  CVE: CVE-2022-24112
+  Overall Confidence: High
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-15_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-15_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-15_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Apache APISIX
+Associated CVE candidate (Analyst): CVE-2022-24112
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2022-24112
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0042-F000378-004]: POST /apisix/admin/migrate/import.
+- PCAP [E-S0042-F000378-009]: admin keyword observed.
+- PCAP [E-S0042-F000378-010]: popen(ngx.req.get_headers().
+- PCAP [E-S0042-F000389-013]: HTTP Status 200.
+- PCAP [E-S0042-F000389-014]: Content-Type: application/json; charset=utf-8.
+- PCAP [E-S0050-F000474-004]: GET /6cx5hN.
+- PCAP [E-S0050-F000474-007]: id.
+- PCAP [E-S0050-F000476-009]: HTTP Status 200.
+- PCAP [E-S0050-F000476-011]: uid=99.
+- PCAP [E-S0050-F000476-012]: gid=99.
+- PCAP [E-S0050-F000476-013]: Server response contains uid=99(nobody) (possible command output; correlate with request).
+- PCAP [E-S0050-F000476-014]: Server response contains gid=99(nobody) (possible command output; correlate with request).
+- ONLINE [CISA KEV] Apache APISIX Authentication Bypass Vulnerability: Apache APISIX: Apache APISIX contains an authentication bypass vulnerability that allows for remote code execution. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2022-24112 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-31908: NVD vulnerability record: Header injection vulnerability in Apache APISIX.
+
+The attacker can take advantage of certain configuration in forward-auth plugin to inject malicious headers.
+This issue affects Apache APISIX: from 2.12.0 through 3.15.0.
+
+Users are recommended to upgrade to version 3.16.0, which fixes the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-31908 Supports: Web-cited CVE-2026-31908 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-94212: NVD vulnerability record: Improper verification of cryptographic signature vulnerability in Apache APISIX.
+
+
+
+Any unauthenticated attacker could impersonate any user on every route protected by the saml-auth plugin under default configuration. This issue affects Apache APISIX: from 3.17.0 through 3.18.0.
+
+
+
+Users are recommended to upgrade to version 3.19.0, which fixes the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-94212 Supports: Web-cited CVE-2026-94212 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2022-24112: NVD vulnerability record: An attacker can abuse the batch-requests plugin to send requests to bypass the IP restriction of Admin API. A default configuration of Apache APISIX (with default API key) is vulnerable to remote code execution. When the admin key was changed or the port of Admin API was changed to a port different from the data panel, the impact is lower. But there is still a risk to bypass the IP restriction of Apache APISIX's data panel. There is a check in the batch-requests plugin which overrides the client IP with its real remote IP. But due to a bug in the code, this check can be bypassed. Source: https://nvd.nist.gov/vuln/detail/CVE-2022-24112 Supports: NVD lists CVE-2022-24112 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] API Gateway Security Best Practices | Apache APISIX: UNTRUSTED WEB RESEARCH (not PCAP evidence). Deploy rulesets targeting SQL injection, XSS, and command injection. Update rules regularly to address emerging attack vectors. Log and audit ... | Webpage text: 🤔 Introducing APISIX AI Gateway – Built for LLMs and AI workloads. Learn More securityapi-gatewaybest-practices API gateway security best practices protect API infrastructure at the edge by combining authentication, coarse-grained authorization, rate limiting, request validation, and traffic filtering before requests reach backend services. These controls reduce the attack surface and provide consistent protection for traffic routed through the gateway, while backend services remain responsible for business authorization and r Why API Gateway Security Matters The OWASP API Security Top 10 (2023 edition) ranks broken object-level authorization and broken authentication as its first two API risk categories. As organizations expose more application functionality through APIs, these interfaces require the same deliberate threat modeling and layered controls as the services behind them. The cost of getting API security wrong can be substantial. An API gateway sits at a useful enforcement point because it processes traffic routed through it and can apply common edge policies consistently, while application services continue to enforce their own authorization and data-protection rules. Understanding the threat landscape is essential for building an effective defense. The following categories represent the most frequent and damaging attack patterns targeting APIs today. Broken Object-Level Authorization (BOLA) BOLA attacks exploit weak authorization checks to access resources belonging to other users. An attacker modifies object identifiers in API requests (for example, changing /users/123/orders to /users/456/orders) to retrieve unauthorized data. BOLA remains one of the most exploited API vulnerability classes, particularly in organizations where API management and authorization enforcement have not kept pace with API pr SQL injection, NoSQL injection, and command injection remain persistent threats. Attackers embed malicious payloads in query parameters, headers, or request bodies. Despite being a well-known vulnerability class, injection attacks continue to appear frequently in web application security assessments. Weak or improperly implemented authentication mechanisms allow attackers to assume legitimate user identities. Common failures include missing token validation, weak password policies, credential stuffing vulnerabilities, and improper session management. APIs frequently return more data than the client needs, relying on the frontend to filter sensitive fields. Attackers bypass the frontend and consume raw API responses directly, gaining access to data never intended for display. This over-exposure is especially dangerous in mobile applications where API traffic is easily intercepted. Without appropriate traffic controls, automated clients can increase the rate of brute-force attempts, credential enumeration, or resource-exhaustion traffic against an API. Security Layers at the Gateway A defense-in-depth approach applies multiple security controls at the gateway layer, each addressing a distinct category of risk. For routes that require identity, the gateway can verify credentials before forwarding incoming requests. Common mechanisms include JWT validation, OAuth 2.0 token Source: https://apisix.apache.org/learning-center/api-gateway-security/
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-31908: Apache APISIX Header Injection ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-31908 is a header injection vulnerability in Apache APISIX that allows attackers to inject malicious headers through the forward-auth ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-31908 CVE-2026-31908: Apache APISIX Header Injection Vulnerability CVE-2026-31908 is a header injection vulnerability in Apache APISIX that allows attackers to inject malicious headers through the forward-auth plugin. This article covers technical details, affected versions, and mitigation. CVE-2026-31908 Overview CVE-2026-31908 is a header injection vulnerability in Apache APISIX, an open-source API gateway. The flaw resides in the forward-auth plugin, where specific configurations allow attackers to inject malicious HTTP headers into upstream requests. The vulnerability affects Apache APISIX versions 2.12.0 through 3.15.0 and is fixed in version 3.16.0. Attackers can exploit the issue over the network without authentication Unauthenticated attackers can inject arbitrary headers through the forward-auth plugin, enabling authentication bypass, request smuggling, and impersonation against upstream services. Apache APISIX 2.12.0 through 3.15.0 Deployments using the forward-auth plugin with susceptible configurations API gateway instances exposed to untrusted network traffic 2026-04-14 - CVE-2026-31908 published to NVD 2026-04-14 - Apache project published advisory to the dev mailing list 2026-04-17 - Last updated in NVD database Technical Details for CVE-2026-31908 Apache APISIX provides a forward-auth plugin that delegates authentication decisions to an external service. The plugin forwards client requests to an authentication endpoint and propagates response headers back to the upstream service. CVE-2026-31908 stems from insufficient sanitization of headers returned by the authentication service or supplied through request input. Attackers can manipulate the plugin configurat The root cause is improper neutralization of special elements when constructing HTTP headers within the forward-auth plugin. The plugin fails to validate or filter header names and values before passing them to the upstream request, violating header plane separation as described in CWE-75. Configurations that broaden which headers are forwarded amplify the issue by accepting attacker-controlled values. An unauthenticated remote attacker sends crafted HTTP requests to an APISIX route that uses the forward-auth plugin. By controlling input that influences forwarded headers, the attacker injects headers such as X-User, Authorization, or arbitrary custom headers consumed by upstream applications. Upstream services then act on those headers, allowing identity spoofing or privilege escalation depending on backend trust a No public proof-of-concept code is currently available. Refer to the Apache Mailing List Discussion and the Openwall OSS Security Update for technical details. Detection Methods for CVE-2026-31908 Unexpected or duplicated HTTP headers in upstream access logs originating from APISIX nodes Requests to routes configured with the forward-auth plugin containing CRLF sequences or unusual header names in client-supplied fields Upstream authentication bypass events where identity headers (e.g., X-User, X-Forwarded-User) carry attack Source: https://www.sentinelone.com/vulnerability-database/cve-2026-31908/
+- ONLINE RESEARCH LEAD [Serper web result] Apache APISIX User Impersonation Risk and Route ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache APISIX fixes critical flaws enabling user impersonation and access bypass. Attackers can pretend to be another user on an affected login ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Two serious PHP flaws could let an attacker run code without logging in. See which setups and PHP versions are affected× Subscribe to Our Newsletters Subscribe to Our Newsletters How the Login Flaw Allows User Impersonation How Encoded Web Addresses Can Reach Protected Applications Deploy the Fix and Test Access What Linux and Kubernetes Operators Should Check Apache APISIX Vulnerabilities Let Attackers Impersonate Users and Bypass Protected Routes security advisory apache user impersonation api gateway route overlap saml-auth Apache detailed two Apache APISIX vulnerabilities in notices issued on October 1, 2026. Attackers can pretend to be another user on an affected login route, or reach a protected destination through an overlapping public route. Version 3.19.0 fixes both. As an API gateway, APISIX receives requests before an application does and applies the rules for who may reach it. An application relying on those checks needs the gateway to accept the right person and the right destination. For the login flaw, look for saml-auth. This optional feature lets a service accept a user's identity from another login provider. It uses Security Assertion Markup Language, or SAML, to carry that information. The vulnerable setup is saml-auth's default configuration. The second flaw concerns routing rules: it needs a public rule and a protected rule that overlap. How the Login Flaw Allows User Impersonation CVE-2026-94212 affects APISIX 3.17.0 through 3.18.0. Apache’s SAML advisory describes the default saml-auth setup, in which a caller can pose as any user without having logged in. Upgrading to 3.19.0 repairs that behavior. The receiving application still decides what an account may do. But if it bases that decision on the identity APISIX supplies, accepting the wrong person at the gateway can undermine the application's check. With this flaw, an attacker can supply a claimed identity without completing a genuine login. That is the distinction to examine in an affected service. Consider a route that lets an administrator change account settings. If it trusts the identity supplied by an affected gateway, that is a route worth examining closely. This is an illustration of the access check involved, not a claim that every APISIX installation exposes administrative controls. How Encoded Web Addresses Can Reach Protected Applications CVE-2026-94269 affects APISIX 2.14.1 through 3.18.0. Apache’s route advisory says a crafted encoded path can reach a protected backend when a permissive route overlaps a protected one. A route tells APISIX where to send a request and which access checks to apply. Web addresses can represent certain characters using encoded sequences. A gateway rule may treat an encoded address as public; after the address is interpreted for the receiving service, it may identify a protected destination. Apache describes a mismatch between the route and the upstream, meaning the service receiving the traffic. The overlap between public and protected routes is essential to the issue. A useful routing test follows a request through both layers. Save the address APISIX accepted and the one the application received. Do they st Source: https://linuxsecurity.com/news/security-vulnerabilities/apisix-api-gateway-security-user-impersonation
+- ONLINE RESEARCH LEAD [Serper web result] Apache APISIX Header Injection Vulnerability CVE-2026 ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache APISIX versions 2.12.0 through 3.15.0 are vulnerable to a critical header injection vulnerability. This can lead to authentication ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] 🚨Critical Risk🚨: Apache APISIX versions 2.12.0 through 3.15.0 are vulnerable to a critical header injection vulnerability (CVE-2026-31908). This can lead to authentication bypass, privilege escalation, and unauthorized access to protected resources. This issue highlights the importance of API security. #Apache #APISIX #vulnerability #owasp #APIsecurity 🔐 To view or add a comment, sign in API Security Best Practices Securing APIs in Cloud Services Significance of API and Cloud Security How to Ensure API Security in Development Explore content categories CareerProductivityFinanceSoft Skills & Emotional IntelligenceProject ManagementEducationShow more Source: https://www.linkedin.com/posts/threatstats_apache-apisix-vulnerability-activity-7451683811215585280-dOaR
+
+Verification Summary:
+- Affected service: Apache APISIX.
+- Attack type: Command Injection.
+- Attack technique: Command Execution via HTTP Request.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2022-24112.
+- CVE assessment: Analyst proposed CVE-2022-24112; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Apache APISIX 2.9 command injection vulnerability packet clues: endpoint apisix migrate import; endpoint lease grant.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-31908
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-94212
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2022-24112
+- Evidence-source URL: https://apisix.apache.org/learning-center/api-gateway-security/
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2026-31908/
+- Evidence-source URL: https://linuxsecurity.com/news/security-vulnerabilities/apisix-api-gateway-security-user-impersonation
+- Evidence-source URL: https://www.linkedin.com/posts/threatstats_apache-apisix-vulnerability-activity-7451683811215585280-dOaR
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for kavigihan.medium.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 5 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply updates per vendor instructions to mitigate CVE-2022-24112.
+- Implement strict access controls and authentication mechanisms for the Admin API.
+- Regularly audit and monitor API traffic for suspicious activities.
+- Deploy rulesets targeting command injection and update them regularly.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

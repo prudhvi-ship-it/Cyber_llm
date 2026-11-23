@@ -1,0 +1,529 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 4
+TCP Stream IDs: 0, 1, 2, 3
+Protocol Counts: ARP=2, TCP=44, HTTP=8
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:59412           <-> 172.18.0.2:8080                  6 11 kB           8 691 bytes      14 12 kB         0.000212000         3.0020
+172.18.0.1:59434           <-> 172.18.0.2:8080                  6 11 kB           8 713 bytes      14 12 kB         4.453753000         0.0383
+172.18.0.1:59414           <-> 172.18.0.2:8080                  5 459 bytes       7 686 bytes      12 1145 bytes     2.989548000         0.0699
+172.18.0.1:59422           <-> 172.18.0.2:8080                  5 1175 bytes       7 2002 bytes      12 3177 bytes     4.432555000         0.0236
+================
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0002-F000032-003 | client->server] PUT /sessions/absholi7ly.session
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:59412 -> 172.18.0.2:8080 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59412 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:59412 -> 172.18.0.2:8080 (HTTP)
+- [E-S0000-F000012-012 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59412 (HTTP)
+- [E-S0000-F000006-004 | client->server] GET /index.jsp
+- [E-S0000-F000006-005 | client->server] Host: 172.17.0.1:8080
+- [E-S0000-F000006-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0000-F000008-007 | server->client] HTTP Status 200
+- [E-S0000-F000008-008 | server->client] Content-Type: text/html;charset=UTF-8
+- [E-S0000-F000012-013 | server->client] GET Involved</h4>
+- [E-S0000-F000008-009 | server->client] id
+- [E-S0000-F000008-010 | server->client] org/confluence/display/TOMCAT/Specifications
+- [E-S0000-F000008-011 | server->client] org/confluence/display/TOMCAT/Tomcat+Versions
+- [E-S0001-F000015-001 | client->server] 172.18.0.1:59414 -> 172.18.0.2:8080 (TCP)
+- [E-S0001-F000016-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59414 (TCP)
+- [E-S0001-F000020-006 | client->server] 172.18.0.1:59414 -> 172.18.0.2:8080 (HTTP)
+- [E-S0001-F000024-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59414 (HTTP)
+- [E-S0001-F000018-003 | client->server] PUT /check.txt
+- [E-S0001-F000018-004 | client->server] Host: 172.17.0.1:8080
+- [E-S0001-F000018-005 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0001-F000024-008 | server->client] HTTP Status 201
+- [E-S0002-F000029-001 | client->server] 172.18.0.1:59422 -> 172.18.0.2:8080 (TCP)
+- [E-S0002-F000030-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59422 (TCP)
+- [E-S0002-F000034-006 | client->server] 172.18.0.1:59422 -> 172.18.0.2:8080 (HTTP)
+- [E-S0002-F000036-009 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59422 (HTTP)
+- [E-S0002-F000032-003 | client->server] PUT /sessions/absholi7ly.session
+- [E-S0002-F000032-004 | client->server] Host: 172.17.0.1:8080
+- [E-S0002-F000032-005 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0002-F000036-010 | server->client] HTTP Status 409
+- [E-S0002-F000036-011 | server->client] Content-Type: text/html;charset=utf-8
+- [E-S0002-F000034-007 | client->server] cmd.exe
+- [E-S0002-F000034-008 | client->server] Lorg/apache/commons/collections/Transformer
+- [E-S0003-F000039-001 | client->server] 172.18.0.1:59434 -> 172.18.0.2:8080 (TCP)
+- [E-S0003-F000040-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59434 (TCP)
+- [E-S0003-F000043-003 | client->server] 172.18.0.1:59434 -> 172.18.0.2:8080 (HTTP)
+- [E-S0003-F000050-013 | server->client] 172.18.0.2:8080 -> 172.18.0.1:59434 (HTTP)
+- [E-S0003-F000043-004 | client->server] GET /
+- [E-S0003-F000043-005 | client->server] Host: 172.17.0.1:8080
+- [E-S0003-F000043-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0003-F000046-008 | server->client] HTTP Status 200
+- [E-S0003-F000046-009 | server->client] Content-Type: text/html;charset=UTF-8
+- [E-S0003-F000050-014 | server->client] GET Involved</h4>
+- [E-S0003-F000043-007 | client->server] Cookie header observed: [REDACTED]
+- [E-S0003-F000046-010 | server->client] id
+- [E-S0003-F000046-011 | server->client] org/confluence/display/TOMCAT/Specifications
+- [E-S0003-F000046-012 | server->client] org/confluence/display/TOMCAT/Tomcat+Versions
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:59412 -> 172.18.0.2:8080; packets=14; client->server=8, server->client=6; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.1:59414 -> 172.18.0.2:8080; packets=12; client->server=7, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 2: 172.18.0.1:59422 -> 172.18.0.2:8080; packets=12; client->server=7, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.1:59434 -> 172.18.0.2:8080; packets=14; client->server=8, server->client=6; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Apache Tomcat 9.0.97
+Relevant Events: The client at IP address 172.18.0.1 accessed the server at IP address 172.18.0.2 on port 8080, requesting the `/index.jsp` page. The server responded with an HTTP 200 status, indicating successful retrieval of the requested page.
+Malicious Activities: None
+Attack Success: None
+Evidence: 
+- [E-S0000-F000006-004 | client->server | epoch=1753679693.340998] GET /index.jsp
+- [E-S0000-F000008-007 | server->client | epoch=1753679696.324261] HTTP Status 200
+- [E-S0000-F000008-010 | server->client | epoch=1753679696.324261] org/confluence/display/TOMCAT/Specifications
+- [E-S0000-F000008-011 | server->client | epoch=1753679696.324261] org/confluence/display/TOMCAT/Tomcat+Versions
+
+The flow indicates normal access to the Apache Tomcat server's default page, with no evidence of malicious activity or exploitation attempts.
+
+--- Stream 1 [VALID] ---
+Service: Apache Tomcat 9.0.97
+
+Relevant Events: The client at IP address 172.18.0.1 sent a PUT request to the server at IP address 172.18.0.2 on port 8080, targeting the `/check.txt` file. The server responded with an HTTP 201 status, indicating successful creation or update of the file.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence: 
+- [E-S0001-F000018-003 | client->server | epoch=1753679696.330613] PUT /check.txt
+- [E-S0001-F000018-004 | client->server | epoch=1753679696.330613] Host: 172.17.0.1:8080
+- [E-S0001-F000018-005 | client->server | epoch=1753679696.330613] User-Agent: python-requests/2.22.0
+- [E-S0001-F000024-008 | server->client | epoch=1753679696.368725] HTTP Status 201
+
+The flow indicates a normal file upload operation to the Apache Tomcat server, with no evidence of malicious activity or exploitation attempts.
+
+--- Stream 2 [VALID] ---
+Service: Apache Tomcat 9.0.97
+
+Relevant Events: The client at IP address 172.18.0.1 attempted to upload a session file to the server at IP address 172.18.0.2 on port 8080 using a PUT request. The server responded with an HTTP 409 status, indicating a conflict with the current state of the target resource.
+
+Malicious Activities: The payload contains serialized Java objects, including classes from the Apache Commons Collections library, which are often associated with deserialization attacks. The presence of `org.apache.commons.collections.Transformer` and `java.lang.Runtime` suggests an attempt to exploit a deserialization vulnerability to execute a command (`cmd.exe /c touch /tmp/test_poc`).
+
+Attack Success: Failed
+
+Evidence:
+- [E-S0002-F000032-003 | client->server | epoch=1753679697.773334] PUT /sessions/absholi7ly.session
+- [E-S0002-F000034-007 | client->server | epoch=1753679697.773818] cmd.exe
+- [E-S0002-F000034-008 | client->server | epoch=1753679697.773818] Lorg/apache/commons/collections/Transformer
+- [E-S0002-F000036-010 | server->client | epoch=1753679697.789113] HTTP Status 409
+
+The flow indicates an attempted deserialization attack on the Apache Tomcat server, but it was unsuccessful due to the server responding with a 409 Conflict status.
+
+--- Stream 3 [VALID] ---
+Service: Apache Tomcat 9.0.97
+
+Relevant Events: The client at IP address 172.18.0.1 accessed the server at IP address 172.18.0.2 on port 8080, requesting the root path `/`. The server responded with an HTTP 200 status, indicating successful retrieval of the requested page.
+
+Malicious Activities: None
+
+Attack Success: None
+
+Evidence:
+- [E-S0003-F000043-004 | client->server | epoch=1753679697.795701] GET /
+- [E-S0003-F000046-008 | server->client | epoch=1753679697.818973] HTTP Status 200
+- [E-S0003-F000046-009 | server->client | epoch=1753679697.818973] Content-Type: text/html;charset=UTF-8
+
+The flow indicates normal access to the Apache Tomcat server's default page, with no evidence of malicious activity or exploitation attempts.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache Tomcat",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Deserialization",
+    "technique": "Java Deserialization",
+    "success": "Fail",
+    "evidence": [
+      "E-S0002-F000032-003",
+      "E-S0002-F000034-007",
+      "E-S0002-F000034-008",
+      "E-S0002-F000036-010"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2015-4852",
+    "confidence": "Medium",
+    "reason": "The presence of serialized Java objects, including classes from the Apache Commons Collections library, suggests an attempt to exploit a deserialization vulnerability."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache Tomcat",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Deserialization",
+    "technique": "Java Deserialization",
+    "success": "Fail",
+    "evidence": [
+      "E-S0002-F000032-003",
+      "E-S0002-F000034-007",
+      "E-S0002-F000034-008",
+      "E-S0002-F000036-010"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2020-9484",
+    "confidence": "Medium",
+    "reason": "The packet evidence shows an attempted deserialization attack using Apache Commons Collections, which aligns with CVE-2020-9484. This CVE involves deserialization vulnerabilities in Apache Tomcat when certain conditions are met, such as using the PersistenceManager with a FileStore and a lax sessionAttributeValueClassNameFilter."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0002-F000032-003",
+    "E-S0002-F000034-007",
+    "E-S0002-F000034-008",
+    "E-S0002-F000036-010"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Apache Tomcat
+Attack Type: Deserialization
+Attack Success: Fail
+CVE: CVE-2020-9484
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: Medium
+Overall Confidence: High
+Score: 5/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Apache Tomcat 9.0.97 deserialization vulnerability packet clues: endpoint sessions absholi7ly session
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T02:16:25.770771+00:00
+Candidate CVEs: CVE-2025-24813, CVE-2020-9484, CVE-2026-66713
+Sources: 7
+
+Source 1: NIST NVD
+Title: CVE-2025-24813: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-24813
+Summary: Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat.
+
+This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.2, from 10.1.0-M1 through 10.1.34, from 9.0.0.M1 through 9.0.98.
+The following versions were EOL at the time the CVE was created but are 
+known to be affected: 8.5.0 though 8.5.100. Other, older, EOL versions 
+may also be affected.
+
+
+If all of the following were true, a malicious user was able to view       security sensitive files and/or inject content into those files:
+- writes enabled for the default servlet (disabled by default)
+- support for partial PUT (enabled by default)
+- a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads
+- attacker knowledge of the names of security sensitive files being uploaded
+- the security sensitive files also being uploaded via partial PUT
+
+If all of the following were true, a malicious user was able to       perform remote code execution:
+- writes enabled for the default servlet (disabled by default)
+- support for partial PUT (enabled by default)
+- application was using Tomcat's file based session persistence with the default storage location
+- application included a library that may be leveraged in a deserialization attack
+
+Users are recommended to upgrade to version 11.0.3, 10.1.35 or 9.0.99, which fixes the issue.
+Supports: Web-cited CVE-2025-24813 was retrieved independently from NVD; applicability and exploitation are unverified.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2020-9484: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2020-9484
+Summary: When using Apache Tomcat versions 10.0.0-M1 to 10.0.0-M4, 9.0.0.M1 to 9.0.34, 8.5.0 to 8.5.54 and 7.0.0 to 7.0.103 if a) an attacker is able to control the contents and name of a file on the server; and b) the server is configured to use the PersistenceManager with a FileStore; and c) the PersistenceManager is configured with sessionAttributeValueClassNameFilter="null" (the default unless a SecurityManager is used) or a sufficiently lax filter to allow the attacker provided object to be deserialized; and d) the attacker knows the relative file path from the storage location used by FileStore to the file the attacker has control over; then, using a specifically crafted request, the attacker will be able to trigger remote code execution via deserialization of the file under their control. Note that all of conditions a) to d) must be true for the attack to succeed.
+Supports: NVD lists CVE-2020-9484 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2026-66713: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-66713
+Summary: Deserialization of Untrusted Data (CWE-502) in the Tribes-based clustering component
+
+  in Apache Software Foundation Apache Axis2/Java through 2.0.0 on Apache Tomcat
+
+  (only when Tribes clustering is enabled, which is off by default) allows an
+
+  unauthenticated remote attacker with network access to the clustering port to
+
+  execute arbitrary code via a crafted serialized Java object delivered to the cluster
+
+  channel and deserialized in
+
+  org.apache.axis2.clustering.tribes.Axis2ChannelListener#messageReceived. Users are
+
+  recommended to upgrade to version 2.0.1, which fixes this issue by removing the
+
+  clustering feature entirely.
+Supports: NVD lists CVE-2026-66713 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: Official vendor webpage
+Title: Apache Tomcat 9 vulnerabilities
+URL: https://tomcat.apache.org/security-9.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Apache Tomcat 9.x vulnerabilities This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the Apache Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw is known to affect, and where a flaw has not been verified list the version with a question mark. Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat provides a workaround are listed at the end of this page. Please note that binary patches are never provided. If you need to apply a source code patch, use the building instructions for the Apache Tomcat version that you are using. For Tomcat 9.0 those are Both files can be found in the webapps/docs subdirectory of a binary distribution. You may also want to review the page in the documentation. If you need help on building or configuring Tomcat or other help on following the instructions to mitigate the known vulnerabilities listed here, please send your questions to the public Tomcat Users mailing list If you have encountered an unlisted security vulnerability or other unexpected behaviour that has security impact, or if the descriptions here are incomplete, please report them privately to the Tomcat Security Team. Thank you. Fixed in Apache Tomcat 9.0.123 Fixed in Apache Tomcat 9.0.122 Fixed in Apache Tomcat 9.0.121 Fixed in Apache Tomcat 9.0.120 Fixed in Apache Tomcat 9.0.119 Fixed in Apache Tomcat 9.0.118 Fixed in Apache Tomcat 9.0.117 Fixed in Apache Tomcat 9.0.116 Fixed in Apache Tomcat 9.0.115 Fixed in Apache Tomcat 9.0.113 Fixed in Apache Tomcat 9.0.110 Fixed in Apache Tomcat 9.0.109 Fixed in Apache Tomcat 9.0.108 Fixed in Apache Tomcat 9.0.107 Fixed in Apache Tomcat 9.0.106 Fixed in Apache Tomcat 9.0.105 Fixed in Apache Tomcat 9.0.104 Fixed in Apache Tomcat 9.0.102 Fixed in Apache Tomcat 9.0.99 Fixed in Apache Tomcat 9.0.98 Fixed in Apache Tomcat 9.0.97 Fixed in Apache Tomcat 9.0.96 Fixed in Apache Tomcat 9.0.90 Fixed in Apache Tomcat 9.0.86 Fixed in Apache Tomcat 9.0.83 Fixed in Apache Tomcat 9.0.81 Fixed in Apache Tomcat 9.0.80 Fixed in Apache Tomcat 9.0.75 Fixed in Apache Tomcat 9.0.74 Fixed in Apache Tomcat 9.0.72 Fixed in Apache Tomcat 9.0.71 Fixed in Apache Tomcat 9.0.69 Fixed in Apache Tomcat 9.0.68 Fixed in Apache Tomcat 9.0.65 Fixed in Apache Tomcat 9.0.63 Fixed in Apache Tomcat 9.0.62 Fixed in Apache Tomcat 9.0.58 Fixed in Apache Tomcat 9.0.54 Fixed in Apache Tomcat 9.0.48 Fixed in Apache Tomcat 9.0.46 Fixed in Apache Tomcat 9.0.45 Fixed in Apache Tomcat 9.0.44 Fixed in Apache Tomcat 9.0.43 Fixed in Apache Tomcat 9.0.40 Fixed in Apache Tomcat 9.0.38 Fixed in Apache Tomcat 9.0.37 Fixed in Apache Tomcat 9.0.36 Fixed in Apache Tomcat 9.0.35 Fixed in Apache Tomcat 9.0.31 Fixed in Apache Tomcat 9.0.30 Fixed in Apache Tomcat 9.0.29 Fixed in Apache Tomcat 9.0.21 Fixed in Apache Tomcat 9.0.20 Fixed in Apache Tomcat 9.0.19 Fixed in Apache Tomcat 9.0.16 Fixed in Apache Tomcat 9.0.12 Fixed in Apache Tomcat 9.0.10 Fixed in Apache Tomcat 9.0.9 Fixed in Ap
+Supports: None
+Contradicts: None
+
+Source 5: Serper web result
+Title: CVE-2025-24813-PoC-Apache-Tomcat-RCE
+URL: https://github.com/Mattb709/CVE-2025-24813-PoC-Apache-Tomcat-RCE
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). A proof-of-concept exploit for the Apache Tomcat deserialization vulnerability (CVE-2025-24813). This tool demonstrates how attackers could exploit insecure ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Imperva Protects Against Apache Tomcat Deserialization ...
+URL: https://www.imperva.com/blog/imperva-protects-against-apache-tomcat-deserialization-vulnerability/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). A newly disclosed vulnerability, CVE-2025-24813, affecting Apache Tomcat, has been identified as a high-risk path equivalence vulnerability that ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Home > Blog > Imperva Protects Against Apache Tomcat Deserialization Vulnerability Imperva Protects Against Apache Tomcat Deserialization Vulnerability A newly disclosed vulnerability, CVE-2025-24813, affecting Apache Tomcat, has been identified as a high-risk path equivalence vulnerability that allows attackers to manipulate filenames with internal dots (.) under specific conditions, leading to unauthorized file access, modification, and potential remote code execution (RCE). The flaw is particularly dangerous when combined with partial PUT request support and defa If successfully exploited, CVE-2025-24813 could allow: Unauthorized file modification: Attackers could overwrite critical application files, logs, or configuration settings. Information Disclosure: Sensitive files could be exposed, leading to data leaks. Remote Code Execution (RCE): Could be possible if an attacker can modify a security-sensitive file in a way that enables execution of arbitrary code. Imperva customers are protected against CVE-2025-24813. Apache Tomcat is a widely used open-source Java-based web server and servlet container that supports JavaServer Pages (JSP) and other Java-based applications. CVE-2025-24813 arises from improper handling of path equivalence in Apache Tomcat, particularly when processing filenames containing internal dots (.). Under certain conditions—such as default servlet write permissions enabled and partial PUT requests supported The following Apache Tomcat versions are confirmed to be affected: Tomcat 9.0.0.M1 to 9.0.98 Tomcat 10.1.0-M1 to 10.1.34 Tomcat 11.0.0-M1 to 11.0.2 Apache has released patches addressing this vulnerability in the latest versions. Organizations using older, unsupported versions of Tomcat should prioritize upgrades to patched releases, or apply mitigations where upgrading is not possible. Imperva protects against CVE-2025-24813. Since its release, we’ve seen over 26,000 distinct attack attempts targeting sites all across the globe. Attack data shows that 97% of analyzed IPs involved in exploitation attempts are classified as high-risk, stressing the importance of threat intelligence in preventative security. United States is by far the most frequently targeted country, at 66%, although we’ve seen attacks on almost every continent. Attackers primarily target financial and business sites, which is common, as these industries handle large volumes of sensitive data, financial transactions, and valuable credentials, making them lucrative targets for fraud and data theft. CVE-2025-24813 poses a risk to organizations running vulnerable Apache Tomcat instances, particularly those relying on session persistence mechanisms. By applying patches, implementing proper configurations, and utilizing security solutions like Imperva Web Application Firewall (WAF)—which protects against CVE-2025-24813—businesses can effectively mitigate the risks associated with this vulnerability. Imperva Cloud WAF customers are protected against this vulnerability out-of-the-box. A mitigation for on-premises WAF Gateway customers is available in ADC content. For organizations seeking enhanced protection against web application threats
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Apache Tomcat Vulnerabilities
+URL: https://www.hhs.gov/sites/default/files/apache-tomcat-vulnerabilities-sector-alert-tlpclear-r.pdf
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). An insecure deserialization vulnerability allows an attacker to potentially manipulate or craft malicious serialized data in such a way that an ...
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for www.hhs.gov: ValueError: Only HTML/plaintext webpages are supported | Webpage read unavailable for www.sangfor.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0002-F000032-003]: PUT /sessions/absholi7ly.session.
+- PCAP [E-S0002-F000034-007]: cmd.exe.
+- PCAP [E-S0002-F000034-008]: Lorg/apache/commons/collections/Transformer.
+- PCAP [E-S0002-F000036-010]: HTTP Status 409.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-24813: NVD vulnerability record: Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat.
+
+This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.2, from 10.1.0-M1 through 10.1.34, from 9.0.0.M1 through 9.0.98.
+The following versions were EOL at the time the CVE was created but are 
+known to be affected: 8.5.0 though 8.5.100. Other, older, EOL versions 
+may also be affected.
+
+
+If all of the following were true, a malicious user was able to view       security sensitive files and/or inject content into those files:
+- writes enabled for the default servlet (disabled by default)
+- support for partial PUT (enabled by default)
+- a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads
+- attacker knowledge of the names of security sensitive files being uploaded
+- the security sensitive files also being uploaded via partial PUT
+
+If all of the following were true, a malicious user was able to       perform remote code execution:
+- writes enabled for the default servlet (disabled by default)
+- support for partial PUT (enabled by default)
+- application was using Tomcat's file based session persistence with the default storage location
+- application included a library that may be leveraged in a deserialization attack
+
+Users are recommended to upgrade to version 11.0.3, 10.1.35 or 9.0.99, which fixes the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-24813 Supports: Web-cited CVE-2025-24813 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2020-9484: NVD vulnerability record: When using Apache Tomcat versions 10.0.0-M1 to 10.0.0-M4, 9.0.0.M1 to 9.0.34, 8.5.0 to 8.5.54 and 7.0.0 to 7.0.103 if a) an attacker is able to control the contents and name of a file on the server; and b) the server is configured to use the PersistenceManager with a FileStore; and c) the PersistenceManager is configured with sessionAttributeValueClassNameFilter="null" (the default unless a SecurityManager is used) or a sufficiently lax filter to allow the attacker provided object to be deserialized; and d) the attacker knows the relative file path from the storage location used by FileStore to the file the attacker has control over; then, using a specifically crafted request, the attacker will be able to trigger remote code execution via deserialization of the file under their control. Note that all of conditions a) to d) must be true for the attack to succeed. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-9484 Supports: NVD lists CVE-2020-9484 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-66713: NVD vulnerability record: Deserialization of Untrusted Data (CWE-502) in the Tribes-based clustering component
+
+  in Apache Software Foundation Apache Axis2/Java through 2.0.0 on Apache Tomcat
+
+  (only when Tribes clustering is enabled, which is off by default) allows an
+
+  unauthenticated remote attacker with network access to the clustering port to
+
+  execute arbitrary code via a crafted serialized Java object delivered to the cluster
+
+  channel and deserialized in
+
+  org.apache.axis2.clustering.tribes.Axis2ChannelListener#messageReceived. Users are
+
+  recommended to upgrade to version 2.0.1, which fixes this issue by removing the
+
+  clustering feature entirely. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-66713 Supports: NVD lists CVE-2026-66713 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] Apache Tomcat 9 vulnerabilities: UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Apache Tomcat 9.x vulnerabilities This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the Apache Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw is known to affect, and where a flaw has not been verified list the version with a question mark. Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat provides a workaround are listed at the end of this page. Please note that binary patches are never provided. If you need to apply a source code patch, use the building instructions for the Apache Tomcat version that you are using. For Tomcat 9.0 those are Both files can be found in the webapps/docs subdirectory of a binary distribution. You may also want to review the page in the documentation. If you need help on building or configuring Tomcat or other help on following the instructions to mitigate the known vulnerabilities listed here, please send your questions to the public Tomcat Users mailing list If you have encountered an unlisted security vulnerability or other unexpected behaviour that has security impact, or if the descriptions here are incomplete, please report them privately to the Tomcat Security Team. Thank you. Fixed in Apache Tomcat 9.0.123 Fixed in Apache Tomcat 9.0.122 Fixed in Apache Tomcat 9.0.121 Fixed in Apache Tomcat 9.0.120 Fixed in Apache Tomcat 9.0.119 Fixed in Apache Tomcat 9.0.118 Fixed in Apache Tomcat 9.0.117 Fixed in Apache Tomcat 9.0.116 Fixed in Apache Tomcat 9.0.115 Fixed in Apache Tomcat 9.0.113 Fixed in Apache Tomcat 9.0.110 Fixed in Apache Tomcat 9.0.109 Fixed in Apache Tomcat 9.0.108 Fixed in Apache Tomcat 9.0.107 Fixed in Apache Tomcat 9.0.106 Fixed in Apache Tomcat 9.0.105 Fixed in Apache Tomcat 9.0.104 Fixed in Apache Tomcat 9.0.102 Fixed in Apache Tomcat 9.0.99 Fixed in Apache Tomcat 9.0.98 Fixed in Apache Tomcat 9.0.97 Fixed in Apache Tomcat 9.0.96 Fixed in Apache Tomcat 9.0.90 Fixed in Apache Tomcat 9.0.86 Fixed in Apache Tomcat 9.0.83 Fixed in Apache Tomcat 9.0.81 Fixed in Apache Tomcat 9.0.80 Fixed in Apache Tomcat 9.0.75 Fixed in Apache Tomcat 9.0.74 Fixed in Apache Tomcat 9.0.72 Fixed in Apache Tomcat 9.0.71 Fixed in Apache Tomcat 9.0.69 Fixed in Apache Tomcat 9.0.68 Fixed in Apache Tomcat 9.0.65 Fixed in Apache Tomcat 9.0.63 Fixed in Apache Tomcat 9.0.62 Fixed in Apache Tomcat 9.0.58 Fixed in Apache Tomcat 9.0.54 Fixed in Apache Tomcat 9.0.48 Fixed in Apache Tomcat 9.0.46 Fixed in Apache Tomcat 9.0.45 Fixed in Apache Tomcat 9.0.44 Fixed in Apache Tomcat 9.0.43 Fixed in Apache Tomcat 9.0.40 Fixed in Apache Tomcat 9.0.38 Fixed in Apache Tomcat 9.0.37 Fixed in Apache Tomcat 9.0.36 Fixed in Apache Tomcat 9.0.35 Fixed in Apache Tomcat 9.0.31 Fixed in Apache Tomcat 9.0.30 Fixed in Apache Tomcat 9.0.29 Fixed in Apache Tomcat 9.0.21 Fixed in Apache Tomcat 9.0.20 Fixed in Apache Tomcat 9.0.19 Fixed in Apache Tomcat 9.0.16 Fixed in Apache Tomcat 9.0.12 Fixed in Apache Tomcat 9.0.10 Fixed in Apache Tomcat 9.0.9 Fixed in Ap Source: https://tomcat.apache.org/security-9.html
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2025-24813-PoC-Apache-Tomcat-RCE: UNTRUSTED WEB RESEARCH (not PCAP evidence). A proof-of-concept exploit for the Apache Tomcat deserialization vulnerability (CVE-2025-24813). This tool demonstrates how attackers could exploit insecure ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/Mattb709/CVE-2025-24813-PoC-Apache-Tomcat-RCE
+- ONLINE RESEARCH LEAD [Serper web result] Imperva Protects Against Apache Tomcat Deserialization ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A newly disclosed vulnerability, CVE-2025-24813, affecting Apache Tomcat, has been identified as a high-risk path equivalence vulnerability that ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Home > Blog > Imperva Protects Against Apache Tomcat Deserialization Vulnerability Imperva Protects Against Apache Tomcat Deserialization Vulnerability A newly disclosed vulnerability, CVE-2025-24813, affecting Apache Tomcat, has been identified as a high-risk path equivalence vulnerability that allows attackers to manipulate filenames with internal dots (.) under specific conditions, leading to unauthorized file access, modification, and potential remote code execution (RCE). The flaw is particularly dangerous when combined with partial PUT request support and defa If successfully exploited, CVE-2025-24813 could allow: Unauthorized file modification: Attackers could overwrite critical application files, logs, or configuration settings. Information Disclosure: Sensitive files could be exposed, leading to data leaks. Remote Code Execution (RCE): Could be possible if an attacker can modify a security-sensitive file in a way that enables execution of arbitrary code. Imperva customers are protected against CVE-2025-24813. Apache Tomcat is a widely used open-source Java-based web server and servlet container that supports JavaServer Pages (JSP) and other Java-based applications. CVE-2025-24813 arises from improper handling of path equivalence in Apache Tomcat, particularly when processing filenames containing internal dots (.). Under certain conditions—such as default servlet write permissions enabled and partial PUT requests supported The following Apache Tomcat versions are confirmed to be affected: Tomcat 9.0.0.M1 to 9.0.98 Tomcat 10.1.0-M1 to 10.1.34 Tomcat 11.0.0-M1 to 11.0.2 Apache has released patches addressing this vulnerability in the latest versions. Organizations using older, unsupported versions of Tomcat should prioritize upgrades to patched releases, or apply mitigations where upgrading is not possible. Imperva protects against CVE-2025-24813. Since its release, we’ve seen over 26,000 distinct attack attempts targeting sites all across the globe. Attack data shows that 97% of analyzed IPs involved in exploitation attempts are classified as high-risk, stressing the importance of threat intelligence in preventative security. United States is by far the most frequently targeted country, at 66%, although we’ve seen attacks on almost every continent. Attackers primarily target financial and business sites, which is common, as these industries handle large volumes of sensitive data, financial transactions, and valuable credentials, making them lucrative targets for fraud and data theft. CVE-2025-24813 poses a risk to organizations running vulnerable Apache Tomcat instances, particularly those relying on session persistence mechanisms. By applying patches, implementing proper configurations, and utilizing security solutions like Imperva Web Application Firewall (WAF)—which protects against CVE-2025-24813—businesses can effectively mitigate the risks associated with this vulnerability. Imperva Cloud WAF customers are protected against this vulnerability out-of-the-box. A mitigation for on-premises WAF Gateway customers is available in ADC content. For organizations seeking enhanced protection against web application threats Source: https://www.imperva.com/blog/imperva-protects-against-apache-tomcat-deserialization-vulnerability/
+- ONLINE [Serper web result] Apache Tomcat Vulnerabilities: UNTRUSTED WEB RESEARCH (not PCAP evidence). An insecure deserialization vulnerability allows an attacker to potentially manipulate or craft malicious serialized data in such a way that an ... Source: https://www.hhs.gov/sites/default/files/apache-tomcat-vulnerabilities-sector-alert-tlpclear-r.pdf
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2025-24813
+- https://nvd.nist.gov/vuln/detail/CVE-2020-9484
+- https://nvd.nist.gov/vuln/detail/CVE-2026-66713
+- https://tomcat.apache.org/security-9.html
+- https://github.com/Mattb709/CVE-2025-24813-PoC-Apache-Tomcat-RCE
+- https://www.imperva.com/blog/imperva-protects-against-apache-tomcat-deserialization-vulnerability/
+- https://www.hhs.gov/sites/default/files/apache-tomcat-vulnerabilities-sector-alert-tlpclear-r.pdf
+
+Search status: Valid
+Search query: Apache Tomcat 9.0.97 deserialization vulnerability packet clues: endpoint sessions absholi7ly session
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for www.hhs.gov: ValueError: Only HTML/plaintext webpages are supported
+- Webpage read unavailable for www.sangfor.com: HTTPError: HTTP Error 403: Forbidden
+- 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2020-9484",
+  "cve_supported": "Yes",
+  "confidence": "Medium",
+  "reasons": [
+    "Analyst proposed CVE-2020-9484; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Apache Tomcat
+Associated CVE candidate (Analyst): CVE-2020-9484
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2020-9484
+Attack: Failed
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0002-F000032-003]: PUT /sessions/absholi7ly.session.
+- PCAP [E-S0002-F000034-007]: cmd.exe.
+- PCAP [E-S0002-F000034-008]: Lorg/apache/commons/collections/Transformer.
+- PCAP [E-S0002-F000036-010]: HTTP Status 409.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-24813: NVD vulnerability record: Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat.
+
+This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.2, from 10.1.0-M1 through 10.1.34, from 9.0.0.M1 through 9.0.98.
+The following versions were EOL at the time the CVE was created but are 
+known to be affected: 8.5.0 though 8.5.100. Other, older, EOL versions 
+may also be affected.
+
+
+If all of the following were true, a malicious user was able to view       security sensitive files and/or inject content into those files:
+- writes enabled for the default servlet (disabled by default)
+- support for partial PUT (enabled by default)
+- a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads
+- attacker knowledge of the names of security sensitive files being uploaded
+- the security sensitive files also being uploaded via partial PUT
+
+If all of the following were true, a malicious user was able to       perform remote code execution:
+- writes enabled for the default servlet (disabled by default)
+- support for partial PUT (enabled by default)
+- application was using Tomcat's file based session persistence with the default storage location
+- application included a library that may be leveraged in a deserialization attack
+
+Users are recommended to upgrade to version 11.0.3, 10.1.35 or 9.0.99, which fixes the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-24813 Supports: Web-cited CVE-2025-24813 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2020-9484: NVD vulnerability record: When using Apache Tomcat versions 10.0.0-M1 to 10.0.0-M4, 9.0.0.M1 to 9.0.34, 8.5.0 to 8.5.54 and 7.0.0 to 7.0.103 if a) an attacker is able to control the contents and name of a file on the server; and b) the server is configured to use the PersistenceManager with a FileStore; and c) the PersistenceManager is configured with sessionAttributeValueClassNameFilter="null" (the default unless a SecurityManager is used) or a sufficiently lax filter to allow the attacker provided object to be deserialized; and d) the attacker knows the relative file path from the storage location used by FileStore to the file the attacker has control over; then, using a specifically crafted request, the attacker will be able to trigger remote code execution via deserialization of the file under their control. Note that all of conditions a) to d) must be true for the attack to succeed. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-9484 Supports: NVD lists CVE-2020-9484 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-66713: NVD vulnerability record: Deserialization of Untrusted Data (CWE-502) in the Tribes-based clustering component
+
+  in Apache Software Foundation Apache Axis2/Java through 2.0.0 on Apache Tomcat
+
+  (only when Tribes clustering is enabled, which is off by default) allows an
+
+  unauthenticated remote attacker with network access to the clustering port to
+
+  execute arbitrary code via a crafted serialized Java object delivered to the cluster
+
+  channel and deserialized in
+
+  org.apache.axis2.clustering.tribes.Axis2ChannelListener#messageReceived. Users are
+
+  recommended to upgrade to version 2.0.1, which fixes this issue by removing the
+
+  clustering feature entirely. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-66713 Supports: NVD lists CVE-2026-66713 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Official vendor webpage] Apache Tomcat 9 vulnerabilities: UNTRUSTED WEB RESEARCH (not PCAP evidence). This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Apache Tomcat 9.x vulnerabilities This page lists all security vulnerabilities fixed in released versions of Apache Tomcat® 9.x. Each vulnerability is given a security impact rating by the Apache Tomcat security team — please note that this rating may vary from platform to platform. We also list the versions of Apache Tomcat the flaw is known to affect, and where a flaw has not been verified list the version with a question mark. Note: Vulnerabilities that are not Tomcat vulnerabilities but have either been incorrectly reported against Tomcat or where Tomcat provides a workaround are listed at the end of this page. Please note that binary patches are never provided. If you need to apply a source code patch, use the building instructions for the Apache Tomcat version that you are using. For Tomcat 9.0 those are Both files can be found in the webapps/docs subdirectory of a binary distribution. You may also want to review the page in the documentation. If you need help on building or configuring Tomcat or other help on following the instructions to mitigate the known vulnerabilities listed here, please send your questions to the public Tomcat Users mailing list If you have encountered an unlisted security vulnerability or other unexpected behaviour that has security impact, or if the descriptions here are incomplete, please report them privately to the Tomcat Security Team. Thank you. Fixed in Apache Tomcat 9.0.123 Fixed in Apache Tomcat 9.0.122 Fixed in Apache Tomcat 9.0.121 Fixed in Apache Tomcat 9.0.120 Fixed in Apache Tomcat 9.0.119 Fixed in Apache Tomcat 9.0.118 Fixed in Apache Tomcat 9.0.117 Fixed in Apache Tomcat 9.0.116 Fixed in Apache Tomcat 9.0.115 Fixed in Apache Tomcat 9.0.113 Fixed in Apache Tomcat 9.0.110 Fixed in Apache Tomcat 9.0.109 Fixed in Apache Tomcat 9.0.108 Fixed in Apache Tomcat 9.0.107 Fixed in Apache Tomcat 9.0.106 Fixed in Apache Tomcat 9.0.105 Fixed in Apache Tomcat 9.0.104 Fixed in Apache Tomcat 9.0.102 Fixed in Apache Tomcat 9.0.99 Fixed in Apache Tomcat 9.0.98 Fixed in Apache Tomcat 9.0.97 Fixed in Apache Tomcat 9.0.96 Fixed in Apache Tomcat 9.0.90 Fixed in Apache Tomcat 9.0.86 Fixed in Apache Tomcat 9.0.83 Fixed in Apache Tomcat 9.0.81 Fixed in Apache Tomcat 9.0.80 Fixed in Apache Tomcat 9.0.75 Fixed in Apache Tomcat 9.0.74 Fixed in Apache Tomcat 9.0.72 Fixed in Apache Tomcat 9.0.71 Fixed in Apache Tomcat 9.0.69 Fixed in Apache Tomcat 9.0.68 Fixed in Apache Tomcat 9.0.65 Fixed in Apache Tomcat 9.0.63 Fixed in Apache Tomcat 9.0.62 Fixed in Apache Tomcat 9.0.58 Fixed in Apache Tomcat 9.0.54 Fixed in Apache Tomcat 9.0.48 Fixed in Apache Tomcat 9.0.46 Fixed in Apache Tomcat 9.0.45 Fixed in Apache Tomcat 9.0.44 Fixed in Apache Tomcat 9.0.43 Fixed in Apache Tomcat 9.0.40 Fixed in Apache Tomcat 9.0.38 Fixed in Apache Tomcat 9.0.37 Fixed in Apache Tomcat 9.0.36 Fixed in Apache Tomcat 9.0.35 Fixed in Apache Tomcat 9.0.31 Fixed in Apache Tomcat 9.0.30 Fixed in Apache Tomcat 9.0.29 Fixed in Apache Tomcat 9.0.21 Fixed in Apache Tomcat 9.0.20 Fixed in Apache Tomcat 9.0.19 Fixed in Apache Tomcat 9.0.16 Fixed in Apache Tomcat 9.0.12 Fixed in Apache Tomcat 9.0.10 Fixed in Apache Tomcat 9.0.9 Fixed in Ap Source: https://tomcat.apache.org/security-9.html
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2025-24813-PoC-Apache-Tomcat-RCE: UNTRUSTED WEB RESEARCH (not PCAP evidence). A proof-of-concept exploit for the Apache Tomcat deserialization vulnerability (CVE-2025-24813). This tool demonstrates how attackers could exploit insecure ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Source: https://github.com/Mattb709/CVE-2025-24813-PoC-Apache-Tomcat-RCE
+- ONLINE RESEARCH LEAD [Serper web result] Imperva Protects Against Apache Tomcat Deserialization ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A newly disclosed vulnerability, CVE-2025-24813, affecting Apache Tomcat, has been identified as a high-risk path equivalence vulnerability that ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Home > Blog > Imperva Protects Against Apache Tomcat Deserialization Vulnerability Imperva Protects Against Apache Tomcat Deserialization Vulnerability A newly disclosed vulnerability, CVE-2025-24813, affecting Apache Tomcat, has been identified as a high-risk path equivalence vulnerability that allows attackers to manipulate filenames with internal dots (.) under specific conditions, leading to unauthorized file access, modification, and potential remote code execution (RCE). The flaw is particularly dangerous when combined with partial PUT request support and defa If successfully exploited, CVE-2025-24813 could allow: Unauthorized file modification: Attackers could overwrite critical application files, logs, or configuration settings. Information Disclosure: Sensitive files could be exposed, leading to data leaks. Remote Code Execution (RCE): Could be possible if an attacker can modify a security-sensitive file in a way that enables execution of arbitrary code. Imperva customers are protected against CVE-2025-24813. Apache Tomcat is a widely used open-source Java-based web server and servlet container that supports JavaServer Pages (JSP) and other Java-based applications. CVE-2025-24813 arises from improper handling of path equivalence in Apache Tomcat, particularly when processing filenames containing internal dots (.). Under certain conditions—such as default servlet write permissions enabled and partial PUT requests supported The following Apache Tomcat versions are confirmed to be affected: Tomcat 9.0.0.M1 to 9.0.98 Tomcat 10.1.0-M1 to 10.1.34 Tomcat 11.0.0-M1 to 11.0.2 Apache has released patches addressing this vulnerability in the latest versions. Organizations using older, unsupported versions of Tomcat should prioritize upgrades to patched releases, or apply mitigations where upgrading is not possible. Imperva protects against CVE-2025-24813. Since its release, we’ve seen over 26,000 distinct attack attempts targeting sites all across the globe. Attack data shows that 97% of analyzed IPs involved in exploitation attempts are classified as high-risk, stressing the importance of threat intelligence in preventative security. United States is by far the most frequently targeted country, at 66%, although we’ve seen attacks on almost every continent. Attackers primarily target financial and business sites, which is common, as these industries handle large volumes of sensitive data, financial transactions, and valuable credentials, making them lucrative targets for fraud and data theft. CVE-2025-24813 poses a risk to organizations running vulnerable Apache Tomcat instances, particularly those relying on session persistence mechanisms. By applying patches, implementing proper configurations, and utilizing security solutions like Imperva Web Application Firewall (WAF)—which protects against CVE-2025-24813—businesses can effectively mitigate the risks associated with this vulnerability. Imperva Cloud WAF customers are protected against this vulnerability out-of-the-box. A mitigation for on-premises WAF Gateway customers is available in ADC content. For organizations seeking enhanced protection against web application threats Source: https://www.imperva.com/blog/imperva-protects-against-apache-tomcat-deserialization-vulnerability/
+- ONLINE [Serper web result] Apache Tomcat Vulnerabilities: UNTRUSTED WEB RESEARCH (not PCAP evidence). An insecure deserialization vulnerability allows an attacker to potentially manipulate or craft malicious serialized data in such a way that an ... Source: https://www.hhs.gov/sites/default/files/apache-tomcat-vulnerabilities-sector-alert-tlpclear-r.pdf
+
+Verification Summary:
+- Affected service: Apache Tomcat.
+- Attack type: Deserialization.
+- Attack technique: Java Deserialization.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Fail.
+- Validated CVE: CVE-2020-9484.
+- CVE assessment: Analyst proposed CVE-2020-9484; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Apache Tomcat 9.0.97 deserialization vulnerability packet clues: endpoint sessions absholi7ly session.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-24813
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-9484
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-66713
+- Evidence-source URL: https://tomcat.apache.org/security-9.html
+- Evidence-source URL: https://github.com/Mattb709/CVE-2025-24813-PoC-Apache-Tomcat-RCE
+- Evidence-source URL: https://www.imperva.com/blog/imperva-protects-against-apache-tomcat-deserialization-vulnerability/
+- Evidence-source URL: https://www.hhs.gov/sites/default/files/apache-tomcat-vulnerabilities-sector-alert-tlpclear-r.pdf
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.hhs.gov: ValueError: Only HTML/plaintext webpages are supported
+- Evidence limitation: Webpage read unavailable for www.sangfor.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Upgrade Apache Tomcat to a version that addresses CVE-2020-9484.
+- Ensure the PersistenceManager is configured with a strict sessionAttributeValueClassNameFilter.
+- Regularly review and update security configurations to prevent deserialization vulnerabilities.

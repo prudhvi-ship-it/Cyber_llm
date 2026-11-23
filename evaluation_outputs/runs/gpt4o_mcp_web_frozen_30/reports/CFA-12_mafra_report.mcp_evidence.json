@@ -1,0 +1,11 @@
+{
+  "status": "Abstain",
+  "query": "network forensic investigation",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:33:12.786574+00:00",
+  "sources": [],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "Online evidence search skipped because no attack, CVE candidate, or packet-linked mechanism signature was identified."
+  ]
+}

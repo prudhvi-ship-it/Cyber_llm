@@ -1,0 +1,118 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_f826987547eac6f6fbae
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event3_CVE-2021-42013_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Apache
+  Attack Type: Path Traversal
+  Attack Success: Fail
+  CVE: CVE-2021-42013
+  Overall Confidence: High
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-03_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-03_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\deepseek_r1_0528_30_20261025_202456\reports\CFA-03_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Apache
+Associated CVE candidate (Analyst): CVE-2021-42013
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2021-42013
+Attack: Failed
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000008-009]: HTTP request candidate GET /icons/../../../../etc/passwd to 172.18.0.2:80; request frame=8; indicator frame=8; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=10 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0000-F000010-007]: HTTP Status 400.
+- PCAP [E-S0001-F000018-009]: HTTP request candidate GET /icons/../../../../etc/shadow to 172.18.0.2:80; request frame=18; indicator frame=18; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=20 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0001-F000020-007]: HTTP Status 400.
+- PCAP [E-S0002-F000028-009]: HTTP request candidate GET /icons/../../../../etc/hosts to 172.18.0.2:80; request frame=28; indicator frame=28; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=30 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0002-F000030-007]: HTTP Status 400.
+- PCAP [E-S0003-F000038-009]: HTTP request candidate GET /icons/../../../../etc/hostname to 172.18.0.2:80; request frame=38; indicator frame=38; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=40 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0003-F000040-007]: HTTP Status 400.
+- PCAP [E-S0004-F000048-009]: HTTP request candidate GET /icons/../../../../etc/group to 172.18.0.2:80; request frame=48; indicator frame=48; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=50 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0004-F000050-007]: HTTP Status 400.
+- PCAP [E-S0005-F000058-010]: HTTP request candidate GET /icons/../../../../root/.bash_history to 172.18.0.2:80; request frame=58; indicator frame=58; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=60 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0005-F000060-008]: HTTP Status 400.
+- PCAP [E-S0006-F000068-010]: HTTP request candidate GET /icons/../../../../root/.ssh/authorized_keys to 172.18.0.2:80; request frame=68; indicator frame=68; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=70 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0006-F000070-008]: HTTP Status 400.
+- PCAP [E-S0007-F000078-009]: HTTP request candidate GET /icons/../../../../var/log/syslog to 172.18.0.2:80; request frame=78; indicator frame=78; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=80 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0007-F000080-007]: HTTP Status 400.
+- PCAP [E-S0008-F000088-009]: HTTP request candidate GET /icons/../../../../var/log/auth.log to 172.18.0.2:80; request frame=88; indicator frame=88; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=90 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0008-F000090-007]: HTTP Status 400.
+- PCAP [E-S0009-F000098-009]: HTTP request candidate GET /icons/../../../../var/www/html/config.php to 172.18.0.2:80; request frame=98; indicator frame=98; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=100 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0009-F000100-007]: HTTP Status 400.
+- PCAP [E-S0010-F000108-011]: HTTP request candidate POST /cgi-bin/../../../../bin/sh to 172.18.0.2:80; request frame=108; indicator frame=108; indicators=path traversal; bounded indicator excerpt=../; response HTTP 400 frame=110 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE.
+- PCAP [E-S0010-F000110-009]: HTTP Status 400.
+- ONLINE [CISA KEV] Apache HTTP Server Path Traversal Vulnerability: Apache HTTP Server: Apache HTTP Server contains a path traversal vulnerability that allows an attacker to perform remote code execution if files outside directories configured by Alias-like directives are not under default require all denied or if CGI scripts are enabled. This CVE ID resolves an incomplete patch for CVE-2021-41773. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2021-42013 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-36939: NVD vulnerability record: Cassandra Web 0.5.0 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by manipulating path traversal parameters. Attackers can exploit the disabled Rack::Protection module to read sensitive system files like /etc/passwd and retrieve Apache Cassandra database credentials. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-36939 Supports: NVD lists CVE-2020-36939 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2021-42013: NVD vulnerability record: It was found that the fix for CVE-2021-41773 in Apache HTTP Server 2.4.50 was insufficient. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. If files outside of these directories are not protected by the usual default configuration "require all denied", these requests can succeed. If CGI scripts are also enabled for these aliased pathes, this could allow for remote code execution. This issue only affects Apache 2.4.49 and Apache 2.4.50 and not earlier versions. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-42013 Supports: NVD lists CVE-2021-42013 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2007-5461: NVD vulnerability record: Absolute path traversal vulnerability in Apache Tomcat 4.0.0 through 4.0.6, 4.1.0, 5.0.0, 5.5.0 through 5.5.25, and 6.0.0 through 6.0.14, under certain configurations, allows remote authenticated users to read arbitrary files via a WebDAV write request that specifies an entity with a SYSTEM tag. Source: https://nvd.nist.gov/vuln/detail/CVE-2007-5461 Supports: NVD lists CVE-2007-5461 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CVE-2021-41773: Path Traversal & RCE in Apache HTTP ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Address the critical vulnerabilities in Apache HTTP Server (CVE-2021-41773 & CVE-2021-42013) that enable path traversal and remote code ... | Webpage text: About CVE-2021-41773 About CVE-2021-42013 Detecting the Vulnerabilities with Qualys WAS On October 4, 2021, Apache HTTP Server Project released Security advisory on a Path traversal and File disclosure vulnerability in Apache HTTP Server 2.4.49 and 2.4.50 tracked as CVE-2021-41773 and CVE-2021-42013. In the advisory, Apache also highlighted “the issue is known to be exploited in the wild” and later it was identified that the vulnerability can be abused to perform remote code execution. For exploiting bo Get Full Access to the Qualys Cloud Platform Free As the vulnerabilities are configuration dependent, checking the version of Apache web server is not enough to identify vulnerable servers. With both the CVEs being actively exploited, Qualys Web Application Scanning has released QID 150372, 150373, 150374 which sends specially crafted HTTP request to the target server to determine if it is exploitable. Once successfully detected, users can remediate the vulnerabilit About CVE-2021-41773 According to CVE-2021-41773, Apache HTTP Server 2.4.49 is vulnerable to Path Traversal and Remote Code execution attacks. The path traversal vulnerability was introduced due to the new code change added for path normalization i.e., for URL paths to remove unwanted or dangerous parts from the pathname, but it was inadequate to detect different techniques of encoding the path traversal characters “dot-dot-slash (../)” To prevent path traversal attacks, the normalization function which is responsible to resolve URL-encoded values from the requested URI, resolved Unicode values one at a time. Hence when URL encoding the second dot as %2e, the logic fails to recognize %2e as dot thereby not decoding it, this converts the characters ../ to .%2e/ and bypasses the check. Along with Path traversal check bypass, for an Apache HTTP server to be vulnerable, the HTTP Server configuration should either contain the directory directive for entire server’s filesystem as Require all granted or the directory directive should be completely missing from the configuration file. Vulnerable Configuration: Therefore, bypassing the dot-dot check as .%2e and chaining it with misconfigured directory directive allows an attacker to read arbitrary files such as passwd from the vulnerable server file system. Exploitation: Path Traversal GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Upgrade-Insecure-Requests: 1 Date: Mon, 18 Oct 2021 08:13:02 GMT Server: Apache/2.4.49 (Unix) Last-Modified: Mon, 27 Sep 2021 00:00:00 GMT ETag: "39e-5cceec7356000" root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/u Source: https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+- ONLINE RESEARCH LEAD [Serper web result] CVE Record: CVE-2021-41773: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs ... | Webpage text: Common vulnerabilities and Exposures (CVE) Source: https://www.cve.org/CVERecord?id=CVE-2021-41773
+- ONLINE RESEARCH LEAD [Serper web result] Apache HTTP Server 2.4.49 - Path Traversal & Remote ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache HTTP Server 2.4.49 - Path Traversal & Remote Code Execution (RCE). CVE-2021-41773 . webapps exploit for Multiple platform. Source: https://www.exploit-db.com/exploits/50383
+- ONLINE [Serper web result] CVE-2021-41773 & CVE-2021-42013: UNTRUSTED WEB RESEARCH (not PCAP evidence). New Vulnerabilities Affecting Apache Server features vulnerability analysis on CVE-2021-41773 and CVE-2021-42013. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Partner with the world's largest commercial agentic SOC. Tailored security expertise and guided risk mitigation. Arctic Wolf Security Teams Security experts proactively protecting you 24x7. Incident Response In Action Learn how our IR team stops attacks and swiftly restores your organization to pre-incident operations. Source: https://arcticwolf.com/resources/blog/new-vulnerabilities-affecting-apache-server-2-4-49-2-4-50-cve-2021-41773-cve-2021-42013/
+
+Verification Summary:
+- Affected service: Apache.
+- Attack type: Path Traversal.
+- Attack technique: Directory Traversal and Command Injection.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Fail.
+- Validated CVE: CVE-2021-42013.
+- CVE assessment: Analyst proposed CVE-2021-42013; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Apache 2.4.50 Path Traversal packet clues: endpoint icons etc passwd; endpoint icons etc shadow; endpoint icons etc hosts; endpoint icons etc hostname.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-36939
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2021-42013
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2007-5461
+- Evidence-source URL: https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+- Evidence-source URL: https://www.cve.org/CVERecord?id=CVE-2021-41773
+- Evidence-source URL: https://www.exploit-db.com/exploits/50383
+- Evidence-source URL: https://arcticwolf.com/resources/blog/new-vulnerabilities-affecting-apache-server-2-4-49-2-4-50-cve-2021-41773-cve-2021-42013/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: Webpage read unavailable for safecomputing.umich.edu: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 4 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply vendor security patches for Apache HTTP Server to address CVE-2021-42013
+- Maintain 'Require all denied' default configuration for non-aliased directories
+- Disable CGI scripts if not operationally required
+- Implement web application firewall rules to detect double-encoded path traversal attempts
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

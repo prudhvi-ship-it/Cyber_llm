@@ -1,0 +1,102 @@
+{
+  "status": "Valid",
+  "query": "Apache APISIX 2.9 Remote Command Execution Malicious configuration import to APISIX Admin API leading to etcd route injection with header-driven io.popen; subsequent GET request executed OS command and returned output.",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Apache APISIX Authentication Bypass Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Apache APISIX: Apache APISIX contains an authentication bypass vulnerability that allows for remote code execution. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2022-24112 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2022-24112: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24112",
+      "snippet": "An attacker can abuse the batch-requests plugin to send requests to bypass the IP restriction of Admin API. A default configuration of Apache APISIX (with default API key) is vulnerable to remote code execution. When the admin key was changed or the port of Admin API was changed to a port different from the data panel, the impact is lower. But there is still a risk to bypass the IP restriction of Apache APISIX's data panel. There is a check in the batch-requests plugin which overrides the client IP with its real remote IP. But due to a bug in the code, this check can be bypassed.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2022-24112 for a product matching 'Apache APISIX'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-49871: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-49871",
+      "snippet": "Cross-Site Request Forgery (CSRF) vulnerability in the cas-auth plugin under default configurations.\n\nThis defect allows a remote attacker that manages to send a victim to a webpage controlled by them can cause the victim's browser to become authenticated as a different identity.\n\nActions the victim takes upstream are then attributed to attackers identity.\n\n\nThis issue affects Apache APISIX: from 3.0.0 through 3.16.0.\n\nUsers are recommended to upgrade to version 3.17.0, which fixes the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-49871 for a product matching 'Apache APISIX'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-94276: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94276",
+      "snippet": "Improper Authentication vulnerability in Apache APISIX.\n\nOn a route using openid-connect plugin with remote introspection against an authorization server that serves multiple issuers, a token that introspects as active for one issuer may get accepted on a route restricted to another. This issue affects Apache APISIX: from 3.12.0 through 3.18.0.\n\nUsers are recommended to upgrade to version 3.19.0, which fixes the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-94276 for a product matching 'Apache APISIX'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "apisix/batch-requests plugin allows overwriting the X-REAL ...",
+      "url": "https://lists.apache.org/thread/lcdqywz8zy94mdysk7p3gfdgn51jmt94",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). A default configuration of Apache APISIX (with default API key) is vulnerable to remote code execution. When the admin key was changed or ...",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Build an APISIX Plugin: file-logger Tutorial",
+      "url": "https://apisix.apache.org/blog/2022/02/16/file-logger-api-gateway/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Step-by-step guide to developing a custom APISIX plugin. Learn the full workflow by building the file-logger plugin from scratch. | Webpage excerpt: 🤔 Introducing APISIX AI Gateway – Built for LLMs and AI workloads. Learn More Over the past few months, community users have added many plugins to Apache APISIX, enriching the Apache APISIX ecosystem. From the user’s point of view, the emergence of more diverse plugins is certainly a good thing, as they fulfill more of the user’s expectations for a gateway that is “one-stop” and “multi-functional” processor on top of perfecting the high performance and low latency of Apache APISIX. None of the articles on the Apache APISIX blog seem to go into detail about the process of developing plugins. So let’s take a look at the process from the perspective of a plugin developer and see how a plugin is born! file-logger supports generating custom log formats using Apache APISIX plugin metadata. Users can append request and response data in JSON format to log files via the file-logger plugin, or push the log data stream to a specified location. After introducing the features of file-logger, you will have a better understanding of this plugin. The following is a detailed explanation of how I, a front-end developer with no server-side experience, develop the plugin for Apache APISIX and add the corresponding tests for it. Open the Apache APISIX Plugin Development Guide and in order of priority you need to determine the following two things: Since this development of file-logger is a logging",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Admin API",
+      "url": "https://apisix.apache.org/docs/apisix/admin-api/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This article introduces the functions supported by the Apache APISIX Admin API, which you can use to get, create, update, and delete resources. | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] 🤔 Introducing APISIX AI Gateway – Built for LLMs and AI workloads. Learn More The Admin API lets users control their deployed Apache APISIX instance. The architecture design gives an idea about how everything fits together. When APISIX is started, the Admin API will listen on port 9180 by default and take the API prefixed with /apisix/admin. Therefore, to avoid conflicts between your designed API and /apisix/admin, you can modify the configuration file /conf/config.yaml to modify the default listening port. APISIX supports setting the IP access allowlist of Admin API to prevent APISIX from being illegally accessed and attacked. You can configure the IP addresses to allow access in the deployment.admin.allow_admin option in the ./conf/config.yaml file. key: your-admin-key # set a secure Admin API key; if left empty, APISIX will generate one during initialization and write it back to this file You can fetch the admin_key from config.yaml and save to an environment variable with the following command:",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Apache APISIX FAQ: API Gateway Questions",
+      "url": "https://apisix.apache.org/docs/apisix/FAQ/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This is likely because the LuaRocks server used is blocked. This error is caused by installing Apache APISIX in the /root directory. The worker process would ... | Webpage excerpt: 🤔 Introducing APISIX AI Gateway – Built for LLMs and AI workloads. Learn More Apache APISIX FAQ: API Gateway Questions APISIX outperforms other API gateways in these metrics while being platform agnostic and fully dynamic delivering features like supporting multiple protocols, fine-grained routing and multi-language support. How does Apache APISIX differ from other API gateways? Apache APISIX differs in the following ways: It uses etcd to save and synchronize configurations rather than relational databases like PostgreSQL or MySQL. The real-time event notification system in etcd is easier to scale than in these alternatives. This allows APISIX to synchronize the configuration in real-time, makes the code concise and avoids a single point of failure. What is the performance impact of using Apache APISIX?",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T01:43:54.755605+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2022-24112",
+    "CVE-2026-49871",
+    "CVE-2026-94276"
+  ],
+  "retrieval_errors": []
+}

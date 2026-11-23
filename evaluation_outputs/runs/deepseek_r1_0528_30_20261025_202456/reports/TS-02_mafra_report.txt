@@ -1,0 +1,378 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 2
+TCP Stream IDs: 0, 1
+Protocol Counts: ARP=4, TCP=16, HTTP=4
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:43246           <-> 172.18.0.2:5173                  4 778 bytes       6 717 bytes      10 1495 bytes     0.000190000         0.0238
+172.18.0.1:43254           <-> 172.18.0.2:5173                  5 5669 bytes       5 657 bytes      10 6326 bytes     0.022433000         0.0215
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0001-F000014-004 | client->server] GET /@fs/etc/passwd?raw??
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:43246 -> 172.18.0.2:5173 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43246 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:43246 -> 172.18.0.2:5173 (HTTP)
+- [E-S0000-F000008-007 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43246 (HTTP)
+- [E-S0000-F000006-004 | client->server] GET /@fs/etc/passwd
+- [E-S0000-F000006-005 | client->server] Host: 172.17.0.1:5173
+- [E-S0000-F000006-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+- [E-S0000-F000008-008 | server->client] HTTP Status 403
+- [E-S0001-F000011-001 | client->server] 172.18.0.1:43254 -> 172.18.0.2:5173 (TCP)
+- [E-S0001-F000012-002 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43254 (TCP)
+- [E-S0001-F000014-003 | client->server] 172.18.0.1:43254 -> 172.18.0.2:5173 (HTTP)
+- [E-S0001-F000018-007 | server->client] 172.18.0.2:5173 -> 172.18.0.1:43254 (HTTP)
+- [E-S0001-F000014-004 | client->server] GET /@fs/etc/passwd?raw??
+- [E-S0001-F000014-005 | client->server] Host: 172.17.0.1:5173
+- [E-S0001-F000014-006 | client->server] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+- [E-S0001-F000018-008 | server->client] HTTP Status 200
+- [E-S0001-F000018-009 | server->client] Content-Type: text/javascript
+- [E-S0001-F000018-010 | server->client] root user keyword observed
+- [E-S0001-F000018-011 | server->client] /bin/bash
+- [E-S0001-F000018-012 | server->client] eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhc3N3ZD9yYXc/Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IFwicm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaFxcbmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuYmluOng6MjoyOmJpbjovYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jp...[TRUNCATED]
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:43246 -> 172.18.0.2:5173; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.1:43254 -> 172.18.0.2:5173; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Vite development server (version not specified)  
+Relevant Events: Client (172.18.0.1) attempted to read `/etc/passwd` via Vite's filesystem access feature (`/@fs`), triggering a server restriction. Server (172.18.0.2) rejected the request with a 403 Forbidden error.  
+Malicious Activities: Path traversal attempt targeting `/etc/passwd` (sensitive system file)  
+Attack Success: Failed  
+Evidence:  
+- E-S0000-F000006-004: Malicious request `GET /@fs/etc/passwd`  
+- E-S0000-F000008-007/E-S0000-F000008-008: Server response HTTP 403 Forbidden with explicit error message confirming path restriction ("/etc/passwd is outside of Vite serving allow list")
+
+--- Stream 1 [VALID] ---
+Service: Vite development server  
+Relevant Events: Client (172.18.0.1) requested `/etc/passwd` via Vite's `/@fs` endpoint. Server (172.18.0.2) returned HTTP 200 with the file's contents.  
+Malicious Activities: Path traversal attack targeting `/etc/passwd` (sensitive system file disclosure)  
+Attack Success: Succeeded  
+Evidence:  
+- E-S0001-F000014-004: Malicious request `GET /@fs/etc/passwd?raw??`  
+- E-S0001-F000018-008: Server response HTTP 200  
+- E-S0001-F000018-010: Response content includes "root" user entry (confirms `/etc/passwd` disclosure)  
+- E-S0001-F000018-011: Response content includes `/bin/bash` paths (system shell confirmation)  
+
+### Explanation:  
+- **Service Identification**: Vite development server confirmed via `/@fs` endpoint usage (consistent with Stream 0 analysis).  
+- **Attack Success**: Unlike Stream 0's blocked request (403), this flow returned the full contents of `/etc/passwd` (200 OK + file data), proving successful exploitation.  
+- **Critical Evidence**: The response (E-S0001-F000018-010/011) contains actual `/etc/passwd` entries (root user, shell paths), demonstrating system file compromise.  
+- **Impact**: Sensitive system file disclosure enables attacker reconnaissance (user accounts, shell paths).
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite development server",
+    "application": "Vite",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "Arbitrary File Read",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000014-004",
+      "E-S0001-F000018-008",
+      "E-S0001-F000018-010",
+      "E-S0001-F000018-011",
+      "E-S0001-F000018-012"
+    ]
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No distinctive CVE identified for Vite arbitrary file read via /@fs endpoint"
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Vite development server",
+    "application": "Vite",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "Arbitrary File Read",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000006-004",
+      "E-S0000-F000008-008",
+      "E-S0001-F000014-004",
+      "E-S0001-F000018-008",
+      "E-S0001-F000018-010",
+      "E-S0001-F000018-011",
+      "E-S0001-F000018-012"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2025-30208",
+    "confidence": "Medium",
+    "reason": "Packet E-S0001-F000014-004 shows GET /@fs/etc/passwd?raw?? matching CVE-2025-30208's distinctive query bypass mechanism (?raw??) for Vite's @fs endpoint. Response E-S0001-F000018-008/010/011 confirms /etc/passwd disclosure. Distinct from other CVEs by specific query-triggered bypass. Confidence Medium due to unobserved Vite version and lack of advisory corroboration."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000006-004",
+    "E-S0001-F000014-004",
+    "E-S0001-F000018-008",
+    "E-S0001-F000018-010",
+    "E-S0001-F000018-011",
+    "E-S0001-F000018-012"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Vite development server
+Attack Type: Path Traversal
+Attack Success: Success
+CVE: CVE-2025-30208
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: High
+Overall Confidence: High
+Score: 5/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: web vulnerability packet clues: endpoint etc passwd
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T12:55:19.129359+00:00
+Candidate CVEs: CVE-2026-112946, CVE-2025-24010, CVE-2025-24360, CVE-2025-30208
+Sources: 8
+
+Source 1: NIST NVD
+Title: CVE-2026-112946: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-112946
+Summary: Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3.
+Supports: NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2025-24010: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-24010
+Summary: Vite is a frontend tooling framework for javascript. Vite allowed any websites to send any requests to the development server and read the response due to default CORS settings and lack of validation on the Origin header for WebSocket connections. This vulnerability is fixed in 6.0.9, 5.4.12, and 4.5.6.
+Supports: NVD lists CVE-2025-24010 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2025-24360: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-24360
+Summary: Nuxt is an open-source web development framework for Vue.js. Starting in version 3.8.1 and prior to version 3.15.3, Nuxt allows any websites to send any requests to the development server and read the response due to default CORS settings. Users with the default server.cors option using Vite builder may get the source code stolen by malicious websites. Version 3.15.3 fixes the vulnerability.
+Supports: NVD lists CVE-2025-24360 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2025-30208: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2025-30208
+Summary: Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue.
+Supports: NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: Web Application Vulnerabilities | SQLi, XSS & CSRF
+URL: https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Web application vulnerabilities are weaknesses or flaws in web apps that can be exploited by attackers to access sensitive data, manipulate systems, or ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Government websites go dark after AI-discovered flaw ...
+URL: https://www.reuters.com/world/asia-pacific/eu-agency-warns-websites-may-need-be-taken-offline-php-prepares-patches-2026-10-21/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Government websites in Europe and elsewhere went offline after the disclosure of ​critical vulnerabilities in a widely used programming ...
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Vulnerabilities | OWASP Foundation
+URL: https://community.owasp.org/vulnerabilities/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the ... | Webpage text: A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the stakeholders of an application. Stakeholders include the application owner, application users, and other entities that rely on Please do not post any actual vulnerabilities in products, services, or web applications. Those disclosure reports should be posted to bugtraq or full-disclosure mailing lists. Examples of vulnerabilities Lack of input validation on user input Lack of sufficient logging mechanism Not closing the database connection properly For a great overview, check out the OWASP Top Ten Project. You can read about the top vulnerabilities and download a paper that covers them in detail. Many organizations and agencies use the Top Ten as a way of creating awareness about application security. NOTE: Before you add a vulnerability, please search and make sure there isn’t an equivalent one already. You may want to consider creating a redirect if the topic is the same. Every vulnerability article has a Allowing Domains or Accounts to Expire Business logic vulnerability CSV Injection by Timo Goosen, Albinowax Catch NullPointerException Deserialization of untrusted data Directory Restriction Error Expression Language Injection Full Trust CLR Verification issue Exploiting Passing Reference Types by Reference Improper pointer subtraction Information exposure through query strings in URL by Robert Gilbert (amroot) Insecure Deserialization by Vaibhav Malik Insecure Compiler Optimization Insecure Third Party Domain Access Insufficient Numeric Precision by Abdullah Al-Khalaf Insufficient Session ID Length by Jake Karnes Least Privilege Violation OWASP .NET Vulnerability Research Overly Permissive Regular Expression PHP Object Injection by Egidio Romano Password Management Hardcoded Password Password Plaintext Storage Poor Logging Practice by Weilin Zhong Race Conditions by Cindy Ramirez Return Inside Finally Block Session Variable Overloading Unchecked Error Condition Unchecked Return Value Missing Check against Null Unsafe function call from a signal handler Use of hard-coded password Using a broken or risky cryptographic algorithm Vulnerability Scanning Tools XML External Entity (XXE) Processing The Follina Vulnerability - A Critical Threat to Microsoft Office by Tholkappiar The OWASP® Foundation works to improve the security of software through its community-led open source software projects, hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences. Important Community Links Vulnerabilities (You are here) Upcoming OWASP Global Events
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: CVE: Common Vulnerabilities and Exposures
+URL: https://www.cve.org/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Identify, define, and catalog publicly disclosed cybersecurity vulnerabilities. There are currently over 395,000 CVE Records accessible via Download or Keyword ... | Webpage text: Common vulnerabilities and Exposures (CVE)
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for www.reuters.com: HTTPError: HTTP Error 401: HTTP Forbidden | Webpage read unavailable for www.cybersecuritydive.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000014-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 200.
+- PCAP [E-S0001-F000018-010]: root user keyword observed.
+- PCAP [E-S0001-F000018-011]: /bin/bash.
+- PCAP [E-S0001-F000018-012]: eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhc3N3ZD9yYXc/Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IFwicm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaFxcbmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuYmluOng6MjoyOmJpbjovYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jp...[TRUNCATED].
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-112946: NVD vulnerability record: Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-112946 Supports: NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-24010: NVD vulnerability record: Vite is a frontend tooling framework for javascript. Vite allowed any websites to send any requests to the development server and read the response due to default CORS settings and lack of validation on the Origin header for WebSocket connections. This vulnerability is fixed in 6.0.9, 5.4.12, and 4.5.6. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-24010 Supports: NVD lists CVE-2025-24010 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-24360: NVD vulnerability record: Nuxt is an open-source web development framework for Vue.js. Starting in version 3.8.1 and prior to version 3.15.3, Nuxt allows any websites to send any requests to the development server and read the response due to default CORS settings. Users with the default server.cors option using Vite builder may get the source code stolen by malicious websites. Version 3.15.3 fixes the vulnerability. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-24360 Supports: NVD lists CVE-2025-24360 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2025-30208: NVD vulnerability record: Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-30208 Supports: NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Web Application Vulnerabilities | SQLi, XSS & CSRF: UNTRUSTED WEB RESEARCH (not PCAP evidence). Web application vulnerabilities are weaknesses or flaws in web apps that can be exploited by attackers to access sensitive data, manipulate systems, or ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+- ONLINE [Serper web result] Government websites go dark after AI-discovered flaw ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Government websites in Europe and elsewhere went offline after the disclosure of ​critical vulnerabilities in a widely used programming ... Source: https://www.reuters.com/world/asia-pacific/eu-agency-warns-websites-may-need-be-taken-offline-php-prepares-patches-2026-10-21/
+- ONLINE [Serper web result] Vulnerabilities | OWASP Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the ... | Webpage text: A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the stakeholders of an application. Stakeholders include the application owner, application users, and other entities that rely on Please do not post any actual vulnerabilities in products, services, or web applications. Those disclosure reports should be posted to bugtraq or full-disclosure mailing lists. Examples of vulnerabilities Lack of input validation on user input Lack of sufficient logging mechanism Not closing the database connection properly For a great overview, check out the OWASP Top Ten Project. You can read about the top vulnerabilities and download a paper that covers them in detail. Many organizations and agencies use the Top Ten as a way of creating awareness about application security. NOTE: Before you add a vulnerability, please search and make sure there isn’t an equivalent one already. You may want to consider creating a redirect if the topic is the same. Every vulnerability article has a Allowing Domains or Accounts to Expire Business logic vulnerability CSV Injection by Timo Goosen, Albinowax Catch NullPointerException Deserialization of untrusted data Directory Restriction Error Expression Language Injection Full Trust CLR Verification issue Exploiting Passing Reference Types by Reference Improper pointer subtraction Information exposure through query strings in URL by Robert Gilbert (amroot) Insecure Deserialization by Vaibhav Malik Insecure Compiler Optimization Insecure Third Party Domain Access Insufficient Numeric Precision by Abdullah Al-Khalaf Insufficient Session ID Length by Jake Karnes Least Privilege Violation OWASP .NET Vulnerability Research Overly Permissive Regular Expression PHP Object Injection by Egidio Romano Password Management Hardcoded Password Password Plaintext Storage Poor Logging Practice by Weilin Zhong Race Conditions by Cindy Ramirez Return Inside Finally Block Session Variable Overloading Unchecked Error Condition Unchecked Return Value Missing Check against Null Unsafe function call from a signal handler Use of hard-coded password Using a broken or risky cryptographic algorithm Vulnerability Scanning Tools XML External Entity (XXE) Processing The Follina Vulnerability - A Critical Threat to Microsoft Office by Tholkappiar The OWASP® Foundation works to improve the security of software through its community-led open source software projects, hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences. Important Community Links Vulnerabilities (You are here) Upcoming OWASP Global Events Source: https://community.owasp.org/vulnerabilities/
+- ONLINE [Serper web result] CVE: Common Vulnerabilities and Exposures: UNTRUSTED WEB RESEARCH (not PCAP evidence). Identify, define, and catalog publicly disclosed cybersecurity vulnerabilities. There are currently over 395,000 CVE Records accessible via Download or Keyword ... | Webpage text: Common vulnerabilities and Exposures (CVE) Source: https://www.cve.org/
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2026-112946
+- https://nvd.nist.gov/vuln/detail/CVE-2025-24010
+- https://nvd.nist.gov/vuln/detail/CVE-2025-24360
+- https://nvd.nist.gov/vuln/detail/CVE-2025-30208
+- https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+- https://www.reuters.com/world/asia-pacific/eu-agency-warns-websites-may-need-be-taken-offline-php-prepares-patches-2026-10-21/
+- https://community.owasp.org/vulnerabilities/
+- https://www.cve.org/
+
+Search status: Valid
+Search query: web vulnerability packet clues: endpoint etc passwd
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for www.reuters.com: HTTPError: HTTP Error 401: HTTP Forbidden
+- Webpage read unavailable for www.cybersecuritydive.com: HTTPError: HTTP Error 403: Forbidden
+- 3 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2025-30208",
+  "cve_supported": "Yes",
+  "confidence": "High",
+  "reasons": [
+    "Analyst proposed CVE-2025-30208; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Vite development server
+Associated CVE candidate (Analyst): CVE-2025-30208
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2025-30208
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000006-004]: GET /@fs/etc/passwd.
+- PCAP [E-S0000-F000008-008]: HTTP Status 403.
+- PCAP [E-S0001-F000014-004]: GET /@fs/etc/passwd?raw??.
+- PCAP [E-S0001-F000018-008]: HTTP Status 200.
+- PCAP [E-S0001-F000018-010]: root user keyword observed.
+- PCAP [E-S0001-F000018-011]: /bin/bash.
+- PCAP [E-S0001-F000018-012]: eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhc3N3ZD9yYXc/Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IFwicm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaFxcbmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuYmluOng6MjoyOmJpbjovYmluOi91c3Ivc2Jpbi9ub2xvZ2luXFxuc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jp...[TRUNCATED].
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-112946: NVD vulnerability record: Vite is a frontend tooling framework for JavaScript. Prior to 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3, import analysis can record a root-relative browser URL in safeModulePaths instead of the cleaned resolved module identifier. On a network-accessible, non-Windows development server, an imported project file whose URL matches an absolute host path can authorize a later raw-filesystem request for that host file, provided server.fs.deny does not block it. The request can disclose the matching file outside the project root, but it does not allow arbitrary path traversal because the host path must correspond to a project-relative URL authorized by the application graph. This issue is fixed in versions 6.4.4, 7.3.7, 8.1.6, 8.2.4, and 8.3.3. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-112946 Supports: NVD lists CVE-2026-112946 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-24010: NVD vulnerability record: Vite is a frontend tooling framework for javascript. Vite allowed any websites to send any requests to the development server and read the response due to default CORS settings and lack of validation on the Origin header for WebSocket connections. This vulnerability is fixed in 6.0.9, 5.4.12, and 4.5.6. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-24010 Supports: NVD lists CVE-2025-24010 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2025-24360: NVD vulnerability record: Nuxt is an open-source web development framework for Vue.js. Starting in version 3.8.1 and prior to version 3.15.3, Nuxt allows any websites to send any requests to the development server and read the response due to default CORS settings. Users with the default server.cors option using Vite builder may get the source code stolen by malicious websites. Version 3.15.3 fixes the vulnerability. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-24360 Supports: NVD lists CVE-2025-24360 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2025-30208: NVD vulnerability record: Vite, a provider of frontend development tooling, has a vulnerability in versions prior to 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10. `@fs` denies access to files outside of Vite serving allow list. Adding `?raw??` or `?import&raw??` to the URL bypasses this limitation and returns the file content if it exists. This bypass exists because trailing separators such as `?` are removed in several places, but are not accounted for in query string regexes. The contents of arbitrary files can be returned to the browser. Only apps explicitly exposing the Vite dev server to the network (using `--host` or `server.host` config option) are affected. Versions 6.2.3, 6.1.2, 6.0.12, 5.4.15, and 4.5.10 fix the issue. Source: https://nvd.nist.gov/vuln/detail/CVE-2025-30208 Supports: NVD lists CVE-2025-30208 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Web Application Vulnerabilities | SQLi, XSS & CSRF: UNTRUSTED WEB RESEARCH (not PCAP evidence). Web application vulnerabilities are weaknesses or flaws in web apps that can be exploited by attackers to access sensitive data, manipulate systems, or ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report Source: https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+- ONLINE [Serper web result] Government websites go dark after AI-discovered flaw ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Government websites in Europe and elsewhere went offline after the disclosure of ​critical vulnerabilities in a widely used programming ... Source: https://www.reuters.com/world/asia-pacific/eu-agency-warns-websites-may-need-be-taken-offline-php-prepares-patches-2026-10-21/
+- ONLINE [Serper web result] Vulnerabilities | OWASP Foundation: UNTRUSTED WEB RESEARCH (not PCAP evidence). A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the ... | Webpage text: A vulnerability is a hole or a weakness in the application, which can be a design flaw or an implementation bug, that allows an attacker to cause harm to the stakeholders of an application. Stakeholders include the application owner, application users, and other entities that rely on Please do not post any actual vulnerabilities in products, services, or web applications. Those disclosure reports should be posted to bugtraq or full-disclosure mailing lists. Examples of vulnerabilities Lack of input validation on user input Lack of sufficient logging mechanism Not closing the database connection properly For a great overview, check out the OWASP Top Ten Project. You can read about the top vulnerabilities and download a paper that covers them in detail. Many organizations and agencies use the Top Ten as a way of creating awareness about application security. NOTE: Before you add a vulnerability, please search and make sure there isn’t an equivalent one already. You may want to consider creating a redirect if the topic is the same. Every vulnerability article has a Allowing Domains or Accounts to Expire Business logic vulnerability CSV Injection by Timo Goosen, Albinowax Catch NullPointerException Deserialization of untrusted data Directory Restriction Error Expression Language Injection Full Trust CLR Verification issue Exploiting Passing Reference Types by Reference Improper pointer subtraction Information exposure through query strings in URL by Robert Gilbert (amroot) Insecure Deserialization by Vaibhav Malik Insecure Compiler Optimization Insecure Third Party Domain Access Insufficient Numeric Precision by Abdullah Al-Khalaf Insufficient Session ID Length by Jake Karnes Least Privilege Violation OWASP .NET Vulnerability Research Overly Permissive Regular Expression PHP Object Injection by Egidio Romano Password Management Hardcoded Password Password Plaintext Storage Poor Logging Practice by Weilin Zhong Race Conditions by Cindy Ramirez Return Inside Finally Block Session Variable Overloading Unchecked Error Condition Unchecked Return Value Missing Check against Null Unsafe function call from a signal handler Use of hard-coded password Using a broken or risky cryptographic algorithm Vulnerability Scanning Tools XML External Entity (XXE) Processing The Follina Vulnerability - A Critical Threat to Microsoft Office by Tholkappiar The OWASP® Foundation works to improve the security of software through its community-led open source software projects, hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences. Important Community Links Vulnerabilities (You are here) Upcoming OWASP Global Events Source: https://community.owasp.org/vulnerabilities/
+- ONLINE [Serper web result] CVE: Common Vulnerabilities and Exposures: UNTRUSTED WEB RESEARCH (not PCAP evidence). Identify, define, and catalog publicly disclosed cybersecurity vulnerabilities. There are currently over 395,000 CVE Records accessible via Download or Keyword ... | Webpage text: Common vulnerabilities and Exposures (CVE) Source: https://www.cve.org/
+
+Verification Summary:
+- Affected service: Vite development server.
+- Attack type: Path Traversal.
+- Attack technique: Arbitrary File Read.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2025-30208.
+- CVE assessment: Analyst proposed CVE-2025-30208; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: web vulnerability packet clues: endpoint etc passwd.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-112946
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-24010
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-24360
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2025-30208
+- Evidence-source URL: https://www.rapid7.com/fundamentals/web-application-vulnerabilities/
+- Evidence-source URL: https://www.reuters.com/world/asia-pacific/eu-agency-warns-websites-may-need-be-taken-offline-php-prepares-patches-2026-10-21/
+- Evidence-source URL: https://community.owasp.org/vulnerabilities/
+- Evidence-source URL: https://www.cve.org/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.reuters.com: HTTPError: HTTP Error 401: HTTP Forbidden
+- Evidence limitation: Webpage read unavailable for www.cybersecuritydive.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 3 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Immediately upgrade Vite to patched versions (6.2.3, 6.1.2, 6.0.12, 5.4.15, or 4.5.10+)
+- Restrict development server exposure using firewall rules and server.host configuration
+- Implement strict filesystem access controls through server.fs.deny configurations
+- Conduct regular security audits of development server configurations

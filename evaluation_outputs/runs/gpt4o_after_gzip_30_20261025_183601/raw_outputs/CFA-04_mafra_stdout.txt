@@ -1,0 +1,174 @@
+============================================================
+MAFRA MCP - Online Evidence-Enrichment Forensic Analysis
+============================================================
+
+Analysing: incident.pcap
+Anonymous case ID: case_6ac7f7b1c1d3ff113758
+
+[1/3] Preparing network evidence...
+
+Flow summary saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\MAFRA_Eval30\pcaps\CFA_event4_CVE-2024-23897_mafra_mcp_flow_summary.txt
+[2/3] Running forensic agents and online research...
+Memory Manager: DISABLED (fair evaluation mode)
+
+Investigation findings:
+  Service: Jetty
+  Attack Type: Path Traversal
+  Attack Success: Unknown
+  CVE: CVE-2021-28169
+  Overall Confidence: Low
+
+Full MAFRA MCP report saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-04_mafra_report.txt
+MCP evidence audit saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-04_mafra_report.mcp_evidence.json
+[3/3] Saving investigation results...
+Memory storage skipped: mode=disabled
+Total cases in this isolated collection: 0
+Detailed terminal log saved to: C:\Users\12486\Desktop\FRA_Project_V2_MCP\evaluation_outputs\runs\gpt4o_after_gzip_30_20261025_183601\reports\CFA-04_mafra_report.terminal.log
+
+============================================================
+FINAL SECURITY REPORT
+============================================================
+Affected Service: Jetty
+Associated CVE candidate (Analyst): CVE-2021-28169
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0004-F000346-004]: POST /cli?remoting=false.
+- PCAP [E-S0004-F000346-005]: Host: localhost:8080.
+- PCAP [E-S0004-F000346-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0004-F000350-008]: HTTP Status 500.
+- PCAP [E-S0004-F000350-009]: Content-Type: text/html;charset=utf-8.
+- PCAP [E-S0004-F000350-011]: Id.
+- PCAP [E-S0005-F000365-004]: POST /cli?remoting=false.
+- PCAP [E-S0005-F000365-005]: Host: localhost:8080.
+- PCAP [E-S0005-F000365-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0005-F000367-007]: HTTP Status 200.
+- PCAP [E-S0005-F000384-008]: root user keyword observed.
+- PCAP [E-S0008-F000438-004]: POST /cli?remoting=false.
+- PCAP [E-S0008-F000438-005]: Host: localhost:8080.
+- PCAP [E-S0008-F000438-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0008-F000462-008]: HTTP Status 200.
+- PCAP [E-S0010-F000480-004]: POST /cli?remoting=false.
+- PCAP [E-S0010-F000480-005]: Host: localhost:8080.
+- PCAP [E-S0010-F000480-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0010-F000490-008]: HTTP Status 200.
+- PCAP [E-S0011-F000501-004]: POST /cli?remoting=false.
+- PCAP [E-S0011-F000501-005]: Host: localhost:8080.
+- PCAP [E-S0011-F000501-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0011-F000503-007]: HTTP Status 200.
+- PCAP [E-S0011-F000560-008]: root user keyword observed.
+- PCAP [E-S0012-F000508-003]: POST /cli?remoting=false.
+- PCAP [E-S0012-F000508-004]: Host: localhost:8080.
+- PCAP [E-S0012-F000508-005]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0012-F000599-008]: HTTP Status 200.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-8384: NVD vulnerability record: In Eclipse Jetty, an HTTP URI of this form:
+
+
+
+
+
+/public;/../admin/secret.txt
+
+
+
+
+
+
+
+
+results in an unresolved path of:
+
+
+
+
+
+/public/../admin/secret.txt
+
+
+
+
+
+
+
+
+instead of the expected:
+
+
+
+
+
+/admin/secret.txt
+
+
+
+
+
+
+
+
+Jetty itself is not affected, as it will not serve the secret.txt file because it will not pass the alias checker (only resolved resources are served).
+
+
+
+
+However, web applications that rely on resolved paths being provided by Jetty may be confused when receiving an unresolved path. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-8384 Supports: Web-cited CVE-2026-8384 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2021-28169: NVD vulnerability record: For Eclipse Jetty versions <= 9.4.40, <= 10.0.2, <= 11.0.2, it is possible for requests to the ConcatServlet with a doubly encoded path to access protected resources within the WEB-INF directory. For example a request to `/concat?/%2557EB-INF/web.xml` can retrieve the web.xml file. This can reveal sensitive information regarding the implementation of a web application. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-28169 Supports: NVD lists CVE-2021-28169 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2014-3626: NVD vulnerability record: The Grails Resource Plugin often has to exchange URIs for resources with other internal components. Those other components will decode any URI passed to them. To protect against directory traversal the Grails Resource Plugin did the following: normalized the URI, checked the normalized URI did not step outside the appropriate root directory (e.g. the web application root), decoded the URI and checked that this did not introduce additional /../ (and similar) sequences. A bug was introduced where the Grails Resource Plugin before 1.2.13 returned the decoded version of the URI rather than the normalized version of the URI after the directory traversal check. This exposed a double decoding vulnerability. To address this issue, the Grails Resource Plugin now repeatedly decodes the URI up to three times or until decoding no longer changes the URI. If the decode limit of 3 is exceeded the URI is rejected. A side-effect of this is that the Grails Resource Plugin is unable to serve a resource that includes a '%' character in the full path to the resource. Not all environments are vulnerable because of the differences in URL resolving in different servlet containers. Applications deployed to Tomcat 8 and Jetty 9 were found not not be vulnerable, however applications deployed to JBoss EAP 6.3 / JBoss AS 7.4 and JBoss AS 7.1 were found to be vulnerable (other JBoss versions weren't tested). In certain cases JBoss returns JBoss specific vfs protocol urls from URL resolution methods (ClassLoader.getResources). The JBoss vfs URL protocol supports resolving any file on the filesystem. This made the directory traversal possible. There may be other containers, in addition to JBoss, on which this vulnerability is exposed. Source: https://nvd.nist.gov/vuln/detail/CVE-2014-3626 Supports: NVD lists CVE-2014-3626 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2024-31848: NVD vulnerability record: A path traversal vulnerability exists in the Java version of CData API Server < 23.4.8844 when running using the embedded Jetty server, which could allow an unauthenticated remote attacker to gain complete administrative access to the application. Source: https://nvd.nist.gov/vuln/detail/CVE-2024-31848 Supports: NVD lists CVE-2024-31848 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Jetty Web Server - Directory Traversal: UNTRUSTED WEB RESEARCH (not PCAP evidence). Jetty Web Server is prone to a directory-traversal vulnerability because it fails to sufficiently sanitize user-supplied input. Source: https://www.exploit-db.com/exploits/36318
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-8384 CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying on Jetty's resolved paths. This article covers technical details, impact, and mitigation. CVE-2026-8384 Overview CVE-2026-8384 is a path resolution vulnerability in Eclipse Jetty. When Jetty processes an HTTP URI containing a semicolon segment followed by parent directory traversal, the server returns an unresolved path to downstream web applications. For example, the URI /public;/../admin/secret.txt is passed through as /public/../admin/secret.txt rather than being normalized to /admin/secret.txt. Jetty itself does not serve the target file because its alias checker only serves resolved resources. However, web applications that trust Jetty to provide fully resolved paths may make incorrect authorization or routing decisions. The issue is tracked under CWE-647: Use of Non-Canonical URL Paths for Authorization Decisions. Web applications relying on Jetty-normalized paths for access control may expose restricted resources when attackers craft URIs containing semicolon path parameters combined with directory traversal sequences. Eclipse Jetty (see vendor advisory for affected version ranges) Web applications deployed on Jetty that consume request paths for authorization Downstream services and reverse proxies parsing Jetty-forwarded paths 2026-07-14 - CVE-2026-8384 published to NVD 2026-07-14 - Last updated in NVD database Technical Details for CVE-2026-8384 The flaw resides in how Jetty processes semicolon path parameters during URI decoding. In HTTP URIs, the semicolon character introduces path parameters as defined in RFC 3986. Jetty strips these parameters during processing but does not properly normalize the resulting path when it contains parent directory references (..). Given the request URI /public;/../admin/secret.txt, Jetty produces the unresolved path /public/../admin/secret.txt instead of the canonical form /admin/secret.txt. Jetty's alias checker prevents Jetty from serving the target file directly. The risk emerges when embedded web applications, servlets, or filters make authorization decisions based on the raw path string provided by Jetty. The root cause is inconsistent URI normalization across the request processing pipeline. Semicolon segments are consumed early, but the subsequent path is not re-normalized to collapse .. sequences. Applications that expect Jetty to hand them a canonical, resolved path receive a hybrid string that appears benign at the prefix (/public/...) while actually pointing elsewhere. An unauthenticated remote attacker sends a crafted HTTP request over the network. The attacker inserts a semicolon segment followed by .. traversal sequences to bypass path-prefix-based access controls in Jetty-hosted applications. Exploitation requires no privileges or user interaction. The impact is limited to integrity of downstream authorization decisions and does not directly expose files Source: https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+- ONLINE RESEARCH LEAD [Serper web result] Jetty Security: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are a couple of avenues for reporting security issues to the Jetty project. Jetty Security Reports Published ID Severity Impacted Versions Fixed Versions ... | Webpage text: Reporting Security Issues There are a couple of avenues for reporting security issues to the Jetty project. If the issue is directly related to Jetty itself, then reporting to the Jetty developers is encouraged. The most direct method is to mail security@jetty.org or security@webtide.com. We are flexible in how we work with reporters of security issues but reserve the right to act in the interests of the Jetty project in all circumstances. If the issue is related to Eclipse or its Jetty integration, we would like to encourage you to reach out to security@eclipse.org. If the issue is related to integrations with Jetty, we are happy to work with you to identify the proper entity, and either of the approaches above is okay. We prefer that security issues be reported directly to Jetty developers via email instead of GitHub issues since it has no facility to tag issues as private. We will actively delete issues that are opened in this way. For more information on how we handle security issues, please refer to our Security Policy. CVE-2026-19863 CVE-2026-77711 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76184 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18660 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18661 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-19864 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76182 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18659 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18662 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-12611 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.10 12.0.38, 12.1.11 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19203 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19204 <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (10.0.32, 11.0.32 see details for availability) CVE-2024-7708 CVE-2026-8384 CVE-2026-6790 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.34, <=12.1.8 12.0.35, 12.1.9 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-10051 CVE-2026-10050 <=9.4.62, <=10.0.30, <=11.0.30, <=12.0.35, <=12.1.9 12.0.36, 12.1.10 (9.4.63, 10.0.31, 11.0.31 see details for availability) CVE-2026-5795 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.33, <=12.1.7 12.0.34, 12.1.8 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-2332 <=9.4.59, <=10.0.27, <=11.0.28, <=12.0.32, <=12.1.6 12.0.33, 12.1.7 (9.4.60, 10.0.28, 11.0.29 see details for availability) CVE-2026-1605 CVE-2025-11143 <=9.4 Source: https://jetty.org/security.html
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-5795: Jetty Authentication Bypass and Privilege ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw in Jetty's authentication layer can allow one user's privileges to be applied to another user's request, effectively bypassing access ... Source: https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+
+Verification Summary:
+- Affected service: Jetty.
+- Attack type: Path Traversal.
+- Attack technique: File Disclosure.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: No.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 2/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2021-28169; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: CVE-2021-28169 association
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Valid.
+- MCP investigation query: Jetty 10.0.18 path traversal vulnerability.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-8384
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2021-28169
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2014-3626
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2024-31848
+- Evidence-source URL: https://www.exploit-db.com/exploits/36318
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+- Evidence-source URL: https://jetty.org/security.html
+- Evidence-source URL: https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: 6 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Review and update Jetty server configurations to ensure proper handling of path traversal attempts.
+- Implement additional logging and monitoring to detect unusual access patterns.
+- Conduct regular security assessments and vulnerability scans on the Jetty server.
+============================================================
+MAFRA MCP analysis complete!
+
+C:\Users\12486\Desktop\FRA_Project_V2_MCP\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1

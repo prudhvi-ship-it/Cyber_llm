@@ -128,6 +128,7 @@ def evaluate_completeness(
     skipped_fra=False,
     skipped_mafra=False,
     telemetry_error_count=0,
+    single_system_evaluation=False,
 ):
     expected = {str(value) for value in expected_ids}
     observed = set(results_df.get("id", pd.Series(dtype=str)).astype(str))
@@ -142,7 +143,7 @@ def evaluate_completeness(
         dataset_reasons.append(f"{len(extra_ids)} unexpected case IDs are present")
     if duplicate_count:
         dataset_reasons.append(f"{duplicate_count} duplicate case rows are present")
-    if skipped_fra:
+    if skipped_fra and not single_system_evaluation:
         dataset_reasons.append("FRA was skipped")
     if skipped_mafra:
         dataset_reasons.append("MAFRA was skipped")
@@ -196,6 +197,8 @@ def evaluate_completeness(
         status = "PRELIMINARY_INCOMPLETE"
     elif provider_error_count:
         status = "COMPLETE_WITH_PROVIDER_ERROR_WARNINGS"
+    elif single_system_evaluation:
+        status = "COMPLETE_MAFRA_MCP_SINGLE_SYSTEM"
     elif profile == "heterogeneous" and memory_mode == "read_only":
         status = "COMPLETE_PROPOSED_MULTI_LLM_WITH_TRAINING_RAG"
     elif profile == "heterogeneous":
@@ -215,7 +218,10 @@ def evaluate_completeness(
         "multi_llm_no_memory_ablation": (
             clean_run and profile == "heterogeneous" and memory_mode == "disabled"
         ),
-        "controlled_same_model_run": clean_run and profile == "fair_same_model",
+        "controlled_same_model_run": (
+            clean_run and profile == "fair_same_model" and not single_system_evaluation
+        ),
+        "single_system_evaluation": bool(single_system_evaluation),
         "profile": profile,
         "memory_mode": memory_mode,
         "expected_case_count": len(expected),

@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "phpMyAdmin command injection endpoint tbl find replace packet clues: endpoint tbl find replace",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2016-5734: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-5734",
+      "snippet": "phpMyAdmin 4.0.x before 4.0.10.16, 4.4.x before 4.4.15.7, and 4.6.x before 4.6.3 does not properly choose delimiters to prevent use of the preg_replace e (aka eval) modifier, which might allow remote attackers to execute arbitrary PHP code via a crafted string, as demonstrated by the table search-and-replace implementation.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2016-5734 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-4349: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-4349",
+      "snippet": "SQL injection vulnerability in server_privileges.php in phpMyAdmin 2.7.0 allows remote authenticated users to execute arbitrary SQL commands via the (1) dbname and (2) checkprivs parameters.  NOTE: the vendor and a third party have disputed this issue, saying that the main task of the program is to support query execution by authenticated users, and no external attack scenario exists without an auto-login configuration.  Thus it is likely that this issue will be REJECTED.  However, a closely related CSRF issue has been assigned CVE-2005-4450",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-4349 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2006-1804: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2006-1804",
+      "snippet": "SQL injection vulnerability in sql.php in phpMyAdmin 2.7.0-pl1 allows remote attackers to execute arbitrary SQL commands via the sql_query parameter.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2006-1804 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2007-5976: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-5976",
+      "snippet": "SQL injection vulnerability in db_create.php in phpMyAdmin before 2.11.2.1 allows remote authenticated users with CREATE DATABASE privileges to execute arbitrary SQL commands via the db parameter.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2007-5976 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "PMASA-2020-3",
+      "url": "https://www.phpmyadmin.net/security/PMASA-2020-3/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Summary. SQL injection relating to searching. Description. An SQL injection vulnerability has been discovered where certain parameters are not ... | Webpage text: Announcement-ID: PMASA-2020-3 SQL injection relating to searching An SQL injection vulnerability has been discovered where certain parameters are not properly escaped when generating certain queries for search actions within phpMyAdmin. An attacker can generate specially-crafted database or table names. The attack can be performed if a user attempts certain search operations on the malicious database or table. Because of the specific steps required to exploit this, we consider this vulnerability to be of moderate severity. phpMyAdmin 4.9.x releases prior to 4.9.5 and the 5.0.x releases prior to 5.0.2 are affected. Upgrade to phpMyAdmin 4.9.5 or 5.0.2 or newer or apply patch listed below. Thanks to hoangn144_VCS and Yutaka WATANABE for reporting these vulnerabilities. CVE-2020-10802 The following commits have been made to fix this issue: a8acd7a42cf743186528b0453f90aaa32bfefabe For further information and in case of questions, please contact the phpMyAdmin security team at security@phpmyadmin.net. Thank you for downloading phpMyAdmin Your download should start automatically. If not, please click here. Verify the downloaded file Please take additional steps to verify that the file you have downloaded is not corrupted. You can verify it using the following methods: Verify its PGP signature, see the Verifying phpMyAdmin releases chapter for more information. Check that the file's SHA256 hash matches Support phpMyAdmin's development phpMyAdmin relies on the work of volunteers and contractors. You can help improve phpMyAdmin by donating to our project. Every donation counts! We also have a sponsorship program for corporates who are willing to contribute more and receive benefits such as logo placement.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OS Command Injection: Examples & Prevention",
+      "url": "https://www.fastly.com/blog/back-to-basics-os-command-injection",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Understand OS command injection attacks with examples, common risks, and practical steps to prevent this web application vulnerability. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Scale AI systems, protect your content from bots, and run your edge with natural language — all on one programmable platform. DeliverReal-time experiences at global scale SecureProtect apps and APIs from AI-scale threats DeployRun code milliseconds from your users ObserveReal-time visibility, from origin to edge Professional ServicesExpert help to migrate or optimize your delivery service Managed CDNFastly's managed cloud CDN deployed inside your own network Managed Security24/7 expert-managed WAF, bot, and DDoS threat protection Live EntertainmentReal-time monitoring & support for high-traffic events Deliver fast, personalized experiences globally with Fastly CDN Get everything you need from a modern CDN — from effortless scale and built-in security to programmable control and full visibility. Fastly industry solutions Discover how Fastly helps your industry innovate, improve performance, and deliver secure online experiences that keep customers engaged. Resiliency & Availability High-performance streaming media Fastly powers the world's leading media brands with an open edge cloud platform built to deliver flawless live and on-demand entertainment at any scale, to any screen, anywhere. See why enterprises are switching from Cloudflare to Fastly with 24% faster load times, 33% better TTFB, and stronger app security. A new architecture for the modern internet Explore Fastly's global network — 622 Tbps of capacity, fewer, more powerful POPs, and sub-millisecond TTFB at the 99th percentile. Originally published in July 2023. Updated September 2025. OS Command Injection is a web application vulnerability that can lead to arbitrary command execution on the underlying operating system. Attackers exploit command injection vulnerabilities by supplying malicious input to operating system commands executed by an application. Successful exploitation can allow attackers to retrieve sensitive data, escalate privileges, and move laterally within a network. Strong input validation is the preferred defense against command injection vulnerabilities. Avoiding operating system command execution entirely is the most effective mitigation. What is OS Command Injection? OS Command Injection is a web application vulnerability that allows attackers to execute arbitrary commands on the underlying operating system. Because successful exploitation can lead to full command execution on a target system, command injection vulnerabilities are often considered among the most severe web application vulnerabilities. For a concise definition, see Fastly's Learning Center entry on OS Command Injection. This blog goes deeper: below, we'll walk through real-world CVE case studies, the mechanics of an exploitation, and what these attacks look like when observed by a WAF in production traffic. This is a common pattern in web applications that perform operating system command execution on behalf of users, and it can become dangerous when user input is passed directly to shell commands. Consider a web application meant to monitor internal systems and provide alerts when one of the systems goes offline. In this scenario, the application may want to test network reachability to the",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Testing for OS command injection vulnerabilities",
+      "url": "https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/input-validation/command-injection/testing",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). OS command injection is a vulnerability that enables an attacker to execute arbitrary operating system (OS) commands on the server that is ... | Webpage text: Back to documentation home Professional and Community Edition Professional and Community Edition Step 1: Download and install Step 2: Intercepting HTTP traffic Step 3: Modifying requests Step 4: Setting the target scope Step 5: Reissuing requests Step 6: Running your first scan [Pro only] Step 7: Generating a report [Pro only] Mapping the visible attack surface Discovering hidden content Automated content discovery Analyzing the attack surface Scoping the effort to audit a website Identifying high-risk functionality Identifying supported HTTP methods Checking for hidden inputs Identifying which parts of a token impact the response Testing for vulnerabilities Testing authentication mechanisms Guessing usernames for known users Testing session management mechanisms Analyzing session token generation Identifying which parts of a token impact the response Determining the session timeout Generating a CSRF proof-of-concept Maintaining an authenticated session Testing for privilege escalation Testing horizontal access controls Testing for parameter-based access control Spoofing your IP address using Burp Proxy match and replace Bypassing client-side controls Testing for SQL injection vulnerabilities Cross-site scripting (XSS) Identifying reflected input Testing for DOM XSS with DOM Invader Testing for web message DOM XSS with DOM Invader Testing for reflected XSS manually Bypassing XSS filters by enumerating permitted tags and attributes Client-side prototype pollution Testing for OS command injection vulnerabilities Testing for asynchronous OS command injection vulnerabilities Exploiting OS command injection vulnerabilities to exfiltrate data Testing for XXE injection vulnerabilities Testing for blind XXE injection vulnerabilities Testing for directory traversal vulnerabilities Testing for SSRF vulnerabilities Testing for WebSocket vulnerabilities Manipulating WebSocket messages Manipulating WebSocket handshakes Working with GraphQL in Burp Suite Complementing your manual testing with Burp Scanner Getting started with Burp Proxy Filtering WebSockets history Creating rules with scripts Working with HTTP messages Using Burp AI in Repeater Generating AI-powered explanations Automating tasks with custom actions Sending grouped HTTP requests Working with WebSocket messages Filtering the site map with scripts Manual application mapping Reviewing unrequested items Analyzing the attack surface Working with Logger entries Capture filter with scripts Viewing requests sent by Burp extensions Testing with web messages Testing for prototype pollution Testing for DOM clobbering Prototype pollution settings Annotating Organizer items Best practices for writing AI features Submitting scripts to GitHub Managing custom scan checks Importing custom scan checks Creating custom scan checks Testing custom scan checks Submitting BChecks to GitHub Submitting scripts to GitHub Installing from the BApp Store Troubleshooting extensions Viewing requests sent by extensions Setting up your development environment Using the starter project Writing your first extension Setting up remote debugging Loading your extension in Burp BApp Store acceptance criteria Submitting extensions to the BApp Store Maintaining extensions",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Find and Replace text in the entire table using a MySQL ...",
+      "url": "https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). For a single table update. UPDATE `table_name` SET `field_name` = replace(same_field_name, 'unwanted_text', 'wanted_text').",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T06:20:07.424243+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2016-5734",
+    "CVE-2005-4349",
+    "CVE-2006-1804",
+    "CVE-2007-5976"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

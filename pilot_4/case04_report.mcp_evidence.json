@@ -1,0 +1,82 @@
+{
+  "status": "Valid",
+  "query": "Redis GitLab Community Edition Information Disclosure Unauthenticated direct access to exposed Redis service (GET of cache keys)",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Cisco IOS XR Open Port Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Cisco IOS XR: Cisco IOS XR software health check opens TCP port 6379 by default on activation. An attacker can connect to the Redis instance on the open port and allow access to the Redis instance that is running within the NOSi container. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2022-20821 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00"
+    },
+    {
+      "source_name": "CISA KEV",
+      "title": "Debian-specific Redis Server Lua Sandbox Escape Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Redis Debian-specific Redis Servers: Redis is prone to a (Debian-specific) Lua sandbox escape, which could result in remote code execution. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2022-0543 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Troubleshooting Redis",
+      "url": "https://docs.gitlab.com/administration/redis/troubleshooting/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). If you get an error in GitLab like Redis::CannotConnectError: No sentinels available. , there may be something wrong with your configuration files or it can be ... | Webpage excerpt: Connect to the other Redis machines via TCP in 6379 Connect to the Redis machines via TCP in 6379 Basic Redis activity check Start Redis troubleshooting with a basic Redis activity check: Run gitlab-redis-cli --stat and observe the output while it runs. basic Redis functionality is working and GitLab can connect to it. Troubleshooting Redis replication",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "gitlab-reconfigure blocked on redis after reinstalling ...",
+      "url": "https://stackoverflow.com/questions/62208800/gitlab-reconfigure-blocked-on-redis-after-reinstalling-gitlab-on-ubuntu-18-04-4l",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). I decide to reinstall gitlab-ce ( 12.10.0 ) after dealing with issues on 12.9.0. Before installing the new version, I had ensured that all ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "The redis requirement (6.2.x) of GitLab v18.0 is not ...",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/issues/556684",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The redis requirement (6.2.x) of GitLab v18.0 is not compatible with the Redis versions available on Azure Cache for Redis.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CsEnox/Gitlab-Redis-Deserialization-RCE",
+      "url": "https://github.com/CsEnox/Gitlab-Redis-Deserialization-RCE",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Disclosure: This vulnerability was reported to GitLab via HackerOne and was closed as Informational. Their assessment was that the pre-requisite of Redis access ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T00:00:23.735355+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2022-0543",
+    "CVE-2022-20821"
+  ],
+  "retrieval_errors": [
+    "NVD lookup failed: TimeoutError: The read operation timed out",
+    "NVD lookup failed: HTTPError: HTTP Error 503: Service Unavailable",
+    "Webpage extraction skipped for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage extraction skipped for gitlab.com: HTTPError: HTTP Error 302: Found"
+  ]
+}

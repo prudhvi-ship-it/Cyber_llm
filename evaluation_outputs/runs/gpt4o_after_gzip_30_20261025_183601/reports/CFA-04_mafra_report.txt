@@ -1,0 +1,1086 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 23
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22
+Protocol Counts: ICMPv6=2, ARP=4, DNS=4, TCP=627, TLSv1.2=3, TLSv1.3=118, HTTP=40
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.2:60890           <-> 52.202.51.185:443              154 3007 kB       113 7591 bytes     267 3014 kB      19.884954000         2.1171
+172.18.0.1:37736           <-> 172.18.0.2:8080                 48 5830 bytes      49 3488 bytes      97 9318 bytes   142.315421000         1.1592
+172.18.0.1:60030           <-> 172.18.0.2:8080                 27 3770 bytes      29 2168 bytes      56 5938 bytes   137.645712000         1.2371
+172.18.0.1:37706           <-> 172.18.0.2:8080                 15 1888 bytes      17 1376 bytes      32 3264 bytes   139.596500000         1.1275
+172.18.0.2
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0003-F000338-001 | client->server] 172.18.0.1:47724 -> 172.18.0.2:8080 (TCP)
+- [E-S0003-F000339-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:47724 (TCP)
+- [E-S0003-F000341-003 | client->server] 172.18.0.1:47724 -> 172.18.0.2:8080 (HTTP)
+- [E-S0003-F000357-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:47724 (HTTP)
+- [E-S0003-F000341-004 | client->server] POST /cli?remoting=false
+- [E-S0003-F000341-005 | client->server] Host: localhost:8080
+- [E-S0003-F000341-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0003-F000348-007 | server->client] HTTP Status 200
+- [E-S0004-F000343-001 | client->server] 172.18.0.1:47728 -> 172.18.0.2:8080 (TCP)
+- [E-S0004-F000344-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:47728 (TCP)
+- [E-S0004-F000346-003 | client->server] 172.18.0.1:47728 -> 172.18.0.2:8080 (HTTP)
+- [E-S0004-F000350-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:47728 (HTTP)
+- [E-S0004-F000346-004 | client->server] POST /cli?remoting=false
+- [E-S0004-F000346-005 | client->server] Host: localhost:8080
+- [E-S0004-F000346-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0004-F000350-008 | server->client] HTTP Status 500
+- [E-S0004-F000350-009 | server->client] Content-Type: text/html;charset=utf-8
+- [E-S0004-F000350-010 | server->client] Cookie header observed: [REDACTED]
+- [E-S0004-F000350-011 | server->client] Id
+- [E-S0005-F000362-001 | client->server] 172.18.0.1:60030 -> 172.18.0.2:8080 (TCP)
+- [E-S0005-F000363-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:60030 (TCP)
+- [E-S0005-F000365-003 | client->server] 172.18.0.1:60030 -> 172.18.0.2:8080 (HTTP)
+- [E-S0005-F000418-009 | server->client] 172.18.0.2:8080 -> 172.18.0.1:60030 (HTTP)
+- [E-S0005-F000365-004 | client->server] POST /cli?remoting=false
+- [E-S0005-F000365-005 | client->server] Host: localhost:8080
+- [E-S0005-F000365-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0005-F000367-007 | server->client] HTTP Status 200
+- [E-S0005-F000384-008 | server->client] root user keyword observed
+- [E-S0006-F000369-001 | client->server] 172.18.0.1:60042 -> 172.18.0.2:8080 (TCP)
+- [E-S0006-F000370-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:60042 (TCP)
+- [E-S0006-F000372-003 | client->server] 172.18.0.1:60042 -> 172.18.0.2:8080 (HTTP)
+- [E-S0006-F000420-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:60042 (HTTP)
+- [E-S0006-F000372-004 | client->server] POST /cli?remoting=false
+- [E-S0006-F000372-005 | client->server] Host: localhost:8080
+- [E-S0006-F000372-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0006-F000420-008 | server->client] HTTP Status 200
+- [E-S0007-F000428-001 | client->server] 172.18.0.1:37706 -> 172.18.0.2:8080 (TCP)
+- [E-S0007-F000429-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37706 (TCP)
+- [E-S0007-F000431-003 | client->server] 172.18.0.1:37706 -> 172.18.0.2:8080 (HTTP)
+- [E-S0007-F000460-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37706 (HTTP)
+- [E-S0007-F000431-004 | client->server] POST /cli?remoting=false
+- [E-S0007-F000431-005 | client->server] Host: localhost:8080
+- [E-S0007-F000431-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0007-F000433-007 | server->client] HTTP Status 200
+- [E-S0008-F000435-001 | client->server] 172.18.0.1:37708 -> 172.18.0.2:8080 (TCP)
+- [E-S0008-F000436-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37708 (TCP)
+- [E-S0008-F000438-003 | client->server] 172.18.0.1:37708 -> 172.18.0.2:8080 (HTTP)
+- [E-S0008-F000462-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37708 (HTTP)
+- [E-S0008-F000438-004 | client->server] POST /cli?remoting=false
+- [E-S0008-F000438-005 | client->server] Host: localhost:8080
+- [E-S0008-F000438-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0008-F000462-008 | server->client] HTTP Status 200
+- [E-S0009-F000470-001 | client->server] 172.18.0.1:37710 -> 172.18.0.2:8080 (TCP)
+- [E-S0009-F000471-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37710 (TCP)
+- [E-S0009-F000473-003 | client->server] 172.18.0.1:37710 -> 172.18.0.2:8080 (HTTP)
+- [E-S0009-F000488-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37710 (HTTP)
+- [E-S0009-F000473-004 | client->server] POST /cli?remoting=false
+- [E-S0009-F000473-005 | client->server] Host: localhost:8080
+- [E-S0009-F000473-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0009-F000475-007 | server->client] HTTP Status 200
+- [E-S0010-F000477-001 | client->server] 172.18.0.1:37726 -> 172.18.0.2:8080 (TCP)
+- [E-S0010-F000478-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37726 (TCP)
+- [E-S0010-F000480-003 | client->server] 172.18.0.1:37726 -> 172.18.0.2:8080 (HTTP)
+- [E-S0010-F000490-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37726 (HTTP)
+- [E-S0010-F000480-004 | client->server] POST /cli?remoting=false
+- [E-S0010-F000480-005 | client->server] Host: localhost:8080
+- [E-S0010-F000480-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0010-F000490-008 | server->client] HTTP Status 200
+- [E-S0011-F000498-001 | client->server] 172.18.0.1:37736 -> 172.18.0.2:8080 (TCP)
+- [E-S0011-F000499-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37736 (TCP)
+- [E-S0011-F000501-003 | client->server] 172.18.0.1:37736 -> 172.18.0.2:8080 (HTTP)
+- [E-S0011-F000597-009 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37736 (HTTP)
+- [E-S0011-F000501-004 | client->server] POST /cli?remoting=false
+- [E-S0011-F000501-005 | client->server] Host: localhost:8080
+- [E-S0011-F000501-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0011-F000503-007 | server->client] HTTP Status 200
+- [E-S0011-F000560-008 | server->client] root user keyword observed
+- [E-S0012-F000505-001 | client->server] 172.18.0.1:37740 -> 172.18.0.2:8080 (TCP)
+- [E-S0012-F000506-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37740 (TCP)
+- [E-S0012-F000510-006 | client->server] 172.18.0.1:37740 -> 172.18.0.2:8080 (HTTP)
+- [E-S0012-F000599-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37740 (HTTP)
+- [E-S0012-F000508-003 | client->server] POST /cli?remoting=false
+- [E-S0012-F000508-004 | client->server] Host: localhost:8080
+- [E-S0012-F000508-005 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0012-F000599-008 | server->client] HTTP Status 200
+- [E-S0013-F000607-001 | client->server] 172.18.0.1:37742 -> 172.18.0.2:8080 (TCP)
+- [E-S0013-F000608-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37742 (TCP)
+- [E-S0013-F000610-003 | client->server] 172.18.0.1:37742 -> 172.18.0.2:8080 (HTTP)
+- [E-S0013-F000635-009 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37742 (HTTP)
+- [E-S0013-F000610-004 | client->server] POST /cli?remoting=false
+- [E-S0013-F000610-005 | client->server] Host: localhost:8080
+- [E-S0013-F000610-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0013-F000612-007 | server->client] HTTP Status 200
+- [E-S0013-F000621-008 | server->client] root user keyword observed
+- [E-S0014-F000614-001 | client->server] 172.18.0.1:37746 -> 172.18.0.2:8080 (TCP)
+- [E-S0014-F000615-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37746 (TCP)
+- [E-S0014-F000617-003 | client->server] 172.18.0.1:37746 -> 172.18.0.2:8080 (HTTP)
+- [E-S0014-F000637-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37746 (HTTP)
+- [E-S0014-F000617-004 | client->server] POST /cli?remoting=false
+- [E-S0014-F000617-005 | client->server] Host: localhost:8080
+- [E-S0014-F000617-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0014-F000637-009 | server->client] HTTP Status 200
+- [E-S0014-F000617-007 | client->server] root user keyword observed
+- [E-S0015-F000645-001 | client->server] 172.18.0.1:37762 -> 172.18.0.2:8080 (TCP)
+- [E-S0015-F000646-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37762 (TCP)
+- [E-S0015-F000648-003 | client->server] 172.18.0.1:37762 -> 172.18.0.2:8080 (HTTP)
+- [E-S0015-F000675-009 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37762 (HTTP)
+- [E-S0015-F000648-004 | client->server] POST /cli?remoting=false
+- [E-S0015-F000648-005 | client->server] Host: localhost:8080
+- [E-S0015-F000648-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0015-F000650-007 | server->client] HTTP Status 200
+- [E-S0015-F000661-008 | server->client] root user keyword observed
+- [E-S0016-F000652-001 | client->server] 172.18.0.1:37770 -> 172.18.0.2:8080 (TCP)
+- [E-S0016-F000653-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37770 (TCP)
+- [E-S0016-F000657-006 | client->server] 172.18.0.1:37770 -> 172.18.0.2:8080 (HTTP)
+- [E-S0016-F000677-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37770 (HTTP)
+- [E-S0016-F000655-003 | client->server] POST /cli?remoting=false
+- [E-S0016-F000655-004 | client->server] Host: localhost:8080
+- [E-S0016-F000655-005 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0016-F000677-009 | server->client] HTTP Status 200
+- [E-S0016-F000657-007 | client->server] root user keyword observed
+- [E-S0017-F000685-001 | client->server] 172.18.0.1:37778 -> 172.18.0.2:8080 (TCP)
+- [E-S0017-F000686-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37778 (TCP)
+- [E-S0017-F000688-003 | client->server] 172.18.0.1:37778 -> 172.18.0.2:8080 (HTTP)
+- [E-S0017-F000713-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37778 (HTTP)
+- [E-S0017-F000688-004 | client->server] POST /cli?remoting=false
+- [E-S0017-F000688-005 | client->server] Host: localhost:8080
+- [E-S0017-F000688-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0017-F000690-007 | server->client] HTTP Status 200
+- [E-S0018-F000692-001 | client->server] 172.18.0.1:37784 -> 172.18.0.2:8080 (TCP)
+- [E-S0018-F000693-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37784 (TCP)
+- [E-S0018-F000695-003 | client->server] 172.18.0.1:37784 -> 172.18.0.2:8080 (HTTP)
+- [E-S0018-F000715-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37784 (HTTP)
+- [E-S0018-F000695-004 | client->server] POST /cli?remoting=false
+- [E-S0018-F000695-005 | client->server] Host: localhost:8080
+- [E-S0018-F000695-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0018-F000715-008 | server->client] HTTP Status 200
+- [E-S0019-F000723-001 | client->server] 172.18.0.1:37800 -> 172.18.0.2:8080 (TCP)
+- [E-S0019-F000724-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37800 (TCP)
+- [E-S0019-F000726-003 | client->server] 172.18.0.1:37800 -> 172.18.0.2:8080 (HTTP)
+- [E-S0019-F000751-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37800 (HTTP)
+- [E-S0019-F000726-004 | client->server] POST /cli?remoting=false
+- [E-S0019-F000726-005 | client->server] Host: localhost:8080
+- [E-S0019-F000726-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0019-F000728-007 | server->client] HTTP Status 200
+- [E-S0020-F000730-001 | client->server] 172.18.0.1:37814 -> 172.18.0.2:8080 (TCP)
+- [E-S0020-F000731-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37814 (TCP)
+- [E-S0020-F000733-003 | client->server] 172.18.0.1:37814 -> 172.18.0.2:8080 (HTTP)
+- [E-S0020-F000753-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:37814 (HTTP)
+- [E-S0020-F000733-004 | client->server] POST /cli?remoting=false
+- [E-S0020-F000733-005 | client->server] Host: localhost:8080
+- [E-S0020-F000733-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0020-F000753-008 | server->client] HTTP Status 200
+- [E-S0021-F000761-001 | client->server] 172.18.0.1:33154 -> 172.18.0.2:8080 (TCP)
+- [E-S0021-F000762-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:33154 (TCP)
+- [E-S0021-F000764-003 | client->server] 172.18.0.1:33154 -> 172.18.0.2:8080 (HTTP)
+- [E-S0021-F000789-008 | server->client] 172.18.0.2:8080 -> 172.18.0.1:33154 (HTTP)
+- [E-S0021-F000764-004 | client->server] POST /cli?remoting=false
+- [E-S0021-F000764-005 | client->server] Host: localhost:8080
+- [E-S0021-F000764-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0021-F000766-007 | server->client] HTTP Status 200
+- [E-S0022-F000768-001 | client->server] 172.18.0.1:33160 -> 172.18.0.2:8080 (TCP)
+- [E-S0022-F000769-002 | server->client] 172.18.0.2:8080 -> 172.18.0.1:33160 (TCP)
+- [E-S0022-F000771-003 | client->server] 172.18.0.1:33160 -> 172.18.0.2:8080 (HTTP)
+- [E-S0022-F000791-007 | server->client] 172.18.0.2:8080 -> 172.18.0.1:33160 (HTTP)
+- [E-S0022-F000771-004 | client->server] POST /cli?remoting=false
+- [E-S0022-F000771-005 | client->server] Host: localhost:8080
+- [E-S0022-F000771-006 | client->server] User-Agent: python-requests/2.22.0
+- [E-S0022-F000791-008 | server->client] HTTP Status 200
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.2:45924 -> 52.202.51.185:443; packets=29; client->server=15, server->client=14; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.2:60890 -> 52.202.51.185:443; packets=267; client->server=113, server->client=154; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 2: 172.18.0.2:32866 -> 52.202.51.185:443; packets=31; client->server=16, server->client=15; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.1:47724 -> 172.18.0.2:8080; packets=14; client->server=8, server->client=6; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 4: 172.18.0.1:47728 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 5: 172.18.0.1:60030 -> 172.18.0.2:8080; packets=56; client->server=29, server->client=27; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 6: 172.18.0.1:60042 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 7: 172.18.0.1:37706 -> 172.18.0.2:8080; packets=32; client->server=17, server->client=15; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 8: 172.18.0.1:37708 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 9: 172.18.0.1:37710 -> 172.18.0.2:8080; packets=18; client->server=10, server->client=8; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 10: 172.18.0.1:37726 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 11: 172.18.0.1:37736 -> 172.18.0.2:8080; packets=97; client->server=49, server->client=48; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 12: 172.18.0.1:37740 -> 172.18.0.2:8080; packets=12; client->server=7, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 13: 172.18.0.1:37742 -> 172.18.0.2:8080; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 14: 172.18.0.1:37746 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 15: 172.18.0.1:37762 -> 172.18.0.2:8080; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 16: 172.18.0.1:37770 -> 172.18.0.2:8080; packets=12; client->server=7, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 17: 172.18.0.1:37778 -> 172.18.0.2:8080; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 18: 172.18.0.1:37784 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 19: 172.18.0.1:37800 -> 172.18.0.2:8080; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 20: 172.18.0.1:37814 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 21: 172.18.0.1:33154 -> 172.18.0.2:8080; packets=28; client->server=15, server->client=13; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 22: 172.18.0.1:33160 -> 172.18.0.2:8080; packets=10; client->server=6, server->client=4; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- Joomla application/framework candidate: observed j_3, j_3mmj, j_b, j_c, j_d, j_f, j_hmr, j_lt. A MySQL connection is supporting backend evidence here.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- Primary application candidate: Joomla
+- Supporting fingerprints: j_3, j_3mmj, j_b, j_c, j_d, j_f, j_hmr, j_lt, j_m, j_n
+- Backend dependency: MySQL
+- Reason: application-specific schema and version artifacts are more specific than the database protocol label.
+- This is not a CVE or attack-success decision.
+
+--- Stream 0 [TLS SKIPPED, FRA rule] ---
+Encrypted TLS traffic was excluded from normal PCAP flow analysis; no inference was made from its contents.
+
+--- Stream 1 [TLS SKIPPED, FRA rule] ---
+Encrypted TLS traffic was excluded from normal PCAP flow analysis; no inference was made from its contents.
+
+--- Stream 2 [TLS SKIPPED, FRA rule] ---
+Encrypted TLS traffic was excluded from normal PCAP flow analysis; no inference was made from its contents.
+
+--- Stream 3 [VALID] ---
+Service: Jetty 10.0.18
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request is targeting the path `/cli?remoting=false` and is using the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+Malicious Activities: None observed. The request and response do not contain any suspicious payloads or exploit indicators.
+Attack Success: None
+Evidence: 
+- [E-S0003-F000341-004 | client->server | epoch=1727267617.407151] POST /cli?remoting=false
+- [E-S0003-F000341-005 | client->server | epoch=1727267617.407151] Host: localhost:8080
+- [E-S0003-F000341-006 | client->server | epoch=1727267617.407151] User-Agent: python-requests/2.22.0
+- [E-S0003-F000348-007 | server->client | epoch=1727267618.279426] HTTP Status 200
+
+--- Stream 4 [VALID] ---
+Service: Jetty 10.0.18
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 500 Server Error status, indicating an internal server error occurred while processing the request.
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/etc/passwd`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+Attack Success: Failed
+Evidence:
+- [E-S0004-F000346-004 | client->server | epoch=1727267617.500451] POST /cli?remoting=false
+- [E-S0004-F000346-005 | client->server | epoch=1727267617.500451] Host: localhost:8080
+- [E-S0004-F000346-006 | client->server | epoch=1727267617.500451] User-Agent: python-requests/2.22.0
+- [E-S0004-F000350-008 | server->client | epoch=1727267619.198073] HTTP Status 500
+- [E-S0004-F000350-009 | server->client | epoch=1727267619.198073] Content-Type: text/html;charset=utf-8
+- [E-S0004-F000350-011 | server->client | epoch=1727267619.198073] Id
+
+--- Stream 5 [VALID] ---
+Service: Jetty 10.0.18
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+Malicious Activities: The response contains references to various system user accounts, suggesting a potential attempt to enumerate system users or access sensitive information. This indicates a possible path traversal or file disclosure attempt targeting the Jetty server.
+Attack Success: Succeeded
+Evidence:
+- [E-S0005-F000365-004 | client->server | epoch=1727267633.994129] POST /cli?remoting=false
+- [E-S0005-F000365-005 | client->server | epoch=1727267633.994129] Host: localhost:8080
+- [E-S0005-F000365-006 | client->server | epoch=1727267633.994129] User-Agent: python-requests/2.22.0
+- [E-S0005-F000367-007 | server->client | epoch=1727267633.999471] HTTP Status 200
+- [E-S0005-F000384-008 | server->client | epoch=1727267634.192813] root user keyword observed
+
+--- Stream 6 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/etc/shadow`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The response does not contain any content, suggesting the file disclosure attempt did not succeed.)
+
+Evidence:
+- [E-S0006-F000372-004 | client->server | epoch=1727267634.097022] POST /cli?remoting=false
+- [E-S0006-F000372-005 | client->server | epoch=1727267634.097022] Host: localhost:8080
+- [E-S0006-F000372-006 | client->server | epoch=1727267634.097022] User-Agent: python-requests/2.22.0
+- [E-S0006-F000420-008 | server->client | epoch=1727267635.221829] HTTP Status 200
+
+--- Stream 7 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: None observed. The request and response do not contain any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0007-F000431-004 | client->server | epoch=1727267635.944890] POST /cli?remoting=false
+- [E-S0007-F000431-005 | client->server | epoch=1727267635.944890] Host: localhost:8080
+- [E-S0007-F000431-006 | client->server | epoch=1727267635.944890] User-Agent: python-requests/2.22.0
+- [E-S0007-F000433-007 | server->client | epoch=1727267635.955292] HTTP Status 200
+
+--- Stream 8 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/etc/hosts`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Succeeded (The server responded with a 200 OK status, suggesting the file disclosure attempt was successful.)
+
+Evidence:
+- [E-S0008-F000438-004 | client->server | epoch=1727267636.047172] POST /cli?remoting=false
+- [E-S0008-F000438-005 | client->server | epoch=1727267636.047172] Host: localhost:8080
+- [E-S0008-F000438-006 | client->server | epoch=1727267636.047172] User-Agent: python-requests/2.22.0
+- [E-S0008-F000462-008 | server->client | epoch=1727267637.068630] HTTP Status 200
+
+--- Stream 9 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: None observed. The request and response do not contain any suspicious payloads or exploit indicators.
+
+Attack Success: None
+
+Evidence:
+- [E-S0009-F000473-004 | client->server | epoch=1727267637.263618] POST /cli?remoting=false
+- [E-S0009-F000473-005 | client->server | epoch=1727267637.263618] Host: localhost:8080
+- [E-S0009-F000473-006 | client->server | epoch=1727267637.263618] User-Agent: python-requests/2.22.0
+- [E-S0009-F000475-007 | server->client | epoch=1727267637.266845] HTTP Status 200
+
+--- Stream 10 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/etc/hostname`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Succeeded (The server responded with a 200 OK status, suggesting the file disclosure attempt was successful.)
+
+Evidence:
+- [E-S0010-F000480-004 | client->server | epoch=1727267637.364712] POST /cli?remoting=false
+- [E-S0010-F000480-005 | client->server | epoch=1727267637.364712] Host: localhost:8080
+- [E-S0010-F000480-006 | client->server | epoch=1727267637.364712] User-Agent: python-requests/2.22.0
+- [E-S0010-F000490-008 | server->client | epoch=1727267638.385187] HTTP Status 200
+
+--- Stream 11 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access system user information, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Succeeded (The server responded with a 200 OK status, suggesting the file disclosure attempt was successful.)
+
+Evidence:
+- [E-S0011-F000501-004 | client->server | epoch=1727267638.663510] POST /cli?remoting=false
+- [E-S0011-F000501-005 | client->server | epoch=1727267638.663510] Host: localhost:8080
+- [E-S0011-F000501-006 | client->server | epoch=1727267638.663510] User-Agent: python-requests/2.22.0
+- [E-S0011-F000503-007 | server->client | epoch=1727267638.666086] HTTP Status 200
+- [E-S0011-F000560-008 | server->client | epoch=1727267638.793965] root user keyword observed
+
+--- Stream 12 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/etc/group`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Succeeded (The server responded with a 200 OK status, suggesting the file disclosure attempt was successful.)
+
+Evidence:
+- [E-S0012-F000508-003 | client->server | epoch=1727267638.764350] POST /cli?remoting=false
+- [E-S0012-F000508-004 | client->server | epoch=1727267638.764350] Host: localhost:8080
+- [E-S0012-F000508-005 | client->server | epoch=1727267638.764350] User-Agent: python-requests/2.22.0
+- [E-S0012-F000599-008 | server->client | epoch=1727267639.812219] HTTP Status 200
+
+--- Stream 13 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/root/.bash_history`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with an error message indicating "No such file: /root/.bash_history", suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0013-F000610-004 | client->server | epoch=1727267639.955044] POST /cli?remoting=false
+- [E-S0013-F000610-005 | client->server | epoch=1727267639.955044] Host: localhost:8080
+- [E-S0013-F000610-006 | client->server | epoch=1727267639.955044] User-Agent: python-requests/2.22.0
+- [E-S0013-F000612-007 | server->client | epoch=1727267639.958061] HTTP Status 200
+- [E-S0013-F000621-008 | server->client | epoch=1727267640.073506] root user keyword observed
+- [E-S0013-F000635-009 | server->client | epoch=1727267641.097847] ERROR: No such file: /root/.bash_history
+
+--- Stream 14 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/root/.bash_history`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with a 200 OK status, but the content-length is 0, suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0014-F000617-004 | client->server | epoch=1727267640.055369] POST /cli?remoting=false
+- [E-S0014-F000617-005 | client->server | epoch=1727267640.055369] Host: localhost:8080
+- [E-S0014-F000617-006 | client->server | epoch=1727267640.055369] User-Agent: python-requests/2.22.0
+- [E-S0014-F000637-009 | server->client | epoch=1727267641.098850] HTTP Status 200
+- [E-S0014-F000617-007 | client->server | epoch=1727267640.055369] root user keyword observed
+
+--- Stream 15 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/root/.ssh/authorized_keys`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with an error message indicating "No such file: /root/.ssh/authorized_keys", suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0015-F000648-004 | client->server | epoch=1727267641.293927] POST /cli?remoting=false
+- [E-S0015-F000648-005 | client->server | epoch=1727267641.293927] Host: localhost:8080
+- [E-S0015-F000648-006 | client->server | epoch=1727267641.293927] User-Agent: python-requests/2.22.0
+- [E-S0015-F000675-009 | server->client | epoch=1727267642.419395] ERROR: No such file: /root/.ssh/authorized_keys
+
+--- Stream 16 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/root/.ssh/authorized_keys`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with a 200 OK status, but the content-length is 0, suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0016-F000655-003 | client->server | epoch=1727267641.395297] POST /cli?remoting=false
+- [E-S0016-F000655-004 | client->server | epoch=1727267641.395297] Host: localhost:8080
+- [E-S0016-F000655-005 | client->server | epoch=1727267641.395297] User-Agent: python-requests/2.22.0
+- [E-S0016-F000677-009 | server->client | epoch=1727267642.421626] HTTP Status 200
+
+--- Stream 17 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/var/log/syslog`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with an error message indicating "No such file: /var/log/syslog", suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0017-F000688-004 | client->server | epoch=1727267642.579837] POST /cli?remoting=false
+- [E-S0017-F000688-005 | client->server | epoch=1727267642.579837] Host: localhost:8080
+- [E-S0017-F000688-006 | client->server | epoch=1727267642.579837] User-Agent: python-requests/2.22.0
+- [E-S0017-F000690-007 | server->client | epoch=1727267642.583001] HTTP Status 200
+- [E-S0017-F000713-008 | server->client | epoch=1727267643.715977] ERROR: No such file: /var/log/syslog
+
+--- Stream 18 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/var/log/syslog`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with a 200 OK status, but the content-length is 0, suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0018-F000695-004 | client->server | epoch=1727267642.681505] POST /cli?remoting=false
+- [E-S0018-F000695-005 | client->server | epoch=1727267642.681505] Host: localhost:8080
+- [E-S0018-F000695-006 | client->server | epoch=1727267642.681505] User-Agent: python-requests/2.22.0
+- [E-S0018-F000715-008 | server->client | epoch=1727267643.719276] HTTP Status 200
+
+--- Stream 19 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/var/log/auth.log`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with an error message indicating "No such file: /var/log/auth.log", suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0019-F000726-004 | client->server | epoch=1727267644.396610] POST /cli?remoting=false
+- [E-S0019-F000726-005 | client->server | epoch=1727267644.396610] Host: localhost:8080
+- [E-S0019-F000726-006 | client->server | epoch=1727267644.396610] User-Agent: python-requests/2.22.0
+- [E-S0019-F000751-008 | server->client | epoch=1727267645.513299] ERROR: No such file: /var/log/auth.log
+
+--- Stream 20 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/var/log/auth.log`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with a 200 OK status, but the content-length is 0, suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0020-F000733-004 | client->server | epoch=1727267644.495736] POST /cli?remoting=false
+- [E-S0020-F000733-005 | client->server | epoch=1727267644.495736] Host: localhost:8080
+- [E-S0020-F000733-006 | client->server | epoch=1727267644.495736] User-Agent: python-requests/2.22.0
+- [E-S0020-F000753-008 | server->client | epoch=1727267645.517654] HTTP Status 200
+
+--- Stream 21 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/var/www/html/config.php`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with an error message indicating "No such file: /var/www/html/config.php", suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0021-F000764-004 | client->server | epoch=1727267645.637591] POST /cli?remoting=false
+- [E-S0021-F000764-005 | client->server | epoch=1727267645.637591] Host: localhost:8080
+- [E-S0021-F000764-006 | client->server | epoch=1727267645.637591] User-Agent: python-requests/2.22.0
+- [E-S0021-F000789-008 | server->client | epoch=1727267645.756420] ERROR: No such file: /var/www/html/config.php
+
+--- Stream 22 [VALID] ---
+Service: Jetty 10.0.18
+
+Relevant Events: The client at IP 172.18.0.1 is sending a POST request to the server at IP 172.18.0.2 on port 8080. The request targets the path `/cli?remoting=false` and uses the `python-requests/2.22.0` user agent. The server responds with a 200 OK status, indicating that the request was processed successfully.
+
+Malicious Activities: The POST request contains a suspicious payload attempting to access `/var/www/html/config.php`, which is indicative of a path traversal or file disclosure attempt targeting the Jetty server.
+
+Attack Success: Failed (The server responded with a 200 OK status, but the content-length is 0, suggesting the file disclosure attempt was unsuccessful.)
+
+Evidence:
+- [E-S0022-F000771-004 | client->server | epoch=1727267645.739206] POST /cli?remoting=false
+- [E-S0022-F000771-005 | client->server | epoch=1727267645.739206] Host: localhost:8080
+- [E-S0022-F000771-006 | client->server | epoch=1727267645.739206] User-Agent: python-requests/2.22.0
+- [E-S0022-F000791-008 | server->client | epoch=1727267645.757411] HTTP Status 200
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Jetty",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "File Disclosure",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0004-F000346-004",
+      "E-S0004-F000346-005",
+      "E-S0004-F000346-006",
+      "E-S0004-F000350-008",
+      "E-S0004-F000350-009",
+      "E-S0004-F000350-011",
+      "E-S0005-F000365-004",
+      "E-S0005-F000365-005",
+      "E-S0005-F000365-006",
+      "E-S0005-F000367-007",
+      "E-S0005-F000384-008",
+      "E-S0008-F000438-004",
+      "E-S0008-F000438-005",
+      "E-S0008-F000438-006",
+      "E-S0008-F000462-008",
+      "E-S0010-F000480-004",
+      "E-S0010-F000480-005",
+      "E-S0010-F000480-006",
+      "E-S0010-F000490-008",
+      "E-S0011-F000501-004",
+      "E-S0011-F000501-005",
+      "E-S0011-F000501-006",
+      "E-S0011-F000503-007",
+      "E-S0011-F000560-008",
+      "E-S0012-F000508-003",
+      "E-S0012-F000508-004",
+      "E-S0012-F000508-005",
+      "E-S0012-F000599-008"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-28169",
+    "confidence": "Medium",
+    "reason": "The observed path traversal attempts and file disclosure activities targeting Jetty server align with known vulnerabilities such as CVE-2021-28169, which involves path traversal in Jetty."
+  },
+  "confidence": "Medium"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Jetty",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "File Disclosure",
+    "success": "Unknown",
+    "evidence": [
+      "E-S0004-F000346-004",
+      "E-S0004-F000346-005",
+      "E-S0004-F000346-006",
+      "E-S0004-F000350-008",
+      "E-S0004-F000350-009",
+      "E-S0004-F000350-011",
+      "E-S0005-F000365-004",
+      "E-S0005-F000365-005",
+      "E-S0005-F000365-006",
+      "E-S0005-F000367-007",
+      "E-S0005-F000384-008",
+      "E-S0008-F000438-004",
+      "E-S0008-F000438-005",
+      "E-S0008-F000438-006",
+      "E-S0008-F000462-008",
+      "E-S0010-F000480-004",
+      "E-S0010-F000480-005",
+      "E-S0010-F000480-006",
+      "E-S0010-F000490-008",
+      "E-S0011-F000501-004",
+      "E-S0011-F000501-005",
+      "E-S0011-F000501-006",
+      "E-S0011-F000503-007",
+      "E-S0011-F000560-008",
+      "E-S0012-F000508-003",
+      "E-S0012-F000508-004",
+      "E-S0012-F000508-005",
+      "E-S0012-F000599-008"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-28169",
+    "confidence": "Medium",
+    "reason": "The observed path traversal attempts and file disclosure activities targeting Jetty server align with known vulnerabilities such as CVE-2021-28169, which involves path traversal in Jetty. The evidence includes multiple POST requests attempting to access sensitive files, with some responses indicating successful file disclosure."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "No",
+  "cve_supported": "No",
+  "unsupported_claims": [
+    "CVE-2021-28169 association"
+  ],
+  "evidence_check": [
+    "E-S0004-F000346-004",
+    "E-S0004-F000346-005",
+    "E-S0004-F000346-006",
+    "E-S0004-F000350-008",
+    "E-S0004-F000350-009",
+    "E-S0004-F000350-011",
+    "E-S0005-F000365-004",
+    "E-S0005-F000365-005",
+    "E-S0005-F000365-006",
+    "E-S0005-F000367-007",
+    "E-S0005-F000384-008",
+    "E-S0008-F000438-004",
+    "E-S0008-F000438-005",
+    "E-S0008-F000438-006",
+    "E-S0008-F000462-008",
+    "E-S0010-F000480-004",
+    "E-S0010-F000480-005",
+    "E-S0010-F000480-006",
+    "E-S0010-F000490-008",
+    "E-S0011-F000501-004",
+    "E-S0011-F000501-005",
+    "E-S0011-F000501-006",
+    "E-S0011-F000503-007",
+    "E-S0011-F000560-008",
+    "E-S0012-F000508-003",
+    "E-S0012-F000508-004",
+    "E-S0012-F000508-005",
+    "E-S0012-F000599-008"
+  ],
+  "confidence": "Medium"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Jetty
+Attack Type: Path Traversal
+Attack Success: Unknown
+CVE: CVE-2021-28169
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: No
+CVE Supported: No
+Verifier Confidence: Medium
+Overall Confidence: Low
+Score: 2/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Jetty 10.0.18 path traversal vulnerability
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T01:42:23.309220+00:00
+Candidate CVEs: CVE-2021-28169, CVE-2026-8384, CVE-2014-3626, CVE-2024-31848
+Sources: 8
+
+Source 1: NIST NVD
+Title: CVE-2026-8384: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2026-8384
+Summary: In Eclipse Jetty, an HTTP URI of this form:
+
+
+
+
+
+/public;/../admin/secret.txt
+
+
+
+
+
+
+
+
+results in an unresolved path of:
+
+
+
+
+
+/public/../admin/secret.txt
+
+
+
+
+
+
+
+
+instead of the expected:
+
+
+
+
+
+/admin/secret.txt
+
+
+
+
+
+
+
+
+Jetty itself is not affected, as it will not serve the secret.txt file because it will not pass the alias checker (only resolved resources are served).
+
+
+
+
+However, web applications that rely on resolved paths being provided by Jetty may be confused when receiving an unresolved path.
+Supports: Web-cited CVE-2026-8384 was retrieved independently from NVD; applicability and exploitation are unverified.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2021-28169: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2021-28169
+Summary: For Eclipse Jetty versions <= 9.4.40, <= 10.0.2, <= 11.0.2, it is possible for requests to the ConcatServlet with a doubly encoded path to access protected resources within the WEB-INF directory. For example a request to `/concat?/%2557EB-INF/web.xml` can retrieve the web.xml file. This can reveal sensitive information regarding the implementation of a web application.
+Supports: NVD lists CVE-2021-28169 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2014-3626: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2014-3626
+Summary: The Grails Resource Plugin often has to exchange URIs for resources with other internal components. Those other components will decode any URI passed to them. To protect against directory traversal the Grails Resource Plugin did the following: normalized the URI, checked the normalized URI did not step outside the appropriate root directory (e.g. the web application root), decoded the URI and checked that this did not introduce additional /../ (and similar) sequences. A bug was introduced where the Grails Resource Plugin before 1.2.13 returned the decoded version of the URI rather than the normalized version of the URI after the directory traversal check. This exposed a double decoding vulnerability. To address this issue, the Grails Resource Plugin now repeatedly decodes the URI up to three times or until decoding no longer changes the URI. If the decode limit of 3 is exceeded the URI is rejected. A side-effect of this is that the Grails Resource Plugin is unable to serve a resource that includes a '%' character in the full path to the resource. Not all environments are vulnerable because of the differences in URL resolving in different servlet containers. Applications deployed to Tomcat 8 and Jetty 9 were found not not be vulnerable, however applications deployed to JBoss EAP 6.3 / JBoss AS 7.4 and JBoss AS 7.1 were found to be vulnerable (other JBoss versions weren't tested). In certain cases JBoss returns JBoss specific vfs protocol urls from URL resolution methods (ClassLoader.getResources). The JBoss vfs URL protocol supports resolving any file on the filesystem. This made the directory traversal possible. There may be other containers, in addition to JBoss, on which this vulnerability is exposed.
+Supports: NVD lists CVE-2014-3626 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2024-31848: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2024-31848
+Summary: A path traversal vulnerability exists in the Java version of CData API Server < 23.4.8844 when running using the embedded Jetty server, which could allow an unauthenticated remote attacker to gain complete administrative access to the application.
+Supports: NVD lists CVE-2024-31848 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: Jetty Web Server - Directory Traversal
+URL: https://www.exploit-db.com/exploits/36318
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Jetty Web Server is prone to a directory-traversal vulnerability because it fails to sufficiently sanitize user-supplied input.
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability
+URL: https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-8384 CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying on Jetty's resolved paths. This article covers technical details, impact, and mitigation. CVE-2026-8384 Overview CVE-2026-8384 is a path resolution vulnerability in Eclipse Jetty. When Jetty processes an HTTP URI containing a semicolon segment followed by parent directory traversal, the server returns an unresolved path to downstream web applications. For example, the URI /public;/../admin/secret.txt is passed through as /public/../admin/secret.txt rather than being normalized to /admin/secret.txt. Jetty itself does not serve the target file because its alias checker only serves resolved resources. However, web applications that trust Jetty to provide fully resolved paths may make incorrect authorization or routing decisions. The issue is tracked under CWE-647: Use of Non-Canonical URL Paths for Authorization Decisions. Web applications relying on Jetty-normalized paths for access control may expose restricted resources when attackers craft URIs containing semicolon path parameters combined with directory traversal sequences. Eclipse Jetty (see vendor advisory for affected version ranges) Web applications deployed on Jetty that consume request paths for authorization Downstream services and reverse proxies parsing Jetty-forwarded paths 2026-07-14 - CVE-2026-8384 published to NVD 2026-07-14 - Last updated in NVD database Technical Details for CVE-2026-8384 The flaw resides in how Jetty processes semicolon path parameters during URI decoding. In HTTP URIs, the semicolon character introduces path parameters as defined in RFC 3986. Jetty strips these parameters during processing but does not properly normalize the resulting path when it contains parent directory references (..). Given the request URI /public;/../admin/secret.txt, Jetty produces the unresolved path /public/../admin/secret.txt instead of the canonical form /admin/secret.txt. Jetty's alias checker prevents Jetty from serving the target file directly. The risk emerges when embedded web applications, servlets, or filters make authorization decisions based on the raw path string provided by Jetty. The root cause is inconsistent URI normalization across the request processing pipeline. Semicolon segments are consumed early, but the subsequent path is not re-normalized to collapse .. sequences. Applications that expect Jetty to hand them a canonical, resolved path receive a hybrid string that appears benign at the prefix (/public/...) while actually pointing elsewhere. An unauthenticated remote attacker sends a crafted HTTP request over the network. The attacker inserts a semicolon segment followed by .. traversal sequences to bypass path-prefix-based access controls in Jetty-hosted applications. Exploitation requires no privileges or user interaction. The impact is limited to integrity of downstream authorization decisions and does not directly expose files
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Jetty Security
+URL: https://jetty.org/security.html
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are a couple of avenues for reporting security issues to the Jetty project. Jetty Security Reports Published ID Severity Impacted Versions Fixed Versions ... | Webpage text: Reporting Security Issues There are a couple of avenues for reporting security issues to the Jetty project. If the issue is directly related to Jetty itself, then reporting to the Jetty developers is encouraged. The most direct method is to mail security@jetty.org or security@webtide.com. We are flexible in how we work with reporters of security issues but reserve the right to act in the interests of the Jetty project in all circumstances. If the issue is related to Eclipse or its Jetty integration, we would like to encourage you to reach out to security@eclipse.org. If the issue is related to integrations with Jetty, we are happy to work with you to identify the proper entity, and either of the approaches above is okay. We prefer that security issues be reported directly to Jetty developers via email instead of GitHub issues since it has no facility to tag issues as private. We will actively delete issues that are opened in this way. For more information on how we handle security issues, please refer to our Security Policy. CVE-2026-19863 CVE-2026-77711 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76184 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18660 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18661 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-19864 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76182 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18659 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18662 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-12611 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.10 12.0.38, 12.1.11 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19203 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19204 <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (10.0.32, 11.0.32 see details for availability) CVE-2024-7708 CVE-2026-8384 CVE-2026-6790 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.34, <=12.1.8 12.0.35, 12.1.9 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-10051 CVE-2026-10050 <=9.4.62, <=10.0.30, <=11.0.30, <=12.0.35, <=12.1.9 12.0.36, 12.1.10 (9.4.63, 10.0.31, 11.0.31 see details for availability) CVE-2026-5795 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.33, <=12.1.7 12.0.34, 12.1.8 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-2332 <=9.4.59, <=10.0.27, <=11.0.28, <=12.0.32, <=12.1.6 12.0.33, 12.1.7 (9.4.60, 10.0.28, 11.0.29 see details for availability) CVE-2026-1605 CVE-2025-11143 <=9.4
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: CVE-2026-5795: Jetty Authentication Bypass and Privilege ...
+URL: https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw in Jetty's authentication layer can allow one user's privileges to be applied to another user's request, effectively bypassing access ...
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0004-F000346-004]: POST /cli?remoting=false.
+- PCAP [E-S0004-F000346-005]: Host: localhost:8080.
+- PCAP [E-S0004-F000346-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0004-F000350-008]: HTTP Status 500.
+- PCAP [E-S0004-F000350-009]: Content-Type: text/html;charset=utf-8.
+- PCAP [E-S0004-F000350-011]: Id.
+- PCAP [E-S0005-F000365-004]: POST /cli?remoting=false.
+- PCAP [E-S0005-F000365-005]: Host: localhost:8080.
+- PCAP [E-S0005-F000365-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0005-F000367-007]: HTTP Status 200.
+- PCAP [E-S0005-F000384-008]: root user keyword observed.
+- PCAP [E-S0008-F000438-004]: POST /cli?remoting=false.
+- PCAP [E-S0008-F000438-005]: Host: localhost:8080.
+- PCAP [E-S0008-F000438-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0008-F000462-008]: HTTP Status 200.
+- PCAP [E-S0010-F000480-004]: POST /cli?remoting=false.
+- PCAP [E-S0010-F000480-005]: Host: localhost:8080.
+- PCAP [E-S0010-F000480-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0010-F000490-008]: HTTP Status 200.
+- PCAP [E-S0011-F000501-004]: POST /cli?remoting=false.
+- PCAP [E-S0011-F000501-005]: Host: localhost:8080.
+- PCAP [E-S0011-F000501-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0011-F000503-007]: HTTP Status 200.
+- PCAP [E-S0011-F000560-008]: root user keyword observed.
+- PCAP [E-S0012-F000508-003]: POST /cli?remoting=false.
+- PCAP [E-S0012-F000508-004]: Host: localhost:8080.
+- PCAP [E-S0012-F000508-005]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0012-F000599-008]: HTTP Status 200.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-8384: NVD vulnerability record: In Eclipse Jetty, an HTTP URI of this form:
+
+
+
+
+
+/public;/../admin/secret.txt
+
+
+
+
+
+
+
+
+results in an unresolved path of:
+
+
+
+
+
+/public/../admin/secret.txt
+
+
+
+
+
+
+
+
+instead of the expected:
+
+
+
+
+
+/admin/secret.txt
+
+
+
+
+
+
+
+
+Jetty itself is not affected, as it will not serve the secret.txt file because it will not pass the alias checker (only resolved resources are served).
+
+
+
+
+However, web applications that rely on resolved paths being provided by Jetty may be confused when receiving an unresolved path. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-8384 Supports: Web-cited CVE-2026-8384 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2021-28169: NVD vulnerability record: For Eclipse Jetty versions <= 9.4.40, <= 10.0.2, <= 11.0.2, it is possible for requests to the ConcatServlet with a doubly encoded path to access protected resources within the WEB-INF directory. For example a request to `/concat?/%2557EB-INF/web.xml` can retrieve the web.xml file. This can reveal sensitive information regarding the implementation of a web application. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-28169 Supports: NVD lists CVE-2021-28169 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2014-3626: NVD vulnerability record: The Grails Resource Plugin often has to exchange URIs for resources with other internal components. Those other components will decode any URI passed to them. To protect against directory traversal the Grails Resource Plugin did the following: normalized the URI, checked the normalized URI did not step outside the appropriate root directory (e.g. the web application root), decoded the URI and checked that this did not introduce additional /../ (and similar) sequences. A bug was introduced where the Grails Resource Plugin before 1.2.13 returned the decoded version of the URI rather than the normalized version of the URI after the directory traversal check. This exposed a double decoding vulnerability. To address this issue, the Grails Resource Plugin now repeatedly decodes the URI up to three times or until decoding no longer changes the URI. If the decode limit of 3 is exceeded the URI is rejected. A side-effect of this is that the Grails Resource Plugin is unable to serve a resource that includes a '%' character in the full path to the resource. Not all environments are vulnerable because of the differences in URL resolving in different servlet containers. Applications deployed to Tomcat 8 and Jetty 9 were found not not be vulnerable, however applications deployed to JBoss EAP 6.3 / JBoss AS 7.4 and JBoss AS 7.1 were found to be vulnerable (other JBoss versions weren't tested). In certain cases JBoss returns JBoss specific vfs protocol urls from URL resolution methods (ClassLoader.getResources). The JBoss vfs URL protocol supports resolving any file on the filesystem. This made the directory traversal possible. There may be other containers, in addition to JBoss, on which this vulnerability is exposed. Source: https://nvd.nist.gov/vuln/detail/CVE-2014-3626 Supports: NVD lists CVE-2014-3626 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2024-31848: NVD vulnerability record: A path traversal vulnerability exists in the Java version of CData API Server < 23.4.8844 when running using the embedded Jetty server, which could allow an unauthenticated remote attacker to gain complete administrative access to the application. Source: https://nvd.nist.gov/vuln/detail/CVE-2024-31848 Supports: NVD lists CVE-2024-31848 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Jetty Web Server - Directory Traversal: UNTRUSTED WEB RESEARCH (not PCAP evidence). Jetty Web Server is prone to a directory-traversal vulnerability because it fails to sufficiently sanitize user-supplied input. Source: https://www.exploit-db.com/exploits/36318
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-8384 CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying on Jetty's resolved paths. This article covers technical details, impact, and mitigation. CVE-2026-8384 Overview CVE-2026-8384 is a path resolution vulnerability in Eclipse Jetty. When Jetty processes an HTTP URI containing a semicolon segment followed by parent directory traversal, the server returns an unresolved path to downstream web applications. For example, the URI /public;/../admin/secret.txt is passed through as /public/../admin/secret.txt rather than being normalized to /admin/secret.txt. Jetty itself does not serve the target file because its alias checker only serves resolved resources. However, web applications that trust Jetty to provide fully resolved paths may make incorrect authorization or routing decisions. The issue is tracked under CWE-647: Use of Non-Canonical URL Paths for Authorization Decisions. Web applications relying on Jetty-normalized paths for access control may expose restricted resources when attackers craft URIs containing semicolon path parameters combined with directory traversal sequences. Eclipse Jetty (see vendor advisory for affected version ranges) Web applications deployed on Jetty that consume request paths for authorization Downstream services and reverse proxies parsing Jetty-forwarded paths 2026-07-14 - CVE-2026-8384 published to NVD 2026-07-14 - Last updated in NVD database Technical Details for CVE-2026-8384 The flaw resides in how Jetty processes semicolon path parameters during URI decoding. In HTTP URIs, the semicolon character introduces path parameters as defined in RFC 3986. Jetty strips these parameters during processing but does not properly normalize the resulting path when it contains parent directory references (..). Given the request URI /public;/../admin/secret.txt, Jetty produces the unresolved path /public/../admin/secret.txt instead of the canonical form /admin/secret.txt. Jetty's alias checker prevents Jetty from serving the target file directly. The risk emerges when embedded web applications, servlets, or filters make authorization decisions based on the raw path string provided by Jetty. The root cause is inconsistent URI normalization across the request processing pipeline. Semicolon segments are consumed early, but the subsequent path is not re-normalized to collapse .. sequences. Applications that expect Jetty to hand them a canonical, resolved path receive a hybrid string that appears benign at the prefix (/public/...) while actually pointing elsewhere. An unauthenticated remote attacker sends a crafted HTTP request over the network. The attacker inserts a semicolon segment followed by .. traversal sequences to bypass path-prefix-based access controls in Jetty-hosted applications. Exploitation requires no privileges or user interaction. The impact is limited to integrity of downstream authorization decisions and does not directly expose files Source: https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+- ONLINE RESEARCH LEAD [Serper web result] Jetty Security: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are a couple of avenues for reporting security issues to the Jetty project. Jetty Security Reports Published ID Severity Impacted Versions Fixed Versions ... | Webpage text: Reporting Security Issues There are a couple of avenues for reporting security issues to the Jetty project. If the issue is directly related to Jetty itself, then reporting to the Jetty developers is encouraged. The most direct method is to mail security@jetty.org or security@webtide.com. We are flexible in how we work with reporters of security issues but reserve the right to act in the interests of the Jetty project in all circumstances. If the issue is related to Eclipse or its Jetty integration, we would like to encourage you to reach out to security@eclipse.org. If the issue is related to integrations with Jetty, we are happy to work with you to identify the proper entity, and either of the approaches above is okay. We prefer that security issues be reported directly to Jetty developers via email instead of GitHub issues since it has no facility to tag issues as private. We will actively delete issues that are opened in this way. For more information on how we handle security issues, please refer to our Security Policy. CVE-2026-19863 CVE-2026-77711 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76184 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18660 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18661 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-19864 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76182 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18659 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18662 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-12611 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.10 12.0.38, 12.1.11 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19203 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19204 <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (10.0.32, 11.0.32 see details for availability) CVE-2024-7708 CVE-2026-8384 CVE-2026-6790 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.34, <=12.1.8 12.0.35, 12.1.9 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-10051 CVE-2026-10050 <=9.4.62, <=10.0.30, <=11.0.30, <=12.0.35, <=12.1.9 12.0.36, 12.1.10 (9.4.63, 10.0.31, 11.0.31 see details for availability) CVE-2026-5795 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.33, <=12.1.7 12.0.34, 12.1.8 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-2332 <=9.4.59, <=10.0.27, <=11.0.28, <=12.0.32, <=12.1.6 12.0.33, 12.1.7 (9.4.60, 10.0.28, 11.0.29 see details for availability) CVE-2026-1605 CVE-2025-11143 <=9.4 Source: https://jetty.org/security.html
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-5795: Jetty Authentication Bypass and Privilege ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw in Jetty's authentication layer can allow one user's privileges to be applied to another user's request, effectively bypassing access ... Source: https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+
+=== SOURCE URLS ===
+- https://nvd.nist.gov/vuln/detail/CVE-2026-8384
+- https://nvd.nist.gov/vuln/detail/CVE-2021-28169
+- https://nvd.nist.gov/vuln/detail/CVE-2014-3626
+- https://nvd.nist.gov/vuln/detail/CVE-2024-31848
+- https://www.exploit-db.com/exploits/36318
+- https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+- https://jetty.org/security.html
+- https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+
+Search status: Valid
+Search query: Jetty 10.0.18 path traversal vulnerability
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- 6 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed CVE-2021-28169; independent Verifier CVE support: No. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Jetty
+Associated CVE candidate (Analyst): CVE-2021-28169
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0004-F000346-004]: POST /cli?remoting=false.
+- PCAP [E-S0004-F000346-005]: Host: localhost:8080.
+- PCAP [E-S0004-F000346-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0004-F000350-008]: HTTP Status 500.
+- PCAP [E-S0004-F000350-009]: Content-Type: text/html;charset=utf-8.
+- PCAP [E-S0004-F000350-011]: Id.
+- PCAP [E-S0005-F000365-004]: POST /cli?remoting=false.
+- PCAP [E-S0005-F000365-005]: Host: localhost:8080.
+- PCAP [E-S0005-F000365-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0005-F000367-007]: HTTP Status 200.
+- PCAP [E-S0005-F000384-008]: root user keyword observed.
+- PCAP [E-S0008-F000438-004]: POST /cli?remoting=false.
+- PCAP [E-S0008-F000438-005]: Host: localhost:8080.
+- PCAP [E-S0008-F000438-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0008-F000462-008]: HTTP Status 200.
+- PCAP [E-S0010-F000480-004]: POST /cli?remoting=false.
+- PCAP [E-S0010-F000480-005]: Host: localhost:8080.
+- PCAP [E-S0010-F000480-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0010-F000490-008]: HTTP Status 200.
+- PCAP [E-S0011-F000501-004]: POST /cli?remoting=false.
+- PCAP [E-S0011-F000501-005]: Host: localhost:8080.
+- PCAP [E-S0011-F000501-006]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0011-F000503-007]: HTTP Status 200.
+- PCAP [E-S0011-F000560-008]: root user keyword observed.
+- PCAP [E-S0012-F000508-003]: POST /cli?remoting=false.
+- PCAP [E-S0012-F000508-004]: Host: localhost:8080.
+- PCAP [E-S0012-F000508-005]: User-Agent: python-requests/2.22.0.
+- PCAP [E-S0012-F000599-008]: HTTP Status 200.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2026-8384: NVD vulnerability record: In Eclipse Jetty, an HTTP URI of this form:
+
+
+
+
+
+/public;/../admin/secret.txt
+
+
+
+
+
+
+
+
+results in an unresolved path of:
+
+
+
+
+
+/public/../admin/secret.txt
+
+
+
+
+
+
+
+
+instead of the expected:
+
+
+
+
+
+/admin/secret.txt
+
+
+
+
+
+
+
+
+Jetty itself is not affected, as it will not serve the secret.txt file because it will not pass the alias checker (only resolved resources are served).
+
+
+
+
+However, web applications that rely on resolved paths being provided by Jetty may be confused when receiving an unresolved path. Source: https://nvd.nist.gov/vuln/detail/CVE-2026-8384 Supports: Web-cited CVE-2026-8384 was retrieved independently from NVD; applicability and exploitation are unverified.
+- ONLINE [NIST NVD] CVE-2021-28169: NVD vulnerability record: For Eclipse Jetty versions <= 9.4.40, <= 10.0.2, <= 11.0.2, it is possible for requests to the ConcatServlet with a doubly encoded path to access protected resources within the WEB-INF directory. For example a request to `/concat?/%2557EB-INF/web.xml` can retrieve the web.xml file. This can reveal sensitive information regarding the implementation of a web application. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-28169 Supports: NVD lists CVE-2021-28169 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2014-3626: NVD vulnerability record: The Grails Resource Plugin often has to exchange URIs for resources with other internal components. Those other components will decode any URI passed to them. To protect against directory traversal the Grails Resource Plugin did the following: normalized the URI, checked the normalized URI did not step outside the appropriate root directory (e.g. the web application root), decoded the URI and checked that this did not introduce additional /../ (and similar) sequences. A bug was introduced where the Grails Resource Plugin before 1.2.13 returned the decoded version of the URI rather than the normalized version of the URI after the directory traversal check. This exposed a double decoding vulnerability. To address this issue, the Grails Resource Plugin now repeatedly decodes the URI up to three times or until decoding no longer changes the URI. If the decode limit of 3 is exceeded the URI is rejected. A side-effect of this is that the Grails Resource Plugin is unable to serve a resource that includes a '%' character in the full path to the resource. Not all environments are vulnerable because of the differences in URL resolving in different servlet containers. Applications deployed to Tomcat 8 and Jetty 9 were found not not be vulnerable, however applications deployed to JBoss EAP 6.3 / JBoss AS 7.4 and JBoss AS 7.1 were found to be vulnerable (other JBoss versions weren't tested). In certain cases JBoss returns JBoss specific vfs protocol urls from URL resolution methods (ClassLoader.getResources). The JBoss vfs URL protocol supports resolving any file on the filesystem. This made the directory traversal possible. There may be other containers, in addition to JBoss, on which this vulnerability is exposed. Source: https://nvd.nist.gov/vuln/detail/CVE-2014-3626 Supports: NVD lists CVE-2014-3626 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2024-31848: NVD vulnerability record: A path traversal vulnerability exists in the Java version of CData API Server < 23.4.8844 when running using the embedded Jetty server, which could allow an unauthenticated remote attacker to gain complete administrative access to the application. Source: https://nvd.nist.gov/vuln/detail/CVE-2024-31848 Supports: NVD lists CVE-2024-31848 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Jetty Web Server - Directory Traversal: UNTRUSTED WEB RESEARCH (not PCAP evidence). Jetty Web Server is prone to a directory-traversal vulnerability because it fails to sufficiently sanitize user-supplied input. Source: https://www.exploit-db.com/exploits/36318
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-8384 CVE-2026-8384: Eclipse Jetty Path Traversal Vulnerability CVE-2026-8384 is a path traversal flaw in Eclipse Jetty where malformed URIs bypass path resolution. This affects web applications relying on Jetty's resolved paths. This article covers technical details, impact, and mitigation. CVE-2026-8384 Overview CVE-2026-8384 is a path resolution vulnerability in Eclipse Jetty. When Jetty processes an HTTP URI containing a semicolon segment followed by parent directory traversal, the server returns an unresolved path to downstream web applications. For example, the URI /public;/../admin/secret.txt is passed through as /public/../admin/secret.txt rather than being normalized to /admin/secret.txt. Jetty itself does not serve the target file because its alias checker only serves resolved resources. However, web applications that trust Jetty to provide fully resolved paths may make incorrect authorization or routing decisions. The issue is tracked under CWE-647: Use of Non-Canonical URL Paths for Authorization Decisions. Web applications relying on Jetty-normalized paths for access control may expose restricted resources when attackers craft URIs containing semicolon path parameters combined with directory traversal sequences. Eclipse Jetty (see vendor advisory for affected version ranges) Web applications deployed on Jetty that consume request paths for authorization Downstream services and reverse proxies parsing Jetty-forwarded paths 2026-07-14 - CVE-2026-8384 published to NVD 2026-07-14 - Last updated in NVD database Technical Details for CVE-2026-8384 The flaw resides in how Jetty processes semicolon path parameters during URI decoding. In HTTP URIs, the semicolon character introduces path parameters as defined in RFC 3986. Jetty strips these parameters during processing but does not properly normalize the resulting path when it contains parent directory references (..). Given the request URI /public;/../admin/secret.txt, Jetty produces the unresolved path /public/../admin/secret.txt instead of the canonical form /admin/secret.txt. Jetty's alias checker prevents Jetty from serving the target file directly. The risk emerges when embedded web applications, servlets, or filters make authorization decisions based on the raw path string provided by Jetty. The root cause is inconsistent URI normalization across the request processing pipeline. Semicolon segments are consumed early, but the subsequent path is not re-normalized to collapse .. sequences. Applications that expect Jetty to hand them a canonical, resolved path receive a hybrid string that appears benign at the prefix (/public/...) while actually pointing elsewhere. An unauthenticated remote attacker sends a crafted HTTP request over the network. The attacker inserts a semicolon segment followed by .. traversal sequences to bypass path-prefix-based access controls in Jetty-hosted applications. Exploitation requires no privileges or user interaction. The impact is limited to integrity of downstream authorization decisions and does not directly expose files Source: https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+- ONLINE RESEARCH LEAD [Serper web result] Jetty Security: UNTRUSTED WEB RESEARCH (not PCAP evidence). There are a couple of avenues for reporting security issues to the Jetty project. Jetty Security Reports Published ID Severity Impacted Versions Fixed Versions ... | Webpage text: Reporting Security Issues There are a couple of avenues for reporting security issues to the Jetty project. If the issue is directly related to Jetty itself, then reporting to the Jetty developers is encouraged. The most direct method is to mail security@jetty.org or security@webtide.com. We are flexible in how we work with reporters of security issues but reserve the right to act in the interests of the Jetty project in all circumstances. If the issue is related to Eclipse or its Jetty integration, we would like to encourage you to reach out to security@eclipse.org. If the issue is related to integrations with Jetty, we are happy to work with you to identify the proper entity, and either of the approaches above is okay. We prefer that security issues be reported directly to Jetty developers via email instead of GitHub issues since it has no facility to tag issues as private. We will actively delete issues that are opened in this way. For more information on how we handle security issues, please refer to our Security Policy. CVE-2026-19863 CVE-2026-77711 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76184 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18660 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18661 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-19864 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-76182 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.12 12.0.39, 12.1.13 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18659 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-18662 <=9.4.64, <=10.0.32, <=11.0.32, <=12.0.38, <=12.1.11 12.0.39, 12.1.12 (9.4.65, 10.0.33, 11.0.33 see details for availability) CVE-2026-12611 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.10 12.0.38, 12.1.11 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19203 <=9.4.63, <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (9.4.64, 10.0.32, 11.0.32 see details for availability) CVE-2026-19204 <=10.0.31, <=11.0.31, <=12.0.37, <=12.1.11 12.0.38, 12.1.12 (10.0.32, 11.0.32 see details for availability) CVE-2024-7708 CVE-2026-8384 CVE-2026-6790 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.34, <=12.1.8 12.0.35, 12.1.9 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-10051 CVE-2026-10050 <=9.4.62, <=10.0.30, <=11.0.30, <=12.0.35, <=12.1.9 12.0.36, 12.1.10 (9.4.63, 10.0.31, 11.0.31 see details for availability) CVE-2026-5795 <=9.4.60, <=10.0.28, <=11.0.28, <=12.0.33, <=12.1.7 12.0.34, 12.1.8 (9.4.61, 10.0.29, 11.0.29 see details for availability) CVE-2026-2332 <=9.4.59, <=10.0.27, <=11.0.28, <=12.0.32, <=12.1.6 12.0.33, 12.1.7 (9.4.60, 10.0.28, 11.0.29 see details for availability) CVE-2026-1605 CVE-2025-11143 <=9.4 Source: https://jetty.org/security.html
+- ONLINE RESEARCH LEAD [Serper web result] CVE-2026-5795: Jetty Authentication Bypass and Privilege ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw in Jetty's authentication layer can allow one user's privileges to be applied to another user's request, effectively bypassing access ... Source: https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+
+Verification Summary:
+- Affected service: Jetty.
+- Attack type: Path Traversal.
+- Attack technique: File Disclosure.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: No.
+- Verification result: Partially Supported.
+- Verifier confidence: Medium.
+- Consensus confidence: Low.
+- Consensus score: 2/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2021-28169; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: CVE-2021-28169 association
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: No supported outcome prediction was available; forced-choice Fail is a low-confidence baseline, NOT evidence that the attempt was blocked.
+- MCP evidence search status: Valid.
+- MCP investigation query: Jetty 10.0.18 path traversal vulnerability.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2026-8384
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2021-28169
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2014-3626
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2024-31848
+- Evidence-source URL: https://www.exploit-db.com/exploits/36318
+- Evidence-source URL: https://www.sentinelone.com/vulnerability-database/cve-2026-8384/
+- Evidence-source URL: https://jetty.org/security.html
+- Evidence-source URL: https://www.herodevs.com/blog-posts/cve-2026-5795-jetty-authentication-bypass-and-privilege-escalation-jaspiauthenticator
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: 6 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Review and update Jetty server configurations to ensure proper handling of path traversal attempts.
+- Implement additional logging and monitoring to detect unusual access patterns.
+- Conduct regular security assessments and vulnerability scans on the Jetty server.

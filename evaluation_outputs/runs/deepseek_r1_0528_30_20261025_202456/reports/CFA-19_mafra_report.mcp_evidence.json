@@ -1,0 +1,104 @@
+{
+  "status": "Valid",
+  "query": "GitLab unknown version command injection attack",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "GitLab Community and Enterprise Editions Remote Code Execution Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "GitLab Community and Enterprise Editions: GitHub Community and Enterprise Editions that utilize the ability to upload images through GitLab Workhorse are vulnerable to remote code execution. Workhorse passes image file extensions through ExifTool, which improperly validates the image files. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2021-22205 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-97229: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97229",
+      "snippet": "GitLab has remediated an issue in GitLab CE/EE affecting all versions from 19.2 before 19.2.8, 19.3 before 19.3.5, and 19.4 before 19.4.2 that, under certain conditions, could have allowed an unauthenticated user to execute arbitrary code on the GitLab server via a specially crafted regular expression in a CI/CD configuration, due to insufficient regular expression validation.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2026-97229 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2022-2884: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-2884",
+      "snippet": "A vulnerability in GitLab CE/EE affecting all versions from 11.3.4 prior to 15.1.5, 15.2 to 15.2.3, 15.3 to 15.3 to 15.3.1 allows an an authenticated user to achieve remote code execution via the Import from GitHub API endpoint",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2022-2884 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-22205: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22205",
+      "snippet": "An issue has been discovered in GitLab CE/EE affecting all versions starting from 11.9. GitLab was not properly validating image files that were passed to a file parser which resulted in a remote command execution.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-22205 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "OS command injection",
+      "url": "https://docs.gitlab.com/user/application_security/api_security_testing/checks/os_command_injection_check/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Blind injections cause delays in response when successful. Remediation. It is possible to execute arbitrary OS commands on the target application server. OS ... | Webpage text: Check for OS command injection vulnerabilities. An OS command injection attack consists of insertion or “injection” of an OS command via the input data from the client to the application. A successful OS command injection exploit can run arbitrary commands. This allows an attacker the ability to read, write, and delete data. Depending on the user the commands run as, this can also include administrative functions. This check modifies parameters in the request (path, query string, headers, JSON, XML, etc.) to try and execute an OS command. Both standard injections and blind injections are performed. Blind injections cause delays in response when successful. It is possible to execute arbitrary OS commands on the target application server. OS command injection is a critical vulnerability that can lead to a full system compromise. User input should never be used in constructing commands or command arguments to functions which execute OS commands. This includes filenames supplied by user uploads or downloads. Ensure your application does not: Use user supplied information in the process name to execute. Use user supplied information in an OS command execution function which does not escape shell meta-characters. Use user supplied information in arguments to OS commands. The application should have a hardcoded set of arguments that are to be passed to OS commands. If filenames are being passed to these functions, it is recommended that a hash of the filename be used instead, or some other unique identifier. It is strongly recommended that a native library that implements the same functionality be used instead of using OS system commands due to the risk of unknown attacks against thir",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "GitLab | Report #298873 - Command injection by ...",
+      "url": "https://hackerone.com/reports/298873",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The `Projects::GitlabProjectsImportService` contains a vulnerability that allows an attacker to write files to arbitrary directories on the server.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "GitLab issues emergency patch for critical code-injection flaw",
+      "url": "https://www.cybersecuritydive.com/news/gitlab-emergency-patch-critical-code-injection/828151/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Researchers warn that unauthenticated attackers would be able to delete or modify publicly accessible projects.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-97229: Critical Unauthenticated Remote Code ...",
+      "url": "https://www.rapid7.com/blog/post/etr-cve-2026-97229-critical-unauthenticated-remote-code-execution-in-gitlab/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). On October 12, 2026, GitLab published a critical patch release for CVE-2026-97229, an integer overflow or wraparound (CWE-190) in the CI/CD ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] The Quarterly Threat Landscape Report is out. See what attackers are targeting now.Read report",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:25:52.006699+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2021-22205",
+    "CVE-2026-97229",
+    "CVE-2022-2884"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.cybersecuritydive.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

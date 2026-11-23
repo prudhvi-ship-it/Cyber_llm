@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "Grafana Path Traversal Exploit packet clues: endpoint plugins alertlist var lib grafana; endpoint plugins alertlist conf defaults ini; endpoint plugins alertlist etc passwd; endpoint plugins alertlist etc shadow",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-6197: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6197",
+      "snippet": "An open redirect vulnerability has been identified in Grafana OSS organization switching functionality.\n\n\nPrerequisites for exploitation:\n\n- Multiple organizations must exist in the Grafana instance\n\n- Victim must be on a different organization than the one specified in the URL",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2025-6197 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-43798: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798",
+      "snippet": "Grafana is an open-source platform for monitoring and observability. Grafana versions 8.0.0-beta1 through 8.3.0 (except for patched versions) iss vulnerable to directory traversal, allowing access to local files. The vulnerable URL path is: `<grafana_host_url>/public/plugins//`, where is the plugin ID for any installed plugin. At no time has Grafana Cloud been vulnerable. Users are advised to upgrade to patched versions 8.0.7, 8.1.8, 8.2.7, or 8.3.1. The GitHub Security Advisory contains more information about vulnerable URL paths, mitigation, and the disclosure timeline.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-43798 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-43813: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-43813",
+      "snippet": "Grafana is an open-source platform for monitoring and observability. Grafana prior to versions 8.3.2 and 7.5.12 contains a directory traversal vulnerability for fully lowercase or fully uppercase .md files. The vulnerability is limited in scope, and only allows access to files with the extension .md to authenticated users only. Grafana Cloud instances have not been affected by the vulnerability. Users should upgrade to patched versions 8.3.2 or 7.5.12. For users who cannot upgrade, running a reverse proxy in front of Grafana that normalizes the PATH of the request will mitigate the vulnerability. The proxy will have to also be able to handle url encoded paths. Alternatively, for fully lowercase or fully uppercase .md files, users can block /api/plugins/.*/markdown/.* without losing any functionality beyond inlined plugin help text.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-43813 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2023-5123: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-5123",
+      "snippet": "The JSON datasource plugin ( https://grafana.com/grafana/plugins/marcusolsson-json-datasource/ ) is a Grafana Labs maintained plugin for Grafana that allows for retrieving and processing JSON data from a remote endpoint (including a specific sub-path) configured by an administrator. Due to inadequate sanitization of the dashboard-supplied path parameter, it was possible to include path traversal characters (../) in the path parameter and send requests to paths on the configured endpoint outside the configured sub-path. \n\n\n\n\n\n    \n    \n            \n\n\n\n\n\n\n    \n    \n            This means that if the datasource was configured by an administrator to point at some sub-path of a domain (e.g.  https://example.com/api/some_safe_api/ ), it was possible for an editor to create a dashboard referencing the datasource which issues queries containing path traversal characters, which would in turn cause the datasource to instead query arbitrary subpaths on the configured domain (e.g.  https://example.com/api/admin_api/) .\n\nIn the rare case that this plugin is configured by an administrator to point back at the Grafana instance itself, this vulnerability becomes considerably more severe, as an administrator browsing a maliciously configured panel could be compelled to make requests to Grafana administrative API endpoints with their credentials, resulting in the potential for privilege escalation, hence the high score for this vulnerability.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2023-5123 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Grafana path traversal · CVE-2021-43798",
+      "url": "https://github.com/advisories/GHSA-8pjx-jj86-j47p",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Today we are releasing Grafana 8.3.1, 8.2.7, 8.1.8, 8.0.7. This patch release includes a high severity security fix that affects Grafana versions from ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. github.com/grafana/grafana Today we are releasing Grafana 8.3.1, 8.2.7, 8.1.8, 8.0.7. This patch release includes a high severity security fix that affects Grafana versions from v8.0.0-beta1 through v8.3.0. Release v8.3.1, only containing a security fix: Release v8.2.7, only containing a security fix: Release v8.1.8, only containing a security fix: Release v8.0.7, only containing a security fix:",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Medium and high severity fixes for CVE-2025-6197 and ...",
+      "url": "https://grafana.com/blog/grafana-security-release-medium-and-high-severity-fixes-for-cve-2025-6197-and-cve-2025-6023/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Both of the vulnerabilities below were identified through our bug bounty program. XSS via client path traversal and open redirect (CVE-2025-6023). | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Grafana security release: Medium and high severity fixes for CVE-2025-6197 and CVE-2025-6023 Today we are releasing security patches for Grafana 12.0.x, 11.6.x, 11.5.x, 11.4.x, and 11.3.x. These security releases contain a fix for CVE-2025-6023, a high severity cross-site scripting (XSS) vulnerability and CVE-2025-6197, a medium severity open redirect vulnerability. Download Grafana 12.0.2+security-01 Download Grafana 11.6.3+security-01 Download Grafana 11.5.6+security-01 Download Grafana 11.4.6+security-01 Download Grafana 11.3.8+security-01 As per our security policy, Grafana Labs customers have received security patched versions in advance under embargo, and Grafana Cloud has been patched seamlessly. As always, we closely coordinated with all cloud providers licensed to offer Grafana Cloud Pro. They have received early notification under embargo and confirmed that their offerings are secure at the time of this announcement. This is applicable to Amazon Both of the vulnerabilities below were identified through our bug bounty program. XSS via client path traversal and open redirect (CVE-2025-6023) On June 11, a bug bounty report identified a cross-site scripting (XSS) vulnerability in Grafana caused by client path traversal and open redirect. This allows attackers to redirect users to malicious websites that execute arbitrary JavaScript code in scripted dashboards. Unlike many other XSS vulnerabilities, this vulnerability does not require editor permissions. If anonymous access is enabled, the XSS will work. The CVSS score for this vulnerability is 7.6 (High). Grafana Cloud users were affected by this XSS since the Content-Security-Policy does not include a connect-src directive, which is needed to stop an attacker from fetching external JavaScript. An attacker does not need access to the Grafana instance in order to craft a payload, but the victim needs to be authenticated and needs at least Viewer permissions in order to execute arbitrary JavaScript. This CVE tracks both the open redirect, and the path traversal in the scripted dashboards functionality that leads to XSS instead of separating them to downgrade their score individually. This XSS vulnerability could enable the redirection of users to external websites and the execution of malicious JavaScript within their browsers. Successful exploitation of this vulnerability might result in session hijacking or complete account takeover. Solutions and mitigations To fully address CVE-2025-6023, please upgrade your Grafana instances. The alternative is that you can block this attack by adding the default Content Security Policy configuration as suggested in the Grafana documentation. Copycontent_security_policy = true content_security_policy_template = \"\"\"script-src 'self' 'unsafe-eval' 'unsafe-inline' 'strict-dynamic' $NONCE;object-src 'none';font-src 'self';style-src 'self' 'unsafe-inline' blob:;img-src * data:;base-uri 'self';connect-src 'self' grafana.com ws://$ROOT_PATH wss://$ROOT_PATH;manifest-src 'self';media-src 'none';form-action 'self';\"\"\" Timeline and post-incident review All times are in UTC * 2025-06-11 12:15 - Bug bounty report created * 2025-06-11 12:33 - Bug b",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "path traversal vulnerability in Grafana 8.x allows \" local file ...",
+      "url": "https://hackerone.com/reports/1427086",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Hi team, I've found a path traversal issue in the Grafana instances hosted on the MTN platforms. With the path traversal it's possible for an ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2022-32275: Grafana Path Traversal Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2022-32275/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2022-32275 is a path traversal vulnerability in Grafana 8.4.3. Learn about its impact, affected versions, and mitigation methods for ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2022-32275 CVE-2022-32275: Grafana Path Traversal Vulnerability CVE-2022-32275 is a path traversal flaw in Grafana 8.4.3 that could potentially allow unauthorized file access. This article covers the technical details, affected versions, security impact, and mitigation strategies. Published: February 18, 2026 CVE-2022-32275 Overview CVE-2022-32275 is a reported path traversal vulnerability in Grafana 8.4.3 that allegedly allows unauthorized reading of arbitrary files through specially crafted URI requests. The vulnerability involves manipulating the dashboard snapshot endpoint using URL-encoded constructor prototype pollution combined with directory traversal sequences. It is important to note that Grafana has disputed this vulnerability, statin If exploitable, this vulnerability could allow unauthenticated remote attackers to read sensitive system files such as /etc/passwd, potentially exposing user credentials and system configuration information. 2022-06-06 - CVE-2022-32275 published to NVD 2024-11-21 - Last updated in NVD database Technical Details for CVE-2022-32275 This reported vulnerability falls under CWE-22 (Improper Limitation of a Pathname to a Restricted Directory), commonly known as path traversal or directory traversal. The attack vector targets the dashboard snapshot functionality in Grafana's web interface. The reported exploit attempts to leverage JavaScript prototype pollution techniques ({{constructor.constructor') combined with URL encoding (%7B%7B) and traditional directory traversal sequences (../) to escape the intended web root and access arbitrary files on the server's filesystem. The attack is network-based and requires no authentication or user interaction. However, Grafana has publicly disputed the validity of this CVE, asserting that the described attack vector does not result in file disclosure but instead returns a standard error page. This disagreement highlights the importance of verifying vulnerability claims and understanding vendor perspectives when assessing security risks. The reported root cause involves improper input validation in the URL handling for the /dashboard/snapshot/ endpoint. Path traversal vulnerabilities typically occur when user-supplied input containing path navigation characters is not properly sanitized before being used in file system operations. According to Grafana's response, their input validation and error handling mechanisms prevent the traversal sequences from reaching the file system, instead returning an error response. The GitHub Grafana Issue #50336 and GitHub Grafana Comment on Issue #50341 contain additional discussion of this dispute. The alleged attack vector involves sending a crafted HTTP request to the Grafana server targeting the snapshot endpoint. The attacker would: Construct a URL with the /dashboard/snapshot/ base path Inject URL-encoded prototype pollution payload (%7B%7Bconstructor.constructor') Append directory traversal sequences (/../../../../../../..) Specify the target file path (e.g., /etc/passwd) The attack requires network acce",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:38:00.782090+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-6197",
+    "CVE-2021-43798",
+    "CVE-2021-43813",
+    "CVE-2023-5123"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for niccs.cisa.gov: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>"
+  ]
+}

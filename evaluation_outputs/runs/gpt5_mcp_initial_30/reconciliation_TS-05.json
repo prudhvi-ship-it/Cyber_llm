@@ -1,0 +1,14 @@
+{
+  "case_id": "TS-05",
+  "timestamp_utc": "20261016T124102Z",
+  "reason": "completed subprocess was incorrectly marked crashed for all Unknown/Not Found fields",
+  "change": {
+    "mafra_crashed": {
+      "old": "True",
+      "new": "False"
+    }
+  },
+  "original_csv_backup": "evaluation_results.before_TS-05_20261016T124102Z.csv",
+  "telemetry": "Unmodified: recorded JSONDecodeError is retained as a separate warning",
+  "forensic_predictions": "Unmodified: all conclusions and correctness labels preserved"
+}

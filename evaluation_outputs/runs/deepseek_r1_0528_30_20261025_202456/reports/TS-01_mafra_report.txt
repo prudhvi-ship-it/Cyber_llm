@@ -1,0 +1,321 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 1
+TCP Stream IDs: 0
+Protocol Counts: ARP=2, TCP=11, SSH=1, SSHv2=5
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:45828           <-> 172.18.0.2:2222                  8 1531 bytes       9 1015 bytes      17 2546 bytes     0.000180000         1.5442
+================================================================================
+
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+No prioritized HTTP requests. Do not infer absence of attack; non-HTTP protocols require independent inspection.
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000003-001 | client->server] 172.18.0.1:45828 -> 172.18.0.2:2222 (TCP)
+- [E-S0000-F000004-002 | server->client] 172.18.0.2:2222 -> 172.18.0.1:45828 (TCP)
+- [E-S0000-F000006-003 | client->server] 172.18.0.1:45828 -> 172.18.0.2:2222 (SSH)
+- [E-S0000-F000008-004 | server->client] 172.18.0.2:2222 -> 172.18.0.1:45828 (SSHv2)
+- [E-S0000-F000012-006 | client->server] 172.18.0.1:45828 -> 172.18.0.2:2222 (SSHv2)
+- [E-S0000-F000008-005 | server->client] Erlang
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:45828 -> 172.18.0.2:2222; packets=17; client->server=9, server->client=8; role_hint=other protocol/application candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: SSH (Erlang/5.2.10)  
+Relevant Events: Client (172.18.0.1) connects to SSH server (172.18.0.2:2222) running Erlang/5.2.10 and attempts remote command execution.  
+Malicious Activities: Suspicious SSH command execution attempt: `touch /tmp/TEST_POC` (decoded from base64-encoded payload).  
+Attack Success: Failed  
+Evidence: E-S0000-F000008-005 (Erlang service identification); command execution payload observed in SSHv2 packet (epoch=1752238492.045146) without response/confirmation. No command output, file creation effect, or success indicator observed in the flow.
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SSH",
+    "application": "Erlang",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Command Execution",
+    "technique": "SSH Command Injection",
+    "success": "Unknown",
+    "evidence": []
+  },
+  "cve": {
+    "candidate": "Not Found",
+    "confidence": "Unknown",
+    "reason": "No distinctive packet evidence or known CVE pattern matches Erlang SSH command execution mechanism. Attack relies on standard SSH functionality, not a specific vulnerability."
+  },
+  "confidence": "Unknown"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "SSH",
+    "application": "Erlang",
+    "framework": "Unknown",
+    "web_server": "Unknown",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Remote Command Execution",
+    "technique": "SSH Command Injection",
+    "success": "Fail",
+    "evidence": [
+      "E-S0000-F000012-006"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2025-32433",
+    "confidence": "Medium",
+    "reason": "Observed unauthenticated SSH command execution attempt (E-S0000-F000012-006) matches CVE-2025-32433's mechanism for Erlang/OTP SSH server missing authentication. Distinct from other CVEs by targeting Erlang specifically and requiring no credentials. Confidence is Medium due to lack of version-specific advisory confirmation."
+  },
+  "confidence": "Medium"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Partially Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Unknown",
+  "cve_supported": "No",
+  "unsupported_claims": [
+    "Attack success classification 'Fail' is not supported due to lack of response to the malicious request.",
+    "CVE association for CVE-2025-32433 is not supported due to lack of evidence of unauthenticated access."
+  ],
+  "evidence_check": [
+    "E-S0000-F000008-005",
+    "E-S0000-F000012-006"
+  ],
+  "confidence": "Unknown"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: SSH
+Attack Type: Remote Command Execution
+Attack Success: Unknown
+CVE: CVE-2025-32433
+Verification Result: Partially Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Unknown
+CVE Supported: No
+Verifier Confidence: Unknown
+Overall Confidence: Low
+Score: 2/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: SSH Remote Command Execution
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T12:47:51.910774+00:00
+Candidate CVEs: CVE-2025-32433, CVE-2010-0168, CVE-2017-9001, CVE-2019-16864
+Sources: 8
+
+Source 1: CISA KEV
+Title: Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.
+Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2010-0168: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2010-0168
+Summary: The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting.
+Supports: NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2017-9001: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2017-9001
+Summary: Aruba ClearPass 6.6.3 and later includes a feature called "SSH Lockout", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with "root" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable.
+Supports: NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2019-16864: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2019-16864
+Summary: CompleteFTPService.exe in the server in EnterpriseDT CompleteFTP before 12.1.4 allows Remote Code Execution by leveraging a Windows user account that has SSH access. The exec command is always run as SYSTEM.
+Supports: NVD lists CVE-2019-16864 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: Run ssh and immediately execute command [duplicate]
+URL: https://stackoverflow.com/questions/18522647/run-ssh-and-immediately-execute-command
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). This question already has answers here: Can I ssh somewhere, run some commands, and then leave myself a prompt? [closed] (5 answers) Closed ...
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: With ssh, how can you run a command on the remote ...
+URL: https://superuser.com/questions/261617/with-ssh-how-can-you-run-a-command-on-the-remote-machine-without-exiting
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Use ssh -X to use termIO cmds. Also - you can chain your cmds like "ssh 'source ~/.bashrc && cd && do ' ...
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: Can I automate running commands on remote machines ...
+URL: https://www.reddit.com/r/bash/comments/mjoq5h/can_i_automate_running_commands_on_remote/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Write the script you want to execute and put it on the remote machine. Then just call ssh, it take a remote command to run as the final argument.
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: How To Run / Execute Command Using SSH
+URL: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Describes how to run or execute a command using SSH with various command-line techniques on Linux, macOS, BSD, and Unix.
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for superuser.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for www.cyberciti.biz: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for unix.stackexchange.com: HTTPError: HTTP Error 403: Forbidden | Webpage read unavailable for askubuntu.com: HTTPError: HTTP Error 403: Forbidden
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+No sufficiently discriminating mechanism match from available sources and packet observations.
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000012-006]: 172.18.0.1:45828 -> 172.18.0.2:2222 (SSHv2).
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [CISA KEV] Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-0168: NVD vulnerability record: The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-0168 Supports: NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-9001: NVD vulnerability record: Aruba ClearPass 6.6.3 and later includes a feature called "SSH Lockout", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with "root" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-9001 Supports: NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2019-16864: NVD vulnerability record: CompleteFTPService.exe in the server in EnterpriseDT CompleteFTP before 12.1.4 allows Remote Code Execution by leveraging a Windows user account that has SSH access. The exec command is always run as SYSTEM. Source: https://nvd.nist.gov/vuln/detail/CVE-2019-16864 Supports: NVD lists CVE-2019-16864 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Run ssh and immediately execute command [duplicate]: UNTRUSTED WEB RESEARCH (not PCAP evidence). This question already has answers here: Can I ssh somewhere, run some commands, and then leave myself a prompt? [closed] (5 answers) Closed ... Source: https://stackoverflow.com/questions/18522647/run-ssh-and-immediately-execute-command
+- ONLINE [Serper web result] With ssh, how can you run a command on the remote ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Use ssh -X to use termIO cmds. Also - you can chain your cmds like "ssh 'source ~/.bashrc && cd && do ' ... Source: https://superuser.com/questions/261617/with-ssh-how-can-you-run-a-command-on-the-remote-machine-without-exiting
+- ONLINE [Serper web result] Can I automate running commands on remote machines ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Write the script you want to execute and put it on the remote machine. Then just call ssh, it take a remote command to run as the final argument. Source: https://www.reddit.com/r/bash/comments/mjoq5h/can_i_automate_running_commands_on_remote/
+- ONLINE [Serper web result] How To Run / Execute Command Using SSH: UNTRUSTED WEB RESEARCH (not PCAP evidence). Describes how to run or execute a command using SSH with various command-line techniques on Linux, macOS, BSD, and Unix. Source: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2010-0168
+- https://nvd.nist.gov/vuln/detail/CVE-2017-9001
+- https://nvd.nist.gov/vuln/detail/CVE-2019-16864
+- https://stackoverflow.com/questions/18522647/run-ssh-and-immediately-execute-command
+- https://superuser.com/questions/261617/with-ssh-how-can-you-run-a-command-on-the-remote-machine-without-exiting
+- https://www.reddit.com/r/bash/comments/mjoq5h/can_i_automate_running_commands_on_remote/
+- https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+
+Search status: Valid
+Search query: SSH Remote Command Execution
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for superuser.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for www.cyberciti.biz: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for unix.stackexchange.com: HTTPError: HTTP Error 403: Forbidden
+- Webpage read unavailable for askubuntu.com: HTTPError: HTTP Error 403: Forbidden
+- 3 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "Not Found",
+  "cve_supported": "No",
+  "confidence": "Low",
+  "reasons": [
+    "Analyst proposed CVE-2025-32433; independent Verifier CVE support: No. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: SSH
+Associated CVE candidate (Analyst): CVE-2025-32433
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: Low
+Attack outcome evidence-verified: No
+Identified CVE: Not Found
+Attack: Failed
+Is Service Vulnerable: Unknown
+Evidence:
+- PCAP [E-S0000-F000012-006]: 172.18.0.1:45828 -> 172.18.0.2:2222 (SSHv2).
+- ONLINE [CISA KEV] Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability: Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2025-32433 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2010-0168: NVD vulnerability record: The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting. Source: https://nvd.nist.gov/vuln/detail/CVE-2010-0168 Supports: NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2017-9001: NVD vulnerability record: Aruba ClearPass 6.6.3 and later includes a feature called "SSH Lockout", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with "root" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable. Source: https://nvd.nist.gov/vuln/detail/CVE-2017-9001 Supports: NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2019-16864: NVD vulnerability record: CompleteFTPService.exe in the server in EnterpriseDT CompleteFTP before 12.1.4 allows Remote Code Execution by leveraging a Windows user account that has SSH access. The exec command is always run as SYSTEM. Source: https://nvd.nist.gov/vuln/detail/CVE-2019-16864 Supports: NVD lists CVE-2019-16864 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] Run ssh and immediately execute command [duplicate]: UNTRUSTED WEB RESEARCH (not PCAP evidence). This question already has answers here: Can I ssh somewhere, run some commands, and then leave myself a prompt? [closed] (5 answers) Closed ... Source: https://stackoverflow.com/questions/18522647/run-ssh-and-immediately-execute-command
+- ONLINE [Serper web result] With ssh, how can you run a command on the remote ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Use ssh -X to use termIO cmds. Also - you can chain your cmds like "ssh 'source ~/.bashrc && cd && do ' ... Source: https://superuser.com/questions/261617/with-ssh-how-can-you-run-a-command-on-the-remote-machine-without-exiting
+- ONLINE [Serper web result] Can I automate running commands on remote machines ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Write the script you want to execute and put it on the remote machine. Then just call ssh, it take a remote command to run as the final argument. Source: https://www.reddit.com/r/bash/comments/mjoq5h/can_i_automate_running_commands_on_remote/
+- ONLINE [Serper web result] How To Run / Execute Command Using SSH: UNTRUSTED WEB RESEARCH (not PCAP evidence). Describes how to run or execute a command using SSH with various command-line techniques on Linux, macOS, BSD, and Unix. Source: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+
+Verification Summary:
+- Affected service: SSH.
+- Attack type: Remote Command Execution.
+- Attack technique: SSH Command Injection.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Unknown.
+- Verification result: Partially Supported.
+- Verifier confidence: Unknown.
+- Consensus confidence: Low.
+- Consensus score: 2/5.
+- Consensus attack outcome: Unknown.
+- Exact CVE attribution was not confirmed from the available packet and version evidence.
+- CVE assessment: Analyst proposed CVE-2025-32433; independent Verifier CVE support: No. No separate online CVE validator was run.
+- Unsupported claim: Attack success classification 'Fail' is not supported due to lack of response to the malicious request.
+- Unsupported claim: CVE association for CVE-2025-32433 is not supported due to lack of evidence of unauthenticated access.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Fail (Low confidence).
+- Attack prediction supported by prior Consensus: No.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- Binary decision limitation: Attack result is a forced low-confidence Analyst prediction; Verifier/Consensus did not establish it.
+- MCP evidence search status: Valid.
+- MCP investigation query: SSH Remote Command Execution.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2010-0168
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2017-9001
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2019-16864
+- Evidence-source URL: https://stackoverflow.com/questions/18522647/run-ssh-and-immediately-execute-command
+- Evidence-source URL: https://superuser.com/questions/261617/with-ssh-how-can-you-run-a-command-on-the-remote-machine-without-exiting
+- Evidence-source URL: https://www.reddit.com/r/bash/comments/mjoq5h/can_i_automate_running_commands_on_remote/
+- Evidence-source URL: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for superuser.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for www.cyberciti.biz: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for unix.stackexchange.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: Webpage read unavailable for askubuntu.com: HTTPError: HTTP Error 403: Forbidden
+- Evidence limitation: 3 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply Erlang/OTP SSH server patches per CISA KEV advisory
+- Restrict SSH access to trusted networks
+- Monitor SSH authentication logs for command execution attempts

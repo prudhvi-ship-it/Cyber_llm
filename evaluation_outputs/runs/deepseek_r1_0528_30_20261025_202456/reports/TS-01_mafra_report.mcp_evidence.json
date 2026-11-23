@@ -1,0 +1,109 @@
+{
+  "status": "Valid",
+  "query": "SSH Remote Command Execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Erlang Erlang/OTP SSH Server Missing Authentication for Critical Function Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Erlang Erlang/OTP: Erlang Erlang/OTP SSH server contains a missing authentication for critical function vulnerability. This could allow an attacker to execute arbitrary commands without valid credentials, potentially leading to unauthenticated remote code execution (RCE). By exploiting a flaw in how SSH protocol messages are handled, a malicious actor could gain unauthorized access to affected systems. This vulnerability could affect various products that implement Erlang/OTP SSH server, including—but not limited to—Cisco, NetApp, and SUSE. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2025-32433 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2010-0168: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-0168",
+      "snippet": "The nsDocument::MaybePreLoadImage function in content/base/src/nsDocument.cpp in the image-preloading implementation in Mozilla Firefox 3.6 before 3.6.2 does not apply scheme restrictions and policy restrictions to the image's URL, which might allow remote attackers to cause a denial of service (application crash or hang) or hijack the functionality of the browser's add-ons via a crafted SRC attribute of an IMG element, as demonstrated by remote command execution through an ssh: URL in a configuration that supports gnome-vfs with a nonstandard network.gnomevfs.supported-protocols setting.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2010-0168 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-9001: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-9001",
+      "snippet": "Aruba ClearPass 6.6.3 and later includes a feature called \"SSH Lockout\", which causes ClearPass to lock accounts with too many login failures through SSH. When this feature is enabled, an unauthenticated remote command execution vulnerability is present which could allow an unauthenticated user to execute arbitrary commands on the underlying operating system with \"root\" privilege level. This vulnerability is only present when a specific feature has been enabled. The SSH Lockout feature is not enabled by default, so only systems which have enabled this feature are vulnerable.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-9001 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2019-16864: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-16864",
+      "snippet": "CompleteFTPService.exe in the server in EnterpriseDT CompleteFTP before 12.1.4 allows Remote Code Execution by leveraging a Windows user account that has SSH access. The exec command is always run as SYSTEM.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2019-16864 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Run ssh and immediately execute command [duplicate]",
+      "url": "https://stackoverflow.com/questions/18522647/run-ssh-and-immediately-execute-command",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). This question already has answers here: Can I ssh somewhere, run some commands, and then leave myself a prompt? [closed] (5 answers) Closed ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "With ssh, how can you run a command on the remote ...",
+      "url": "https://superuser.com/questions/261617/with-ssh-how-can-you-run-a-command-on-the-remote-machine-without-exiting",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Use ssh -X to use termIO cmds. Also - you can chain your cmds like \"ssh 'source ~/.bashrc && cd && do ' ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Can I automate running commands on remote machines ...",
+      "url": "https://www.reddit.com/r/bash/comments/mjoq5h/can_i_automate_running_commands_on_remote/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Write the script you want to execute and put it on the remote machine. Then just call ssh, it take a remote command to run as the final argument.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "How To Run / Execute Command Using SSH",
+      "url": "https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Describes how to run or execute a command using SSH with various command-line techniques on Linux, macOS, BSD, and Unix.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T12:47:51.910774+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2025-32433",
+    "CVE-2010-0168",
+    "CVE-2017-9001",
+    "CVE-2019-16864"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for superuser.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for www.cyberciti.biz: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for unix.stackexchange.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for askubuntu.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

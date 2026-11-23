@@ -1,0 +1,158 @@
+{
+  "status": "Valid",
+  "query": "SSH remote code execution vulnerability | Erlang/OTP SSH remote command execution vulnerability | Erlang/OTP ssh remote code execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-23943: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-23943",
+      "snippet": "Improper Handling of Highly Compressed Data (Compression Bomb) vulnerability in Erlang OTP ssh (ssh_transport modules) allows Denial of Service via Resource Depletion.\n\nThe SSH transport layer advertises legacy zlib compression by default and inflates attacker-controlled payloads pre-authentication without any size limit, enabling reliable memory exhaustion DoS.\n\nTwo compression algorithms are affected:\n\n* zlib: Activates immediately after key exchange, enabling unauthenticated attacks\n* zlib@openssh.com: Activates post-authentication, enabling authenticated attacks\n\nEach SSH packet can decompress ~255 MB from 256 KB of wire data (1029:1 amplification ratio). Multiple packets can rapidly exhaust available memory, causing OOM kills in memory-constrained environments.\n\nThis vulnerability is associated with program files lib/ssh/src/ssh_transport.erl and program routines ssh_transport:decompress/2, ssh_transport:handle_packet_part/4.\n\nThis issue affects OTP from OTP 17.0 before OTP 28.4.1, OTP 27.3.4.9 and OTP 26.2.5.18, corresponding to ssh from 3.0.1 before 5.5.1, 5.2.11.6 and 5.1.4.14.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-23943 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-54886: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54886",
+      "snippet": "Loop with Unreachable Exit Condition ('Infinite Loop') vulnerability in Erlang OTP ssh (ssh_sftpd module) allows an authenticated SFTP user to render an SFTP channel permanently unresponsive.\n\nThe handle_data/4 function in ssh_sftpd contains a catch-all clause that accepts channel data of any type. When channel data with a non-zero type code (SSH_MSG_CHANNEL_EXTENDED_DATA) arrives with an empty pending buffer and a payload at or below the SFTP packet size limit, the clause tail-calls itself with identical arguments, creating an infinite loop.\n\nThe SFTP protocol operates exclusively on normal channel data (type 0). Extended data (non-zero type) is meaningless for SFTP and is never sent by conforming clients. However, the SSH protocol permits any channel participant to send extended data on an open channel, so an authenticated SFTP client can trigger the loop by sending SSH_MSG_CHANNEL_EXTENDED_DATA with any data_type_code and any non-empty payload at or below the size limit.\n\nThe targeted ssh_sftpd process enters an infinite tail-recursive loop. It never processes another message, its message queue grows without bound, and it can only be stopped by killing the process. BEAM's reduction-based scheduler preemption continues to function, so other processes on the node are not starved, but each stuck channel process consumes its full CPU time share continuously and accumulates unbounded message queue memory. Opening many channels amplifies the CPU and memory impact.\n\nErlang/OTP SSH configurations using the default max_channels setting (infinity) allow an authenticated user to open unlimited channels per connection, amplifying the attack without requiring multiple TCP connections or authentications.\n\nNo file contents, credentials, or write access are obtainable through this issue. The impact is limited to denial of service on targeted SFTP channels, with secondary CPU degradation and memory growth.\n\nThis vulnerability is associated with program file lib/ssh/src/ssh_sftpd.erl and program routine ssh_sftpd:handle_data/4.\n\nThis issue affects OTP from OTP 17.0 before OTP 29.0.3, OTP 28.5.0.3 and OTP 27.3.4.14, corresponding to ssh from 3.0.1 before 6.0.2, 5.5.2.2 and 5.2.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-54886 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    },
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "NVD-CVE-2025-32433 - NIST",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-32433",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH server may allow an attacker to perform unauthenticated remote code execution (RCE) ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:49:33.872230+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Keys to the Kingdom: Erlang/OTP SSH Vulnerability ...",
+      "url": "https://unit42.paloaltonetworks.com/erlang-otp-cve-2025-32433/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-32433 allows for remote code execution in sshd for certain versions of Erlang programming language's OTP. We reproduced this CVE ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Keys to the Kingdom: Erlang/OTP SSH Vulnerability Analysis and Exploits Observed in the Wild Advanced Threat PreventionCloud-Delivered Security ServicesCortexCortex XDRCortex XpanseCortex XSIAMIndustrial and Operational TechnologyNext-Generation FirewallUnit 42 Incident Response Published:August 11, 2025 CVE-2025-32433 This article presents our observations of exploit attempts targeting CVE-2025-32433. This vulnerability allows unauthenticated remote code execution (RCE) in the Secure Shell (SSH) daemon (sshd) from certain versions of the Erlang programming language's Open Telecom Platform (OTP). Erlang/OTP sshd is widely used in critical infrastructure and operational technology (OT) networks.With a CVSS score of 10.0, CVE-2025-32433 enables unauthenticated clients to execute commands by sending SSH connection protocol messages (codes >= 80) to open SSH ports, which should only be processed after successful authentication. Vulnerable versions include Erlang/OTP prior to OTP-27.3.3, OTP-26.2.5.11 and OTP-25.3 A patch is available in Erlang/OTP versions OTP-27.3.3, OTP-26.2.5.11, OTP-25.3.2.20 and later. We have reproduced, validated and analyzed this vulnerability to better understand its impact and provide detection strategies. We observed a significant increase in exploitation activity targeting this vulnerability from May 1-9, 2025, with 70% of our detections originating from firewalls protecting global operational technology (OT) networks. This analysis includes telemetry data showing geographic distribution and trends as well as the industries affected by this vulnerability. Palo Alto Networks customers are better protected from the threats discussed in this article through the following products and services: Next-Generation Firewall with the Advanced Threat Prevention subscription If you think you might have been compromised or have an urgent matter, contact the Unit 42 Incident Response team. Vulnerabilities Discussed CVE-2025-32433 Details of the Vulnerability Erlang is a programming language designed for building concurrent systems where multiple connections are needed simultaneously. Its companion framework, the Open Telecom Platform (OTP), has long been trusted in critical infrastructure from telecommunications networks to financial systems. OT and 5G environments use Erlang/OTP due to its fault-tolerance and scalability for high availability systems with minimal downtime. Due to compliance and safety requirements, OT and 5G administrators tend to use Erlang/OTP's native SSH implementation to remotely manage hosts, which makes CVE-2025-32433 a particular concern in these types of networks. At the heart of Erlang/OTP’s secure communication capabilities lies its native SSH implementation — responsible for encrypted connections, file transfers and most importantly, command execution. A flaw in this implementation would allow an attacker with network access to execute arbitrary code on vulnerable systems without requiring credentials, presenting a direct and severe risk to exposed assets. Analyzing global internet scanning data from Cortex Xpanse in April 2025, we saw vulnerable Erlang/OTP SSH services were widely exposed on",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:53:14.904142+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OpenSSH CVE-2024-6387 RCE Vulnerability",
+      "url": "https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2024-6387 exploit in OpenSSH poses remote unauthenticated code execution risks. Find out which versions are vulnerable and how to ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH Server Versions Affected by the regreSSHion Vulnerability Understanding the Potential Impact of regreSSHion Vulnerability on OpenSSH Exploits Immediate Steps to Mitigate the SSH Vulnerability Technical Details of the OpenSSH Exploit (CVE-2024-6387) Qualys QID Coverage for Detecting the OpenSSH Exploit Discover Vulnerable OpenSSH Assets with Qualys CyberSecurity Asset Management (CSAM) Enhancing Your Security Posture with Qualys VMDR to Detect and Remediate OpenSSH Vulnerabilities Unified Dashboard for regreSSHion: Track Exposure and Remediation of OpenSSH Exploits Automatically Patch regreSSHion Vulnerabilities with Qualys Patch Management Detect and Remediate CVE-2024-6387 (Open SSH Vulnerability) with Qualys TotalCloud Container Security Qualys Products and Customer Responsibilities Frequently Asked Questions (FAQs) The Qualys Threat Research Unit (TRU) has discovered a Remote Unauthenticated Code Execution (RCE) vulnerability in OpenSSH’s server (sshd) in glibc-based Linux systems. CVE assigned to this vulnerability is CVE-2024-6387. The vulnerability, which is a signal handler race condition in OpenSSH’s server (sshd), allows unauthenticated remote code execution (RCE) as root on glibc-based Linux systems; that presents a significant security risk. This race condition affects sshd in its default configuration. Based on searches using Censys and Shodan, we have identified over 14 million potentially vulnerable OpenSSH server instances exposed to the Internet. Anonymized data from Qualys CSAM 3.0 with External Attack Surface Management data reveals that approximately 700,000 external internet-facing instances are vulnerable. This accounts for 31% of all internet-facing instances with OpenSSH in our global customer base. Inte In our security analysis, we identified that this vulnerability is a regression of the previously patched vulnerability CVE-2006-5051, which was reported in 2006. A regression in this context means that a flaw, once fixed, has reappeared in a subsequent software release, typically due to changes or updates that inadvertently reintroduce the issue. This incident highlights the crucial role of thorough regression testi Qualys has developed a working exploit for the regreSSHion vulnerability. As part of the disclosure process, we successfully demonstrated the exploit to the OpenSSH team to assist with their understanding and remediation efforts. We do not release our exploits, as we must allow time for patches to be applied. However, even though the exploit is complex, we believe that other independent researchers will be able to re About OpenSSH: Securing SSH Communications and Protecting Infrastructure from OpenSSH Vulnerabilities OpenSSH (Open Secure Shell) is a suite of secure networking utilities based on the Secure Shell (SSH) protocol, which is vital for secure communication over unsecured networks. It provides robust encryption to ensure privacy and secure file transfers, making it an essential tool for remote server management and secure data communication. Known for its extensive security and authen",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Multiple Cisco Products Unauthenticated Remote Code ...",
+      "url": "https://www.cisco.com/c/en/us/support/docs/csa/cisco-sa-erlang-otp-ssh-xyZZy.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). On April 16, 2025, a critical vulnerability in the Erlang/OTP SSH server was disclosed. This vulnerability could allow an unauthenticated, ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Multiple Cisco Products Unauthenticated Remote Code Execution in Erlang/OTP SSH Server: April 2025 Document ID:1745360245562120 The documentation set for this product strives to use bias-free language. For the purposes of this documentation set, bias-free is defined as language that does not imply discrimination based on age, disability, gender, racial identity, ethnic identity, sexual orientation, socioeconomic status, and intersectionality. Exceptions may be present in the documentation due to language that is hardcoded in the user interfac",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:53:14.904142+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Critical Remote Code Execution Vulnerability in libssh2 ...",
+      "url": "https://arcticwolf.com/resources/blog/critical-remote-code-execution-vulnerability-in-libssh2-client-library-require-urgent-mitigation/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). A suite of severe vulnerabilities has been disclosed in libssh2 (an SSH client library widely embedded in software such as curl, Git GUI clients ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Partner with the world's largest commercial agentic SOC. Tailored security expertise and guided risk mitigation. Arctic Wolf Security Teams Security experts proactively protecting you 24x7. Incident Response In Action Learn how our IR team stops attacks and swiftly restores your organization to pre-incident operations.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Unauthenticated Remote Code Execution in Erlang/OTP SSH",
+      "url": "https://www.google.com/goto?url=CAESaAHrOzAVrTbSlQUb70pxrzlyc3K0KUX41ACD9ou1E_cE43wofelvpWnyQ940QaPWJRCmCpYrk7IfHy8OhtX3FyTMbIBES05f0QOFHElvEutCjPQsrFTbYsI7dBENDnA0W-OEnTSvdOaX",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). > The issue is caused by a flaw in the SSH protocol message handling which allows an attacker to send connection protocol messages prior to ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:53:14.904142+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "April 2025",
+      "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-erlang-otp-ssh-xyZZy",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). On April 16, 2025, a critical vulnerability in the Erlang/OTP SSH server was disclosed. This vulnerability could allow an unauthenticated, ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Multiple Cisco Products Unauthenticated Remote Code Execution in Erlang/OTP SSH Server: April 2025 Home / Cisco Security / Security Advisories",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:49:33.872230+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Remote Unauthenticated Code Execution Vulnerability in ...",
+      "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-openssh-rce-2024",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). On July 1, 2024, the Qualys Threat Research Unit (TRU) disclosed an unauthenticated, remote code execution vulnerability that affects the ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Remote Unauthenticated Code Execution Vulnerability in OpenSSH Server (regreSSHion): July 2024 Home / Cisco Security / Security Advisories",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-32433: Erlang/OTP SSH Remote Code ...",
+      "url": "https://www.google.com/goto?url=CAESsgEB6zswFXe70LjFQXK6OCcWS6D0W0MLjw2NThVEiXkePOCBKdiMyd8K28O8G9h1Jt3ErIDn82_CwvfPOoshpsML9GJz_ueEXLBX_QOSNxRqGg3pWH76A3M9Y5oXQ4adVUMej1xy-llU0xIYhv13QGG_PQ0-nFzzxuxtNfQ1_zpZtKPyFHP1xDjqvw32ZtNS3olcZ12eXP7WL4_gjE2hrdY124PC0jQMxUqR-_JXsqwm-ADy",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Erlang/OTP disclosed a critical vulnerability affecting their SSH server. Check out this blog to learn how the CVE-2025-32433 exploits work.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:49:33.872230+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "OpenSSH: Security",
+      "url": "https://www.google.com/goto?url=CAESYAHrOzAV4i-yDEZtItYOreb3Fuqv4qwfsEdWmQH2uNPU6sqd5j2IRkbQ3Pl4aZ9lZj-xMQsUc5OIpYWDf7itPppskyBb0kmzG4xeLCo0VcaBHZLO_MSZ7kP7Z2DvOHCE7w",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The PKCS#11 support ssh-agent(1) could be abused to achieve remote code execution via a forwarded agent socket if the following conditions are met:.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-30T05:46:14.318488+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2026-23943",
+    "CVE-2026-54886"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for nvd.nist.gov: HTTPError: HTTP Error 301: Moved Permanently",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for nvd.nist.gov: HTTPError: HTTP Error 301: Moved Permanently",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found",
+    "Webpage read unavailable for www.google.com: HTTPError: HTTP Error 302: Found"
+  ]
+}

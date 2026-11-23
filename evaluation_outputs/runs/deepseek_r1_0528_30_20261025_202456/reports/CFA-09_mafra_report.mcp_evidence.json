@@ -1,0 +1,172 @@
+{
+  "status": "Valid",
+  "query": "Cacti unknown version Unauthorized Database Access attack | the the attack database access via root authentication with SQL command execution",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Cacti Command Injection Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Cacti Cacti: Cacti contains a command injection vulnerability that allows an unauthenticated user to execute code. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2022-46169 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-24367: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24367",
+      "snippet": "Cacti is an open source performance and fault management framework. An authenticated Cacti user can abuse graph creation and graph template functionality to create arbitrary PHP scripts in the web root of the application, leading to remote code execution on the server. This vulnerability is fixed in 1.2.29.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2025-24367 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2014-5025: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-5025",
+      "snippet": "Cross-site scripting (XSS) vulnerability in data_sources.php in Cacti 0.8.8b allows remote authenticated users with console access to inject arbitrary web script or HTML via the name_cache parameter in a ds_edit action.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2014-5025 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2024-54146: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-54146",
+      "snippet": "Cacti is an open source performance and fault management framework. Cacti has a SQL injection vulnerability in the template function of host_templates.php using the graph_template parameter. This vulnerability is fixed in 1.2.29.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2024-54146 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2014-5026: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-5026",
+      "snippet": "Multiple cross-site scripting (XSS) vulnerabilities in Cacti 0.8.8b allow remote authenticated users with console access to inject arbitrary web script or HTML via a (1) Graph Tree Title in a delete or (2) edit action; (3) CDEF Name, (4) Data Input Method Name, or (5) Host Templates Name in a delete action; (6) Data Source Title; (7) Graph Title; or (8) Graph Template Name in a delete or (9) duplicate action.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2014-5026 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2002-1477: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2002-1477",
+      "snippet": "graphs.php in Cacti before 0.6.8 allows remote authenticated Cacti administrators to execute arbitrary commands via shell metacharacters in the title during edit mode.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2002-1477 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2025-24367: Cacti Graph Template RCE Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2025-24367/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2025-24367 is a remote code execution vulnerability in Cacti. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2025-24367 CVE-2025-24367: Cacti Graph Template RCE Vulnerability CVE-2025-24367 is a remote code execution vulnerability in Cacti that allows authenticated users to create malicious PHP scripts via graph templates. This article covers technical details, affected versions, and patches. CVE-2025-24367 Overview CVE-2025-24367 is a critical Remote Code Execution (RCE) vulnerability affecting Cacti, an open source performance and fault management framework widely used for network monitoring and graphing. An authenticated Cacti user can abuse the graph creation and graph template functionality to create arbitrary PHP scripts in the web root of the application, leading to remote code execution on the server. This vulnerability allows attackers with valid credentials to leverage the graph template system to write malicious PHP files directly into the web-accessible directory structure. Once these files are created, they can be accessed via HTTP requests, resulting in arbitrary code execution with the privileges of the web server process. Authenticated attackers can achieve full server compromise through arbitrary PHP file creation in the web root, enabling complete control over the Cacti server and potentially the broader network infrastructure it monitors. Cacti versions prior to 1.2.29 All installations with authenticated user access Deployments allowing graph creation and template management 2025-01-27 - CVE-2025-24367 published to NVD 2025-11-03 - Last updated in NVD database Technical Details for CVE-2025-24367 This vulnerability exploits a fundamental weakness in how Cacti handles graph creation and template functionality. The application fails to properly validate or sanitize file paths and content when users interact with the graph template system, allowing authenticated users to craft requests that result in arbitrary PHP files being written to the web root directory. The attack requires only basic authenticated access to the Cacti application—any user with permissions to create or modify graphs can potentially exploit this flaw. Once a malicious PHP file is placed in the web root, the attacker can execute arbitrary commands on the underlying server by simply accessing the newly created file through a web browser or automated HTTP request. The root cause lies in improper neutralization of special elements in output used by a downstream component (CWE-144), combined with insufficient access controls on file creation operations within the graph templating engine. The vulnerability stems from improper input validation and neutralization (CWE-144) in the graph creation and template handling code. Cacti fails to adequately restrict the paths where files can be created and does not properly sanitize user-controlled input that influences file content. This allows attackers to bypass intended restrictions and write executable PHP code to web-accessible locations. The graph template functionality appears to construct file paths using user-supplied data without sufficient validation, enabling path manipulation that results in files b",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "SQL Injection Cheat Sheet",
+      "url": "https://www.invicti.com/blog/web-security/sql-injection-cheat-sheet",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Invicti named a Leader in IDC MarketScape: Worldwide DAST 2026 Vendor Assessment. Read now. SQL injection cheat sheet Use the Invicti SQL Injection Cheat Sheet to learn about exploiting different variants of the SQL injection vulnerability. The cheat sheet includes technical information and payloads for SQL injection attacks against MySQL, Microsoft SQL Server, Oracle and PostgreSQL database servers. You information will be kept Private What is an SQL injection cheat sheet? This SQL injection cheat sheet is a cybersecurity resource with detailed technical information and attack payloads to test for different types of SQL injection (SQLi) vulnerabilities caused by insufficient user input validation and sanitization. It can be used as a reference for penetration testers but also as a general guide for anyone interested in web application security and all the unexpected things you can do w About the Invicti SQL injection cheat sheet This cheat sheet has been the web’s leading reference for SQL injection payloads ever since it was first published in 2015. It is a living document in constant development and currently contains payloads and tips for MySQL, Microsoft SQL Server, Oracle, PostgreSQL, and SQLite. While originally focused on web form inputs, the payloads and techniques here apply equally to any injection point that reaches a SQL database As with any cheat sheet, some examples might not work in every situation because injection in real live environments will vary depending on the server configuration, structured query language dialect, usage of parentheses, application framework, and unexpected, strange, and complex SQL statements. Successful SQL injection often requires a payload tailored to a specific SQL database system. Payload usability is indicated as follows: + = works on potentially other databases When a payloads works on several database systems, you will see multiple symbols: (MS) = works on MySQL and SQL Server (PO+) = works on PostgreSQL, Oracle, and possibly other databases Automate SQLi testing that you can’t cover manually No manual testing process can realistically cover every combination of payload, encoding, filter bypass, and injection context, especially across modern attack surfaces like APIs and GraphQL endpoints. DAST tools exist precisely to close that gap. Invicti’s proof-based scanning doesn’t just detect SQL injection but also safely exploits confirmed vulnerabilities and presents exfiltrated data as a proof of exploit, so you spend time fixing real issues rather than chasing false positives. It covers in-band, out-of-band, and boolean-based blind injection across web applications and APIs. Learn how proof-based scanning works and request a demo to see it in action. SQL injection 101: Injecting comments to manipulate queries Classic inline comment SQL injection attack samples MySQL version detection sample attacks Stacked SQL injection attack samples If statement SQL injection attack samples String from a hex representation Hex-based SQL injection example Dealing with language issues in UNION injections Bypassing login screens that use hashed passwords Example of bypassing an MD5 hash check Err",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Cacti Unauthenticated SQL Injection Vulnerability",
+      "url": "https://www.hillstonenet.com/blog/breaking-the-mold-halting-a-hackers-code-ep-18-cacti-unauthenticated-sql-injection-vulnerability/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Cacti, an open-source tool developed by the Cacti team, has long been a trusted resource for network traffic monitoring and analysis.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Understanding SQL Injection",
+      "url": "https://sec.cloudapps.cisco.com/security/center/resources/sql_injection.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). A SQL injection attack involves the alteration of SQL statements that are used within a web application through the use of attacker-supplied data. Insufficient ... | Webpage text: Understanding SQL Injection Understanding SQL Injection Ramifications of Successful SQL Injection Attacks An Example of SQL Injection for Authentication Bypass Blind and Second Order SQL Injection Defending Against SQL Injection Attacks Defenses in the Application Blacklisting and Whitelisting Fortifying SQL Statements Intrusion Prevention System Signatures Firewall Application Layer Protocol Inspection Structured Query Language (SQL) is used to query, operate, and administer database systems such as Microsoft SQL Server, Oracle, or MySQL. The general use of SQL is consistent across all database systems that support it; however, there are intricacies that are particular to each system. Database systems are commonly used to provide backend functionality to many types of web applications. In support of web applications, user-supplied data is often used to dynamically build SQL statements that interact directly with a database. A SQL injection attack is an attack that is aimed at subverting the original intent of the application by submitting attacker-supplied SQL statements directly to the backend da This white paper will describe SQL injection attacks, how they are performed, and precautions that should be taken inside applications or networks to reduce risks that are associated with SQL injection attacks. A SQL injection attack involves the alteration of SQL statements that are used within a web application through the use of attacker-supplied data. Insufficient input validation and improper construction of SQL statements in web applications can expose them to SQL injection attacks. SQL injection is such a prevalent and potentially destructive attack that the Open Web Application Security Project (OWASP) lists it as t Ramifications of Successful SQL Injection Attacks Although the effects of a successful SQL injection attack vary based on the targeted application and how that application processes user-supplied data, SQL injection can generally be used to perform the following types of attacks: Authentication Bypass: This attack allows an attacker to log on to an application, potentially with administrative privileges, without supplying a valid username and password. Information Disclosure: This attack allows an attacker to obtain, either directly or indirectly, sensitive information in a database. Compromised Data Integrity: This attack involves the alteration of the contents of a database. An attacker could use this attack to deface a web page or more likely to insert malicious content into otherwise innocuous web pages. This technique has been demonstrated via the attacks that are described in Mass exploits with SQL Injection at the SANS Internet Storm Center. Compromised Availability of Data: This attack allows an attacker to delete information with the intent to cause harm or delete log or audit information in a database. Remote Command Execution: Performing command execution through a database can allow an attacker to compromise the host operating system. These attacks often leverage an existing, predefined stored procedure for host operating system command execution. The most recognized variety of this attack uses the xp_cmdshell stored procedure that is c",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Cacti through 1.2.29 allows SQL injection in the template...",
+      "url": "https://github.com/advisories/GHSA-4755-g2xw-m698",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). 29 allows SQL injection in the template function in host_templates.php via the graph_template parameter. NOTE: this issue exists because of an ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Cacti through 1.2.29 allows SQL injection in the template... to the GitHub Advisory Database Cacti through 1.2.29 allows SQL injection in the template function in host_templates.php via the graph_template parameter. NOTE: this issue exists because of an incomplete fix for CVE-2024-54146. https://nvd.nist.gov/vuln/detail/CVE-2025-26520 Published by the National Vulnerability Database Published to the GitHub Advisory Database",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "SQL Injection - SQL Server",
+      "url": "https://learn.microsoft.com/en-us/sql/relational-databases/security/sql-injection?view=sql-server-ver17",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Any procedure that constructs SQL statements should be reviewed for injection vulnerabilities, because the Database Engine executes all ... | Webpage text: Access to this page requires authorization. You can try signing in or changing directories. Access to this page requires authorization. You can try changing directories. Summarize this article for me Azure SQL Managed Instance SQL analytics endpoint in Microsoft Fabric Warehouse in Microsoft Fabric SQL database in Microsoft Fabric SQL injection is an attack in which malicious code is inserted into strings that are later passed to an instance of the SQL Server Database Engine for parsing and execution. Any procedure that constructs SQL statements should be reviewed for injection vulnerabilities, because the Database Engine executes all syntactically valid queries that it receives. Even parameterized data can be manipulated by a skilled and dete The primary form of SQL injection consists of direct insertion of code into user-input variables that are concatenated with SQL commands and executed. A less direct attack injects malicious code into strings that are destined for storage in a table or as metadata. When the stored strings are then concatenated into a dynamic SQL command, the malicious code is executed. The injection process works by prematurely terminating a text string and appending a new command. Because the inserted command might have extra strings appended to it before it executes, the malefactor terminates the injected string with a comment mark --. Subsequent text is ignored at execution time. The following script shows a simple SQL injection. The script builds a SQL query by concatenating hard-coded strings together with a string entered by the user: ShipCity = Request.form (\"ShipCity\"); var sql = \"select * from OrdersTable where ShipCity = '\" + ShipCity + \"'\"; The user is prompted to enter the name of a city. If they enter Redmond, the query assembled by the script looks similar to the following example: SELECT * FROM OrdersTable WHERE ShipCity = 'Redmond'; However, assume that the user enters the following text: Redmond';drop table OrdersTable-- In this case, the script assembles the following query: SELECT * FROM OrdersTable WHERE ShipCity = 'Redmond';drop table OrdersTable--' The semicolon (;) denotes the end of one query and the start of another. The double hyphen (--) indicates that the rest of the current line is a comment and should be ignored. If the modified code is syntactically correct, it's executed by the server. When the Database Engine processes this statement, it first selects all records in OrdersTable where ShipCity is Redmond. Then, the Database Engine drops OrdersTable. As long as injected SQL code is syntactically correct, tampering can't be detected programmatically. Therefore, you must validate all user input and carefully review code that executes constructed SQL commands in the server that you use. Coding best practices are described in the following sections in this article. Always validate user input by testing type, length, format, and range. When you implement precautions against malicious input, consider the architecture and deployment scenarios of your application. Remember that programs designed to run in a secure environment can be copied to a nonsecure environment. The following suggestions should be considered best practices: Make no assu",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CACTUS: Analyzing a Coordinated Ransomware Attack on ...",
+      "url": "https://www.bitdefender.com/en-us/blog/businessinsights/cactus-analyzing-a-coordinated-ransomware-attack-on-corporate-networks",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The attack by the threat actor CACTUS began by exploiting a software vulnerability less than 24 hours after its initial disclosure. This ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] CACTUS: Analyzing a Coordinated Ransomware Attack on Corporate Networks Bitdefender Labs recently helped with an investigation that unfortunately aligns with two key predictions we made for 2024: the rapid rise of opportunistic ransomware and the growing risk of coordinated attacks. This ransomware attack was coordinated and impacted two separate companies simultaneously. The attack by the threat actor CACTUS began by exploiting a software vulnerability less than 24 hours after its initial disclosure. This underscores a crucial lesson for organizations in terms of how quickly threat actors are seizing on opportunities to exploit new vulnerabilities. We now commonly see that if a known Remote Code Execution (RCE) proof-of-concept (POC) remains unaddressed for over 24 hours, it's likely CACTUS continued infiltrating the network of one organization, implanting various types of remote access tools and tunnels across different servers. When they identified an opportunity to move to another company, they momentarily paused their operation to infiltrate the other network. Both companies are part of the same group, but operate independently, maintaining separate networks and domains without any establishe When the attack was finally launched, it was executed with meticulous coordination. After the typical data exfiltration phase, the threat actors proceeded to encrypt all workstations. Attacks on both companies originated from different servers within the victims' networks and were launched within a five-minute window of each other. They followed the same playbook. This attack wasn't just synchronized; it was also multifaceted. What followed 30 minutes later was an attack on the virtualization infrastructure (with companies using different hypervisors), resulting in the encryption of virtual machines, including domain controllers. This is significant because CACTUS, traditionally focusing on Windows workloads, expanded its target to include ESXi and Hyper-V hosts, suggesting a We salute both companies for their courageous decision to not pay the ransom demands. Instead, they sought the forensic expertise of Bitdefender Labs, and after the investigation, they agreed we could share our findings with other security practitioners for educational purposes. It's worth noting that these companies relied on security software from an undisclosed vendor, not Bitdefender. Only a small subset of targe The investigation presented significant hurdles; most computers, including domain controllers, were inaccessible. In many cases, we know the outcomes of specific steps but lack crucial artifacts. For instance, while we may know which file was executed and its resultant actions, we lack access to the executable itself for thorough analysis. Despite these challenges, we successfully pieced together the sequence of events using fragments collected from available resources, as we believe that this case presents a unique opportunity for the threat intelligence community to learn from and analyze. VictimA - Initial Compromise One of the emerging trends among modern cybercriminals is the shift towards targeting vulnerabilities rather than targeting specific indus",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:00:49.393141+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "What Is SQL Injection?",
+      "url": "https://www.cloudflare.com/learning/security/threats/sql-injection/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). By inserting specialized SQL statements into an entry field, an attacker is able to execute commands that allow for the retrieval of data from the database, the ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T07:06:46.662789+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2022-46169",
+    "CVE-2025-24367",
+    "CVE-2024-54146",
+    "CVE-2014-5025",
+    "CVE-2014-5026",
+    "CVE-2002-1477"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.cloudflare.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for eaglepubs.erau.edu: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

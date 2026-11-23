@@ -63,15 +63,63 @@ def extract_attack_type(full_text):
     return "Not Found"
 
 
-def parse_saved_report(report_path):
-    full_text = read_text(report_path)
-    final_text = extract_final_report_section(full_text)
+CONSENSUS_MARKER = "=== CONSENSUS SUMMARY ==="
 
+
+def extract_consensus_section(full_text):
+    """Take the LAST final consensus, never the initial or revised Analyst block."""
+    all_markers = list(re.finditer(
+        r"(?im)^\s*===\s*CONSENSUS SUMMARY\s*===\s*$", full_text
+    ))
+    if not all_markers:
+        return None
+    section = full_text[all_markers[-1].end():]
+    next_heading = re.search(r"(?m)^\s*===\s*[^\n]+?\s*===\s*$", section)
+    if next_heading:
+        section = section[:next_heading.start()]
+    return section
+
+
+def parse_report_text(full_text):
+    # The Analyst candidate is a separate research finding, never a
+    # substitute for the final report's "Identified CVE" decision.
+    final_text = extract_final_report_section(full_text)
+    candidate = extract_field(final_text, "Associated CVE candidate (Analyst)")
+    candidate_support = extract_field(final_text, "Verifier support for exact CVE")
+    consensus = extract_consensus_section(full_text)
+    if consensus is not None:
+        # Do not infer "Vulnerable: Yes" from a candidate CVE alone.
+        # The consensus typically has no explicit vulnerability classification.
+        vulnerable = extract_field(consensus, "Is Service Vulnerable")
+        if vulnerable == "Not Found":
+            vulnerable = extract_field(consensus, "Vulnerable")
+        return {
+            "service": extract_field(consensus, "Service"),
+            "attack_type": extract_field(consensus, "Attack Type"),
+            "attack_success": extract_field(consensus, "Attack Success"),
+            "cve": extract_field(consensus, "CVE"),
+            "cve_candidate": candidate,
+            "cve_candidate_support": candidate_support,
+            "cve_supported": extract_field(consensus, "CVE Supported"),
+            "verification_result": extract_field(consensus, "Verification Result"),
+            "overall_confidence": extract_field(consensus, "Overall Confidence"),
+            "vulnerable": vulnerable if vulnerable != "Not Found" else "Unknown",
+            "report_found": bool(full_text.strip()),
+        }
+
+    # Keep original FRA and legacy MAFRA formats working.
+    final_text = extract_final_report_section(full_text)
     return {
         "service": extract_field(final_text, "Affected Service"),
         "attack_type": extract_attack_type(full_text),
         "attack_success": extract_field(final_text, "Attack"),
         "cve": extract_field(final_text, "Identified CVE"),
+        "cve_candidate": candidate,
+        "cve_candidate_support": candidate_support,
         "vulnerable": extract_field(final_text, "Is Service Vulnerable"),
         "report_found": bool(full_text.strip()),
     }
+
+
+def parse_saved_report(report_path):
+    return parse_report_text(read_text(report_path))

@@ -1,0 +1,102 @@
+{
+  "status": "Valid",
+  "query": "Apache Solr Solr Admin API Remote Code Execution Log4j JNDI (LDAP) injection via HTTP parameter to Solr Admin API CVE-2021-44228",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00",
+  "sources": [
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2017-12629: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12629",
+      "snippet": "Remote code execution occurs in Apache Solr before 7.1 with Apache Lucene before 7.1 by exploiting XXE in conjunction with use of a Config API add-listener command to reach the RunExecutableListener class. Elasticsearch, although it uses Lucene, is NOT vulnerable to this. Note that the XML external entity expansion vulnerability occurs in the XML Query Parser which is available, by default, for any query request with parameters deftype=xmlparser and can be exploited to upload malicious data to the /upload request handler or as Blind XXE using ftp wrapper in order to read arbitrary local files from the Solr server. Note also that the second vulnerability relates to remote code execution using the RunExecutableListener available on all affected versions of Solr.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2017-12629 for a product matching 'Apache Solr'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2019-0192: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-0192",
+      "snippet": "In Apache Solr versions 5.0.0 to 5.5.5 and 6.0.0 to 6.6.5, the Config API allows to configure the JMX server via an HTTP POST request. By pointing it to a malicious RMI server, an attacker could take advantage of Solr's unsafe deserialization to trigger remote code execution on the Solr side.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2019-0192 for a product matching 'Apache Solr'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2019-17558: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-17558",
+      "snippet": "Apache Solr 5.0.0 to Apache Solr 8.3.1 are vulnerable to a Remote Code Execution through the VelocityResponseWriter. A Velocity template can be provided through Velocity templates in a configset `velocity/` directory or as a parameter. A user defined configset could contain renderable, potentially malicious, templates. Parameter provided templates are disabled by default, but can be enabled by setting `params.resource.loader.enabled` by defining a response writer with that setting set to `true`. Defining a response writer requires configuration API access. Solr 8.4 removed the params resource loader entirely, and only enables the configset-provided template rendering when the configset is `trusted` (has been uploaded by an authenticated user).",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2019-17558 for a product matching 'Apache Solr'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Solr™ Security - Apache Solr",
+      "url": "https://solr.apache.org/security.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Recent Security Advisories for Apache Solr ¶ ; CVE-2026-22022, 2026-01-20, Unauthorized bypass of certain \"predefined permission\" rules in the ... | Webpage excerpt: The Solr PMC greatly appreciates responsible disclosure of new security vulnerabilities found in Solr itself It is important not to publish a previously unknown exploit, or exploit demonstration code, on public been assessed as not exploitable in Solr. Search the Solr users mailing list archive Recent Security Advisories for Apache Solr Apache Solr extraction module vulnerable to XXE attacks via XFA content in PDFs Apache Solr: Configset upload on Windows allows arbitrary path write-access",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Solr ™ Security News - Apache Solr",
+      "url": "https://solr.apache.org/security-news.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Remote Code Execution This issue affects all Apache Solr versions prior to 8.11.1. This issue only affects Windows. Mitigation: Upgrade to Solr 8.11.1, | Webpage excerpt: Full history of Apache Solr security advisories. Subscribe to the security ATOM feed to be notified of new advisories. Apache Solr 9.0.0 through 9.10.1 The Apache Solr JWT Authentication Plugin has a configuration parameter blockUnknown has documented this as defaulting to true since Solr 9.0, but the code default has always You use the JWT Authentication Plugin (solr.JWTAuthPlugin) in security.json Upcoming Solr 9.11 and 10.1 releases will change the code default of blockUnknown to true. Deployments of Apache Solr 5.3.0 through 9.10.0 that rely on Solr's \"Rule Based Authorization Plugin\" are vulnerable to allowing unauthorized access to certain Solr APIs, due to insufficiently strict input validation in those components. Only deployments that meet all of the following criteria are impacted by this vulnerability:",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Solr News - Apache Solr",
+      "url": "https://solr.apache.org/news.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Solr instances running on Windows are vulnerable to arbitrary filepath write-access, due to a lack of input-sanitation in the \"configset upload\" ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] 4 October 2026, Apache Solr™ 9.11.0 available The Solr PMC is pleased to announce the release of Apache Solr 9.11.0. Solr is the blazing-fast, open source, multi-modal search platform built on Apache Lucene. It powers full-text, vector, analytics, and geospatial search at many of the world's largest organizations. Other major features include Kubernetes and docker integration, streaming, highlighting, faceting, and spellchecking. Solr 9.11.0 is available for immediate download at: https://solr.apache.org/downloads.html Solr 9.11.0 Release Highlights:¶ Added an allowZkHosts setting to restrict which ZooKeeper connection strings a cross-collection join or streaming expression may target. The local SolrCloud ensemble is always allowed.",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "CVE Status for Dependencies - Apache Solr",
+      "url": "https://solr.apache.org/security-dependency-cves.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Below is a list of CVE vulnerabilities in Apache Solr dependencies and their applicability to Solr, with the assessed state of each. | Webpage excerpt: Apache Solr depends on many third-party libraries. Security scanners routinely flag CVEs in those libraries, but a CVE in a dependency does not automatically mean Solr is vulnerable — it depends on whether Solr actually exercises the affected code path in a way that can be exploited. curl -sO https://solr.apache.org/solr.openvex.json docker scout cves solr:9.9.0 --vex-location solr.openvex.json --vex-author '.*' (Solr's VEX is authored by the Apache Solr project, so --vex-author '.*' is required — by default ⬇ Download Solr VEX File (CycloneDX JSON)",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:01:13.702497+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2017-12629",
+    "CVE-2019-0192",
+    "CVE-2019-17558"
+  ],
+  "retrieval_errors": []
+}

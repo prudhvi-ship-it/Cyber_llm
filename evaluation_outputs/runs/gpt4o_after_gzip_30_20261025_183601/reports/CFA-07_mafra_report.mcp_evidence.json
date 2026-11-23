@@ -1,0 +1,106 @@
+{
+  "status": "Valid",
+  "query": "phpMyAdmin command injection tbl find replace packet clues: endpoint tbl find replace",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2016-5734: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-5734",
+      "snippet": "phpMyAdmin 4.0.x before 4.0.10.16, 4.4.x before 4.4.15.7, and 4.6.x before 4.6.3 does not properly choose delimiters to prevent use of the preg_replace e (aka eval) modifier, which might allow remote attackers to execute arbitrary PHP code via a crafted string, as demonstrated by the table search-and-replace implementation.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2016-5734 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-4349: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-4349",
+      "snippet": "SQL injection vulnerability in server_privileges.php in phpMyAdmin 2.7.0 allows remote authenticated users to execute arbitrary SQL commands via the (1) dbname and (2) checkprivs parameters.  NOTE: the vendor and a third party have disputed this issue, saying that the main task of the program is to support query execution by authenticated users, and no external attack scenario exists without an auto-login configuration.  Thus it is likely that this issue will be REJECTED.  However, a closely related CSRF issue has been assigned CVE-2005-4450",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-4349 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2006-1804: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2006-1804",
+      "snippet": "SQL injection vulnerability in sql.php in phpMyAdmin 2.7.0-pl1 allows remote attackers to execute arbitrary SQL commands via the sql_query parameter.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2006-1804 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2007-5976: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-5976",
+      "snippet": "SQL injection vulnerability in db_create.php in phpMyAdmin before 2.11.2.1 allows remote authenticated users with CREATE DATABASE privileges to execute arbitrary SQL commands via the db parameter.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2007-5976 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Find and Replace text in the entire table using a MySQL ...",
+      "url": "https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Usually I use manual find to replace text in a MySQL database using phpMyAdmin. I'm tired of it now, how can I run a query to find and replace a text ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Find and replace in phpMyAdmin",
+      "url": "https://bobcares.com/blog/find-and-replace-in-phpmyadmin/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The Find and replace in phpMyAdmin is for searching a word in database and replace it by another and is useful in the case of WordPress ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2020-5504: phpMyAdmin SQL Injection Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2020-5504/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2020-5504 is a SQL injection vulnerability in phpMyAdmin user accounts page. Learn about its impact, affected versions, and mitigation ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2020-5504 CVE-2020-5504: phpMyAdmin SQL Injection Vulnerability CVE-2020-5504 is a SQL injection flaw in phpMyAdmin that allows authenticated users to inject malicious SQL through the user accounts page. This article covers technical details, affected versions, and mitigation. CVE-2020-5504 Overview CVE-2020-5504 is a SQL injection vulnerability affecting phpMyAdmin versions 4.x before 4.9.4 and 5.x before 5.0.1. The vulnerability exists in the user accounts page where a malicious user could inject custom SQL statements in place of their own username when creating queries to this page. While exploitation requires the attacker to have a valid MySQL account to access the server, successful exploitation could lead Authenticated attackers can execute arbitrary SQL commands against the database, potentially leading to data exfiltration, modification, or destruction of database contents. phpMyAdmin versions 4.x before 4.9.4 phpMyAdmin versions 5.x before 5.0.1 SUSE Linux Enterprise Server 12 (bundled phpMyAdmin) Debian Linux 8.0 (bundled phpMyAdmin) 2020-01-09 - CVE-2020-5504 published to NVD 2025-04-16 - Last updated in NVD database Technical Details for CVE-2020-5504 This SQL injection vulnerability resides in phpMyAdmin's user accounts management functionality. The root cause is insufficient input sanitization when handling username parameters within queries to the user accounts page. When an authenticated user accesses this page, the application fails to properly escape or parameterize user-supplied input, allowing an attacker to break out of the intended SQL query context and The vulnerability is classified under CWE-89 (SQL Injection), indicating improper neutralization of special elements used in SQL commands. The attack can be executed remotely over the network with low complexity, though it requires the attacker to have low-level privileges (a valid MySQL account). No user interaction is required for exploitation, and successful attacks can result in high impact to confidentiality, in The vulnerability stems from improper input validation in the user accounts page functionality. When phpMyAdmin constructs SQL queries involving usernames, it fails to adequately sanitize or parameterize user input. This allows specially crafted input containing SQL metacharacters to be interpreted as part of the SQL query rather than as data, enabling attackers to manipulate query logic. The attack vector is network-based, requiring an authenticated attacker with valid MySQL credentials. The attacker crafts a malicious username value containing SQL injection payloads when interacting with the user accounts page. Since the application uses the username directly in SQL queries without proper sanitization, the injected SQL code is executed against the database server. The vulnerability allows attackers to inject custom SQL in place of their username parameter. This can be leveraged to extract sensitive data from other database tables, modify or delete data, escalate privileges within the database, or potentially gain further access to",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Summary and Analysis of Penetration Testing Based on ...",
+      "url": "https://medium.com/@959652664/summary-and-analysis-of-penetration-testing-based-on-phpmyadmin-784896851cf9",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). What is phpMyAdmin? phpMyAdmin is a web-based MySQL database management tool built on PHP and hosted on a web server.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:45:31.185288+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2016-5734",
+    "CVE-2005-4349",
+    "CVE-2006-1804",
+    "CVE-2007-5976"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden",
+    "Webpage read unavailable for medium.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

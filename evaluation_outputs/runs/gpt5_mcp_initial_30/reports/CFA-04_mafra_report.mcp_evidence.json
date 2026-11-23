@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "Jenkins 2.441 Abuse of Jenkins CLI endpoint Attempted local file disclosure via @file argument in connect-node command through /cli?remoting=false",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Jenkins Command Line Interface (CLI) Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Jenkins Jenkins Command Line Interface (CLI): Jenkins Command Line Interface (CLI) contains a path traversal vulnerability that allows attackers limited read access to certain files, which can lead to code execution. Required action: Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2024-23897 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2014-3661: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-3661",
+      "snippet": "Jenkins before 1.583 and LTS before 1.565.3 allows remote attackers to cause a denial of service (thread consumption) via vectors related to a CLI handshake.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2014-3661 for a product matching 'Jenkins'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2013-0327: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-0327",
+      "snippet": "Cross-site request forgery (CSRF) vulnerability in Jenkins master in Jenkins before 1.502 and LTS before 1.480.3 allows remote attackers to hijack the authentication of users via unknown vectors.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2013-0327 for a product matching 'Jenkins'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2013-0331: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-0331",
+      "snippet": "Jenkins before 1.502 and LTS before 1.480.3 allows remote authenticated users with write access to cause a denial of service via a crafted payload.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2013-0331 for a product matching 'Jenkins'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins Security Advisory 2022-09-21",
+      "url": "https://www.jenkins.io/security/advisory/2022-09-21/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). As of publication, the Jenkins security team is unaware of any exploitable help icon/tooltip in Jenkins core or plugins published by the ... | Webpage excerpt: Jenkins Security Advisory 2022-09-21 This advisory announces vulnerabilities in the following Jenkins deliverables: Jenkins 2.367 through 2.369 (both inclusive) does not escape tooltips of the l:helpIcon UI component used for some help icons on the Jenkins web UI. As of publication, the Jenkins security team is unaware of any exploitable help icon/tooltip in Jenkins core or plugins published by the Jenkins project. Jenkins 2.370 escapes tooltips of the l:helpIcon UI component. This allows attackers able to change the contents of the Topaz Workbench CLI home directory on agents to have Jenkins parse a crafted file that uses external entities for extraction of secrets from the Jenkins controller or server-side request forgery. build-publisher Plugin 1.22 and earlier does not perform a permission check in an HTTP endpoint.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Authenticating scripted clients",
+      "url": "https://www.jenkins.io/doc/book/system-administration/authenticating-scripted-clients/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Security Advisories Reporting Vulnerabilities. Earlier versions of Jenkins require you to specify your real password, and it is only available when your ... | Webpage excerpt: Backing-up/Restoring Jenkins Administering Jenkins on Kubernetes Managing Jenkins with Chef Managing Jenkins with Puppet Reset the Jenkins administrator password Groovy script using cdancy/jenkins-rest Earlier versions of Jenkins require you to specify your real password,",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Jenkins CLI",
+      "url": "https://www.jenkins.io/doc/book/managing/cli/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Jenkins has a built-in command line interface that allows users and administrators to access Jenkins from a script or shell environment. | Webpage excerpt: Jenkins Features Controlled with System Properties Jenkins has a built-in command line interface that allows users and administrators to access Jenkins from a script or shell environment. This can The command line interface can be accessed over SSH or with the Jenkins CLI client, a .jar file distributed with Jenkins. This document assumes Jenkins 2.54 or newer. In a new Jenkins installation, the SSH service is disabled by default.",
+      "source_type": "vendor_page_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-33002: Jenkins Auth Bypass Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2026-33002/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-33002 is an authentication bypass flaw in Jenkins CLI WebSocket endpoint caused by DNS rebinding attacks. This vulnerability affects ... | Webpage excerpt: [PARTIAL WEBPAGE: only first 150000 bytes examined] CVE-2026-33002: Jenkins Auth Bypass Vulnerability CVE-2026-33002 is an authentication bypass flaw in Jenkins CLI WebSocket endpoint caused by DNS rebinding attacks. This vulnerability affects versions 2.442-2.554 and LTS 2.426.3-2.541.2, allowing attackers to bypass origin validation. CVE-2026-33002 is a DNS rebinding vulnerability affecting Jenkins automation servers. The vulnerability exists in how Jenkins validates the origin of requests made through the CLI WebSocket endpoint. By computing the expected origin using the Host or X-Forwarded-Host HTTP request headers, an attacker can exploit DNS rebinding techniques to bypass origin validation controls, potentially gaining unauthorized access to Attackers can bypass origin validation through DNS rebinding attacks, potentially allowing unauthorized access to Jenkins CLI WebSocket functionality and enabling malicious actions against the Jenkins server. Jenkins 2.442 through 2.554 (both inclusive) Jenkins LTS 2.426.3 through LTS 2.541.2 (both inclusive) This vulnerability stems from improper origin validation in Jenkins' CLI WebSocket endpoint implementation. The flaw is classified under CWE-350 (Reliance on Reverse DNS Resolution for a Security-Critical Action), which describes scenarios where security controls depend on DNS-based information that can be manipulated by attackers.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-15T23:46:32.743946+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2013-0327",
+    "CVE-2013-0331",
+    "CVE-2014-3661",
+    "CVE-2024-23897"
+  ],
+  "retrieval_errors": []
+}

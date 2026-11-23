@@ -1,0 +1,102 @@
+{
+  "status": "Valid",
+  "query": "Jenkins information disclosure vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Jenkins Command Line Interface (CLI) Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Jenkins Jenkins Command Line Interface (CLI): Jenkins Command Line Interface (CLI) contains a path traversal vulnerability that allows attackers limited read access to certain files, which can lead to code execution. Required action: Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2024-23897 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-48921: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48921",
+      "snippet": "Jenkins Pipeline: Groovy Libraries Plugin 797.v90ea_a_9b_e45a_0 and earlier does not prohibit symbolic links in shared libraries, allowing attackers able to control the content of a library used by a Pipeline job to read arbitrary files on the Jenkins controller filesystem.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2026-48921 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2018-1000110: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-1000110",
+      "snippet": "An improper authorization vulnerability exists in Jenkins Git Plugin version 3.7.0 and earlier in GitStatus.java that allows an attacker with network access to obtain a list of nodes and users.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2018-1000110 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2024-23897: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-23897",
+      "snippet": "Jenkins 2.441 and earlier, LTS 2.426.2 and earlier does not disable a feature of its CLI command parser that replaces an '@' character followed by a file path in an argument with the file's contents, allowing unauthenticated attackers to read arbitrary files on the Jenkins controller file system.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2024-23897 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2026-48921: Jenkins Pipeline Information Disclosure ...",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2026-48921/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2026-48921 is an information disclosure vulnerability in Jenkins Pipeline: Groovy Libraries Plugin that allows attackers to read arbitrary ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2026-48921 CVE-2026-48921: Jenkins Pipeline Information Disclosure Flaw CVE-2026-48921 is an information disclosure vulnerability in Jenkins Pipeline: Groovy Libraries Plugin that allows attackers to read arbitrary files on the Jenkins controller. This article covers technical details, affected versions, and mitigation. Disclaimer: This content was generated using AI. While we strive for accuracy, please verify critical information with official sources. Sources: National Vulnerability Database, CISA KEV, Exploit-DB CVE-2026-48921 Overview CVE-2026-48921 affects the Jenkins Pipeline: Groovy Libraries Plugin version 797.v90ea_a_9b_e45a_0 and earlier. The plugin does not prohibit symbolic links in shared libraries used by Pipeline jobs. Attackers who can control the content of a shared library can place symlinks that resolve to arbitrary files on the Jenkins controller filesystem. When the Pipeline job processes the library, it reads files outside the in Authenticated attackers with library write access can read arbitrary files on the Jenkins controller, including credentials, secrets, and configuration data. Jenkins Pipeline: Groovy Libraries Plugin 797.v90ea_a_9b_e45a_0 and earlier Jenkins controllers consuming attacker-controlled shared libraries Pipeline jobs referencing libraries from untrusted sources 2026-05-27 - CVE CVE-2026-48921 published to NVD 2026-05-27 - Jenkins Security Advisory SECURITY-3727 released 2026-05-27 - Last updated in NVD database Technical Details for CVE-2026-48921 The Pipeline: Groovy Libraries Plugin retrieves shared libraries from configured sources and makes their contents available to Pipeline jobs at build time. The plugin reads files from the library checkout when Pipeline steps reference them. The plugin does not validate whether files inside the library are regular files or symbolic links. An attacker who controls a library source can commit a symbolic link pointing to This exposes sensitive controller data such as secrets.key, credentials.xml, SSH keys under $JENKINS_HOME, and arbitrary paths like /etc/passwd. The issue maps to CWE-59: Improper Link Resolution Before File Access. The plugin lacks symlink filtering when materializing shared library content. File access operations resolve symbolic targets without confirming that the resolved path remains inside the library root directory. Exploitation requires the attacker to control a Pipeline shared library, typically through write access to the source code management repository backing that library. The attacker commits a symlink, then triggers or waits for a Pipeline job to load the library. The job reads the symlink target, returning controller filesystem contents through build logs or downstream Pipeline steps. The vulnerability manifests at the file resolution layer of the shared library loader. Refer to the Jenkins Security Advisory #SECURITY-3727 for the technical breakdown. Detection Methods for CVE-2026-48921 Pipeline build logs containing contents of files outside the library directory, such as /etc/passwd or $JENKI",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Reporting Security Vulnerabilities",
+      "url": "https://www.jenkins.io/security/reporting/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Please only report leaked secrets, or similar information disclosure, that results in a direct, immediate risk. Configuration of googlegroups.com, which we ... | Webpage text: Vulnerabilities and Scoring Vulnerabilities in Plugins How We Fix Security Issues Reporting Vulnerabilities Vulnerabilities in Plugins Reporting Security Vulnerabilities Coordinated (Responsible) Disclosure Bug bounty / Reward / Gift Thanks for your interest in reporting vulnerabilities to the Jenkins project! Please report them in the issue tracker under the SECURITY project. This project is configured in such a way that only the reporter and the security team can see the details. By restricting access to this potentially sensitive information, we can work on a fix and deliver it before the method of attack becomes well-known. If you are unable to report using our issue tracker, you can also send your report to the private Jenkins Security Team mailing list: jenkinsci-cert@googlegroups.com We will then file an issue on your behalf. This section aims to clarify the scope of issues handled by the Jenkins security team. When in doubt, we recommend you report issues to us as described above, and let us evaluate them. Please report issues present in the following components: Jenkins, including installers and Docker images published by the Jenkins project. In Jira, use the core or packaging component, as applicable. Jenkins plugins published by the Jenkins project (listed on plugins.jenkins.io and/or hosted in the jenkinsci GitHub organization). In Jira, use the specific-plugin component and specify the plugin name or ID in the issue summary. Please do not bundle issues in multiple plugins into a single issue, as this prevents assigning the issue to the correct maintainer. Additional components published by the Jenkins project for general use, such as Docker images for Jenkins agents. In Jira, use the other component. Jenkins infrastructure projects, such as jenkins.io or more generally the repositories hosted in the jenkins-infra GitHub organization. In Jira, use the infra component. The following components are out of scope: Issues specific to CloudBees Jenkins products should be reported to CloudBees directly. Issues specific to JayeX should be reported directly to them. We do not consider the following issues to be vulnerabilities in Jenkins (core + plugins): Vulnerabilities only exploitable by users with Overall/Administer permission will generally not be considered to be vulnerabilities. Administrators in Jenkins can use the Script Console and install plugins. These tools let them run arbitrary code and change the behavior of Jenkins in multiple ways, so that very few, if any, vulnerabilities will let them do something novel. We still recommend reporting such vulnerabilities in private so that they can be reviewed by the security team, in case the vulnerable code is also used for features accessible by regular users. Web methods that lack permission checks or CSRF protection, and cause Jenkins to access a URL, that is not controlled by an attacker, without disclosing configuration information from Jenkins or returning sensitive information. This behavior is commonly the case in plugins integrating with a hosted service (e.g., some connection tests) and while permissions beyond Overall/Read should be required to cause Jenkins to send a request, the impact is negligi",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Jenkins Information Disclosure to Unauthenticated Users",
+      "url": "https://rhinosecuritylabs.com/vulnerability-disclosure/jenkins-information-disclosure-to-unauthenticated-users/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). An improper authorization vulnerability exists in Jenkins Git Plugin version 3.7.0 and earlier in GitStatus.java that allows an attacker ... | Webpage text: Jenkins Information Disclosure to Unauthenticated Users CVSS Rating: 5.3 (medium) CVE-2018-1000110 Disclosing Company: Rhino Security Labs Affected software/version: Jenkins GIT version 3.7.0 Rhino Security Labs References Vulnerability Description An improper authorization vulnerability exists in Jenkins Git Plugin version 3.7.0 and earlier in GitStatus.java that allows an attacker with network access to obtain a list of nodes and users. CVSS Rating (version 3.0) Attack Complexity (AC)Low Privileges Required (PR)None User Interaction (UI)None",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Jenkins Git client Plugin file system information disclosure ...",
+      "url": "https://github.com/advisories/GHSA-g2pq-9jr7-w6gv",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). file system information disclosure vulnerability ・ allowing attackers with check for the existence of an attacker-specified file path on the Jenkins ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Jenkins Git client Plugin file system information disclosure vulnerability to the GitHub Advisory Database org.jenkins-ci.plugins:git-client In Jenkins Git client Plugin 6.3.2 and earlier, Git URL field form validation responses differ based on whether the specified file path exists on the controller when specifying amazon-s3 protocol for use with JGit, allowing attackers with Overall/Read permission to check for the existence of an attacker-specified file path on the Jenkins controller file system. https://nvd.nist.gov/vuln/detail/CVE-2025-58458 https://www.jenkins.io/security/advisory/2025-09-03/#SECURITY-3590 jenkinsci/git-client-plugin@20090a8 http://www.openwall.com/lists/oss-security/2025/09/03/4 Published by the National Vulnerability Database Published to the GitHub Advisory Database This score calculates overall vulnerability severity from 0 to 10 and is based on the Common Vulnerability Scoring System (CVSS). Learn more about base metrics More severe the more the remote (logically and physically) an attacker can be in order to exploit the vulnerability. More severe for the least complex attacks. More severe if no privileges are required. More severe when no user interaction is required. More severe when a scope change occurs, e.g. one vulnerable component impacts resources in components beyond its security scope. More severe when loss of data confidentiality is highest, measuring the level of data access available to an unauthorized user. More severe when loss of data integrity is the highest, measuring the consequence of data modification possible by an unauthorized user. More severe when the loss of impacted component availability is highest. CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N Exploit Prediction Scoring System (EPSS) This score estimates the probability of this vulnerability being exploited within the next 30 days. Exposure of Sensitive Information to an Unauthorized Actor The product exposes sensitive information to an actor that is not explicitly authorized to have access to that information. Insertion of Sensitive Information into Externally-Accessible File or Directory The product places sensitive information into files or directories that are accessible to actors who are allowed to have access to the files, but not to the sensitive information. CVE-2025-58458 jenkinsci/git-client-plugin There was an error while loading. Please reload this page. See something to contribute? Suggest improvements for this vulnerability. You can’t perform that action at this time.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-29T22:53:02.484751+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2024-23897",
+    "CVE-2026-48921",
+    "CVE-2018-1000110"
+  ],
+  "retrieval_errors": []
+}

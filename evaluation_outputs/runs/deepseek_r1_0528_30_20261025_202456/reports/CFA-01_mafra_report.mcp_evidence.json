@@ -1,0 +1,102 @@
+{
+  "status": "Valid",
+  "query": "path traversal Grafana alertlist endpoint /plugins/alertlist web packet clues: endpoint plugins alertlist var lib grafana; endpoint plugins alertlist conf defaults ini; endpoint plugins alertlist etc passwd; endpoint plugins alertlist etc shadow",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Grafana Path Traversal Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Grafana Labs Grafana: Grafana contains a path traversal vulnerability that could allow access to local files. Required action: Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2021-43798 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-41090: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-41090",
+      "snippet": "Grafana Agent is a telemetry collector for sending metrics, logs, and trace data to the opinionated Grafana observability stack. Prior to versions 0.20.1 and 0.21.2, inline secrets defined within a metrics instance config are exposed in plaintext over two endpoints: metrics instance configs defined in the base YAML file are exposed at `/-/config` and metrics instance configs defined for the scraping service are exposed at `/agent/api/v1/configs/:key`. Inline secrets will be exposed to anyone being able to reach these endpoints. If HTTPS with client authentication is not configured, these endpoints are accessible to unauthenticated users. Secrets found in these sections are used for delivering metrics to a Prometheus Remote Write system, authenticating against a system for discovering Prometheus targets, and authenticating against a system for collecting metrics. This does not apply for non-inlined secrets, such as `*_file` based secrets. This issue is patched in Grafana Agent versions 0.20.1 and 0.21.2. A few workarounds are available. Users who cannot upgrade should use non-inline secrets where possible. Users may also desire to restrict API access to Grafana Agent with some combination of restricting the network interfaces Grafana Agent listens on through `http_listen_address` in the `server` block, configuring Grafana Agent to use HTTPS with client authentication, and/or using firewall rules to restrict external access to Grafana Agent's API.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2021-41090 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-43798: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-43798",
+      "snippet": "Grafana is an open-source platform for monitoring and observability. Grafana versions 8.0.0-beta1 through 8.3.0 (except for patched versions) iss vulnerable to directory traversal, allowing access to local files. The vulnerable URL path is: `<grafana_host_url>/public/plugins//`, where is the plugin ID for any installed plugin. At no time has Grafana Cloud been vulnerable. Users are advised to upgrade to patched versions 8.0.7, 8.1.8, 8.2.7, or 8.3.1. The GitHub Security Advisory contains more information about vulnerable URL paths, mitigation, and the disclosure timeline.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-43798 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2021-43813: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-43813",
+      "snippet": "Grafana is an open-source platform for monitoring and observability. Grafana prior to versions 8.3.2 and 7.5.12 contains a directory traversal vulnerability for fully lowercase or fully uppercase .md files. The vulnerability is limited in scope, and only allows access to files with the extension .md to authenticated users only. Grafana Cloud instances have not been affected by the vulnerability. Users should upgrade to patched versions 8.3.2 or 7.5.12. For users who cannot upgrade, running a reverse proxy in front of Grafana that normalizes the PATH of the request will mitigate the vulnerability. The proxy will have to also be able to handle url encoded paths. Alternatively, for fully lowercase or fully uppercase .md files, users can block /api/plugins/.*/markdown/.* without losing any functionality beyond inlined plugin help text.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2021-43813 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Grafana 8.3.1, 8.2.7, 8.1.8, and 8.0.7 released with high ...",
+      "url": "https://grafana.com/blog/grafana-8-3-1-8-2-7-8-1-8-and-8-0-7-released-with-high-severity-security-fix/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Today we are releasing Grafana 8.3.1, 8.2.7, 8.1.8, and 8.0.7 which include an important high severity security fix. If you are affected, ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Grafana 8.3.1, 8.2.7, 8.1.8, and 8.0.7 released with high severity security fix Note:We released fixes for CVE-2021-41090 and CVE-2021-43798 within 24 hours and mixed them up in one of the three blog posts. To make it clear: CVE-2021-41090 is for the Grafana Agent and CVE-2021-43798 is for Grafana the software. Only CVE-2021-43798 was a 0day exploit. Today we are releasing Grafana 8.3.1, 8.2.7, 8.1.8, and 8.0.7. This patch release includes a high severity security fix that affects Grafana versions from v8.0.0-beta1 through v8.3.0. Release v8.3.1, only containing a security fix: Release v8.2.7, only containing a security fix: Release v8.1.8, only containing a security fix: Release v8.0.7, only containing a security fix: Path Traversal (CVE-2021-43798) On 2021-12-03, we received a report that Grafana is vulnerable to directory traversal, allowing access to local files. We have confirmed this for versions v8.0.0-beta1 to v8.3.0. Thanks to our defense-in-depth approach, at no time has Grafana Cloud been vulnerable. The vulnerable URL path is: <grafana_host_url>/public/plugins/<“plugin-id”> where <“plugin-id”> is the plugin ID for any installed plugin. Every Grafana instance comes with pre-installed plugins like the Prometheus plugin or MySQL plugin so the following URLs are vulnerable for every instance: <grafana_host_url>/public/plugins/alertlist/ <grafana_host_url>/public/plugins/annolist/ <grafana_host_url>/public/plugins/barchart/ <grafana_host_url>/public/plugins/bargauge/ <grafana_host_url>/public/plugins/candlestick/ <grafana_host_url>/public/plugins/cloudwatch/ <grafana_host_url>/public/plugins/dashlist/ <grafana_host_url>/public/plugins/elasticsearch/ <grafana_host_url>/public/plugins/gauge/ <grafana_host_url>/public/plugins/geomap/ <grafana_host_url>/public/plugins/gettingstarted/ <grafana_host_url>/public/plugins/grafana-azure-monitor-datasource/ <grafana_host_url>/public/plugins/graph/ <grafana_host_url>/public/plugins/heatmap/ <grafana_host_url>/public/plugins/histogram/ <grafana_host_url>/public/plugins/influxdb/ <grafana_host_url>/public/plugins/jaeger/ <grafana_host_url>/public/plugins/logs/ <grafana_host_url>/public/plugins/loki/ <grafana_host_url>/public/plugins/mssql/ <grafana_host_url>/public/plugins/mysql/ <grafana_host_url>/public/plugins/news/ <grafana_host_url>/public/plugins/nodeGraph/ <grafana_host_url>/public/plugins/opentsdb <grafana_host_url>/public/plugins/piechart/ <grafana_host_url>/public/plugins/pluginlist/ <grafana_host_url>/public/plugins/postgres/ <grafana_host_url>/public/plugins/prometheus/ <grafana_host_url>/public/plugins/stackdriver/ <grafana_host_url>/public/plugins/stat/ <grafana_host_url>/public/plugins/state-timeline/ <grafana_host_url>/public/plugins/status-history/ <grafana_host_url>/public/plugins/table/ <grafana_host_url>/public/plugins/table-old/ <grafana_host_url>/public/plugins/tempo/ <grafana_host_url>/public/plugins/testdata/ <grafana_host_url>/public/plugins/text/ <grafana_host_url>/public/plugins/timeseries/ <grafana_host_url>/public/plugins/welcome/ <grafana_host_url>/public/plugins/zipkin/ We have received CVE-2021-43798 for this issue. The CVSS score for this vulnerability is 7",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2021-43798: Grafana Path Traversal Vulnerability",
+      "url": "https://www.sentinelone.com/vulnerability-database/cve-2021-43798/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). CVE-2021-43798 is a path traversal vulnerability in Grafana. Learn about its impact, affected versions, and mitigation methods. | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Stopping PHP2SHELL: How SentinelOne Protects Customers From This Attack TechniqueRead More Vulnerability Database/CVE-2021-43798 CVE-2021-43798: Grafana Path Traversal Vulnerability CVE-2021-43798 is a path traversal vulnerability in Grafana versions 8.0.0-beta1 through 8.3.0 that allows unauthorized access to local files. This article covers technical details, affected versions, and mitigation. CVE-2021-43798 Overview CVE-2021-43798 is a directory traversal vulnerability affecting Grafana, an open-source platform for monitoring and observability. Grafana versions 8.0.0-beta1 through 8.3.0 (except for patched versions) are vulnerable to path traversal attacks that allow unauthenticated remote attackers to read arbitrary files from the underlying server filesystem. The vulnerable URL path exploits the plugin API endpoint: <grafana_h Unauthenticated attackers can read sensitive files including configuration files, credentials, and database contents from vulnerable Grafana servers, potentially leading to complete system compromise. Grafana versions 8.0.0-beta1 through 8.0.6 Grafana versions 8.1.0 through 8.1.7 Grafana versions 8.2.0 through 8.2.6 2021-12-07 - CVE CVE-2021-43798 published to NVD 2025-10-24 - Last updated in NVD database Technical Details for CVE-2021-43798 This directory traversal vulnerability (CWE-22) exists in Grafana's plugin file serving functionality. The application fails to properly sanitize user-supplied input in URL paths when serving plugin files. By crafting a malicious request to the /public/plugins/<plugin-id>/ endpoint with path traversal sequences, an attacker can escape the intended directory and access arbitrary files on the server filesystem. The vul The attack is network-accessible and requires low complexity to execute. Successful exploitation results in unauthorized disclosure of sensitive information including Grafana configuration files (which may contain database credentials), system password files, and other critical data stored on the server. The root cause lies in insufficient input validation and path canonicalization in Grafana's static file serving mechanism for plugins. The application fails to properly neutralize special elements such as ../ sequences within the plugin path parameter before using it to construct file paths. This allows attackers to traverse outside the intended plugin directory structure and access files anywhere on the filesystem t The attack is executed via network-based HTTP requests targeting the vulnerable plugin endpoint. An attacker sends a crafted GET request to the Grafana server with directory traversal sequences embedded in the URL path. For example, requests targeting endpoints like /public/plugins/alertlist/../../../../../../../etc/passwd allow traversal outside the plugins directory. Any installed plugin ID can be used as the initi The vulnerability can be exploited to read critical files such as /etc/passwd, /etc/shadow (if permissions allow), Grafana's grafana.ini configuration file containing database credentials, and SQLite database files containing user hashes and session tokens. Detection Methods for CVE-2021-43798 HTTP requests to /public/plugins/ endpoints contai",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Grafana path traversal · CVE-2021-43798",
+      "url": "https://github.com/advisories/GHSA-8pjx-jj86-j47p",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Today we are releasing Grafana 8.3.1, 8.2.7, 8.1.8, 8.0.7. This patch release includes a high severity security fix that affects Grafana versions from ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. github.com/grafana/grafana Today we are releasing Grafana 8.3.1, 8.2.7, 8.1.8, 8.0.7. This patch release includes a high severity security fix that affects Grafana versions from v8.0.0-beta1 through v8.3.0. Release v8.3.1, only containing a security fix: Release v8.2.7, only containing a security fix: Release v8.1.8, only containing a security fix: Release v8.0.7, only containing a security fix:",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Path Traversal in JSON Plugin in Grafana",
+      "url": "https://grafana.com/security/security-advisories/cve-2023-5123/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Grafana is an open-source platform for monitoring and observability. The JSON datasource plugin is a Grafana Labs maintained plugin that ... | Webpage text: [PARTIAL WEBPAGE: only first 150000 bytes examined] Path Traversal in JSON Plugin in Grafana Advisory ID:CVE-2023-5123 Product:Grafana JSON Plugin CVSS Vector:CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H Grafana is an open-source platform for monitoring and observability. The JSON datasource plugin is a Grafana Labs maintained plugin that allows for retrieving and processing JSON data from a remote endpoint (including a specific sub-path) configured by an administrator. Due to inadequate sanitization of the dashboard-supplied path parameter, it was possible to include path traversal characters (../) in the path param This means that if the datasource was configured by an administrator to point at some sub-path of a domain (e.g. https://example.com/api/some_safe_api/), it was possible for an editor to create a dashboard referencing the datasource which issues queries containing path traversal characters, which would in turn cause the datasource to instead query arbitrary subpaths on the configured domain (e.g. https://example.com/ In the rare case that this plugin is configured by an administrator to point back at the Grafana instance itself, this vulnerability becomes considerably more severe, as an administrator browsing a maliciously configured panel could be compelled to make requests to Grafana administrative API endpoints with their credentials, resulting in the potential for privilege escalation. UPDATE: Thanks to NguyenHoan for reporting a bypass of this fix. Version 1.3.16 has a fix for this bypass. UPDATE 2: Thanks to isacaya for reporting a bypass of this fix. Version 1.3.21 has a fix for this bypass.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T03:57:19.626691+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2021-43798",
+    "CVE-2021-41090",
+    "CVE-2021-43813"
+  ],
+  "retrieval_errors": []
+}

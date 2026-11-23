@@ -1,0 +1,102 @@
+{
+  "status": "Valid",
+  "query": "phpMyAdmin phpMyAdmin Command Injection Attempted OS command execution via phpMyAdmin tbl_find_replace.php using regex replace with system()",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "phpMyAdmin Remote Code Execution Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "phpMyAdmin phpMyAdmin: Setup script used to generate configuration can be fooled using a crafted POST request to include arbitrary PHP code in generated configuration file. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2009-1151 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-4349: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-4349",
+      "snippet": "SQL injection vulnerability in server_privileges.php in phpMyAdmin 2.7.0 allows remote authenticated users to execute arbitrary SQL commands via the (1) dbname and (2) checkprivs parameters.  NOTE: the vendor and a third party have disputed this issue, saying that the main task of the program is to support query execution by authenticated users, and no external attack scenario exists without an auto-login configuration.  Thus it is likely that this issue will be REJECTED.  However, a closely related CSRF issue has been assigned CVE-2005-4450",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-4349 for a product matching 'phpMyAdmin'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2006-1804: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2006-1804",
+      "snippet": "SQL injection vulnerability in sql.php in phpMyAdmin 2.7.0-pl1 allows remote attackers to execute arbitrary SQL commands via the sql_query parameter.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2006-1804 for a product matching 'phpMyAdmin'; version applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "PMASA-2004-4",
+      "url": "https://www.phpmyadmin.net/security/PMASA-2004-4/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Two vulnerabilities were found in phpMyAdmin, that may allow command execution and file disclosure. Description. We received a security advisory ... | Webpage excerpt: Two vulnerabilities were found in phpMyAdmin, that may allow command execution and file disclosure. Command execution: since phpMyAdmin 2.6.0-pl2, on a system where into MySQL data an offensive value that starts a shell command when browsed. As any of those vulnerabilites can be used for command execution or file Command execution problem: since phpMyAdmin 2.6.0-pl2. File disclosure problem: phpMyAdmin security team at security@phpmyadmin.net.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Web Attack: phpMyAdmin CVE-2009-1151 PHP Command ...",
+      "url": "https://www.broadcom.com/support/security-center/attacksignatures/detail?asid=33654",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). An attacker may exploit this issue to write arbitrary PHP commands to the configuration file generated by the affected script. The attacker's malicious PHP code ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "Security policy — phpMyAdmin 5.2.2 documentation",
+      "url": "https://docs.phpmyadmin.net/en/release_5_2_2/security.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). For every reported vulnerability we issue a phpMyAdmin Security Announcement (PMASA) and it get's assigned a CVE ID as well. We might group similar ... | Webpage excerpt: The phpMyAdmin developer team is putting lot of effort to make phpMyAdmin as secure as possible. But still web application like phpMyAdmin can be vulnerable For every reported vulnerability we issue a phpMyAdmin Security Announcement When phpMyAdmin shows a piece of user data, e.g. something inside a user’s phpMyAdmin tries to escape all userdata before it is rendered into html for the An attacker would trick a phpMyAdmin user into clicking on a link to provoke some action in phpMyAdmin. This link could either be sent via email or some",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "phpMyAdmin Improper Control of Generation of Code ...",
+      "url": "https://www.invicti.com/web-application-vulnerabilities/phpmyadmin-improper-control-of-generation-of-code-code-injection-vulnerability-cve-2013-3239",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). phpMyAdmin 3.5.x before 3.5.8 and 4.x before 4.0.0-rc3, when a SaveDir directory is configured, allows remote authenticated users to execute. | Webpage excerpt: / phpMyAdmin Improper Control of Generation of Code ('Code Injection') Vulnerability (CVE-2013-3239) Server Side Template Injection phpMyAdmin Improper Control of Generation of Code ('Code Injection') Vulnerability (CVE-2013-3239) - Vulnerability Database phpMyAdmin Improper Control of Generation of Code ('Code Injection') Vulnerability (CVE-2013-3239) phpMyAdmin 3.5.x before 3.5.8 and 4.x before 4.0.0-rc3, when a SaveDir directory is configured, allows remote authenticated users to execute arbitrary code by using a double extension in the filename of an export file, leading to interpretation of this file as an executable file by the Apache HTTP Server, as demonstrated by a .php.sql filename.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-16T00:07:50.878441+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2005-4349",
+    "CVE-2006-1804",
+    "CVE-2009-1151"
+  ],
+  "retrieval_errors": []
+}

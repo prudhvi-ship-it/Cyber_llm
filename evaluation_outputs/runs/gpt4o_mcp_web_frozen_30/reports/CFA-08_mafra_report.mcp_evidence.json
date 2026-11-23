@@ -1,0 +1,33 @@
+{
+  "status": "Valid",
+  "query": "SQL Injection",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:29:47.157508+00:00",
+  "sources": [
+    {
+      "source_name": "www.cisa.gov",
+      "title": "MCP search result",
+      "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json\",",
+      "snippet": "{\n  \"query\": \"SQL Injection\",\n  \"sources\": [],\n  \"candidate_cves\": [],\n  \"sources_queried\": [\n    \"https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json\",\n    \"https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json\"\n  ],\n  \"warnings\": [\n    \"NVD lookup skipped: unknown product and no distinctive packet clues.\",\n    \"Web product discovery skipped: no identified product or distinctive packet clues.\"\n  ]\n}",
+      "source_type": "online_security_source",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:29:47.157508+00:00"
+    },
+    {
+      "source_name": "raw.githubusercontent.com",
+      "title": "MCP search result",
+      "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json\"",
+      "snippet": "{\n  \"query\": \"SQL Injection\",\n  \"sources\": [],\n  \"candidate_cves\": [],\n  \"sources_queried\": [\n    \"https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json\",\n    \"https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json\"\n  ],\n  \"warnings\": [\n    \"NVD lookup skipped: unknown product and no distinctive packet clues.\",\n    \"Web product discovery skipped: no identified product or distinctive packet clues.\"\n  ]\n}",
+      "source_type": "online_security_source",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:29:47.157508+00:00"
+    }
+  ],
+  "candidate_cves": [],
+  "retrieval_errors": [
+    "NVD lookup skipped: unknown product and no distinctive packet clues.",
+    "Web product discovery skipped: no identified product or distinctive packet clues."
+  ]
+}

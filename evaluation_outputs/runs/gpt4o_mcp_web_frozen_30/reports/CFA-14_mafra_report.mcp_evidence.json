@@ -1,0 +1,103 @@
+{
+  "status": "Valid",
+  "query": "etcd 3.4.0 packet clues: endpoint lease grant",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00",
+  "sources": [
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2023-32082: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-32082",
+      "snippet": "etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.26 and 3.5.9, the LeaseTimeToLive API allows access to key names (not value) associated to a lease when `Keys` parameter is true, even a user doesn't have read permission to the keys. The impact is limited to a cluster which enables auth (RBAC). Versions 3.4.26 and 3.5.9 fix this issue. There are no known workarounds.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2023-32082 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2025-58063: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58063",
+      "snippet": "CoreDNS is a DNS server that chains plugins. Starting in version 1.2.0 and prior to version 1.12.4, the CoreDNS etcd plugin contains a TTL confusion vulnerability where lease IDs are incorrectly used as TTL values, enabling DNS cache pinning attacks. This effectively creates a DoS condition for DNS resolution of affected services. The `TTL()` function in `plugin/etcd/etcd.go` incorrectly casts etcd lease IDs (64-bit integers) to uint32 and uses them as TTL values. Large lease IDs become very large TTLs when cast to uint32. This enables cache pinning attacks. Version 1.12.4 contains a fix for the issue.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2025-58063 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-33413: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33413",
+      "snippet": "etcd is a distributed key-value store for the data of a distributed system. Prior to versions 3.4.42, 3.5.28, and 3.6.9, unauthorized users may bypass authentication or authorization checks and call certain etcd functions in clusters that expose the gRPC API to untrusted or partially trusted clients. In unpatched etcd clusters with etcd auth enabled, unauthorized users are able to call MemberList and learn cluster topology, including member IDs and advertised endpoints; call Alarm, which can be abused for operational disruption or denial of service; use Lease APIs, interfering with TTL-based keys and lease ownership; and/or trigger compaction, permanently removing historical revisions and disrupting watch, audit, and recovery workflows. Kubernetes does not rely on etcd’s built-in authentication and authorization. Instead, the API server handles authentication and authorization itself, so typical Kubernetes deployments are not affected. Versions 3.4.42, 3.5.28, and 3.6.9 contain a patch. If upgrading is not immediately possible, reduce exposure by treating the affected RPCs as unauthenticated in practice. Restrict network access to etcd server ports so only trusted components can connect and/or require strong client identity at the transport layer, such as mTLS with tightly scoped client certificate distribution.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-33413 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2026-44283: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-44283",
+      "snippet": "etcd is a distributed key-value store for the data of a distributed system. Prior to 3.4.44, 3.5.30, and 3.6.11, a vulnerability in etcd allows read access via PrevKv, or lease attachment in Put requests within transaction operations, to bypass RBAC authorization checks. An authenticated user without sufficient read or lease-related permissions may be able to access unauthorized data or attach leases by invoking transaction operations with these features enabled. This vulnerability is fixed in 3.4.44, 3.5.30, and 3.6.11.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2026-44283 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Interacting with etcd",
+      "url": "https://etcd.io/docs/v3.3/dev-guide/interacting_v3/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Applications can grant leases for keys from an etcd cluster. When a key is attached to a lease, its lifetime is bound to the lease's lifetime",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "How to create lease",
+      "url": "https://etcd.io/docs/v3.5/tutorials/how-to-create-lease/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Guide to creating a lease in etcd. etcd from 2.3 to 3.0 Upgrade etcd from 3.0 to 3.1. Guide to creating a lease in etcd lease to write with",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CHANGELOG-3.4.md - etcd-io/etcd",
+      "url": "https://github.com/etcd-io/etcd/blob/main/CHANGELOG/CHANGELOG-3.4.md",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Prevent overflow by large TTL values for Lease Grant . TTL parameter to Grant request is unit of second. Leases with too large TTL values exceeding math.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "etcd3 API",
+      "url": "https://etcd.io/docs/v3.4/learning/api/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Leases are a mechanism for detecting client liveness. The cluster grants leases with a time-to-live. A lease expires if the etcd cluster does ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:36:06.749965+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2023-32082",
+    "CVE-2025-58063",
+    "CVE-2026-33413",
+    "CVE-2026-44283"
+  ],
+  "retrieval_errors": []
+}

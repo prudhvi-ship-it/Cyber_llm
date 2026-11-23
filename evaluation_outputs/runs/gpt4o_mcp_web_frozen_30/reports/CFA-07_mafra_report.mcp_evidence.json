@@ -1,0 +1,104 @@
+{
+  "status": "Valid",
+  "query": "phpMyAdmin Command Injection packet clues: endpoint tbl find replace",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "phpMyAdmin Remote Code Execution Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "phpMyAdmin phpMyAdmin: Setup script used to generate configuration can be fooled using a crafted POST request to include arbitrary PHP code in generated configuration file. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2009-1151 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "MITRE ATT&CK",
+      "title": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T1190",
+      "snippet": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.\n\nExploited applications are often websites/web servers, but can also include databases (like SQL), standard services (like SMB or SSH), network device administration and management protocols (like SNMP and Smart Install), and any other system with Internet-accessible open sockets.(Citation: NVD CVE-2016-6662)(Citation: CIS Multiple SMB Vulnerabilities)(Citation: US-CERT TA18-106A Network Infrastructure Devices 2018)(Citation: Cisco Blog Legacy Device Attacks)(Citation: NVD CVE-2014-7169) On ESXi infrastructure, adversaries may exploit exposed OpenSLP services; they may alternatively exploit exposed VMware vCenter servers.(Citation: Recorded Future ESXiArgs Ransomware 2023)(Citation: Ars Technica VMWare Code Execution Vulnerability 2021) Depending on the flaw being exploited, this may also involve [Exploitation for Stealth](https://attack.mitre.org/techniques/T1211) or [Exploitation for Client Execution](https://attack.mitre.org/techniques/T1203).\n\nIf an application is hosted on cloud-based infrastructure and/or is containerized, then exploiting it may lead to compromise of the underlying instance or container. This can allow an adversary a path to access the cloud or container APIs (e.g., via the [Cloud Instance Metadata API](https://attack.mitre.org/techniques/T1552/005)), exploit container host access via [Escape to Host](https://attack.mitre.org/techniques/T1611), or take advantage of weak identity and access management policies.\n\nAdversaries may also exploit edge network infrastructure and related appliances, specifically targeting devices that do not support robust host-based defenses.(Citation: Mandiant Fortinet Zero Day)(Citation: Wired Russia Cyberwar)\n\nFor websites and databases, the OWASP top 10 and CWE top 25 highlight the most common web-based vulnerabilities.(Citation: OWASP Top 10)(Citation: CWE top 25)",
+      "source_type": "mitre_attack_context",
+      "supports": [
+        "Contextual mapping: the investigation terms are consistent with ATT&CK T1190 (Exploit Public-Facing Application)."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2004-2631: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2004-2631",
+      "snippet": "Eval injection vulnerability in left.php in phpMyAdmin 2.5.1 up to 2.5.7, when LeftFrameLight is FALSE, allows remote attackers to execute arbitrary PHP code via a crafted table name.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2004-2631 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2005-3621: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2005-3621",
+      "snippet": "CRLF injection vulnerability in phpMyAdmin before 2.6.4-pl4 allows remote attackers to conduct HTTP response splitting attacks via unspecified scripts.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2005-3621 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "PMASA-2004-4",
+      "url": "https://www.phpmyadmin.net/security/PMASA-2004-4/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Two vulnerabilities were found in phpMyAdmin, that may allow command execution and file disclosure. Description. We received a security advisory ... | Webpage excerpt: Two vulnerabilities were found in phpMyAdmin, that may allow command execution and file disclosure. Command execution: since phpMyAdmin 2.6.0-pl2, on a system where into MySQL data an offensive value that starts a shell command when browsed. As any of those vulnerabilites can be used for command execution or file Command execution problem: since phpMyAdmin 2.6.0-pl2. File disclosure problem: phpMyAdmin security team at security@phpmyadmin.net.",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "Official vendor webpage",
+      "title": "PMASA-2018-4",
+      "url": "https://www.phpmyadmin.net/security/PMASA-2018-4/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted ... | Webpage excerpt: The vulnerability comes from a portion of code where pages are redirected and loaded within phpMyAdmin, and an improper test for whitelisted pages. $cfg['AllowArbitraryServer'] = true: attacker can specify any host he/she is already in control of, and execute arbitrary code on phpMyAdmin Vulnerable systems should not be run with the phpMyAdmin directives $cfg['AllowArbitraryServer'] = true or $cfg['ServerDefault'] = 0 phpMyAdmin 4.8.0 and 4.8.1 are affected. Upgrade to phpMyAdmin 4.8.2 or newer or apply patch listed below. phpMyAdmin security team at security@phpmyadmin.net. Thank you for downloading phpMyAdmin",
+      "source_type": "vendor_advisory_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Find and Replace text in the entire table using a MySQL ...",
+      "url": "https://stackoverflow.com/questions/11839060/find-and-replace-text-in-the-entire-table-using-a-mysql-query",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). Usually I use manual find to replace text in a MySQL database using phpMyAdmin. I'm tired of it now, how can I run a query to find and replace a text ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Find and replace in phpMyAdmin",
+      "url": "https://bobcares.com/blog/find-and-replace-in-phpmyadmin/",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The Find and replace in phpMyAdmin is for searching a word in database and replace it by another and is useful in the case of WordPress ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-22T05:28:43.149316+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2009-1151",
+    "CVE-2004-2631",
+    "CVE-2005-3621"
+  ],
+  "retrieval_errors": [
+    "Webpage extraction skipped for stackoverflow.com: HTTPError: HTTP Error 403: Forbidden"
+  ]
+}

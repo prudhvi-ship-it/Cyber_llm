@@ -1,0 +1,105 @@
+{
+  "status": "Valid",
+  "query": "MySQL 5.7.44 SQL Injection vulnerability",
+  "tool_name": "search_forensic_evidence",
+  "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00",
+  "sources": [
+    {
+      "source_name": "CISA KEV",
+      "title": "Progress MOVEit Transfer SQL Injection Vulnerability",
+      "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "snippet": "Progress MOVEit Transfer: Progress MOVEit Transfer contains a SQL injection vulnerability that could allow an unauthenticated attacker to gain unauthorized access to MOVEit Transfer's database. Depending on the database engine being used (MySQL, Microsoft SQL Server, or Azure SQL), an attacker may be able to infer information about the structure and contents of the database in addition to executing SQL statements that alter or delete database elements. Required action: Apply updates per vendor instructions.",
+      "source_type": "cisa_kev",
+      "supports": [
+        "CISA KEV identifies CVE-2023-34362 as exploited in the wild."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2024-20963: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-20963",
+      "snippet": "Vulnerability in the MySQL Server product of Oracle MySQL (component: Server: Security: Encryption).  Supported versions that are affected are 8.0.35 and prior and  8.2.0 and prior. Easily exploitable vulnerability allows low privileged attacker with network access via multiple protocols to compromise MySQL Server.  Successful attacks of this vulnerability can result in unauthorized ability to cause a hang or frequently repeatable crash (complete DOS) of MySQL Server. CVSS 3.1 Base Score 6.5 (Availability impacts).  CVSS Vector: (CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H).",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "Web-cited CVE-2024-20963 was retrieved independently from NVD; applicability and exploitation are unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2002-2043: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2002-2043",
+      "snippet": "SQL injection vulnerability in the LDAP and MySQL authentication patch for Cyrus SASL 1.5.24 and 1.5.27 allows remote attackers to execute arbitrary SQL commands and log in as arbitrary POP mail users via the password.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2002-2043 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "NIST NVD",
+      "title": "CVE-2003-0515: NVD vulnerability record",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2003-0515",
+      "snippet": "SQL injection vulnerabilities in the (1) PostgreSQL or (2) MySQL authentication modules for teapop 0.3.5 and earlier allow attackers to execute arbitrary SQL and possibly gain privileges.",
+      "source_type": "nvd_cve_candidate",
+      "supports": [
+        "NVD lists CVE-2003-0515 as a research lead; product identity, version applicability, and exploitation remain unverified."
+      ],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Percona Server for MySQL 5.7.44-49 (2024-03-14)",
+      "url": "https://docs.percona.com/percona-server/5.7/release-notes/5.7.44-49.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The following are generic instructions on updating these libraries using a package manager. Your environment may be different. Upgrading ... | Webpage text: Starting November 2023, MySQL 5.7 has reached EOL status. Do you need help upgrading to MySQL 8.0? Do you need to stay on MySQL 5.7 a bit longer? We will support you either way. Learn more Percona Server for MySQL 5.7.44-49 (2024-03-14)¶ This release is part of MySQL 5.7 Post-EOL Support from Percona. The fixes are available to MySQL 5.7 Post-EOL Support from Percona customers. Community members can build this release from source. We recommend that you either upgrade to MySQL 8.0 or stay on 5.7; we’ll support you. Percona Server for MySQL 5.7.44-49 contains the fix for CVE-2024-20963 and a portability fix. PS-9096: Fixes the following: Bug#35764496: Running too much data through MD5() causes the server to stop. The cause was accessing invalid memory or over-allocating while computing hashes in the md5 encryption methods. Bug#35967676: Fixed a compilation failure in VS2022. PS-9048: In the Debug build, assertions with OPTIMIZE table and fulltext indexes failed. Common Vulnerabilities and Exposures and third-party libraries¶ The following Common Vulnerabilities and Exposures (CVE) records have been identified in the third-party libraries: CVE-2023-38545 CVE-2023-5363 We recommend upgrading the third-party libraries to the latest version, for example, curl v8.4.0 or OpenSSL v3.0.12. The operating systems may port these fixes into the default versions of the libraries installed in the systems. For information on the curl CVE based on the operating system, see the following: For information on the OpenSSL CVE based on the operating system, see the following: The binary tarballs are not shipped with the updated third-party libraries. Upgrade third-party libraries¶ The following are generic instructions on updating these libraries using a package manager. Your environment may be different. Upgrading libraries can have unintended consequences. Consider testing the upgrade on a staging environment before upgrading production. The following steps apply to either package manager: The example updates the OpenSSL library. Create a full server backup to ensure data integrity in case of issues. Identify the library and review the installation method. Research the compatibility between the new library and your current MySQL version. Distributions using the APT package managerDistributions using the YUM package manager $ sudo apt update; sudo apt install libssl-dev openssl; $ sudo yum update; sudo yum install openssl; After the upgrade, do the following: Restart the server to ensure that the library is loaded correctly. $ sudo systemctl restart mysql Connect to the server and verify the update with either SHOW PLUGINS; or SHOW VARIABLES LIKE '%library_name%';. Test the library functionality by running scripts or applications that rely on the upgraded library. Consult the documentation for the library and online resources for any troubleshooting steps specific to this library. Check for any potential compatibility issues. Install Percona Server for MySQL The Percona Server for MySQL GitHub repository Contribute to the documentation For training, contact Percona Training - Start learning now",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "CVE-2023-22094 Detail - NVD",
+      "url": "https://nvd.nist.gov/vuln/detail/cve-2023-22094",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). NVD. National Vulnerability Database. vulnerabilities. CVE-2023-22094 ... Vulnerability in the MySQL Installer product of Oracle MySQL (component: ...",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Changes in MySQL 5.7.44 (2023-10-25)",
+      "url": "https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-44.html",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). 44 is the final release of the MySQL 5.7 series. MySQL 5.7 users are encouraged to upgrade to the latest MySQL 8.0, 8.4, or MySQL Innovation release. SQL ... | Webpage text: MySQL 5.7 Release Notes / Changes in MySQL 5.7.44 (2023-10-25) Changes in MySQL 5.7.44 (2023-10-25) MySQL 5.7.44 is the final release of the MySQL 5.7 series. MySQL 5.7 users are encouraged to upgrade to the latest MySQL 8.0, 8.4, or MySQL Innovation release. SQL Function and Operator Notes Functionality Added or Changed SQL Function and Operator Notes The STR_TO_DATE() function did not perform complete range checking on the string to be converted, so that it was possible to pass to it a string which would yield an invalid date, such as (Bug #108782, Bug #34704094) On Windows, the MSI package definition files were updated to work with the Windows Installer XML (WiX) toolset version 4. Note that they can no longer be used with previous versions of The bundled libedit library was upgraded to Functionality Added or Changed The linked OpenSSL library for MySQL Server has been updated to version 3.0.10. Issues fixed in OpenSSL version 3.0.10 are https://openssl-library.org/news/openssl-3.0-notes/. (Bug #35702863, Bug #35732474) Fixed processing of single character tokens by a FTS parser Our thanks to Shaohua Wang for the contribution. The last detected deadlock section of the engine status log was only showing 1024 characters for the combined thread and query information. Fixing by removing the printed query string limit. (Bug #80927, Bug #23036096) Some complex queries using multiple common table expressions were not always handled correctly. References: This issue is a regression of: Bug #34377854.",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    },
+    {
+      "source_name": "Serper web result",
+      "title": "Oracle MySQL Server 5.7.x < 5.7.44 (October 2023 CPU)",
+      "url": "https://www.tenable.com/plugins/nessus/183396",
+      "snippet": "UNTRUSTED WEB RESEARCH (not PCAP evidence). The remote host is affected by multiple vulnerabilities (Nessus Plugin ID 183396) | Webpage text: Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Tenable Community & Support Tenable OT Security Families Tenable Cloud Security Families Tenable Self-Hosted Container Security Families Oracle MySQL Server 5.7.x < 5.7.44 (October 2023 CPU) critical Nessus Plugin ID 183396 SynopsisThe remote host is affected by multiple vulnerabilities DescriptionThe versions of MySQL Server installed on the remote host are affected by multiple vulnerabilities as referenced in the October 2023 CPU advisory. - Vulnerability in the MySQL Server product of Oracle MySQL (component: Server: Optimizer). Supported versions that are affected are 5.7.43 and prior and 8.0.31 and prior. Easily exploitable vulnerability allows high privileged attacker with network access via multiple protocols to compromise MySQL Server. Successful attacks of this vulnerability can result in unauthorized ability to cause a hang or frequently repeat - Vulnerability in the MySQL Server product of Oracle MySQL (component: InnoDB). Supported versions that are affected are 5.7.43 and prior, 8.0.34 and prior and 8.1.0. Easily exploitable vulnerability allows high privileged attacker with network access via multiple protocols to compromise MySQL Server. Successful attacks of this vulnerability can result in unauthorized ability to cause a hang or frequently repeatable - Vulnerability in the MySQL Server product of Oracle MySQL (component: Server: Compiling (curl)). Supported versions that are affected are 5.7.43 and prior, 8.0.34 and prior and 8.1.0. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise MySQL Server. Successful attacks require human interaction from a person other than the attacker. Successful attacks of this vulnerability can result in takeover of MySQL Server. (CVE-2023-38545) Note that Nessus has not tested for these issues but has instead relied only on the application's self-reported version number. SolutionApply the appropriate patch according to the October 2023 Oracle Critical Patch Update advisory. https://www.oracle.com/docs/tech/security-alerts/cpuoct2023cvrf.xml https://www.oracle.com/security-alerts/cpuoct2023.html File Name: mysql_5_7_44.nasl Agent: windows, macosx, unix Supported Sensors: Nessus Agent, Nessus Vector: CVSS2#AV:N/AC:L/Au:N/C:C/I:C/A:C CVSS Score Source: CVE-2023-38545 Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H Temporal Vector: CVSS:3.0/E:H/RL:O/RC:C Vulnerability Information Required KB Items: installed_sw/MySQL Server Exploit Ease: Exploits are available Patch Publication Date: 10/18/2023 Vulnerability Publication Date: 10/18/2023 CVE: CVE-2023-22028, CVE-2023-22084, CVE-2023-38545",
+      "source_type": "web_research_lead",
+      "supports": [],
+      "contradicts": [],
+      "retrieved_at_utc": "2026-10-26T01:48:19.099153+00:00"
+    }
+  ],
+  "candidate_cves": [
+    "CVE-2023-34362",
+    "CVE-2024-20963",
+    "CVE-2002-2043",
+    "CVE-2003-0515"
+  ],
+  "retrieval_errors": [
+    "Webpage read unavailable for www.rapid7.com: HTTPError: HTTP Error 301: Moved Permanently"
+  ]
+}
